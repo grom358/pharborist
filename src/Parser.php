@@ -86,7 +86,7 @@ class Parser {
   public static function parseFile($filename) {
     $tokenizer = new Tokenizer();
     $parser = new self();
-    if ($source = file_get_contents($filename)) {
+    if ($source = @file_get_contents($filename)) {
       $tokens = $tokenizer->getAll($source);
       $tree = $parser->buildTree(new TokenIterator($tokens));
       return $tree;

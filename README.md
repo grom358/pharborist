@@ -30,11 +30,7 @@ use Pharborist\Tokenizer;
 use Pharborist\TokenIterator;
 use Pharborist\Parser;
 
-$tokenizer = new Tokenizer();
-$parser = new Parser();
-$source = file_get_contents($filename);
-$tokens = $tokenizer->getAll($source);
-$tree = $parser->buildTree(new TokenIterator($tokens));
+$tree = Parser::parseFile($filename);
 
 // check there only one namespace declaration
 $namespace_count = 0;

@@ -23,7 +23,7 @@ $tree->getCallsToFunction('check_plain')->renameTo($alias . '::checkPlain');
 ```
 
 # Usage
-```
+```php
 require_once 'vendor/autoload.php';
 
 use Pharborist\Tokenizer;

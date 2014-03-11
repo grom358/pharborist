@@ -1,0 +1,22 @@
+{
+  "name": "grom358/Pharborist",
+  "description": "Pharborist builds a syntax tree for PHP that can be traversed and manipulated.",
+  "type": "library",
+  "keywords": [
+    "standards",
+    "syntax"
+  ],
+  "license": "GPL",
+  "authors": [
+    {
+      "name": "Cameron Zemek",
+      "role": "lead"
+    }
+  ],
+  "autoload": {
+    "psr-4" : {"Pharborist\\": "src/"}
+  },
+  "require": {
+    "php": ">=5.4"
+  }
+}

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit colors="true" bootstrap="bootstrap.php">
+  <testsuites>
+    <testsuite name="Pharborist">
+      <directory>./src/Tests</directory>
+    </testsuite>
+  </testsuites>
+  <!-- Filter for coverage reports. -->
+  <filter>
+    <blacklist>
+      <directory>./vendor</directory>
+    </blacklist>
+  </filter>
+</phpunit>

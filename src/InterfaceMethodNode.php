@@ -14,7 +14,7 @@ class InterfaceMethodNode extends Node {
   /**
    * @var Node
    */
-  public $methodName;
+  public $name;
 
   /**
    * @var Node[]

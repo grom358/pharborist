@@ -52,6 +52,22 @@ class Node {
   }
 
   /**
+   * Filters children to find matching nodes.
+   * @param string $type
+   *   Type of nodes to return.
+   * @return Node[] matching children
+   */
+  public function filter($type) {
+    $matches = array();
+    foreach ($this->children as $child) {
+      if ($child instanceof $type) {
+        $matches[] = $child;
+      }
+    }
+    return $matches;
+  }
+
+  /**
    * @return SourcePosition
    */
   public function getSourcePosition() {

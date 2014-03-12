@@ -77,6 +77,24 @@ class Parser {
   }
 
   /**
+   * Parse a file and return the parsed tree
+   * @param string $filename Path to file
+   * @return Node|bool
+   *   The top-level node of the parsed tree or FALSE if the file contents
+   *   could not be read.
+   */
+  public static function parseFile($filename) {
+    $tokenizer = new Tokenizer();
+    $parser = new self();
+    if ($source = @file_get_contents($filename)) {
+      $tokens = $tokenizer->getAll($source);
+      $tree = $parser->buildTree(new TokenIterator($tokens));
+      return $tree;
+    }
+    return FALSE;
+  }
+
+  /**
    * Parse zero or more template statements.
    * @param Node $node Node to append matches to.
    * @throws ParserException

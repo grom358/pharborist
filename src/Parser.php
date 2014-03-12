@@ -1496,22 +1496,24 @@ class Parser {
 
   /**
    * Apply any function call, array and object deference.
-   * @param Node $function
+   * @param Node $function_reference
    * @return Node
    */
-  private function functionCall(Node $function) {
-    return $this->objectDereference($this->arrayDeference($this->_functionCall($function)));
+  private function functionCall(Node $function_reference) {
+    return $this->objectDereference($this->arrayDeference($this->_functionCall($function_reference)));
   }
 
   /**
    * Apply any function call to operand.
-   * @param Node $function
-   * @return Node
+   * @param Node $function_reference
+   * @return FunctionCallNode
    */
-  private function _functionCall(Node $function) {
-    $node = new Node();
-    $node->appendChild($function);
-    $node->appendChild($this->functionCallParameterList());
+  private function _functionCall(Node $function_reference) {
+    $node = new FunctionCallNode();
+    $node->functionReference = $node->appendChild($function_reference);
+    $argument_list = $this->functionCallParameterList();
+    $node->appendChild($argument_list);
+    $node->arguments = &$argument_list->arguments;
     return $node;
   }
 
@@ -1652,19 +1654,19 @@ class Parser {
 
   /**
    * Parse function call parameter list.
-   * @return Node
+   * @return ArgumentListNode
    */
   private function functionCallParameterList() {
-    $node = new Node();
+    $node = new ArgumentListNode();
     $this->mustMatch('(', $node);
     if ($this->tryMatch(')', $node, TRUE)) {
       return $node;
     }
     if ($this->isTokenType(T_YIELD)) {
-      $node->appendChild($this->_yield());
+      $node->arguments[] = $node->appendChild($this->_yield());
     } else {
       do {
-        $node->appendChild($this->functionCallParameter());
+        $node->arguments[] = $node->appendChild($this->functionCallParameter());
       } while ($this->tryMatch(',', $node));
     }
     $this->mustMatch(')', $node, TRUE);

@@ -84,14 +84,36 @@ class Parser {
    *   could not be read.
    */
   public static function parseFile($filename) {
-    $tokenizer = new Tokenizer();
-    $parser = new self();
     if ($source = @file_get_contents($filename)) {
-      $tokens = $tokenizer->getAll($source);
-      $tree = $parser->buildTree(new TokenIterator($tokens));
-      return $tree;
+      return self::parseSource($source);
     }
     return FALSE;
+  }
+
+  /**
+   * Parse PHP source code and return the parsed tree.
+   * @param string $source PHP source code
+   * @return Node
+   *   The top-level node of the parsed tree
+   */
+  public static function parseSource($source) {
+    $tokenizer = new Tokenizer();
+    $parser = new self();
+    $tokens = $tokenizer->getAll($source);
+    return $parser->buildTree(new TokenIterator($tokens));
+  }
+
+  /**
+   * Parse a snippet of PHP and return the parsed tree.
+   * @param string $snippet PHP snippet without the opening PHP tag
+   * @return Node
+   *   The top-level node of the parsed tree
+   */
+  public static function parseSnippet($snippet) {
+    $tree = self::parseSource('<?php ' . $snippet);
+    // Strip the inserted opening php tag
+    array_shift($tree->children);
+    return $tree;
   }
 
   /**

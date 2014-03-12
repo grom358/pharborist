@@ -97,8 +97,11 @@ class Parser {
    *   The top-level node of the parsed tree
    */
   public static function parseSource($source) {
-    $tokenizer = new Tokenizer();
-    $parser = new self();
+    static $tokenizer, $parser = NULL;
+    if (!isset($parser)) {
+      $tokenizer = new Tokenizer();
+      $parser = new self();
+    }
     $tokens = $tokenizer->getAll($source);
     return $parser->buildTree(new TokenIterator($tokens));
   }

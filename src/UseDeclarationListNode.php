@@ -9,5 +9,5 @@ class UseDeclarationListNode extends Node {
   /**
    * @var Node[]
    */
-  public $declarations;
+  public $declarations = array();
 }

@@ -2075,14 +2075,14 @@ class Parser {
 
   /**
    * Parse a use declaration list.
-   * @return Node
+   * @return UseDeclarationListNode
    */
   private function _use() {
-    $node = new Node();
+    $node = new UseDeclarationListNode();
     $this->mustMatch(T_USE, $node);
     $this->tryMatch(T_FUNCTION, $node) || $this->tryMatch(T_CONST, $node);
     do {
-      $node->appendChild($this->useDeclaration());
+      $node->declarations[] = $node->appendChild($this->useDeclaration());
     } while ($this->tryMatch(',', $node));
     $this->mustMatch(';', $node, TRUE);
     return $node;
@@ -2090,19 +2090,21 @@ class Parser {
 
   /**
    * Parse a use declaration.
-   * @return Node
+   * @return UseDeclarationNode
    */
   private function useDeclaration() {
+    $declaration = new UseDeclarationNode();
     $node = new Node();
     $this->tryMatch(T_NS_SEPARATOR, $node);
     $this->mustMatch(T_STRING, $node);
     while ($this->tryMatch(T_NS_SEPARATOR, $node)) {
       $this->mustMatch(T_STRING, $node);
     }
-    if ($this->tryMatch(T_AS, $node)) {
-      $this->mustMatch(T_STRING, $node);
+    $declaration->namespacePath = $declaration->appendChild($node);
+    if ($this->tryMatch(T_AS, $declaration)) {
+      $declaration->alias = $this->mustMatch(T_STRING, $declaration);
     }
-    return $node;
+    return $declaration;
   }
 
   /**

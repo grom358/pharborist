@@ -192,13 +192,13 @@ class Parser {
 
   /**
    * Parse a constant declaration list.
-   * @return Node
+   * @return ConstantDeclarationListNode
    */
   private function _const() {
-    $node = new Node();
+    $node = new ConstantDeclarationListNode();
     $this->mustMatch(T_CONST, $node);
     do {
-      $node->appendChild($this->constDeclaration());
+      $node->declarations[] = $node->appendChild($this->constDeclaration());
     } while ($this->tryMatch(',', $node));
     $this->mustMatch(';', $node, TRUE);
     return $node;
@@ -206,13 +206,13 @@ class Parser {
 
   /**
    * Parse a constant declaration.
-   * @return Node
+   * @return ConstantDeclarationNode
    */
   private function constDeclaration() {
-    $node = new Node();
-    $this->mustMatch(T_STRING, $node, TRUE);
+    $node = new ConstantDeclarationNode();
+    $node->name = $this->mustMatch(T_STRING, $node, TRUE);
     if ($this->tryMatch('=', $node)) {
-      $node->appendChild($this->staticScalar());
+      $node->value = $node->appendChild($this->staticScalar());
     }
     return $node;
   }

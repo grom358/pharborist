@@ -7,17 +7,17 @@ namespace Pharborist;
  */
 class InterfaceMethodNode extends Node {
   /**
-   * @var Token
+   * @var Node
    */
   public $visibility;
 
   /**
-   * @var Token
+   * @var Node
    */
   public $methodName;
 
   /**
-   * @var Node
+   * @var Node[]
    */
   public $parameters;
 }

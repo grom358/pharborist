@@ -43,3 +43,4 @@ foreach ($tree->children as $top_level_statement) {
   }
 }
 ```
+[![Build Status](https://travis-ci.org/grom358/pharborist.png?branch=master)](https://travis-ci.org/grom358/pharborist)

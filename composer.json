@@ -1,5 +1,5 @@
 {
-  "name": "grom358/Pharborist",
+  "name": "grom358/pharborist",
   "description": "Pharborist builds a syntax tree for PHP that can be traversed and manipulated.",
   "type": "library",
   "keywords": [

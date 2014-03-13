@@ -84,14 +84,39 @@ class Parser {
    *   could not be read.
    */
   public static function parseFile($filename) {
-    $tokenizer = new Tokenizer();
-    $parser = new self();
     if ($source = @file_get_contents($filename)) {
-      $tokens = $tokenizer->getAll($source);
-      $tree = $parser->buildTree(new TokenIterator($tokens));
-      return $tree;
+      return self::parseSource($source);
     }
     return FALSE;
+  }
+
+  /**
+   * Parse PHP source code and return the parsed tree.
+   * @param string $source PHP source code
+   * @return Node
+   *   The top-level node of the parsed tree
+   */
+  public static function parseSource($source) {
+    static $tokenizer, $parser = NULL;
+    if (!isset($parser)) {
+      $tokenizer = new Tokenizer();
+      $parser = new self();
+    }
+    $tokens = $tokenizer->getAll($source);
+    return $parser->buildTree(new TokenIterator($tokens));
+  }
+
+  /**
+   * Parse a snippet of PHP and return the parsed tree.
+   * @param string $snippet PHP snippet without the opening PHP tag
+   * @return Node
+   *   The top-level node of the parsed tree
+   */
+  public static function parseSnippet($snippet) {
+    $tree = self::parseSource('<?php ' . $snippet);
+    // Strip the inserted opening php tag
+    array_shift($tree->children);
+    return $tree;
   }
 
   /**
@@ -192,13 +217,13 @@ class Parser {
 
   /**
    * Parse a constant declaration list.
-   * @return Node
+   * @return ConstantDeclarationListNode
    */
   private function _const() {
-    $node = new Node();
+    $node = new ConstantDeclarationListNode();
     $this->mustMatch(T_CONST, $node);
     do {
-      $node->appendChild($this->constDeclaration());
+      $node->declarations[] = $node->appendChild($this->constDeclaration());
     } while ($this->tryMatch(',', $node));
     $this->mustMatch(';', $node, TRUE);
     return $node;
@@ -206,13 +231,13 @@ class Parser {
 
   /**
    * Parse a constant declaration.
-   * @return Node
+   * @return ConstantDeclarationNode
    */
   private function constDeclaration() {
-    $node = new Node();
-    $this->mustMatch(T_STRING, $node, TRUE);
+    $node = new ConstantDeclarationNode();
+    $node->name = $this->mustMatch(T_STRING, $node, TRUE);
     if ($this->tryMatch('=', $node)) {
-      $node->appendChild($this->staticScalar());
+      $node->value = $node->appendChild($this->staticScalar());
     }
     return $node;
   }
@@ -1471,22 +1496,24 @@ class Parser {
 
   /**
    * Apply any function call, array and object deference.
-   * @param Node $function
+   * @param Node $function_reference
    * @return Node
    */
-  private function functionCall(Node $function) {
-    return $this->objectDereference($this->arrayDeference($this->_functionCall($function)));
+  private function functionCall(Node $function_reference) {
+    return $this->objectDereference($this->arrayDeference($this->_functionCall($function_reference)));
   }
 
   /**
    * Apply any function call to operand.
-   * @param Node $function
-   * @return Node
+   * @param Node $function_reference
+   * @return FunctionCallNode
    */
-  private function _functionCall(Node $function) {
-    $node = new Node();
-    $node->appendChild($function);
-    $node->appendChild($this->functionCallParameterList());
+  private function _functionCall(Node $function_reference) {
+    $node = new FunctionCallNode();
+    $node->functionReference = $node->appendChild($function_reference);
+    $argument_list = $this->functionCallParameterList();
+    $node->appendChild($argument_list);
+    $node->arguments = &$argument_list->arguments;
     return $node;
   }
 
@@ -1627,19 +1654,19 @@ class Parser {
 
   /**
    * Parse function call parameter list.
-   * @return Node
+   * @return ArgumentListNode
    */
   private function functionCallParameterList() {
-    $node = new Node();
+    $node = new ArgumentListNode();
     $this->mustMatch('(', $node);
     if ($this->tryMatch(')', $node, TRUE)) {
       return $node;
     }
     if ($this->isTokenType(T_YIELD)) {
-      $node->appendChild($this->_yield());
+      $node->arguments[] = $node->appendChild($this->_yield());
     } else {
       do {
-        $node->appendChild($this->functionCallParameter());
+        $node->arguments[] = $node->appendChild($this->functionCallParameter());
       } while ($this->tryMatch(',', $node));
     }
     $this->mustMatch(')', $node, TRUE);
@@ -1707,7 +1734,9 @@ class Parser {
       $node = new FunctionDeclaration();
       $node->appendChildren($node->children);
       $node->name = $this->mustMatch(T_STRING, $node);
-      $node->parameters = $node->appendChild($this->parameterList());
+      $parameter_list = $this->parameterList();
+      $node->appendChild($parameter_list);
+      $node->parameters = &$parameter_list->parameters;
       $node->body = $node->appendChild($this->innerStatementBlock());
       return $node;
     }
@@ -1715,16 +1744,16 @@ class Parser {
 
   /**
    * Parse parameter list.
-   * @return Node
+   * @return ParameterListNode
    */
   private function parameterList() {
-    $node = new Node();
+    $node = new ParameterListNode();
     $this->mustMatch('(', $node);
     if ($this->tryMatch(')', $node)) {
       return $node;
     }
     do {
-      $node->appendChild($this->parameter());
+      $node->parameters[] = $node->appendChild($this->parameter());
     } while ($this->tryMatch(',', $node));
     $this->mustMatch(')', $node, TRUE);
     return $node;
@@ -2278,7 +2307,9 @@ class Parser {
     $this->mustMatch(T_FUNCTION, $node);
     $node->reference = $this->tryMatch('&', $node);
     $node->name = $this->mustMatch(T_STRING, $node);
-    $node->parameters = $node->appendChild($this->parameterList());
+    $parameter_list = $this->parameterList();
+    $node->appendChild($parameter_list);
+    $node->parameters = &$parameter_list->parameters;
     if ($node->modifiers->abstract) {
       $this->mustMatch(';', $node);
       return $node;
@@ -2402,7 +2433,9 @@ class Parser {
     $this->mustMatch(T_FUNCTION, $node);
     $this->tryMatch('&', $node);
     $this->mustMatch(T_STRING, $node);
-    $node->parameters = $node->appendChild($this->parameterList());
+    $parameter_list = $this->parameterList();
+    $node->appendChild($parameter_list);
+    $node->parameters = &$parameter_list->parameters;
     $this->mustMatch(';', $node);
     return $node;
   }

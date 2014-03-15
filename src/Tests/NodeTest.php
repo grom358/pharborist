@@ -105,7 +105,7 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
 
     $function_nodes = $tree->filter('\Pharborist\FunctionDeclaration');
     $function_node = reset($function_nodes);
-    $function_parameters = reset($function_node->parameters);
+    $function_parameters = $function_node->parameters[0];
     $this->assertSame('$bar', (string) $function_parameters);
   }
 

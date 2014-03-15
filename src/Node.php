@@ -42,7 +42,7 @@ class Node {
   }
 
   /**
-   * Append children to node
+   * Append children to node.
    * @param Node[] $children
    */
   public function appendChildren(array $children) {

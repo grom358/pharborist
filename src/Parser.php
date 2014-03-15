@@ -1511,9 +1511,7 @@ class Parser {
   private function _functionCall(Node $function_reference) {
     $node = new FunctionCallNode();
     $node->functionReference = $node->appendChild($function_reference);
-    $argument_list = $this->functionCallParameterList();
-    $node->appendChild($argument_list);
-    $node->arguments = &$argument_list->arguments;
+    $node->arguments = $node->appendChild($this->functionCallParameterList());
     return $node;
   }
 
@@ -1734,9 +1732,7 @@ class Parser {
       $node = new FunctionDeclaration();
       $node->appendChildren($node->children);
       $node->name = $this->mustMatch(T_STRING, $node);
-      $parameter_list = $this->parameterList();
-      $node->appendChild($parameter_list);
-      $node->parameters = &$parameter_list->parameters;
+      $node->parameters = $node->appendChild($this->parameterList());
       $node->body = $node->appendChild($this->innerStatementBlock());
       return $node;
     }
@@ -2307,9 +2303,7 @@ class Parser {
     $this->mustMatch(T_FUNCTION, $node);
     $node->reference = $this->tryMatch('&', $node);
     $node->name = $this->mustMatch(T_STRING, $node);
-    $parameter_list = $this->parameterList();
-    $node->appendChild($parameter_list);
-    $node->parameters = &$parameter_list->parameters;
+    $node->parameters = $node->appendChild($this->parameterList());
     if ($node->modifiers->abstract) {
       $this->mustMatch(';', $node);
       return $node;
@@ -2433,9 +2427,7 @@ class Parser {
     $this->mustMatch(T_FUNCTION, $node);
     $this->tryMatch('&', $node);
     $this->mustMatch(T_STRING, $node);
-    $parameter_list = $this->parameterList();
-    $node->appendChild($parameter_list);
-    $node->parameters = &$parameter_list->parameters;
+    $node->parameters = $node->appendChild($this->parameterList());
     $this->mustMatch(';', $node);
     return $node;
   }

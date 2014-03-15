@@ -22,7 +22,7 @@ class ClassMethodNode extends Node {
   public $name;
 
   /**
-   * @var Node[]
+   * @var ListNode
    */
   public $parameters;
 

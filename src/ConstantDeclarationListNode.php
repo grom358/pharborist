@@ -2,9 +2,16 @@
 namespace Pharborist;
 
 
-class ConstantDeclarationListNode extends Node {
+class ConstantDeclarationListNode extends ListNode {
   /**
    * @var Node[]
    */
-  public $declarations = array();
+  public $declarations;
+
+  /**
+   * Constructor.
+   */
+  public function __construct() {
+    $this->declarations = &$this->items;
+  }
 }

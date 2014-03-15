@@ -5,9 +5,16 @@ namespace Pharborist;
  * List of arguments.
  * @package Pharborist
  */
-class ArgumentListNode extends Node {
+class ArgumentListNode extends ListNode {
   /**
    * @var Node[]
    */
-  public $arguments = array();
+  public $arguments;
+
+  /**
+   * Constructor.
+   */
+  public function __construct() {
+    $this->arguments = &$this->items;
+  }
 }

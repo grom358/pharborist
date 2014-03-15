@@ -5,14 +5,21 @@ namespace Pharborist;
  * A class member list declaration.
  * @package Pharborist
  */
-class ClassMemberListNode extends Node {
+class ClassMemberListNode extends ListNode {
   /**
    * @var ModifiersNode
    */
   public $modifiers;
 
   /**
-   * @var Node
+   * @var Node[]
    */
-  public $members = [];
+  public $members;
+
+  /**
+   * Constructor.
+   */
+  public function __construct() {
+    $this->members = &$this->items;
+  }
 }

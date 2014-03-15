@@ -5,9 +5,16 @@ namespace Pharborist;
  * Use declaration list.
  * @package Pharborist
  */
-class UseDeclarationListNode extends Node {
+class UseDeclarationListNode extends ListNode {
   /**
    * @var Node[]
    */
-  public $declarations = array();
+  public $declarations;
+
+  /**
+   * Constructor.
+   */
+  public function __construct() {
+    $this->declarations = &$this->items;
+  }
 }

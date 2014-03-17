@@ -5,7 +5,7 @@ namespace Pharborist;
  * A function declaration.
  * @package Pharborist
  */
-class FunctionDeclaration extends Node {
+class FunctionDeclarationNode extends Node {
   /**
    * @var Node
    */

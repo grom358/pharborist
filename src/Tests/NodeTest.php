@@ -22,7 +22,7 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
   public function testFilter() {
     // Test with a real file.
     $tree = Parser::parseFile(__DIR__ . '/files/basic.php');
-    $this->assertSame(count($tree->filter('Pharborist\FunctionDeclaration')), 1);
+    $this->assertSame(count($tree->filter('Pharborist\FunctionDeclarationNode')), 1);
   }
 
   /**
@@ -78,7 +78,7 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
     $tree = Parser::parseFile(__DIR__ . '/files/basic.php');
 
     // Function declaration is at line 13, column 10.
-    $function_nodes = $tree->filter('\Pharborist\FunctionDeclaration');
+    $function_nodes = $tree->filter('\Pharborist\FunctionDeclarationNode');
     $function_node = reset($function_nodes);
     $this->assertSame(13, $function_node->getSourcePosition()->lineNo);
     $this->assertSame(10, $function_node->getSourcePosition()->colNo);
@@ -103,7 +103,7 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
   public function testToString() {
     $tree = Parser::parseFile(__DIR__ . '/files/basic.php');
 
-    $function_nodes = $tree->filter('\Pharborist\FunctionDeclaration');
+    $function_nodes = $tree->filter('\Pharborist\FunctionDeclarationNode');
     $function_node = reset($function_nodes);
     $function_parameters = $function_node->parameters[0];
     $this->assertSame('$bar', (string) $function_parameters);

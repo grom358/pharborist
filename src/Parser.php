@@ -1729,7 +1729,7 @@ class Parser {
       return $node;
     }
     else {
-      $node = new FunctionDeclaration();
+      $node = new FunctionDeclarationNode();
       $node->appendChildren($node->children);
       $node->name = $this->mustMatch(T_STRING, $node);
       $node->parameters = $node->appendChild($this->parameterList());

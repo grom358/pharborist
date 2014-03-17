@@ -409,6 +409,7 @@ class Parser {
         $this->mustMatch(T_ELSEIF, $elseIf);
         $elseIf->condition = $elseIf->appendChild($this->parenExpr());
         $elseIf->then = $elseIf->appendChild($this->statement());
+        $node->elseIfList[] = $node->appendChild($elseIf);
       }
       if ($this->tryMatch(T_ELSE, $node)) {
         $node->else = $node->appendChild($this->statement());

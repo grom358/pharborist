@@ -474,9 +474,9 @@ class Parser {
     $node = new ForNode();
     $this->mustMatch(T_FOR, $node);
     $this->mustMatch('(', $node);
-    $node->initial = $node->appendChild($this->forExpr($node, ';'));
-    $node->condition = $node->appendChild($this->forExpr($node, ';'));
-    $node->step = $node->appendChild($this->forExpr($node, ')'));
+    $node->initial = $this->forExpr($node, ';');
+    $node->condition = $this->forExpr($node, ';');
+    $node->step = $this->forExpr($node, ')', TRUE);
     if ($this->tryMatch(':', $node)) {
       $node->body = $node->appendChild($this->innerStatementListNode(T_ENDFOR));
       $this->mustMatch(T_ENDFOR, $node);
@@ -493,15 +493,21 @@ class Parser {
    * Parse a for expression.
    * @param ForNode $parent Parent for node
    * @param int|string $terminator Token type that terminates the for expression
+   * @param bool $is_last TRUE if last for expression
    * @return Node
    */
-  private function forExpr(ForNode $parent, $terminator) {
-    if ($this->tryMatch($terminator, $parent)) {
-      return new Node();
+  private function forExpr(ForNode $parent, $terminator, $is_last = FALSE) {
+    if ($this->isTokenType($terminator)) {
+      $expr = new Node();
+      $parent->appendChild($expr);
+      $this->mustMatch($terminator, $parent);
+      return $expr;
     }
     $node = new Node();
-    $node->appendChild($this->exprList());
-    $this->mustMatch($terminator, $parent, TRUE);
+    $expr = $this->exprList();
+    $node->appendChild($expr);
+    $node = $parent->appendChild($node);
+    $this->mustMatch($terminator, $parent, $is_last);
     return $node;
   }
 

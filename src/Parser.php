@@ -1729,8 +1729,9 @@ class Parser {
       return $node;
     }
     else {
+      $n = $node;
       $node = new FunctionDeclarationNode();
-      $node->appendChildren($node->children);
+      $node->appendChildren($n->children);
       $node->name = $this->mustMatch(T_STRING, $node);
       $node->parameters = $node->appendChild($this->parameterList());
       $node->body = $node->appendChild($this->innerStatementBlock());

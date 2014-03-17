@@ -2121,9 +2121,9 @@ class Parser {
     $declaration = new UseDeclarationNode();
     $node = new Node();
     $this->tryMatch(T_NS_SEPARATOR, $node);
-    $this->mustMatch(T_STRING, $node);
+    $this->mustMatch(T_STRING, $node, TRUE);
     while ($this->tryMatch(T_NS_SEPARATOR, $node)) {
-      $this->mustMatch(T_STRING, $node);
+      $this->mustMatch(T_STRING, $node, TRUE);
     }
     $declaration->namespacePath = $declaration->appendChild($node);
     if ($this->tryMatch(T_AS, $declaration)) {

@@ -5,6 +5,7 @@ namespace Pharborist\Tests;
  * Tests Phaborist\Node.
  * @package Pharborist
  */
+use Pharborist\FunctionDeclarationNode;
 use Pharborist\Node;
 use Pharborist\Parser;
 use Pharborist\SourcePosition;
@@ -23,6 +24,22 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
     // Test with a real file.
     $tree = Parser::parseFile(__DIR__ . '/files/basic.php');
     $this->assertSame(count($tree->filter('Pharborist\FunctionDeclarationNode')), 1);
+  }
+
+  /**
+   * Tests Pharborist\Node::find()
+   *
+   * @covers Pharborist\Node::find()
+   */
+  public function testFind() {
+    $tree = new Node();
+    $block = $tree->appendChild(new Node());
+    $block->appendChild(new FunctionDeclarationNode());
+    $block->appendChild(new FunctionDeclarationNode());
+    $block = $tree->appendChild(new Node());
+    $child = $block->appendChild(new Node());
+    $child->appendChild(new FunctionDeclarationNode());
+    $this->assertSame(count($tree->find('Pharborist\FunctionDeclarationNode')), 3);
   }
 
   /**

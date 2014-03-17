@@ -68,6 +68,23 @@ class Node {
   }
 
   /**
+   * Find descendants that match given type.
+   * @param string $type
+   *   Type of nodes to return.
+   * @return Node[] matching descendants
+   */
+  public function find($type) {
+    $matches = array();
+    if ($this instanceof $type) {
+      $matches[] = $this;
+    }
+    foreach ($this->children as $child) {
+      $matches = array_merge($matches, $child->find($type));
+    }
+    return $matches;
+  }
+
+  /**
    * @return SourcePosition
    */
   public function getSourcePosition() {

@@ -359,6 +359,7 @@ class Parser {
    */
   private function exprStatement() {
     $node = new Node();
+    $this->matchHidden($node);
     $node->appendChild($this->expr());
     $this->mustMatch(';', $node, TRUE);
     return $node;
@@ -403,11 +404,13 @@ class Parser {
       return $node;
     }
     else {
+      $this->matchHidden($node);
       $node->appendChild($this->statement());
       while ($this->isTokenType(T_ELSEIF)) {
         $elseIf = new ElseIfNode();
         $this->mustMatch(T_ELSEIF, $elseIf);
         $elseIf->condition = $elseIf->appendChild($this->parenExpr());
+        $this->matchHidden($elseIf);
         $elseIf->then = $elseIf->appendChild($this->statement());
         $node->elseIfList[] = $node->appendChild($elseIf);
       }
@@ -447,6 +450,7 @@ class Parser {
       return $node;
     }
     else {
+      $this->matchHidden($node);
       $node->body = $node->appendChild($this->statement());
       return $node;
     }
@@ -484,6 +488,7 @@ class Parser {
       return $node;
     }
     else {
+      $this->matchHidden($node);
       $node->body = $node->appendChild($this->statement());
       return $node;
     }

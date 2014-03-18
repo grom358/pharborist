@@ -98,7 +98,7 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
     $function_nodes = $tree->filter('\Pharborist\FunctionDeclarationNode');
     $function_node = reset($function_nodes);
     $this->assertSame(13, $function_node->getSourcePosition()->lineNo);
-    $this->assertSame(10, $function_node->getSourcePosition()->colNo);
+    $this->assertSame(1, $function_node->getSourcePosition()->colNo);
 
     $sourcePosition = new SourcePosition(1, 1);
     $node = $this->getMock('\Pharborist\Node', array('getSourcePosition'));

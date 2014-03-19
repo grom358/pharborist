@@ -1,17 +1,9 @@
 <?php
-namespace Pharborist\Tests;
+namespace Pharborist;
 
 /**
- * Tests Phaborist\Node.
+ * Tests Node.
  * @package Pharborist
- */
-use Pharborist\FunctionDeclarationNode;
-use Pharborist\Node;
-use Pharborist\Parser;
-use Pharborist\SourcePosition;
-
-/**
- * Tests Pharborist\Node
  */
 class NodeTest extends \PHPUnit_Framework_TestCase {
 

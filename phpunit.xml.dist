@@ -5,7 +5,7 @@
   </php>
   <testsuites>
     <testsuite name="Pharborist">
-      <directory>./src/Tests</directory>
+      <directory>./tests</directory>
     </testsuite>
   </testsuites>
   <!-- Filter for coverage reports. -->

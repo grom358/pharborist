@@ -1,21 +1,17 @@
 <?php
-namespace Pharborist\Tests;
+namespace Pharborist;
 
 /**
  * Tests Phaborist\Parser.
  * @package Pharborist
  */
-use Pharborist\Parser;
-
-/**
- * Tests Pharborist\Parser
- */
 class ParserTest extends \PHPUnit_Framework_TestCase {
 
   /**
-   * Tests Pharborist\Parser::parseFile()
+   * Tests Pharborist\Parser::parseFile().
    *
-   * @covers Pharborist\Parser::parseFile()
+   * @covers Pharborist\Parser::parseFile
+   * @covers Pharborist\Parser::parseSource
    */
   public function testParseFile() {
     // Test with a real file.

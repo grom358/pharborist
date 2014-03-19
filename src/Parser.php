@@ -236,7 +236,7 @@ class Parser {
   private function constDeclaration() {
     $node = new ConstantDeclarationNode();
     $node->name = $this->mustMatch(T_STRING, $node, TRUE);
-    if ($this->tryMatch('=', $node)) {
+    if ($this->mustMatch('=', $node)) {
       $node->value = $node->appendChild($this->staticScalar());
     }
     return $node;
@@ -386,13 +386,13 @@ class Parser {
     $this->mustMatch(T_IF, $node);
     $node->condition = $node->appendChild($this->parenExpr());
     if ($this->tryMatch(':', $node)) {
-      $node->then = $node->appendChild($this->statement());
+      $node->then = $node->appendChild($this->innerIfInnerStatementList());
       while ($this->isTokenType(T_ELSEIF)) {
         $elseIf = new ElseIfNode();
         $this->mustMatch(T_ELSEIF, $elseIf);
         $elseIf->condition = $elseIf->appendChild($this->parenExpr());
         $this->mustMatch(':', $elseIf);
-        $elseIf->then = $elseIf->appendChild($this->innerElseIfInnerStatementList());
+        $elseIf->then = $elseIf->appendChild($this->innerIfInnerStatementList());
         $node->elseIfList[] = $node->appendChild($elseIf);
       }
       if ($this->tryMatch(T_ELSE, $node)) {
@@ -425,10 +425,10 @@ class Parser {
    * Parse statements for alternative if syntax.
    * @return Node
    */
-  private function innerElseIfInnerStatementList() {
+  private function innerIfInnerStatementList() {
     $node = new Node();
     $this->matchHidden($node);
-    while ($this->iterator->hasNext() && !$this->isTokenType(T_ELSEIF, T_ENDIF)) {
+    while ($this->iterator->hasNext() && !$this->isTokenType(T_ELSEIF, T_ELSE, T_ENDIF)) {
       $node->appendChild($this->innerStatement());
       $this->matchHidden($node);
     }
@@ -1460,7 +1460,6 @@ class Parser {
         elseif ($this->isTokenType(T_DOUBLE_COLON)) {
           return $this->varClass($namespace_path);
         }
-        break;
       case T_STATIC:
         $class_name = $this->mustMatchToken(T_STATIC);
         return $this->varClass($class_name);
@@ -1583,6 +1582,7 @@ class Parser {
       $node = new Node();
       $node->appendChild($dollar_sign);
       $node->appendChild($this->indirectReference());
+      return $node;
     }
     return $this->referenceVariable();
   }
@@ -2043,7 +2043,7 @@ class Parser {
     switch ($this->getTokenType()) {
       case T_HALT_COMPILER:
         throw new ParserException($this->iterator->getSourcePosition(),
-          "__HALT_COMPILER() can only be used from the outermost scope");
+          "__halt_compiler can only be used from the outermost scope");
       case T_FUNCTION:
         return $this->functionDeclaration();
       case T_ABSTRACT:
@@ -2140,7 +2140,7 @@ class Parser {
     }
     $declaration->namespacePath = $declaration->appendChild($node);
     if ($this->tryMatch(T_AS, $declaration)) {
-      $declaration->alias = $this->mustMatch(T_STRING, $declaration);
+      $declaration->alias = $this->mustMatch(T_STRING, $declaration, TRUE);
     }
     return $declaration;
   }
@@ -2439,7 +2439,7 @@ class Parser {
     !$is_static && $this->tryMatch(T_STATIC, $node);
     $this->mustMatch(T_FUNCTION, $node);
     $this->tryMatch('&', $node);
-    $this->mustMatch(T_STRING, $node);
+    $node->name = $this->mustMatch(T_STRING, $node);
     $node->parameters = $node->appendChild($this->parameterList());
     $this->mustMatch(';', $node);
     return $node;

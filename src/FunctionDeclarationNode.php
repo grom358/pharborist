@@ -12,7 +12,7 @@ class FunctionDeclarationNode extends Node {
   public $name;
 
   /**
-   * @var ListNode
+   * @var ParameterListNode
    */
   public $parameters;
 

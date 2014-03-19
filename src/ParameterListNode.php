@@ -7,7 +7,7 @@ namespace Pharborist;
  */
 class ParameterListNode extends ListNode {
   /**
-   * @var Node[]
+   * @var ParameterNode[]
    */
   public $parameters;
 

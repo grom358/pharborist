@@ -12,7 +12,7 @@ class ClassMemberListNode extends ListNode {
   public $modifiers;
 
   /**
-   * @var Node[]
+   * @var ClassMemberNode[]
    */
   public $members;
 

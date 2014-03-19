@@ -4,7 +4,7 @@ namespace Pharborist;
 
 class ConstantDeclarationListNode extends ListNode {
   /**
-   * @var Node[]
+   * @var ConstantDeclarationNode[]
    */
   public $declarations;
 

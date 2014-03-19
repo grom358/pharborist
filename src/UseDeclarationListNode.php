@@ -7,7 +7,7 @@ namespace Pharborist;
  */
 class UseDeclarationListNode extends ListNode {
   /**
-   * @var Node[]
+   * @var UseDeclarationNode[]
    */
   public $declarations;
 

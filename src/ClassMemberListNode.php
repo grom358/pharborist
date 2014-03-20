@@ -5,7 +5,7 @@ namespace Pharborist;
  * A class member list declaration.
  * @package Pharborist
  */
-class ClassMemberListNode extends ListNode {
+class ClassMemberListNode extends CollectionNode {
   /**
    * @var ModifiersNode
    */

@@ -5,7 +5,7 @@ namespace Pharborist;
  * Use declaration list.
  * @package Pharborist
  */
-class UseDeclarationListNode extends ListNode {
+class UseDeclarationListNode extends CollectionNode {
   /**
    * @var UseDeclarationNode[]
    */

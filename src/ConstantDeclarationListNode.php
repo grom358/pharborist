@@ -1,8 +1,11 @@
 <?php
 namespace Pharborist;
 
-
-class ConstantDeclarationListNode extends ListNode {
+/**
+ * Constant declaration list.
+ * @package Pharborist
+ */
+class ConstantDeclarationListNode extends CollectionNode {
   /**
    * @var ConstantDeclarationNode[]
    */

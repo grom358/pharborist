@@ -4,10 +4,10 @@ namespace Pharborist;
 use Traversable;
 
 /**
- * Container for list of nodes.
+ * A collection of nodes implements array interface.
  * @package Pharborist
  */
-abstract class ListNode extends Node implements \ArrayAccess, \IteratorAggregate {
+abstract class CollectionNode extends Node implements \ArrayAccess, \IteratorAggregate {
   /**
    * @var Node[]
    */

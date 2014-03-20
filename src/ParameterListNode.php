@@ -5,7 +5,7 @@ namespace Pharborist;
  * List of parameters.
  * @package Pharborist
  */
-class ParameterListNode extends ListNode {
+class ParameterListNode extends CollectionNode {
   /**
    * @var ParameterNode[]
    */

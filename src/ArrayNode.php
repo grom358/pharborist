@@ -5,7 +5,7 @@ namespace Pharborist;
  * Node for php array.
  * @package Pharborist
  */
-class ArrayNode extends ListNode {
+class ArrayNode extends CollectionNode {
   /**
    * @var Node[]
    */

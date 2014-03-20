@@ -5,7 +5,7 @@ namespace Pharborist;
  * List of arguments.
  * @package Pharborist
  */
-class ArgumentListNode extends ListNode {
+class ArgumentListNode extends CollectionNode {
   /**
    * @var Node[]
    */

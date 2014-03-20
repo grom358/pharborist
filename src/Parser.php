@@ -1080,8 +1080,15 @@ class Parser {
       case '(':
         $node = new Node();
         $this->mustMatch('(', $node);
-        $node->appendChild($this->expr());
-        $this->mustMatch(')', $node, TRUE);
+        if ($this->isTokenType(T_NEW)) {
+          $node->appendChild($this->newExpr());
+          $this->mustMatch(')', $node, TRUE);
+          $node = $this->objectDereference($this->arrayDeference($node));
+        }
+        else {
+          $node->appendChild($this->expr());
+          $this->mustMatch(')', $node, TRUE);
+        }
         return $node;
       case T_START_HEREDOC:
         $node = new Node();

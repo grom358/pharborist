@@ -1065,16 +1065,16 @@ class Parser {
       case T_CONSTANT_ENCAPSED_STRING:
         return $this->arrayDeference($this->mustMatchToken(T_CONSTANT_ENCAPSED_STRING));
       case T_ARRAY:
-        $node = new Node();
+        $node = new ArrayNode();
         $this->mustMatch(T_ARRAY, $node);
         $this->mustMatch('(', $node);
-        $node->appendChild($this->arrayPairList(')'));
+        $this->arrayPairList($node, ')');
         $this->mustMatch(')', $node);
         return $this->arrayDeference($node);
       case '[':
-        $node = new Node();
+        $node = new ArrayNode();
         $this->mustMatch('[', $node);
-        $node->appendChild($this->arrayPairList(']'));
+        $this->arrayPairList($node, ']');
         $this->mustMatch(']', $node);
         return $this->arrayDeference($node);
       case '(':
@@ -1300,16 +1300,14 @@ class Parser {
 
   /**
    * Parse array pair list.
+   * @param ArrayNode $node the parent ArrayNode
    * @param int|string $terminator Token type that ends the pair list
-   * @return Node
    */
-  private function arrayPairList($terminator) {
-    $node = new Node();
+  private function arrayPairList(ArrayNode $node, $terminator) {
     while (!$this->isTokenType($terminator)) {
       $node->appendChild($this->arrayPair());
       $this->tryMatch(',', $node);
     }
-    return $node;
   }
 
   /**
@@ -1323,14 +1321,14 @@ class Parser {
     $node = $this->expr();
     if ($this->isTokenType(T_DOUBLE_ARROW)) {
       $expr = $node;
-      $node = new Node();
-      $node->appendChild($expr);
+      $node = new ArrayPairNode();
+      $node->key = $node->appendChild($expr);
       $this->mustMatch(T_DOUBLE_ARROW, $node);
       if ($this->isTokenType('&')) {
-        $node->appendChild($this->writeVariable());
+        $node->value = $node->appendChild($this->writeVariable());
       }
       else {
-        $node->appendChild($this->expr());
+        $node->value = $node->appendChild($this->expr());
       }
     }
     return $node;

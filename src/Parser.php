@@ -1607,15 +1607,17 @@ class Parser {
    */
   private function offsetVariable(Node $var) {
     if ($this->isTokenType('{')) {
-      $node = new Node();
-      $node->appendChild($var);
-      $node->appendChild($this->bracesExpr());
+      $node = new ArrayLookupNode();
+      $node->array = $node->appendChild($var);
+      $this->mustMatch('{', $node);
+      $node->key = $node->appendChild($this->expr());
+      $this->mustMatch('}', $node, TRUE);
       return $this->offsetVariable($node);
     }
     elseif ($this->isTokenType('[')) {
-      $node = new Node();
-      $node->appendChild($var);
-      $node->appendChild($this->dimOffset());
+      $node = new ArrayLookupNode();
+      $node->array = $node->appendChild($var);
+      $this->dimOffset($node);
       return $this->offsetVariable($node);
     }
     else {
@@ -1655,16 +1657,14 @@ class Parser {
 
   /**
    * Parse dimensional offset.
-   * @return Node
+   * @param ArrayLookupNode $node Node to append to
    */
-  private function dimOffset() {
-    $node = new Node();
+  private function dimOffset(ArrayLookupNode $node) {
     $this->mustMatch('[', $node);
     if (!$this->isTokenType(']')) {
-      $node->appendChild($this->expr());
+      $node->key = $node->appendChild($this->expr());
     }
     $this->mustMatch(']', $node, TRUE);
-    return $node;
   }
 
   /**
@@ -1714,9 +1714,9 @@ class Parser {
   private function arrayDeference(Node $node) {
     while ($this->isTokenType('[')) {
       $n = $node;
-      $node = new Node();
-      $node->appendChild($n);
-      $node->appendChild($this->dimOffset());
+      $node = new ArrayLookupNode();
+      $node->array = $node->appendChild($n);
+      $this->dimOffset($node);
     }
     return $node;
   }

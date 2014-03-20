@@ -713,24 +713,14 @@ class Parser {
    * @return Node
    */
   private function _unset() {
-    $node = new Node();
+    $node = new UnsetStatementNode();
     $this->mustMatch(T_UNSET, $node);
     $this->mustMatch('(', $node);
-    $node->appendChild($this->variableList());
+    do {
+      $node->variables[] = $node->appendChild($this->variable());
+    } while ($this->tryMatch(',', $node));
     $this->mustMatch(')', $node);
     $this->mustMatch(';', $node, TRUE);
-    return $node;
-  }
-
-  /**
-   * Parse list of variables.
-   * @return Node
-   */
-  private function variableList() {
-    $node = new Node();
-    do {
-      $node->appendChild($this->variable());
-    } while ($this->tryMatch(',', $node));
     return $node;
   }
 

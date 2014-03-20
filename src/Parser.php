@@ -2612,7 +2612,12 @@ class Parser {
     return static::createTokenNode($token);
   }
 
-  private static function createTokenNode($token) {
+  /**
+   * Create a TokenNode from Token.
+   * @param Token $token Token to create node for
+   * @return TokenNode
+   */
+  private static function createTokenNode(Token $token) {
     switch ($token->type) {
       case T_VARIABLE:
         return new VariableNode($token);

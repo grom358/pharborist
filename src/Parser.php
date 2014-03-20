@@ -1465,6 +1465,7 @@ class Parser {
         elseif ($this->isTokenType(T_DOUBLE_COLON)) {
           return $this->varClass($namespace_path);
         }
+        break;
       case T_STATIC:
         $class_name = $this->mustMatchToken(T_STATIC);
         return $this->varClass($class_name);

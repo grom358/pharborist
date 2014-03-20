@@ -14,7 +14,7 @@ class TryNode extends Node {
   /**
    * @var Node[]
    */
-  public $catches;
+  public $catches = array();
 
   /**
    * @var Node

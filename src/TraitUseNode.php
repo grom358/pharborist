@@ -9,10 +9,10 @@ class TraitUseNode extends Node {
   /**
    * @var NamespacePathNode[]
    */
-  public $traits;
+  public $traits = array();
 
   /**
    * @var (TraitPrecedenceNode|TraitAliasNode)[]
    */
-  public $adaptations;
+  public $adaptations = array();
 }

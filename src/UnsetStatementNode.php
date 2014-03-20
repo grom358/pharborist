@@ -9,5 +9,5 @@ class UnsetStatementNode extends Node {
   /**
    * @var Node[]
    */
-  public $variables;
+  public $variables = array();
 }

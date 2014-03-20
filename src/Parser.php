@@ -1585,9 +1585,9 @@ class Parser {
         return $this->offsetVariable($this->compoundVariable());
       }
       // Otherwise its an indirect reference
-      $node = new Node();
+      $node = new VariableVariableNode();
       $node->appendChild($dollar_sign);
-      $node->appendChild($this->indirectReference());
+      $node->variable = $node->appendChild($this->indirectReference());
       return $node;
     }
     return $this->referenceVariable();

@@ -2067,7 +2067,7 @@ class Parser {
 
   /**
    * Parse a namespace path.
-   * @return Node
+   * @return NamespacePathNode
    */
   private function namespacePath() {
     $node = new NamespacePathNode();

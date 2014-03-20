@@ -2070,7 +2070,7 @@ class Parser {
    * @return Node
    */
   private function namespacePath() {
-    $node = new Node();
+    $node = new NamespacePathNode();
     if ($this->tryMatch(T_NAMESPACE, $node)) {
       $this->mustMatch(T_NS_SEPARATOR, $node);
     }
@@ -2106,10 +2106,10 @@ class Parser {
 
   /**
    * Parse a namespace name.
-   * @return Node
+   * @return NamespacePathNode
    */
   private function namespaceName() {
-    $node = new Node();
+    $node = new NamespacePathNode();
     $this->mustMatch(T_STRING, $node, TRUE);
     while ($this->tryMatch(T_NS_SEPARATOR, $node)) {
       $this->mustMatch(T_STRING, $node, TRUE);
@@ -2138,7 +2138,7 @@ class Parser {
    */
   private function useDeclaration() {
     $declaration = new UseDeclarationNode();
-    $node = new Node();
+    $node = new NamespacePathNode();
     $this->tryMatch(T_NS_SEPARATOR, $node);
     $this->mustMatch(T_STRING, $node, TRUE);
     while ($this->tryMatch(T_NS_SEPARATOR, $node)) {

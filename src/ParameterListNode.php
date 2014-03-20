@@ -16,5 +16,6 @@ class ParameterListNode extends CollectionNode {
    */
   public function __construct() {
     $this->parameters = &$this->items;
+    $this->collectionType = '\Pharborist\ParameterNode';
   }
 }

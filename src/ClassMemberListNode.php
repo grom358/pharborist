@@ -21,5 +21,6 @@ class ClassMemberListNode extends CollectionNode {
    */
   public function __construct() {
     $this->members = &$this->items;
+    $this->collectionType = '\Pharborist\ClassMemberNode';
   }
 }

@@ -14,6 +14,12 @@ abstract class CollectionNode extends Node implements \ArrayAccess, \IteratorAgg
   protected $items = array();
 
   /**
+   * Type of items the collection contains.
+   * @var string
+   */
+  protected $collectionType = '\Pharborist\Node';
+
+  /**
    * (PHP 5 &gt;= 5.0.0)<br/>
    * Whether a offset exists
    * @link http://php.net/manual/en/arrayaccess.offsetexists.php
@@ -55,6 +61,9 @@ abstract class CollectionNode extends Node implements \ArrayAccess, \IteratorAgg
    * @return void
    */
   public function offsetSet($offset, $value) {
+    if (!($value instanceof $this->collectionType)) {
+      throw new \InvalidArgumentException("Only items of type {$this->collectionType} are allowed!");
+    }
     if (is_null($offset)) {
       $this->items[] = $value;
     }

@@ -16,5 +16,6 @@ class ConstantDeclarationListNode extends CollectionNode {
    */
   public function __construct() {
     $this->declarations = &$this->items;
+    $this->collectionType = '\Pharborist\ConstantDeclarationNode';
   }
 }

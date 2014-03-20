@@ -1338,12 +1338,12 @@ class Parser {
 
   /**
    * Parse a write variable.
-   * @return Node
+   * @return ReferenceVariableNode
    */
   private function writeVariable() {
-    $node = new Node();
+    $node = new ReferenceVariableNode();
     $this->mustMatch('&', $node);
-    $node->appendChild($this->variable());
+    $node->variable = $node->appendChild($this->variable());
     return $node;
   }
 

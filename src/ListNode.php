@@ -1,16 +1,17 @@
 <?php
 namespace Pharborist;
+
 use Traversable;
 
 /**
  * Container for list of nodes.
  * @package Pharborist
  */
-class ListNode extends Node implements \ArrayAccess, \IteratorAggregate {
+abstract class ListNode extends Node implements \ArrayAccess, \IteratorAggregate {
   /**
    * @var Node[]
    */
-  public $items = array();
+  protected $items = array();
 
   /**
    * (PHP 5 &gt;= 5.0.0)<br/>

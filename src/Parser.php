@@ -2359,7 +2359,7 @@ class Parser {
    */
   private function traitAdaptation() {
     $qualified_name = $this->namespacePath();
-    if (count($qualified_name->children) === 1) {
+    if (count($qualified_name->children) === 1 && !$this->isTokenType(T_DOUBLE_COLON)) {
       $qualified_name = $qualified_name->children[0];
       return $this->traitAlias($qualified_name);
     }
@@ -2370,10 +2370,15 @@ class Parser {
     if ($this->isTokenType(T_AS)) {
       return $this->traitAlias($node);
     }
+    $method_name_node = $node;
+    $node = new TraitPrecedenceNode();
+    $node->methodName = $node->appendChild($method_name_node);
     $this->mustMatch(T_INSTEADOF, $node);
+    $trait_names_node = new TraitNameListNode();
     do {
-      $node->appendChild($this->namespacePath());
-    } while ($this->tryMatch(',', $node));
+      $trait_names_node->names[] = $trait_names_node->appendChild($this->namespacePath());
+    } while ($this->tryMatch(',', $trait_names_node));
+    $node->traitNames = $node->appendChild($trait_names_node);
     $this->mustMatch(';', $node, TRUE);
     return $node;
   }
@@ -2381,19 +2386,19 @@ class Parser {
   /**
    * Parse a trait alias.
    * @param Node $trait_method_reference
-   * @return Node
+   * @return TraitAliasNode
    */
   private function traitAlias(Node $trait_method_reference) {
-    $node = new Node();
-    $node->appendChild($trait_method_reference);
+    $node = new TraitAliasNode();
+    $node->methodName = $node->appendChild($trait_method_reference);
     $this->mustMatch(T_AS, $node);
     if ($trait_modifier = $this->tryMatchToken(T_PUBLIC, T_PROTECTED, T_PRIVATE)) {
-      $node->appendChild($trait_modifier);
-      $this->tryMatch(T_STRING, $node);
+      $node->visibility = $node->appendChild($trait_modifier);
+      $node->alias = $this->tryMatch(T_STRING, $node);
       $this->mustMatch(';', $node, TRUE);
       return $node;
     }
-    $this->mustMatch(T_STRING, $node);
+    $node->alias = $this->mustMatch(T_STRING, $node);
     $this->mustMatch(';', $node, TRUE);
     return $node;
   }

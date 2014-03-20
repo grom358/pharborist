@@ -864,22 +864,24 @@ class Parser {
 
   /**
    * Parse a try control structure.
-   * @return Node
+   * @return TryNode
    */
   private function _try() {
-    $node = new Node();
+    $node = new TryNode();
     $this->mustMatch(T_TRY, $node);
-    $node->appendChild($this->innerStatementBlock());
-    while ($this->tryMatch(T_CATCH, $node)) {
-      $this->mustMatch('(', $node);
-      $node->appendChild($this->namespacePath());
-      $this->mustMatch(T_VARIABLE, $node);
-      $this->mustMatch(')', $node);
-      $node->appendChild($this->innerStatementBlock());
+    $node->try = $node->appendChild($this->innerStatementBlock());
+    $catch_node = new CatchNode();
+    while ($this->tryMatch(T_CATCH, $catch_node)) {
+      $this->mustMatch('(', $catch_node);
+      $catch_node->exceptionType = $catch_node->appendChild($this->namespacePath());
+      $catch_node->variable = $this->mustMatch(T_VARIABLE, $catch_node);
+      $this->mustMatch(')', $catch_node);
+      $catch_node->body = $catch_node->appendChild($this->innerStatementBlock());
+      $node->catches[] = $node->appendChild($catch_node);
+      $catch_node = new CatchNode();
     }
     if ($this->tryMatch(T_FINALLY, $node)) {
-      $this->mustMatch(T_FINALLY, $node);
-      $node->appendChild($this->innerStatementBlock());
+      $node->finally = $node->appendChild($this->innerStatementBlock());
     }
     return $node;
   }

@@ -1642,7 +1642,7 @@ class Parser {
       return $node;
     }
     else {
-      return $this->mustMatchToken(T_VARIABLE, '\Pharborist\VariableNode');
+      return $this->mustMatchToken(T_VARIABLE);
     }
   }
 
@@ -2546,7 +2546,7 @@ class Parser {
     }
     $this->addSkipped($parent);
     $this->docComment = NULL;
-    $node = new TokenNode($token);
+    $node = static::createTokenNode($token);
     $parent->appendChild($node);
     $this->iterator->next();
     if (!$maybe_last) {
@@ -2569,7 +2569,7 @@ class Parser {
     }
     $this->addSkipped($parent);
     $this->docComment = NULL;
-    $node = new TokenNode($token);
+    $node = static::createTokenNode($token);
     $parent->appendChild($node);
     $this->iterator->next();
     if (!$maybe_last) {
@@ -2589,7 +2589,7 @@ class Parser {
     foreach (func_get_args() as $expected_type) {
       if ($expected_type === $token->type) {
         $this->iterator->next();
-        return new TokenNode($token);
+        return static::createTokenNode($token);
       }
     }
     return NULL;
@@ -2601,7 +2601,7 @@ class Parser {
    * @return TokenNode
    * @throws ParserException
    */
-  private function mustMatchToken($expected_type, $class_name = '\Pharborist\TokenNode') {
+  private function mustMatchToken($expected_type) {
     $token = $this->iterator->current();
     if ($token === NULL || $token->type !== $expected_type) {
       throw new ParserException(
@@ -2609,7 +2609,20 @@ class Parser {
         'expected ' . Token::typeName($expected_type));
     }
     $this->iterator->next();
-    return new $class_name($token);
+    return static::createTokenNode($token);
+  }
+
+  private static function createTokenNode($token) {
+    switch ($token->type) {
+      case T_VARIABLE:
+        return new VariableNode($token);
+      case T_LNUMBER:
+        return new IntegerNode($token);
+      case T_DNUMBER:
+        return new FloatNode($token);
+      default:
+        return new TokenNode($token);
+    }
   }
 
   /**

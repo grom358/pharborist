@@ -1632,10 +1632,10 @@ class Parser {
    */
   private function compoundVariable() {
     if ($this->isTokenType('$')) {
-      $node = new Node();
+      $node = new CompoundVariableNode();
       $this->mustMatch('$', $node);
       $this->mustMatch('{', $node);
-      $node->appendChild($this->expr());
+      $node->expression = $node->appendChild($this->expr());
       $this->mustMatch('}', $node, TRUE);
       return $node;
     }

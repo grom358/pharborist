@@ -12,17 +12,12 @@ class InterfaceNode extends Node {
   public $name;
 
   /**
-   * @var Node[]
+   * @var NamespacePathNode[]
    */
   public $extends = array();
 
   /**
-   * @var Node[]
+   * @var (InterfaceMethodNode|ConstantDeclarationNode)[]
    */
-  public $constants = array();
-
-  /**
-   * @var Node[]
-   */
-  public $methods = array();
+  public $statements = array();
 }

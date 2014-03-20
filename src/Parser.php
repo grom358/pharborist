@@ -2335,19 +2335,19 @@ class Parser {
 
   /**
    * Parse a trait use statement.
-   * @return Node
+   * @return TraitUseNode
    */
   private function traitUse() {
-    $node = new Node();
+    $node = new TraitUseNode();
     $this->mustMatch(T_USE, $node);
     // trait_list
     do {
-      $node->appendChild($this->namespacePath());
+      $node->traits[] = $node->appendChild($this->namespacePath());
     } while ($this->tryMatch(',', $node));
     // trait_adaptations
     if ($this->tryMatch('{', $node)) {
       while ($this->iterator->hasNext() && !$this->isTokenType('}')) {
-        $node->appendChild($this->traitAdaptation());
+        $node->adaptations[] = $node->appendChild($this->traitAdaptation());
       }
       $this->mustMatch('}', $node, TRUE);
       return $node;
@@ -2422,10 +2422,10 @@ class Parser {
     $this->mustMatch('{', $node);
     while (!$this->isTokenType('}')) {
       if ($this->isTokenType(T_CONST)) {
-        $node->constants[] = $node->appendChild($this->_const());
+        $node->statements[] = $node->appendChild($this->_const());
       }
       else {
-        $node->methods[] = $node->appendChild($this->interfaceMethod());
+        $node->statements[] = $node->appendChild($this->interfaceMethod());
       }
     }
     $this->mustMatch('}', $node, TRUE);

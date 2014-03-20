@@ -12,17 +12,17 @@ class TraitNode extends Node {
   public $name;
 
   /**
-   * @var Node
+   * @var NamespacePathNode
    */
   public $extends;
 
   /**
-   * @var Node[]
+   * @var NamespacePathNode[]
    */
   public $implements = array();
 
   /**
-   * @var Node[]
+   * @var (ClassMemberListNode|ClassMethodNode|ConstantDeclarationNode|TraitUseNode)[]
    */
   public $statements = array();
 }

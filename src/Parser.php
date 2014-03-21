@@ -876,10 +876,10 @@ class Parser {
 
   /**
    * Parse a throw statement.
-   * @return Node
+   * @return ThrowStatementNode
    */
   private function _throw() {
-    $node = new Node();
+    $node = new ThrowStatementNode();
     $this->mustMatch(T_THROW, $node);
     $node->appendChild($this->expr());
     $this->mustMatch(';', $node, TRUE);

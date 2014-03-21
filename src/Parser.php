@@ -754,7 +754,7 @@ class Parser {
 
   /**
    * Parse a foreach variable.
-   * @return Node
+   * @return ReferenceVariableNode
    */
   private function foreachVariable() {
     if ($this->isTokenType(T_LIST)) {
@@ -762,7 +762,7 @@ class Parser {
     }
     else {
       if ($this->isTokenType('&')) {
-        $node = new Node();
+        $node = new ReferenceVariableNode();
         $this->mustMatch('&', $node);
         $node->appendChild($this->variable());
         return $node;

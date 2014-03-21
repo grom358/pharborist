@@ -775,18 +775,18 @@ class Parser {
 
   /**
    * Parse a list() expression.
-   * @return Node
+   * @return ListNode
    */
   private function _list() {
-    $node = new Node();
-    $this->mustMatch(T_LIST, $node);
+    $node = new ListNode();
+    $node->functionReference = $this->mustMatch(T_LIST, $node);
     $this->mustMatch('(', $node);
     do {
       if ($this->tryMatch(')', $node, TRUE)) {
         return $node;
       }
       if (!$this->isTokenType(',')) {
-        $node->appendChild($this->listElement());
+        $node->arguments[] = $node->appendChild($this->listElement());
       }
     } while ($this->tryMatch(',', $node));
     $this->mustMatch(')', $node, TRUE);

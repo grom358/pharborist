@@ -810,45 +810,41 @@ class Parser {
 
   /**
    * Parse a declare statement.
-   * @return Node
+   * @return DeclareNode
    */
   private function _declare() {
-    $node = new Node();
+    $node = new DeclareNode();
     $this->mustMatch(T_DECLARE, $node);
-    $node->appendChild($this->declareList());
+    $node->directives = $node->appendChild($this->declareList());
     if ($this->tryMatch(':', $node)) {
-      $node->appendChild($this->innerStatementListNode(T_ENDDECLARE));
+      $node->body = $node->appendChild($this->innerStatementListNode(T_ENDDECLARE));
       $this->mustMatch(T_ENDDECLARE, $node);
       $this->mustMatch(';', $node, TRUE);
       return $node;
     }
     else {
-      $node->appendChild($this->statement());
+      $node->body = $node->appendChild($this->statement());
       return $node;
     }
   }
 
   /**
    * Parse declares from declare statement.
-   * @return Node
+   * @return DeclareDirectiveListNode
    */
   private function declareList() {
-    $node = new Node();
+    $node = new DeclareDirectiveListNode();
     $this->mustMatch('(', $node);
     if ($this->tryMatch(')', $node, TRUE)) {
       return $node;
     }
     do {
-      $child = new Node();
-      $this->tryMatch(T_STRING, $child);
-      if ($this->isTokenType('=')) {
-        $c = $child;
-        $child = new Node();
-        $child->appendChild($c);
-        $this->mustMatch('=', $child);
-        $child->appendChild($this->staticScalar());
+      $child = new DeclareDirectiveNode();
+      $child->name = $this->tryMatch(T_STRING, $child);
+      if ($this->tryMatch('=', $child)) {
+        $child->value = $child->appendChild($this->staticScalar());
       }
-      $node->appendChild($child);
+      $node->directives[] = $node->appendChild($child);
     } while ($this->tryMatch(',', $node));
     $this->mustMatch(')', $node, TRUE);
     return $node;

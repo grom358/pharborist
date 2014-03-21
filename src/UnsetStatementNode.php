@@ -7,7 +7,7 @@ namespace Pharborist;
  */
 class UnsetStatementNode extends Node {
   /**
-   * @var Node[]
+   * @var Node
    */
-  public $variables = array();
+  public $functionCall;
 }

@@ -713,15 +713,17 @@ class Parser {
    * @return UnsetStatementNode
    */
   private function _unset() {
-    $node = new UnsetStatementNode();
-    $this->mustMatch(T_UNSET, $node);
+    $statement_node = new UnsetStatementNode();
+    $node = new UnsetNode();
+    $node->functionReference = $this->mustMatch(T_UNSET, $node);
     $this->mustMatch('(', $node);
     do {
-      $node->variables[] = $node->appendChild($this->variable());
+      $node->arguments[] = $node->appendChild($this->variable());
     } while ($this->tryMatch(',', $node));
     $this->mustMatch(')', $node);
-    $this->mustMatch(';', $node, TRUE);
-    return $node;
+    $statement_node->functionCall = $statement_node->appendChild($node);
+    $this->mustMatch(';', $statement_node, TRUE);
+    return $statement_node;
   }
 
   /**

@@ -696,13 +696,13 @@ class Parser {
 
   /**
    * Parse echo statement.
-   * @return Node
+   * @return EchoStatementNode
    */
   private function _echo() {
-    $node = new Node();
+    $node = new EchoStatementNode();
     $this->mustMatch(T_ECHO, $node);
     do {
-      $node->appendChild($this->expr());
+      $node->expressions[] = $node->appendChild($this->expr());
     } while ($this->tryMatch(',', $node));
     $this->mustMatch(';', $node, TRUE);
     return $node;
@@ -710,7 +710,7 @@ class Parser {
 
   /**
    * Parse an unset statement.
-   * @return Node
+   * @return UnsetStatementNode
    */
   private function _unset() {
     $node = new UnsetStatementNode();

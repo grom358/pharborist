@@ -9,7 +9,7 @@ class TraitAliasNode extends Node {
   /**
    * @var Node
    */
-  public $methodName;
+  public $methodReference;
 
   /**
    * @var Node

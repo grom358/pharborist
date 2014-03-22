@@ -9,10 +9,10 @@ class TraitPrecedenceNode extends Node {
   /**
    * @var Node
    */
-  public $methodName;
+  public $methodReference;
 
   /**
-   * @var TraitNameListNode
+   * @var NamespacePathNode[]
    */
-  public $traitNames;
+  public $traitNames = array();
 }

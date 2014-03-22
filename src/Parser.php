@@ -2359,32 +2359,30 @@ class Parser {
       $qualified_name = $qualified_name->children[0];
       return $this->traitAlias($qualified_name);
     }
-    $node = new Node();
-    $node->appendChild($qualified_name);
+    $node = new TraitMethodReferenceNode();
+    $node->traitName = $node->appendChild($qualified_name);
     $this->mustMatch(T_DOUBLE_COLON, $node);
-    $this->mustMatch(T_STRING, $node);
+    $node->methodReference = $this->mustMatch(T_STRING, $node);
     if ($this->isTokenType(T_AS)) {
       return $this->traitAlias($node);
     }
-    $method_name_node = $node;
+    $method_reference_node = $node;
     $node = new TraitPrecedenceNode();
-    $node->methodName = $node->appendChild($method_name_node);
+    $node->methodReference = $node->appendChild($method_reference_node);
     $this->mustMatch(T_INSTEADOF, $node);
-    $trait_names_node = new TraitNameListNode();
     do {
-      $trait_names_node->names[] = $trait_names_node->appendChild($this->namespacePath());
-    } while ($this->tryMatch(',', $trait_names_node));
-    $node->traitNames = $node->appendChild($trait_names_node);
+      $node->traitNames[] = $node->appendChild($this->namespacePath());
+    } while ($this->tryMatch(',', $node));
     $this->mustMatch(';', $node, TRUE);
     return $node;
   }
 
   /**
    * Parse a trait alias.
-   * @param Node $trait_method_reference
+   * @param TraitMethodReferenceNode $trait_method_reference
    * @return TraitAliasNode
    */
-  private function traitAlias(Node $trait_method_reference) {
+  private function traitAlias(TraitMethodReferenceNode $trait_method_reference) {
     $node = new TraitAliasNode();
     $node->methodName = $node->appendChild($trait_method_reference);
     $this->mustMatch(T_AS, $node);

@@ -191,8 +191,6 @@ class Parser {
         return $this->_namespace();
       case T_USE:
         return $this->_use();
-      case T_FUNCTION:
-        return $this->functionDeclaration();
       case T_CONST:
         return $this->_const();
       case T_ABSTRACT:
@@ -211,6 +209,11 @@ class Parser {
         $this->mustMatch(';', $node);
         return $node;
       default:
+        if ($this->getTokenType() === T_FUNCTION) {
+          if ($function_declaration = $this->functionDeclaration()) {
+            return $function_declaration;
+          }
+        }
         return $this->statement();
     }
   }
@@ -1209,42 +1212,32 @@ class Parser {
   /**
    * Parse an anonymous function declaration.
    * @param Node $static
-   * @return Node
+   * @return AnonymousFunctionNode
    */
   private function anonymousFunction(Node $static = NULL) {
-    $node = new Node();
+    $node = new AnonymousFunctionNode();
     if ($static) {
       $node->appendChild($static);
     }
     $this->mustMatch(T_FUNCTION, $node);
-    $this->tryMatch('&', $node);
-    $node->appendChild($this->parameterList());
+    $node->reference = $this->tryMatch('&', $node);
+    $node->parameters = $node->appendChild($this->parameterList());
     if ($this->tryMatch(T_USE, $node)) {
       $this->mustMatch('(', $node);
-      $node->appendChild($this->lexicalVarList());
+      do {
+        if ($this->isTokenType('&')) {
+          $var = new ReferenceVariableNode();
+          $this->mustMatch('&', $var);
+          $var->variable = $this->mustMatch(T_VARIABLE, $var);
+          $node->lexicalVariables[] = $node->appendChild($var);
+        }
+        else {
+          $node->lexicalVariables[] = $this->mustMatch(T_VARIABLE, $node);
+        }
+      } while ($this->tryMatch(',', $node));
       $this->mustMatch(')', $node);
     }
-    $node->appendChild($this->innerStatementBlock());
-    return $node;
-  }
-
-  /**
-   * Parse lexical variable list.
-   * @return Node
-   */
-  private function lexicalVarList() {
-    $node = new Node();
-    do {
-      if ($this->isTokenType('&')) {
-        $var = new Node();
-        $this->mustMatch('&', $var);
-        $this->mustMatch(T_VARIABLE, $var);
-        $node->appendChild($var);
-      }
-      else {
-        $this->mustMatch(T_VARIABLE, $node);
-      }
-    } while ($this->tryMatch(',', $node));
+    $node->body = $node->appendChild($this->innerStatementBlock());
     return $node;
   }
 
@@ -1741,32 +1734,18 @@ class Parser {
 
   /**
    * Parse function declaration.
-   * @return Node
+   * @return FunctionDeclarationNode
    */
   private function functionDeclaration() {
-    $node = new Node();
+    $this->mark();
+    $node = new FunctionDeclarationNode();
     $this->mustMatch(T_FUNCTION, $node);
-    $this->tryMatch('&', $node);
+    $node->reference = $this->tryMatch('&', $node);
     if ($this->isTokenType('(')) {
-      /*
-       * As far as I can tell you can not apply any expression operators to
-       * anonymous functions. So return the anonymous function if its at start
-       * of statement instead of rewinding and applying the expr rule.
-       */
-      $node->appendChild($this->parameterList());
-      if ($this->tryMatch(T_USE, $node)) {
-        $this->mustMatch('(', $node);
-        $node->appendChild($this->lexicalVarList());
-        $this->mustMatch(')', $node);
-      }
-      $node->appendChild($this->innerStatementBlock());
-      $this->mustMatch(';', $node);
-      return $node;
+      $this->rewind();
+      return NULL;
     }
     else {
-      $n = $node;
-      $node = new FunctionDeclarationNode();
-      $node->appendChildren($n->children);
       $node->name = $this->mustMatch(T_STRING, $node);
       $node->parameters = $node->appendChild($this->parameterList());
       $node->body = $node->appendChild($this->innerStatementBlock());
@@ -2067,8 +2046,6 @@ class Parser {
       case T_HALT_COMPILER:
         throw new ParserException($this->iterator->getSourcePosition(),
           "__halt_compiler can only be used from the outermost scope");
-      case T_FUNCTION:
-        return $this->functionDeclaration();
       case T_ABSTRACT:
       case T_FINAL:
       case T_CLASS:
@@ -2078,6 +2055,11 @@ class Parser {
       case T_TRAIT:
         return $this->traitDeclaration();
       default:
+        if ($this->getTokenType() === T_FUNCTION) {
+          if ($function_declaration = $this->functionDeclaration()) {
+            return $function_declaration;
+          }
+        }
         return $this->statement();
     }
   }

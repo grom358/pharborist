@@ -9,6 +9,11 @@ class FunctionDeclarationNode extends StatementNode {
   /**
    * @var Node
    */
+  public $reference;
+
+  /**
+   * @var Node
+   */
   public $name;
 
   /**

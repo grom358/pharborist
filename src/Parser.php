@@ -1124,11 +1124,13 @@ class Parser {
           return $this->exprFunctionCall($operand);
         }
       case T_ISSET:
-        $node = new Node();
-        $this->mustMatch(T_ISSET, $node);
+        $node = new IssetNode();
+        $node->functionReference = $this->mustMatch(T_ISSET, $node);
         $this->mustMatch('(', $node);
-        $node->appendChild($this->exprList());
-        $this->mustMatch(')', $node);
+        do {
+          $node->arguments[] = $node->appendChild($this->expr());
+        } while ($this->tryMatch(',', $node));
+        $this->mustMatch(')', $node, TRUE);
         return $node;
       case T_EMPTY:
       case T_EVAL:

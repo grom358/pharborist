@@ -1920,10 +1920,10 @@ class Parser {
 
   /**
    * Parse braces expression.
-   * @return Node
+   * @return DynamicNameNode
    */
   private function bracesExpr() {
-    $node = new Node();
+    $node = new DynamicNameNode();
     $this->mustMatch('{', $node);
     $node->appendChild($this->expr());
     $this->mustMatch('}', $node, TRUE);

@@ -17,9 +17,9 @@ class FunctionDeclarationNode extends StatementNode {
   public $name;
 
   /**
-   * @var ParameterListNode
+   * @var ParameterNode[]
    */
-  public $parameters;
+  public $parameters = array();
 
   /**
    * @var Node

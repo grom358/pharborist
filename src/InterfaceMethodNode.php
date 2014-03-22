@@ -14,10 +14,15 @@ class InterfaceMethodNode extends Node {
   /**
    * @var Node
    */
+  public $reference;
+
+  /**
+   * @var Node
+   */
   public $name;
 
   /**
-   * @var ParameterListNode
+   * @var ParameterNode[]
    */
-  public $parameters;
+  public $parameters = array();
 }

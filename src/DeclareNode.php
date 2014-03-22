@@ -7,9 +7,9 @@ namespace Pharborist;
  */
 class DeclareNode extends StatementNode {
   /**
-   * @var DeclareDirectiveListNode
+   * @var DeclareDirectiveNode[]
    */
-  public $directives;
+  public $directives = array();
 
   /**
    * @var Node

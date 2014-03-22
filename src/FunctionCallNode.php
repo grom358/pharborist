@@ -12,7 +12,7 @@ class FunctionCallNode extends Node {
   public $functionReference;
 
   /**
-   * @var ArgumentListNode
+   * @var Node[]
    */
-  public $arguments;
+  public $arguments = array();
 }

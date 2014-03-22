@@ -5,13 +5,9 @@ namespace Pharborist;
  * Node for php array.
  * @package Pharborist
  */
-class ArrayNode extends CollectionNode {
+class ArrayNode extends Node {
   /**
    * @var Node[]
    */
-  public $elements;
-
-  public function __construct() {
-    $this->elements = &$this->items;
-  }
+  public $elements = array();
 }

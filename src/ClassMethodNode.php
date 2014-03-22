@@ -22,9 +22,9 @@ class ClassMethodNode extends Node {
   public $name;
 
   /**
-   * @var ParameterListNode
+   * @var ParameterNode[]
    */
-  public $parameters;
+  public $parameters = array();
 
   /**
    * @var Node

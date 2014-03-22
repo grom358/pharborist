@@ -599,30 +599,30 @@ class Parser {
 
   /**
    * Parse a break statement.
-   * @return Node
+   * @return BreakStatementNode
    */
   private function _break() {
-    $node = new Node();
+    $node = new BreakStatementNode();
     $this->mustMatch(T_BREAK, $node);
     if ($this->tryMatch(';', $node, TRUE)) {
       return $node;
     }
-    $node->appendChild($this->expr());
+    $node->level = $this->mustMatch(T_LNUMBER, $node);
     $this->mustMatch(';', $node, TRUE);
     return $node;
   }
 
   /**
    * Parse a continue statement.
-   * @return Node
+   * @return ContinueStatementNode
    */
   private function _continue() {
-    $node = new Node();
+    $node = new ContinueStatementNode();
     $this->mustMatch(T_CONTINUE, $node);
     if ($this->tryMatch(';', $node, TRUE)) {
       return $node;
     }
-    $node->appendChild($this->expr());
+    $node->level = $this->mustMatch(T_LNUMBER, $node);
     $this->mustMatch(';', $node, TRUE);
     return $node;
   }

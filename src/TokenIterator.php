@@ -2,7 +2,7 @@
 namespace Pharborist;
 
 /**
- * Iterator over tokens that supports marking and rewinding position.
+ * Iterator over tokens that supports peek.
  * @package Pharborist
  */
 class TokenIterator {
@@ -25,32 +25,12 @@ class TokenIterator {
   private $length;
 
   /**
-   * Marked position in array.
-   * @var int
-   */
-  private $mark;
-
-  /**
    * @param Token[] $tokens
    */
   public function __construct(array $tokens) {
     $this->tokens = $tokens;
     $this->length = count($tokens);
     $this->position = 0;
-  }
-
-  /**
-   * Mark position.
-   */
-  public function mark() {
-    $this->mark = $this->position;
-  }
-
-  /**
-   * Rewind to mark.
-   */
-  public function rewind() {
-    $this->position = $this->mark;
   }
 
   /**
@@ -62,6 +42,18 @@ class TokenIterator {
       return NULL;
     }
     return $this->tokens[$this->position];
+  }
+
+  /**
+   * Peek ahead.
+   * @param int $offset Offset from current position.
+   * @return Token
+   */
+  public function peek($offset) {
+    if ($this->position + $offset >= $this->length) {
+      return NULL;
+    }
+    return $this->tokens[$this->position + $offset];
   }
 
   /**

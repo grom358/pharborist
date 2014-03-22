@@ -187,8 +187,6 @@ class Parser {
    */
   private function topStatement() {
     switch ($this->getTokenType()) {
-      case T_NAMESPACE:
-        return $this->_namespace();
       case T_USE:
         return $this->_use();
       case T_CONST:
@@ -209,10 +207,11 @@ class Parser {
         $this->mustMatch(';', $node);
         return $node;
       default:
-        if ($this->getTokenType() === T_FUNCTION) {
-          if ($function_declaration = $this->functionDeclaration()) {
-            return $function_declaration;
-          }
+        if ($this->getTokenType() === T_FUNCTION && $this->isLookAhead(T_STRING, '&')) {
+          return $this->functionDeclaration();
+        }
+        elseif ($this->getTokenType() === T_NAMESPACE && !$this->isLookAhead(T_NS_SEPARATOR)) {
+          return $this->_namespace();
         }
         return $this->statement();
     }
@@ -302,27 +301,20 @@ class Parser {
       case ';':
         return $this->mustMatchToken(';');
       case T_STATIC:
-        // Check if static variable list.
-        $this->mark();
-        $node = new StaticVariableStatementNode();
-        $this->mustMatch(T_STATIC, $node);
-        if ($this->isTokenType(T_VARIABLE)) {
-          return $this->staticVariableList($node);
+        if ($this->isLookAhead(T_VARIABLE)) {
+          return $this->staticVariableList();
         }
         else {
-          $this->rewind();
           return $this->exprStatement();
         }
       case T_STRING:
-        // Check if goto label.
-        $this->mark();
-        $node = new GotoLabelNode();
-        $this->mustMatch(T_STRING, $node);
-        if ($this->tryMatch(':', $node, TRUE)) {
+        if ($this->isLookAhead(':')) {
+          $node = new GotoLabelNode();
+          $this->mustMatch(T_STRING, $node);
+          $this->mustMatch(':', $node, TRUE);
           return $node;
         }
         else {
-          $this->rewind();
           return $this->exprStatement();
         }
       default:
@@ -332,10 +324,11 @@ class Parser {
 
   /**
    * Parse a static variable list.
-   * @param StaticVariableStatementNode $node Node being created.
    * @return StaticVariableStatementNode
    */
-  private function staticVariableList(StaticVariableStatementNode $node) {
+  private function staticVariableList() {
+    $node = new StaticVariableStatementNode();
+    $this->mustMatch(T_STATIC, $node);
     do {
       $node->variables[] = $node->appendChild($this->staticVariable());
     } while ($this->tryMatch(',', $node));
@@ -600,7 +593,7 @@ class Parser {
     if ($this->tryMatch(';', $node, TRUE)) {
       return $node;
     }
-    $node->level = $this->mustMatch(T_LNUMBER, $node);
+    $this->parseLevel($node);
     $this->mustMatch(';', $node, TRUE);
     return $node;
   }
@@ -615,9 +608,23 @@ class Parser {
     if ($this->tryMatch(';', $node, TRUE)) {
       return $node;
     }
-    $node->level = $this->mustMatch(T_LNUMBER, $node);
+    $this->parseLevel($node);
     $this->mustMatch(';', $node, TRUE);
     return $node;
+  }
+
+  /**
+   * Parse a break/continue level.
+   * @param BreakStatementNode|ContinueStatementNode $node
+   */
+  private function parseLevel($node) {
+    if ($this->tryMatch('(', $node)) {
+      $node->level = $this->mustMatch(T_LNUMBER, $node);
+      $this->mustMatch(')', $node);
+    }
+    else {
+      $node->level = $this->mustMatch(T_LNUMBER, $node);
+    }
   }
 
   /**
@@ -1092,8 +1099,11 @@ class Parser {
         if ($this->isTokenType(T_DOUBLE_COLON)) {
           return $this->exprClass($namespace_path);
         }
+        elseif ($this->isTokenType('(')) {
+          return $this->functionCall($namespace_path);
+        }
         else {
-          return $this->exprFunctionCall($namespace_path);
+          return $namespace_path;
         }
       case T_STATIC:
         $static = $this->mustMatchToken(T_STATIC);
@@ -1104,12 +1114,15 @@ class Parser {
         }
       case '$':
       case T_VARIABLE:
-        $operand = $this->arrayDeference($this->indirectReference());
+        $operand = $this->indirectReference();
         if ($this->isTokenType(T_DOUBLE_COLON)) {
           return $this->exprClass($operand);
         }
+        elseif ($this->isTokenType('(')) {
+          return $this->functionCall($operand);
+        }
         else {
-          return $this->exprFunctionCall($operand);
+          return $this->objectDereference($operand);
         }
       case T_ISSET:
         $node = new IssetNode();
@@ -1401,32 +1414,28 @@ class Parser {
     $node->appendChild($class_name);
     $this->mustMatch(T_DOUBLE_COLON, $node);
     if ($this->tryMatch(T_STRING, $node)) {
-      return $this->exprFunctionCall($node);
+      if ($this->isTokenType('(')) {
+        return $this->functionCall($node);
+      }
+      else {
+        return $node;
+      }
     }
     elseif ($this->tryMatch(T_CLASS, $node)) {
       return $node;
     }
     elseif ($this->isTokenType('{')) {
       $node->appendChild($this->bracesExpr());
-      return $this->exprFunctionCall($node);
-    }
-    else {
-      $node->appendChild($this->indirectReference());
-      return $this->exprFunctionCall($node);
-    }
-  }
-
-  /**
-   * Parse expression operand where function call or object dereference.
-   * @param Node
-   * @return Node
-   */
-  private function exprFunctionCall(Node $node) {
-    if ($this->isTokenType('(')) {
       return $this->functionCall($node);
     }
     else {
-      return $this->objectDereference($node);
+      $node->appendChild($this->indirectReference());
+      if ($this->isTokenType('(')) {
+        return $this->functionCall($node);
+      }
+      else {
+        return $this->objectDereference($node);
+      }
     }
   }
 
@@ -1559,16 +1568,12 @@ class Parser {
    */
   private function indirectReference() {
     if ($this->isTokenType('$')) {
-      // Handle ${
-      $this->mark();
-      $dollar_sign = $this->mustMatchToken('$');
-      if ($this->isTokenType('{')) {
-        $this->rewind();
+      if ($this->isLookAhead('{')) {
         return $this->offsetVariable($this->compoundVariable());
       }
       // Otherwise its an indirect reference
       $node = new VariableVariableNode();
-      $node->appendChild($dollar_sign);
+      $this->mustMatch('$', $node);
       $node->variable = $node->appendChild($this->indirectReference());
       return $node;
     }
@@ -1707,20 +1712,13 @@ class Parser {
    * @return FunctionDeclarationNode
    */
   private function functionDeclaration() {
-    $this->mark();
     $node = new FunctionDeclarationNode();
     $this->mustMatch(T_FUNCTION, $node);
     $node->reference = $this->tryMatch('&', $node);
-    if ($this->isTokenType('(')) {
-      $this->rewind();
-      return NULL;
-    }
-    else {
-      $node->name = $this->mustMatch(T_STRING, $node);
-      $this->parameterList($node);
-      $node->body = $node->appendChild($this->innerStatementBlock());
-      return $node;
-    }
+    $node->name = $this->mustMatch(T_STRING, $node);
+    $this->parameterList($node);
+    $node->body = $node->appendChild($this->innerStatementBlock());
+    return $node;
   }
 
   /**
@@ -2625,18 +2623,22 @@ class Parser {
   }
 
   /**
-   * Mark current position.
+   * Look ahead from current position at tokens and check if the token at
+   * offset is of an expected type, where the offset ignores hidden tokens.
+   * @param int|string $expected_type Expected token type
+   * @param int|string $skip_type (Optional) Additional token type to ignore
+   * @return bool
    */
-  private function mark() {
-    $this->iterator->mark();
-  }
-
-  /**
-   * Rewind back to mark.
-   */
-  private function rewind() {
-    $this->iterator->rewind();
-    $this->skipped = array();
-    $this->docComment = NULL;
+  private function isLookAhead($expected_type, $skip_type = NULL) {
+    $token = NULL;
+    for ($offset = 1; ; $offset++) {
+      $token = $this->iterator->peek($offset);
+      if ($token === NULL) {
+        return FALSE;
+      }
+      if (!static::isHidden($token->type) && $token->type !== $skip_type) {
+        return $expected_type === $token->type;
+      }
+    }
   }
 }

@@ -250,7 +250,7 @@ class Parser {
     switch ($this->getTokenType()) {
       case T_CLOSE_TAG:
         // A close tag escapes into template mode.
-        $node = new Node();
+        $node = new TemplateNode();
         $this->mustMatch(T_CLOSE_TAG, $node);
         $this->templateStatementList($node);
         if ($this->iterator->hasNext()) {

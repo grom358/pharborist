@@ -202,8 +202,8 @@ class Parser {
       case T_TRAIT:
         return $this->traitDeclaration();
       case T_HALT_COMPILER:
-        $node = new Node();
-        $this->mustMatch(T_HALT_COMPILER, $node);
+        $node = new HaltCompilerNode();
+        $node->functionReference = $this->mustMatch(T_HALT_COMPILER, $node);
         $this->mustMatch('(', $node);
         $this->mustMatch(')', $node);
         $this->mustMatch(';', $node);

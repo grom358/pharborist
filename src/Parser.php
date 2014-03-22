@@ -664,13 +664,13 @@ class Parser {
 
   /**
    * Parse a global variable declaration list.
-   * @return Node
+   * @return GlobalStatementNode
    */
   private function _global() {
-    $node = new Node();
+    $node = new GlobalStatementNode();
     $this->mustMatch(T_GLOBAL, $node);
     do {
-      $node->appendChild($this->globalVar());
+      $node->variables[] = $node->appendChild($this->globalVar());
     } while ($this->tryMatch(',', $node));
     $this->mustMatch(';', $node, TRUE);
     return $node;
@@ -686,16 +686,20 @@ class Parser {
       return $var;
     }
     elseif ($this->isTokenType('$')) {
-      $node = new Node();
+      $node = new CompoundVariableNode();
       $this->mustMatch('$', $node);
       if ($this->tryMatch('{', $node)) {
-        $node->appendChild($this->expr());
-        $this->mustMatch('}', $node);
+        $node->expression = $node->appendChild($this->expr());
+        $this->mustMatch('}', $node, TRUE);
+        return $node;
       }
       else {
+        $n = $node;
+        $node = new VariableVariableNode();
+        $node->appendChildren($n->children);
         $node->appendChild($this->variable());
+        return $node;
       }
-      return $node;
     }
     throw new ParserException($this->iterator->getSourcePosition(), 'expected a global variable (eg. T_VARIABLE)');
   }

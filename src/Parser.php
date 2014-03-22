@@ -1314,10 +1314,12 @@ class Parser {
    * @param int|string $terminator Token type that ends the pair list
    */
   private function arrayPairList(ArrayNode $node, $terminator) {
-    while (!$this->isTokenType($terminator)) {
+    do {
+      if ($this->isTokenType($terminator)) {
+        break;
+      }
       $node->appendChild($this->arrayPair());
-      $this->tryMatch(',', $node);
-    }
+    } while ($this->tryMatch(',', $node));
   }
 
   /**
@@ -1807,17 +1809,17 @@ class Parser {
   private function staticScalar() {
     // Handle static array
     if ($this->isTokenType(T_ARRAY)) {
-      $node = new Node();
+      $node = new ArrayNode();
       $this->mustMatch(T_ARRAY, $node);
       $this->mustMatch('(', $node);
-      $node->appendChild($this->staticArrayPairList(')'));
+      $this->staticArrayPairList($node, ')');
       $this->mustMatch(')', $node, TRUE);
       return $node;
     }
     elseif ($this->isTokenType('[')) {
-      $node = new Node();
+      $node = new ArrayNode();
       $this->mustMatch('[', $node);
-      $node->appendChild($this->staticArrayPairList(']'));
+      $this->staticArrayPairList($node, ']');
       $this->mustMatch(']', $node, TRUE);
       return $node;
     }
@@ -1858,19 +1860,26 @@ class Parser {
 
   /**
    * Parse static array pair list.
+   * @param ArrayNode $node Array node to add elements to
    * @param int|string $terminator Token type that terminates the array pair list
-   * @return Node
    */
-  private function staticArrayPairList($terminator) {
-    $node = new Node();
-    while (!$this->isTokenType($terminator)) {
-      $node->appendChild($this->staticScalar());
-      if ($this->tryMatch(T_DOUBLE_ARROW, $node)) {
-        $node->appendChild($this->staticScalar());
+  private function staticArrayPairList(ArrayNode $node, $terminator) {
+    do {
+      if ($this->isTokenType($terminator)) {
+        break;
       }
-      $this->tryMatch(',', $node);
-    }
-    return $node;
+      $value = $this->staticScalar();
+      if ($this->isTokenType(T_DOUBLE_ARROW)) {
+        $pair = new ArrayPairNode();
+        $pair->key = $pair->appendChild($value);
+        $this->mustMatch(T_DOUBLE_ARROW, $pair);
+        $pair->value = $pair->appendChild($this->staticScalar());
+        $node->elements[] = $node->appendChild($pair);
+      }
+      else {
+        $node->elements[] = $node->appendChild($value);
+      }
+    } while ($this->tryMatch(',', $node));
   }
 
   /**

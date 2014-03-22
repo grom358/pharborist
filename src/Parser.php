@@ -313,7 +313,7 @@ class Parser {
       case T_STRING:
         // Check if goto label.
         $this->mark();
-        $node = new Node();
+        $node = new GotoLabelNode();
         $this->mustMatch(T_STRING, $node);
         if ($this->tryMatch(':', $node, TRUE)) {
           return $node;

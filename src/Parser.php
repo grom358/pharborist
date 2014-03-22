@@ -274,7 +274,7 @@ class Parser {
       case T_RETURN:
         return $this->_return();
       case T_YIELD:
-        $node = new Node();
+        $node = new YieldStatementNode();
         $node->appendChild($this->_yield());
         $this->mustMatch(';', $node);
         return $node;

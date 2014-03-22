@@ -534,7 +534,9 @@ class Parser {
     $node->switchOn = $node->appendChild($this->parenExpr());
     if ($this->tryMatch(':', $node)) {
       $this->tryMatch(';', $node);
-      $node->caseList = $node->appendChild($this->caseList(T_ENDSWITCH));
+      while ($this->iterator->hasNext() && !$this->isTokenType(T_ENDSWITCH)) {
+        $node->cases[] = $node->appendChild($this->caseStatement(T_ENDSWITCH));
+      }
       $this->mustMatch(T_ENDSWITCH, $node);
       $this->mustMatch(';', $node, TRUE);
       return $node;
@@ -542,23 +544,12 @@ class Parser {
     else {
       $this->mustMatch('{', $node);
       $this->tryMatch(';', $node);
-      $node->caseList = $node->appendChild($this->caseList('}'));
+      while ($this->iterator->hasNext() && !$this->isTokenType('}')) {
+        $node->cases[] = $node->appendChild($this->caseStatement('}'));
+      }
       $this->mustMatch('}', $node, TRUE);
       return $node;
     }
-  }
-
-  /**
-   * Parse list of case statements.
-   * @param int|string $terminator Token type that terminates the list
-   * @return Node
-   */
-  private function caseList($terminator) {
-    $node = new Node();
-    while ($this->iterator->hasNext() && !$this->isTokenType($terminator)) {
-      $node->appendChild($this->caseStatement($terminator));
-    }
-    return $node;
   }
 
   /**

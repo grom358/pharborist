@@ -12,7 +12,7 @@ class SwitchNode extends StatementNode {
   public $switchOn;
 
   /**
-   * @var Node[]
+   * @var CaseNode[]
    */
-  public $caseList;
+  public $cases = array();
 }

@@ -922,7 +922,7 @@ class Parser {
         }
       }
       if ($this->isTokenType(':')) {
-        $node = new Node();
+        $node = new PartialNode();
         $node->type = ':';
         $this->mustMatch(':', $node);
         $expression_nodes[] = $node;
@@ -1892,7 +1892,7 @@ class Parser {
         }
       }
       if ($this->isTokenType(':')) {
-        $node = new Node();
+        $node = new PartialNode();
         $node->type = ':';
         $this->mustMatch(':', $node);
         $expression_nodes[] = $node;

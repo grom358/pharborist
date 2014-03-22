@@ -1944,7 +1944,7 @@ class Parser {
 
   /**
    * Parse function call parameter list.
-   * @param NewNode|FunctionCallNode $node
+   * @param NewNode|FunctionCallNode|ClassMethodCallNode|ObjectMethodCallNode $node
    */
   private function functionCallParameterList($node) {
     $this->mustMatch('(', $node);
@@ -2723,5 +2723,6 @@ class Parser {
         return $expected_type === $token->type;
       }
     }
+    return FALSE;
   }
 }

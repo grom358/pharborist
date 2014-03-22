@@ -1052,7 +1052,7 @@ class Parser {
         $this->mustMatch(']', $node);
         return $this->arrayDeference($node);
       case '(':
-        $node = new Node();
+        $node = new ParenthesisNode();
         $this->mustMatch('(', $node);
         if ($this->isTokenType(T_NEW)) {
           $node->appendChild($this->newExpr());

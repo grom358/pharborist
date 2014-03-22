@@ -66,7 +66,7 @@ class Parser {
    */
   public function buildTree(TokenIterator $iterator) {
     $this->iterator = $iterator;
-    $top = new Node();
+    $top = new StatementBlockNode();
     $this->top = $top;
     // Parse any template statements that proceed the opening PHP tag.
     $this->templateStatementList($top);
@@ -156,15 +156,15 @@ class Parser {
 
   /**
    * Parse a list of top level statements.
-   * @param Node $node Node to append matches to
+   * @param StatementBlockNode $node Node to append matches to
    * @param string $terminator Character that ends the statement list
    */
-  private function topStatementList(Node $node, $terminator = '') {
+  private function topStatementList(StatementBlockNode $node, $terminator = '') {
     $this->matchHidden($node);
     while ($this->iterator->hasNext() &&
       !$this->isTokenType($terminator) &&
       ($statement = $this->topStatement())) {
-      $node->appendChild($statement);
+      $node->statements[] = $node->appendChild($statement);
       $this->matchHidden($node);
     }
     $this->matchHidden($node);
@@ -176,7 +176,7 @@ class Parser {
    * @return Node
    */
   private function topStatementBlock($terminator = '') {
-    $node = new Node();
+    $node = new StatementBlockNode();
     $this->topStatementList($node, $terminator);
     return $node;
   }
@@ -434,10 +434,10 @@ class Parser {
    * @return Node
    */
   private function innerIfInnerStatementList() {
-    $node = new Node();
+    $node = new StatementBlockNode();
     $this->matchHidden($node);
     while ($this->iterator->hasNext() && !$this->isTokenType(T_ELSEIF, T_ELSE, T_ENDIF)) {
-      $node->appendChild($this->innerStatement());
+      $node->statements[] = $node->appendChild($this->innerStatement());
       $this->matchHidden($node);
     }
     return $node;
@@ -596,10 +596,10 @@ class Parser {
    * @return Node
    */
   private function innerCaseStatementList($terminator) {
-    $node = new Node();
+    $node = new StatementBlockNode();
     $this->matchHidden($node);
     while ($this->iterator->hasNext() && !$this->isTokenType($terminator, T_CASE, T_DEFAULT)) {
-      $node->appendChild($this->innerStatement());
+      $node->statements[] = $node->appendChild($this->innerStatement());
       $this->matchHidden($node);
     }
     return $node;
@@ -2007,13 +2007,13 @@ class Parser {
 
   /**
    * Parse inner statement list.
-   * @param Node $parent Node to append statements to
+   * @param StatementBlockNode $parent Node to append statements to
    * @param int|string $terminator Token type that terminates the statement list
    */
-  private function innerStatementList(Node $parent, $terminator) {
+  private function innerStatementList(StatementBlockNode $parent, $terminator) {
     $this->matchHidden($parent);
     while ($this->iterator->hasNext() && !$this->isTokenType($terminator)) {
-      $parent->appendChild($this->innerStatement());
+      $parent->statements[] = $parent->appendChild($this->innerStatement());
       $this->matchHidden($parent);
     }
   }
@@ -2023,7 +2023,7 @@ class Parser {
    * @return Node
    */
   private function innerStatementBlock() {
-    $node = new Node();
+    $node = new StatementBlockNode();
     $this->mustMatch('{', $node);
     $this->innerStatementList($node, '}');
     $this->mustMatch('}', $node, TRUE);
@@ -2036,7 +2036,7 @@ class Parser {
    * @return Node
    */
   private function innerStatementListNode($terminator) {
-    $node = new Node();
+    $node = new StatementBlockNode();
     $this->innerStatementList($node, $terminator);
     return $node;
   }

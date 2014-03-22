@@ -5,7 +5,7 @@ namespace Pharborist;
  * A unset statement.
  * @package Pharborist
  */
-class UnsetStatementNode extends Node {
+class UnsetStatementNode extends StatementNode {
   /**
    * @var Node
    */

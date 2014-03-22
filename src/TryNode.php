@@ -5,7 +5,7 @@ namespace Pharborist;
  * A try control structure.
  * @package Pharborist
  */
-class TryNode extends Node {
+class TryNode extends StatementNode {
   /**
    * @var Node
    */

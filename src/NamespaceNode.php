@@ -5,7 +5,7 @@ namespace Pharborist;
  * Namespace declaration.
  * @package Pharborist
  */
-class NamespaceNode extends Node {
+class NamespaceNode extends StatementNode {
   /**
    * @var Node
    */

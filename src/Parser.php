@@ -217,10 +217,10 @@ class Parser {
 
   /**
    * Parse a constant declaration list.
-   * @return ConstantDeclarationListNode
+   * @return ConstantDeclarationStatementNode
    */
   private function _const() {
-    $node = new ConstantDeclarationListNode();
+    $node = new ConstantDeclarationStatementNode();
     $this->mustMatch(T_CONST, $node);
     do {
       $node->declarations[] = $node->appendChild($this->constDeclaration());
@@ -2105,10 +2105,10 @@ class Parser {
 
   /**
    * Parse a use declaration list.
-   * @return UseDeclarationListNode
+   * @return UseDeclarationStatementNode
    */
   private function _use() {
-    $node = new UseDeclarationListNode();
+    $node = new UseDeclarationStatementNode();
     $this->mustMatch(T_USE, $node);
     $this->tryMatch(T_FUNCTION, $node) || $this->tryMatch(T_CONST, $node);
     do {

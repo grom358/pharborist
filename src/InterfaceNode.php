@@ -5,7 +5,7 @@ namespace Pharborist;
  * An interface declaration.
  * @package Pharborist
  */
-class InterfaceNode extends Node {
+class InterfaceNode extends StatementNode {
   /**
    * @var Node
    */

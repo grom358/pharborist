@@ -5,7 +5,7 @@ namespace Pharborist;
  * A trait declaration.
  * @package Pharborist
  */
-class TraitNode extends Node {
+class TraitNode extends StatementNode {
   /**
    * @var Node
    */

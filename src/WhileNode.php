@@ -5,7 +5,7 @@ namespace Pharborist;
  * while control structure.
  * @package Pharborist
  */
-class WhileNode extends Node {
+class WhileNode extends StatementNode {
   /**
    * @var Node
    */

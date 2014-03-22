@@ -5,7 +5,7 @@ namespace Pharborist;
  * A declare control structure.
  * @package Pharborist
  */
-class DeclareNode extends Node {
+class DeclareNode extends StatementNode {
   /**
    * @var DeclareDirectiveListNode
    */

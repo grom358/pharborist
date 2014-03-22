@@ -5,7 +5,7 @@ namespace Pharborist;
  * A goto statement.
  * @package Pharborist
  */
-class GotoStatementNode extends Node {
+class GotoStatementNode extends StatementNode {
   /**
    * @var Node
    */

@@ -5,7 +5,7 @@ namespace Pharborist;
  * if control structure.
  * @package Pharborist
  */
-class IfNode extends Node {
+class IfNode extends StatementNode {
   /**
    * @var Node
    */

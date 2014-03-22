@@ -5,7 +5,7 @@ namespace Pharborist;
  * An echo statement.
  * @package Pharborist
  */
-class EchoStatementNode extends Node {
+class EchoStatementNode extends StatementNode {
   /**
    * @var Node[]
    */

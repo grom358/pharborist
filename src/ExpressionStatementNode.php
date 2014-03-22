@@ -5,6 +5,6 @@ namespace Pharborist;
  * An expression statement. Eg. expr();
  * @package Pharborist
  */
-class ExpressionStatementNode extends Node {
+class ExpressionStatementNode extends StatementNode {
 
 }

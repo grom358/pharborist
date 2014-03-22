@@ -5,7 +5,7 @@ namespace Pharborist;
  * foreach control structure.
  * @package Pharborist
  */
-class ForeachNode extends Node {
+class ForeachNode extends StatementNode {
   /**
    * @var Node
    */

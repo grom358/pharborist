@@ -5,7 +5,7 @@ namespace Pharborist;
  * A static variable statement. Eg. static $a, $b = A_SCALAR;
  * @package Pharborist
  */
-class StaticVariableStatementNode extends Node {
+class StaticVariableStatementNode extends StatementNode {
   /**
    * @var StaticVariableNode[]
    */

@@ -14,5 +14,5 @@ class ClassMemberNode extends Node {
   /**
    * @var Node
    */
-  public $defaultValue;
+  public $initialValue;
 }

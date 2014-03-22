@@ -2294,7 +2294,7 @@ class Parser {
     $node = new ClassMemberNode();
     $node->name = $this->mustMatch(T_VARIABLE, $node);
     if ($this->tryMatch('=', $node)) {
-      $node->defaultValue = $node->appendChild($this->staticScalar());
+      $node->initialValue = $node->appendChild($this->staticScalar());
     }
     return $node;
   }

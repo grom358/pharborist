@@ -1162,9 +1162,21 @@ class Parser {
       case T_REQUIRE:
       case T_INCLUDE_ONCE:
       case T_REQUIRE_ONCE:
-        $node = new Node();
-        $this->mustMatch($this->getTokenType(), $node);
-        $node->appendChild($this->expr());
+        $token_type = $this->getTokenType();
+        if ($token_type === T_INCLUDE) {
+          $node = new IncludeNode();
+        }
+        elseif ($token_type === T_INCLUDE_ONCE) {
+          $node = new IncludeOnceNode();
+        }
+        elseif ($token_type === T_REQUIRE) {
+          $node = new RequireNode();
+        }
+        else {
+          $node = new RequireOnceNode();
+        }
+        $this->mustMatch($token_type, $node);
+        $node->expression = $node->appendChild($this->expr());
         return $node;
       case T_NEW:
         return $this->newExpr();

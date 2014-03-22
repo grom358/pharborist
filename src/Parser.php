@@ -1171,7 +1171,7 @@ class Parser {
       case T_LIST:
         return $this->_list();
       case T_EXIT:
-        $node = new Node();
+        $node = new ExitNode();
         $this->mustMatch(T_EXIT, $node, TRUE);
         if (!$this->isTokenType('(')) {
           return $node->children[0];
@@ -1180,7 +1180,12 @@ class Parser {
         if ($this->tryMatch(')', $node, TRUE)) {
           return $node;
         }
-        $node->appendChild($this->expr());
+        if ($this->isTokenType(T_YIELD)) {
+          $node->status = $node->appendChild($this->_yield());
+        }
+        else {
+          $node->status = $node->appendChild($this->expr());
+        }
         $this->mustMatch(')', $node);
         return $node;
       case T_FUNCTION:

@@ -1127,6 +1127,7 @@ class Parser {
         $node = new IssetNode();
         $node->functionReference = $this->mustMatch(T_ISSET, $node);
         $this->mustMatch('(', $node);
+        $node->arguments = array();
         do {
           $node->arguments[] = $node->appendChild($this->expr());
         } while ($this->tryMatch(',', $node));
@@ -1134,10 +1135,16 @@ class Parser {
         return $node;
       case T_EMPTY:
       case T_EVAL:
-        $node = new Node();
-        $this->mustMatch($this->getTokenType(), $node);
+        if ($this->getTokenType() === T_EMPTY) {
+          $node = new EmptyNode();
+        }
+        else {
+          $node = new EvalNode();
+        }
+        $node->functionReference = $this->mustMatch($this->getTokenType(), $node);
+        $node->arguments = array();
         $this->mustMatch('(', $node);
-        $node->appendChild($this->expr());
+        $node->arguments[] = $node->appendChild($this->expr());
         $this->mustMatch(')', $node, TRUE);
         return $node;
       case T_INCLUDE:

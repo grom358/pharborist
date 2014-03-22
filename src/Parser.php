@@ -764,10 +764,7 @@ class Parser {
     }
     else {
       if ($this->isTokenType('&')) {
-        $node = new ReferenceVariableNode();
-        $this->mustMatch('&', $node);
-        $node->appendChild($this->variable());
-        return $node;
+        return $this->writeVariable();
       }
       else {
         return $this->variable();

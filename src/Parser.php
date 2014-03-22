@@ -681,17 +681,12 @@ class Parser {
       return $var;
     }
     elseif ($this->isTokenType('$')) {
-      $node = new CompoundVariableNode();
-      $this->mustMatch('$', $node);
-      if ($this->tryMatch('{', $node)) {
-        $node->expression = $node->appendChild($this->expr());
-        $this->mustMatch('}', $node, TRUE);
-        return $node;
+      if ($this->isLookAhead('{')) {
+        return $this->_compoundVariable();
       }
       else {
-        $n = $node;
         $node = new VariableVariableNode();
-        $node->appendChildren($n->children);
+        $this->mustMatch('$', $node);
         $node->appendChild($this->variable());
         return $node;
       }
@@ -1410,33 +1405,76 @@ class Parser {
    * @return Node
    */
   private function exprClass(Node $class_name) {
-    $node = new Node();
-    $node->appendChild($class_name);
-    $this->mustMatch(T_DOUBLE_COLON, $node);
-    if ($this->tryMatch(T_STRING, $node)) {
+    $colon_node = new PartialNode();
+    $this->mustMatch(T_DOUBLE_COLON, $colon_node);
+    if ($this->isTokenType(T_STRING)) {
+      $class_constant = $this->mustMatchToken(T_STRING);
       if ($this->isTokenType('(')) {
-        return $this->functionCall($node);
+        return $this->classMethodCall($class_name, $colon_node, $class_constant);
       }
       else {
+        $node = new ClassConstantLookupNode();
+        $node->className = $node->appendChild($class_name);
+        $node->appendChildren($colon_node->children);
+        $node->constantName = $node->appendChild($class_constant);
         return $node;
       }
     }
-    elseif ($this->tryMatch(T_CLASS, $node)) {
+    elseif ($this->isTokenType(T_CLASS)) {
+      $node = new ClassNameScalarNode();
+      $node->className = $node->appendChild($class_name);
+      $node->appendChildren($colon_node->children);
+      $this->mustMatch(T_CLASS, $node, TRUE);
       return $node;
     }
     elseif ($this->isTokenType('{')) {
-      $node->appendChild($this->bracesExpr());
-      return $this->functionCall($node);
+      $node = new ClassMethodCallNode();
+      $node->className = $node->appendChild($class_name);
+      $node->appendChildren($colon_node->children);
+      $node->methodName = $node->appendChild($this->bracesExpr());
+      $this->functionCallParameterList($node);
+      return $this->objectDereference($this->arrayDeference($node));
     }
     else {
-      $node->appendChild($this->indirectReference());
+      $var_node = $this->indirectReference();
       if ($this->isTokenType('(')) {
-        return $this->functionCall($node);
+        return $this->classMethodCall($class_name, $colon_node, $var_node);
       }
       else {
-        return $this->objectDereference($node);
+        return $this->classMemberLookup($class_name, $colon_node, $var_node);
       }
     }
+  }
+
+  /**
+   * Construct a class method call.
+   * @param Node $class_name
+   * @param Node $colon_node
+   * @param Node $method_name
+   * @return Node
+   */
+  private function classMethodCall($class_name, $colon_node, $method_name) {
+    $node = new ClassMethodCallNode();
+    $node->className = $node->appendChild($class_name);
+    $node->appendChildren($colon_node->children);
+    $node->methodName = $node->appendChild($method_name);
+    $this->functionCallParameterList($node);
+    return $this->objectDereference($this->arrayDeference($node));
+  }
+
+  /**
+   * Construct a class member lookup.
+   * @param Node $class_name
+   * @param Node $colon_node
+   * @param Node $member_name
+   * @return Node
+   */
+  private function classMemberLookup($class_name, $colon_node, $member_name) {
+    $node = new ClassMemberLookupNode();
+    $node->className = $node->appendChild($class_name);
+    $node->appendChildren($colon_node->children);
+    $node->memberName = $node->appendChild($member_name);
+    return $this->objectDereference($node);
   }
 
   /**
@@ -1482,22 +1520,20 @@ class Parser {
    * @return Node
    */
   private function varClass(Node $class_name) {
-    $node = new Node();
-    $node->appendChild($class_name);
-    $this->mustMatch(T_DOUBLE_COLON, $node);
-    if ($this->tryMatch(T_STRING, $node)) {
-      return $this->functionCall($node);
+    $colon_node = new PartialNode();
+    $this->mustMatch(T_DOUBLE_COLON, $colon_node);
+    if ($method_name = $this->tryMatchToken(T_STRING)) {
+      return $this->classMethodCall($class_name, $colon_node, $method_name);
     }
     elseif ($this->isTokenType('{')) {
-      $node->appendChild($this->bracesExpr());
-      return $this->functionCall($node);
+      return $this->classMethodCall($class_name, $colon_node, $this->bracesExpr());
     }
     else {
-      $node->appendChild($this->indirectReference());
+      $var_node = $this->indirectReference();
       if ($this->isTokenType('(')) {
-        return $this->functionCall($node);
+        return $this->classMethodCall($class_name, $colon_node, $var_node);
       } else {
-        return $this->objectDereference($node);
+        return $this->classMemberLookup($class_name, $colon_node, $var_node);
       }
     }
   }
@@ -1508,19 +1544,10 @@ class Parser {
    * @return Node
    */
   private function functionCall(Node $function_reference) {
-    return $this->objectDereference($this->arrayDeference($this->_functionCall($function_reference)));
-  }
-
-  /**
-   * Apply any function call to operand.
-   * @param Node $function_reference
-   * @return FunctionCallNode
-   */
-  private function _functionCall(Node $function_reference) {
     $node = new FunctionCallNode();
     $node->functionReference = $node->appendChild($function_reference);
     $this->functionCallParameterList($node);
-    return $node;
+    return $this->objectDereference($this->arrayDeference($node));
   }
 
   /**
@@ -1532,17 +1559,24 @@ class Parser {
     if (!$this->isTokenType(T_OBJECT_OPERATOR)) {
       return $object;
     }
-    $node = new Node();
-    $node->appendChild($object);
-    $this->mustMatch(T_OBJECT_OPERATOR, $node);
+    $operator_node = new PartialNode();
+    $this->mustMatch(T_OBJECT_OPERATOR, $operator_node);
 
     $object_property = $this->objectProperty();
-    // is method
     if ($this->isTokenType('(')) {
-      $object_property = $this->_functionCall($object_property);
+      $node = new ObjectMethodCallNode();
+      $node->object = $node->appendChild($object);
+      $node->appendChildren($operator_node->children);
+      $node->methodName = $node->appendChild($object_property);
+      $this->functionCallParameterList($node);
+    }
+    else {
+      $node = new ObjectPropertyNode();
+      $node->object = $node->appendChild($object);
+      $node->appendChildren($operator_node->children);
+      $node->property = $node->appendChild($object_property);
     }
 
-    $node->appendChild($object_property);
     return $this->objectDereference($this->arrayDeference($node));
   }
 
@@ -1619,16 +1653,24 @@ class Parser {
    */
   private function compoundVariable() {
     if ($this->isTokenType('$')) {
-      $node = new CompoundVariableNode();
-      $this->mustMatch('$', $node);
-      $this->mustMatch('{', $node);
-      $node->expression = $node->appendChild($this->expr());
-      $this->mustMatch('}', $node, TRUE);
-      return $node;
+      return $this->_compoundVariable();
     }
     else {
       return $this->mustMatchToken(T_VARIABLE);
     }
+  }
+
+  /**
+   * Parse compound variable.
+   * @return CompoundVariableNode
+   */
+  private function _compoundVariable() {
+    $node = new CompoundVariableNode();
+    $this->mustMatch('$', $node);
+    $this->mustMatch('{', $node);
+    $node->expression = $node->appendChild($this->expr());
+    $this->mustMatch('}', $node, TRUE);
+    return $node;
   }
 
   /**

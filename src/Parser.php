@@ -1213,13 +1213,15 @@ class Parser {
 
   /**
    * Parse a new expression.
-   * @return Node
+   * @return NewNode
    */
   private function newExpr() {
-    $node = new Node();
+    $node = new NewNode();
     $this->mustMatch(T_NEW, $node);
-    $node->appendChild($this->classNameReference());
-    $node->appendChild($this->ctorArguments());
+    $node->className = $node->appendChild($this->classNameReference());
+    if ($this->isTokenType('(')) {
+      $node->arguments = $node->appendChild($this->functionCallParameterList());
+    }
     return $node;
   }
 
@@ -1274,18 +1276,6 @@ class Parser {
       $node->appendChild($this->objectProperty());
     }
     return $node;
-  }
-
-  /**
-   * Parse constructor arguments.
-   * @return Node
-   */
-  private function ctorArguments() {
-    if ($this->isTokenType('(')) {
-      return $this->functionCallParameterList();
-    } else {
-      return new Node();
-    }
   }
 
   /**

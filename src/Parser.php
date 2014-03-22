@@ -510,16 +510,10 @@ class Parser {
    * @return Node
    */
   private function forExpr(ForNode $parent, $terminator, $is_last = FALSE) {
-    if ($this->isTokenType($terminator)) {
-      $expr = new Node();
-      $parent->appendChild($expr);
-      $this->mustMatch($terminator, $parent);
-      return $expr;
+    if ($this->tryMatch($terminator, $parent)) {
+      return NULL;
     }
-    $node = new Node();
-    $expr = $this->exprList();
-    $node->appendChild($expr);
-    $node = $parent->appendChild($node);
+    $node = $parent->appendChild($this->exprList());
     $this->mustMatch($terminator, $parent, $is_last);
     return $node;
   }
@@ -901,12 +895,12 @@ class Parser {
 
   /**
    * Parse a list of expressions.
-   * @return Node
+   * @return ExpressionListNode
    */
   private function exprList() {
-    $node = new Node();
+    $node = new ExpressionListNode();
     do {
-      $node->appendChild($this->expr());
+      $node->expressions[] = $node->appendChild($this->expr());
     } while ($this->tryMatch(',', $node));
     return $node;
   }

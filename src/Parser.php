@@ -1337,7 +1337,7 @@ class Parser {
    * @param int|string $terminator Token type that terminates the encaps list
    * @param bool $encaps_whitespace_allowed
    */
-  private function encapsList(Node $node, $terminator, $encaps_whitespace_allowed = FALSE) {
+  private function encapsList($node, $terminator, $encaps_whitespace_allowed = FALSE) {
     if (!$encaps_whitespace_allowed) {
       if ($this->tryMatch(T_ENCAPSED_AND_WHITESPACE, $node)) {
         $node->appendChild($this->encapsVar());
@@ -1654,10 +1654,10 @@ class Parser {
    * Parse function call parameter list.
    * @param NewNode|FunctionCallNode $node
    */
-  private function functionCallParameterList(Node $node) {
+  private function functionCallParameterList($node) {
     $this->mustMatch('(', $node);
     if ($this->tryMatch(')', $node, TRUE)) {
-      return $node;
+      return;
     }
     if ($this->isTokenType(T_YIELD)) {
       $node->arguments[] = $node->appendChild($this->_yield());
@@ -1667,7 +1667,6 @@ class Parser {
       } while ($this->tryMatch(',', $node));
     }
     $this->mustMatch(')', $node, TRUE);
-    return $node;
   }
 
   /**
@@ -1726,18 +1725,17 @@ class Parser {
 
   /**
    * Parse parameter list.
-   * @param ClassMethodNode|InterfaceMethodNode|FunctionDeclarationNode|NewNode $node
+   * @param ClassMethodNode|InterfaceMethodNode|FunctionDeclarationNode|AnonymousFunctionNode|NewNode $node
    */
-  private function parameterList(Node $node) {
+  private function parameterList($node) {
     $this->mustMatch('(', $node);
     if ($this->tryMatch(')', $node)) {
-      return $node;
+      return;
     }
     do {
       $node->parameters[] = $node->appendChild($this->parameter());
     } while ($this->tryMatch(',', $node));
     $this->mustMatch(')', $node, TRUE);
-    return $node;
   }
 
   /**
@@ -2335,6 +2333,7 @@ class Parser {
    * @return Node
    */
   private function traitAdaptation() {
+    /** @var NamespacePathNode $qualified_name */
     $qualified_name = $this->namespacePath();
     if (count($qualified_name->children) === 1 && !$this->isTokenType(T_DOUBLE_COLON)) {
       $qualified_name = $qualified_name->children[0];
@@ -2360,12 +2359,12 @@ class Parser {
 
   /**
    * Parse a trait alias.
-   * @param TraitMethodReferenceNode $trait_method_reference
+   * @param TraitMethodReferenceNode|NamespacePathNode $trait_method_reference
    * @return TraitAliasNode
    */
-  private function traitAlias(TraitMethodReferenceNode $trait_method_reference) {
+  private function traitAlias($trait_method_reference) {
     $node = new TraitAliasNode();
-    $node->methodName = $node->appendChild($trait_method_reference);
+    $node->methodReference = $node->appendChild($trait_method_reference);
     $this->mustMatch(T_AS, $node);
     if ($trait_modifier = $this->tryMatchToken(T_PUBLIC, T_PROTECTED, T_PRIVATE)) {
       $node->visibility = $node->appendChild($trait_modifier);
@@ -2569,7 +2568,6 @@ class Parser {
 
   /**
    * @param int|string $expected_type Expected token type
-   * @param string $class_name (Optional) TokenNode class to create
    * @return TokenNode
    * @throws ParserException
    */

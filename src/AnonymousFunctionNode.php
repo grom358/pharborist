@@ -12,9 +12,9 @@ class AnonymousFunctionNode extends Node {
   public $reference;
 
   /**
-   * @var ParameterListNode
+   * @var ParameterNode[]
    */
-  public $parameters;
+  public $parameters = array();
 
   /**
    * @var (VariableNode|ReferenceVariableNode)[]

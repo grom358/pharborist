@@ -14,5 +14,5 @@ class TraitMethodReferenceNode extends Node {
   /**
    * @var Node
    */
-  public $methodName;
+  public $methodReference;
 }

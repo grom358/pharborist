@@ -12,7 +12,7 @@ class NewNode extends Node {
   public $className;
 
   /**
-   * @var ArgumentListNode
+   * @var Node[]
    */
-  public $arguments;
+  public $arguments = array();
 }

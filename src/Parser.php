@@ -897,6 +897,185 @@ class Parser {
   }
 
   /**
+   * Parse a static scalar expression.
+   * @return Node
+   * @throws ParserException
+   */
+  private function staticScalar() {
+    // Handle static array
+    if ($this->isTokenType(T_ARRAY)) {
+      $node = new ArrayNode();
+      $this->mustMatch(T_ARRAY, $node);
+      $this->mustMatch('(', $node);
+      $this->staticArrayPairList($node, ')');
+      $this->mustMatch(')', $node, TRUE);
+      return $node;
+    }
+    elseif ($this->isTokenType('[')) {
+      $node = new ArrayNode();
+      $this->mustMatch('[', $node);
+      $this->staticArrayPairList($node, ']');
+      $this->mustMatch(']', $node, TRUE);
+      return $node;
+    }
+
+    // Group tokens into operands & operators to pass to the expression parser
+    $expression_nodes = array();
+    $ternary_count = 0;
+    while ($this->iterator->hasNext() && !$this->isTokenType(';', ',', ')', T_DOUBLE_ARROW)) {
+      // Check balance of ? and : symbols for ternary operators
+      if ($this->isTokenType('?')) {
+        $ternary_count++;
+      }
+      elseif ($this->isTokenType(':')) {
+        $ternary_count--;
+        if ($ternary_count < 0) {
+          throw new ParserException($this->iterator->getSourcePosition(),
+            'unbalanced : with ? ternary operator');
+        }
+      }
+      if ($this->isTokenType(':')) {
+        $node = new PartialNode();
+        $node->type = ':';
+        $this->mustMatch(':', $node);
+        $expression_nodes[] = $node;
+      }
+      elseif ($op = $this->staticOperator()) {
+        $expression_nodes[] = $op;
+      }
+      elseif ($operand = $this->staticOperand()) {
+        $expression_nodes[] = $operand;
+      }
+      else {
+        throw new ParserException($this->iterator->getSourcePosition(), 'invalid scalar expression');
+      }
+    }
+    return $this->expressionParser->parse($expression_nodes);
+  }
+
+  /**
+   * Parse static operator.
+   * @return OperatorNode
+   */
+  private function staticOperator() {
+    static $operators = array(
+      T_LOGICAL_OR => array(OperatorNode::ASSOC_LEFT, 1, TRUE, FALSE),
+      T_LOGICAL_XOR => array(OperatorNode::ASSOC_LEFT, 2, TRUE, FALSE),
+      T_LOGICAL_AND => array(OperatorNode::ASSOC_LEFT, 3, TRUE, FALSE),
+      '?' => array(OperatorNode::ASSOC_LEFT, 5, FALSE, FALSE),
+      T_BOOLEAN_OR => array(OperatorNode::ASSOC_LEFT, 6, TRUE, FALSE),
+      T_BOOLEAN_AND => array(OperatorNode::ASSOC_LEFT, 7, TRUE, FALSE),
+      '|' => array(OperatorNode::ASSOC_LEFT, 8, TRUE, FALSE),
+      '^' => array(OperatorNode::ASSOC_LEFT, 9, TRUE, FALSE),
+      '&' => array(OperatorNode::ASSOC_LEFT, 10, TRUE, FALSE),
+      T_IS_EQUAL => array(OperatorNode::ASSOC_NONE, 11, TRUE, FALSE),
+      T_IS_IDENTICAL => array(OperatorNode::ASSOC_NONE, 11, TRUE, FALSE),
+      T_IS_NOT_EQUAL => array(OperatorNode::ASSOC_NONE, 11, TRUE, FALSE),
+      T_IS_NOT_IDENTICAL => array(OperatorNode::ASSOC_NONE, 11, TRUE, FALSE),
+      '<' => array(OperatorNode::ASSOC_NONE, 12, TRUE, FALSE),
+      T_IS_SMALLER_OR_EQUAL => array(OperatorNode::ASSOC_NONE, 12, TRUE, FALSE),
+      T_IS_GREATER_OR_EQUAL => array(OperatorNode::ASSOC_NONE, 12, TRUE, FALSE),
+      '>' => array(OperatorNode::ASSOC_NONE, 12, TRUE, FALSE),
+      T_SL => array(OperatorNode::ASSOC_LEFT, 13, TRUE, FALSE),
+      T_SR => array(OperatorNode::ASSOC_LEFT, 13, TRUE, FALSE),
+      '+' => array(OperatorNode::ASSOC_LEFT, 14, TRUE, TRUE),
+      '-' => array(OperatorNode::ASSOC_LEFT, 14, TRUE, TRUE),
+      '.' => array(OperatorNode::ASSOC_LEFT, 14, TRUE, FALSE),
+      '*' => array(OperatorNode::ASSOC_LEFT, 15, TRUE, FALSE),
+      '/' => array(OperatorNode::ASSOC_LEFT, 15, TRUE, FALSE),
+      '%' => array(OperatorNode::ASSOC_LEFT, 15, TRUE, FALSE),
+      '!' => array(OperatorNode::ASSOC_RIGHT, 16, FALSE, TRUE),
+      '~' => array(OperatorNode::ASSOC_RIGHT, 18, FALSE, TRUE),
+      T_POW => array(OperatorNode::ASSOC_RIGHT, 19, TRUE, FALSE),
+    );
+    $token_type = $this->getTokenType();
+    if (array_key_exists($token_type, $operators)) {
+      list($assoc, $precedence, $hasBinaryMode, $hasUnaryMode) = $operators[$token_type];
+      $node = new OperatorNode();
+      $node->type = $token_type;
+      $node->associativity = $assoc;
+      $node->precedence = $precedence;
+      $node->hasBinaryMode = $hasBinaryMode;
+      $node->hasUnaryMode = $hasUnaryMode;
+      $this->mustMatch($token_type, $node);
+      return $node;
+    }
+    return NULL;
+  }
+
+  /**
+   * Parse static operand.
+   * @return Node
+   */
+  private function staticOperand() {
+    if ($scalar = $this->tryMatchToken(
+      T_STRING_VARNAME,
+      T_CLASS_C,
+      T_LNUMBER,
+      T_DNUMBER,
+      T_CONSTANT_ENCAPSED_STRING,
+      T_LINE,
+      T_FILE,
+      T_DIR,
+      T_TRAIT_C,
+      T_METHOD_C,
+      T_FUNC_C,
+      T_NS_C
+    )) {
+      return $scalar;
+    }
+    elseif ($this->isTokenType('(')) {
+      $node = new ParenthesisNode();
+      $this->mustMatch('(', $node);
+      $node->appendChild($this->staticScalar());
+      $this->mustMatch(')', $node, TRUE);
+      return $node;
+    }
+    elseif ($this->isTokenType(T_STRING, T_NAMESPACE, T_NS_SEPARATOR)) {
+      $namespace_path = $this->namespacePath();
+      if ($this->isTokenType(T_DOUBLE_COLON)) {
+        $colon_node = new PartialNode();
+        $this->mustMatch(T_DOUBLE_COLON, $colon_node);
+        if ($this->isTokenType(T_CLASS)) {
+          return $this->classNameScalar($namespace_path, $colon_node);
+        }
+        else {
+          $class_constant = $this->mustMatchToken(T_STRING);
+          return $this->classConstant($namespace_path, $colon_node, $class_constant);
+        }
+      }
+      else {
+        return $namespace_path;
+      }
+    }
+    elseif ($this->isTokenType(T_STATIC)) {
+      $static_node = $this->mustMatchToken(T_STATIC);
+      $colon_node = new PartialNode();
+      $this->mustMatch(T_DOUBLE_COLON, $colon_node);
+      if ($this->isTokenType(T_CLASS)) {
+        return $this->classNameScalar($static_node, $colon_node);
+      }
+      else {
+        $class_constant = $this->mustMatchToken(T_STRING);
+        return $this->classConstant($static_node, $colon_node, $class_constant);
+      }
+    }
+    elseif ($this->isTokenType(T_START_HEREDOC)) {
+      $node = new HeredocNode();
+      $this->mustMatch(T_START_HEREDOC, $node);
+      if ($this->tryMatch(T_END_HEREDOC, $node)) {
+        return $node;
+      }
+      $this->mustMatch(T_ENCAPSED_AND_WHITESPACE, $node);
+      $this->mustMatch(T_END_HEREDOC, $node);
+      return $node;
+    }
+    else {
+      return NULL;
+    }
+  }
+
+  /**
    * Parse an expression.
    * @param bool $is_case TRUE if parsing case expression.
    * @return Node
@@ -1315,6 +1494,30 @@ class Parser {
         break;
       }
       $node->appendChild($this->arrayPair());
+    } while ($this->tryMatch(',', $node));
+  }
+
+  /**
+   * Parse static array pair list.
+   * @param ArrayNode $node Array node to add elements to
+   * @param int|string $terminator Token type that terminates the array pair list
+   */
+  private function staticArrayPairList(ArrayNode $node, $terminator) {
+    do {
+      if ($this->isTokenType($terminator)) {
+        break;
+      }
+      $value = $this->staticScalar();
+      if ($this->isTokenType(T_DOUBLE_ARROW)) {
+        $pair = new ArrayPairNode();
+        $pair->key = $pair->appendChild($value);
+        $this->mustMatch(T_DOUBLE_ARROW, $pair);
+        $pair->value = $pair->appendChild($this->staticScalar());
+        $node->elements[] = $node->appendChild($pair);
+      }
+      else {
+        $node->elements[] = $node->appendChild($value);
+      }
     } while ($this->tryMatch(',', $node));
   }
 
@@ -1851,209 +2054,6 @@ class Parser {
       return $this->namespacePath();
     }
     return NULL;
-  }
-
-  /**
-   * Parse a static scalar expression.
-   * @return Node
-   * @throws ParserException
-   */
-  private function staticScalar() {
-    // Handle static array
-    if ($this->isTokenType(T_ARRAY)) {
-      $node = new ArrayNode();
-      $this->mustMatch(T_ARRAY, $node);
-      $this->mustMatch('(', $node);
-      $this->staticArrayPairList($node, ')');
-      $this->mustMatch(')', $node, TRUE);
-      return $node;
-    }
-    elseif ($this->isTokenType('[')) {
-      $node = new ArrayNode();
-      $this->mustMatch('[', $node);
-      $this->staticArrayPairList($node, ']');
-      $this->mustMatch(']', $node, TRUE);
-      return $node;
-    }
-
-    // Group tokens into operands & operators to pass to the expression parser
-    $expression_nodes = array();
-    $ternary_count = 0;
-    while ($this->iterator->hasNext() && !$this->isTokenType(';', ',', ')', T_DOUBLE_ARROW)) {
-      // Check balance of ? and : symbols for ternary operators
-      if ($this->isTokenType('?')) {
-        $ternary_count++;
-      }
-      elseif ($this->isTokenType(':')) {
-        $ternary_count--;
-        if ($ternary_count < 0) {
-          throw new ParserException($this->iterator->getSourcePosition(),
-            'unbalanced : with ? ternary operator');
-        }
-      }
-      if ($this->isTokenType(':')) {
-        $node = new PartialNode();
-        $node->type = ':';
-        $this->mustMatch(':', $node);
-        $expression_nodes[] = $node;
-      }
-      elseif ($op = $this->staticOperator()) {
-        $expression_nodes[] = $op;
-      }
-      elseif ($operand = $this->staticOperand()) {
-        $expression_nodes[] = $operand;
-      }
-      else {
-        throw new ParserException($this->iterator->getSourcePosition(), 'invalid scalar expression');
-      }
-    }
-    return $this->expressionParser->parse($expression_nodes);
-  }
-
-  /**
-   * Parse static array pair list.
-   * @param ArrayNode $node Array node to add elements to
-   * @param int|string $terminator Token type that terminates the array pair list
-   */
-  private function staticArrayPairList(ArrayNode $node, $terminator) {
-    do {
-      if ($this->isTokenType($terminator)) {
-        break;
-      }
-      $value = $this->staticScalar();
-      if ($this->isTokenType(T_DOUBLE_ARROW)) {
-        $pair = new ArrayPairNode();
-        $pair->key = $pair->appendChild($value);
-        $this->mustMatch(T_DOUBLE_ARROW, $pair);
-        $pair->value = $pair->appendChild($this->staticScalar());
-        $node->elements[] = $node->appendChild($pair);
-      }
-      else {
-        $node->elements[] = $node->appendChild($value);
-      }
-    } while ($this->tryMatch(',', $node));
-  }
-
-  /**
-   * Parse static operator.
-   * @return OperatorNode
-   */
-  private function staticOperator() {
-    static $operators = array(
-      T_LOGICAL_OR => array(OperatorNode::ASSOC_LEFT, 1, TRUE, FALSE),
-      T_LOGICAL_XOR => array(OperatorNode::ASSOC_LEFT, 2, TRUE, FALSE),
-      T_LOGICAL_AND => array(OperatorNode::ASSOC_LEFT, 3, TRUE, FALSE),
-      '?' => array(OperatorNode::ASSOC_LEFT, 5, FALSE, FALSE),
-      T_BOOLEAN_OR => array(OperatorNode::ASSOC_LEFT, 6, TRUE, FALSE),
-      T_BOOLEAN_AND => array(OperatorNode::ASSOC_LEFT, 7, TRUE, FALSE),
-      '|' => array(OperatorNode::ASSOC_LEFT, 8, TRUE, FALSE),
-      '^' => array(OperatorNode::ASSOC_LEFT, 9, TRUE, FALSE),
-      '&' => array(OperatorNode::ASSOC_LEFT, 10, TRUE, FALSE),
-      T_IS_EQUAL => array(OperatorNode::ASSOC_NONE, 11, TRUE, FALSE),
-      T_IS_IDENTICAL => array(OperatorNode::ASSOC_NONE, 11, TRUE, FALSE),
-      T_IS_NOT_EQUAL => array(OperatorNode::ASSOC_NONE, 11, TRUE, FALSE),
-      T_IS_NOT_IDENTICAL => array(OperatorNode::ASSOC_NONE, 11, TRUE, FALSE),
-      '<' => array(OperatorNode::ASSOC_NONE, 12, TRUE, FALSE),
-      T_IS_SMALLER_OR_EQUAL => array(OperatorNode::ASSOC_NONE, 12, TRUE, FALSE),
-      T_IS_GREATER_OR_EQUAL => array(OperatorNode::ASSOC_NONE, 12, TRUE, FALSE),
-      '>' => array(OperatorNode::ASSOC_NONE, 12, TRUE, FALSE),
-      T_SL => array(OperatorNode::ASSOC_LEFT, 13, TRUE, FALSE),
-      T_SR => array(OperatorNode::ASSOC_LEFT, 13, TRUE, FALSE),
-      '+' => array(OperatorNode::ASSOC_LEFT, 14, TRUE, TRUE),
-      '-' => array(OperatorNode::ASSOC_LEFT, 14, TRUE, TRUE),
-      '.' => array(OperatorNode::ASSOC_LEFT, 14, TRUE, FALSE),
-      '*' => array(OperatorNode::ASSOC_LEFT, 15, TRUE, FALSE),
-      '/' => array(OperatorNode::ASSOC_LEFT, 15, TRUE, FALSE),
-      '%' => array(OperatorNode::ASSOC_LEFT, 15, TRUE, FALSE),
-      '!' => array(OperatorNode::ASSOC_RIGHT, 16, FALSE, TRUE),
-      '~' => array(OperatorNode::ASSOC_RIGHT, 18, FALSE, TRUE),
-      T_POW => array(OperatorNode::ASSOC_RIGHT, 19, TRUE, FALSE),
-    );
-    $token_type = $this->getTokenType();
-    if (array_key_exists($token_type, $operators)) {
-      list($assoc, $precedence, $hasBinaryMode, $hasUnaryMode) = $operators[$token_type];
-      $node = new OperatorNode();
-      $node->type = $token_type;
-      $node->associativity = $assoc;
-      $node->precedence = $precedence;
-      $node->hasBinaryMode = $hasBinaryMode;
-      $node->hasUnaryMode = $hasUnaryMode;
-      $this->mustMatch($token_type, $node);
-      return $node;
-    }
-    return NULL;
-  }
-
-  /**
-   * Parse static operand.
-   * @return Node
-   */
-  private function staticOperand() {
-    if ($scalar = $this->tryMatchToken(
-      T_STRING_VARNAME,
-      T_CLASS_C,
-      T_LNUMBER,
-      T_DNUMBER,
-      T_CONSTANT_ENCAPSED_STRING,
-      T_LINE,
-      T_FILE,
-      T_DIR,
-      T_TRAIT_C,
-      T_METHOD_C,
-      T_FUNC_C,
-      T_NS_C
-    )) {
-      return $scalar;
-    }
-    elseif ($this->isTokenType('(')) {
-      $node = new ParenthesisNode();
-      $this->mustMatch('(', $node);
-      $node->appendChild($this->staticScalar());
-      $this->mustMatch(')', $node, TRUE);
-      return $node;
-    }
-    elseif ($this->isTokenType(T_STRING, T_NAMESPACE, T_NS_SEPARATOR)) {
-      $namespace_path = $this->namespacePath();
-      if ($this->isTokenType(T_DOUBLE_COLON)) {
-        $colon_node = new PartialNode();
-        $this->mustMatch(T_DOUBLE_COLON, $colon_node);
-        if ($this->isTokenType(T_CLASS)) {
-          return $this->classNameScalar($namespace_path, $colon_node);
-        }
-        else {
-          $class_constant = $this->mustMatchToken(T_STRING);
-          return $this->classConstant($namespace_path, $colon_node, $class_constant);
-        }
-      }
-      else {
-        return $namespace_path;
-      }
-    }
-    elseif ($this->isTokenType(T_STATIC)) {
-      $static_node = $this->mustMatchToken(T_STATIC);
-      $colon_node = new PartialNode();
-      $this->mustMatch(T_DOUBLE_COLON, $colon_node);
-      if ($this->isTokenType(T_CLASS)) {
-        return $this->classNameScalar($static_node, $colon_node);
-      }
-      else {
-        $class_constant = $this->mustMatchToken(T_STRING);
-        return $this->classConstant($static_node, $colon_node, $class_constant);
-      }
-    }
-    elseif ($this->isTokenType(T_START_HEREDOC)) {
-      $node = new HeredocNode();
-      $this->mustMatch(T_START_HEREDOC, $node);
-      if ($this->tryMatch(T_END_HEREDOC, $node)) {
-        return $node;
-      }
-      $this->mustMatch(T_ENCAPSED_AND_WHITESPACE, $node);
-      $this->mustMatch(T_END_HEREDOC, $node);
-      return $node;
-    }
-    else {
-      return NULL;
-    }
   }
 
   /**

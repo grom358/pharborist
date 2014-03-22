@@ -144,10 +144,10 @@ class Parser {
 
   /**
    * Parse an echo PHP (eg. <?=$a?>) statement.
-   * @return Node
+   * @return EchoTagStatementNode
    */
   private function echoTagStatement() {
-    $node = new Node();
+    $node = new EchoTagStatementNode();
     $this->mustMatch(T_OPEN_TAG_WITH_ECHO, $node);
     $node->appendChild($this->exprList());
     $this->mustMatch(T_CLOSE_TAG, $node);

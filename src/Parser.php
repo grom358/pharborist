@@ -1991,7 +1991,7 @@ class Parser {
       }
     }
     elseif ($this->isTokenType(T_START_HEREDOC)) {
-      $node = new Node();
+      $node = new HeredocNode();
       $this->mustMatch(T_START_HEREDOC, $node);
       if ($this->tryMatch(T_END_HEREDOC, $node)) {
         return $node;

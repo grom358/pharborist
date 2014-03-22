@@ -373,7 +373,7 @@ class Parser {
    * @return Node
    */
   private function parenExpr() {
-    $node = new Node();
+    $node = new ParenthesisNode();
     $this->mustMatch('(', $node);
     if ($this->isTokenType(T_YIELD)) {
       $node->appendChild($this->_yield());
@@ -1945,7 +1945,7 @@ class Parser {
       return $scalar;
     }
     elseif ($this->isTokenType('(')) {
-      $node = new Node();
+      $node = new ParenthesisNode();
       $this->mustMatch('(', $node);
       $node->appendChild($this->staticScalar());
       $this->mustMatch(')', $node, TRUE);

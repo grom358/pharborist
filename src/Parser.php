@@ -372,7 +372,12 @@ class Parser {
   private function parenExpr() {
     $node = new Node();
     $this->mustMatch('(', $node);
-    $node->appendChild($this->expr());
+    if ($this->isTokenType(T_YIELD)) {
+      $node->appendChild($this->_yield());
+    }
+    else {
+      $node->appendChild($this->expr());
+    }
     $this->mustMatch(')', $node, TRUE);
     return $node;
   }
@@ -644,14 +649,15 @@ class Parser {
 
   /**
    * Parse a yield expression.
-   * @return Node
+   * @return YieldNode
    */
   private function _yield() {
-    $node = new Node();
+    $node = new YieldNode();
     $this->mustMatch(T_YIELD, $node);
-    $node->appendChild($this->expr());
+    $node->value = $node->appendChild($this->expr());
     if ($this->tryMatch(T_DOUBLE_ARROW, $node)) {
-      $node->appendChild($this->expr());
+      $node->key = $node->value;
+      $node->value = $node->appendChild($this->expr());
     }
     return $node;
   }
@@ -1071,6 +1077,10 @@ class Parser {
           $node->appendChild($this->newExpr());
           $this->mustMatch(')', $node, TRUE);
           $node = $this->objectDereference($this->arrayDeference($node));
+        }
+        elseif ($this->isTokenType(T_YIELD)) {
+          $node->appendChild($this->_yield());
+          $this->mustMatch(')', $node, TRUE);
         }
         else {
           $node->appendChild($this->expr());

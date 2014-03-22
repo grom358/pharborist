@@ -1095,20 +1095,20 @@ class Parser {
         }
         return $node;
       case T_START_HEREDOC:
-        $node = new Node();
+        $node = new HeredocNode();
         $this->mustMatch(T_START_HEREDOC, $node);
         if ($this->tryMatch(T_END_HEREDOC, $node, TRUE)) {
           return $node;
         }
         else {
-          $node->appendChild($this->encapsList(T_END_HEREDOC, TRUE));
+          $this->encapsList($node, T_END_HEREDOC, TRUE);
           $this->mustMatch(T_END_HEREDOC, $node, TRUE);
           return $node;
         }
       case '"':
-        $node = new Node();
+        $node = new ComplexStringNode();
         $this->mustMatch('"', $node);
-        $node->appendChild($this->encapsList('"'));
+        $this->encapsList($node, '"');
         $this->mustMatch('"', $node);
         return $node;
       case T_STRING:
@@ -1357,12 +1357,11 @@ class Parser {
 
   /**
    * Parse an encaps list.
+   * @param ComplexStringNode|HeredocNode $node Interpolated string.
    * @param int|string $terminator Token type that terminates the encaps list
    * @param bool $encaps_whitespace_allowed
-   * @return Node
    */
-  private function encapsList($terminator, $encaps_whitespace_allowed = FALSE) {
-    $node = new Node();
+  private function encapsList(Node $node, $terminator, $encaps_whitespace_allowed = FALSE) {
     if (!$encaps_whitespace_allowed) {
       if ($this->tryMatch(T_ENCAPSED_AND_WHITESPACE, $node)) {
         $node->appendChild($this->encapsVar());
@@ -1372,16 +1371,15 @@ class Parser {
       $this->tryMatch(T_ENCAPSED_AND_WHITESPACE, $node) ||
         $node->appendChild($this->encapsVar());
     }
-    return $node;
   }
 
   /**
    * Parse an encaps variable.
-   * @return Node
+   * @return StringVariableNode
    * @throws ParserException
    */
   private function encapsVar() {
-    $node = new Node();
+    $node = new StringVariableNode();
     if ($this->tryMatch(T_DOLLAR_OPEN_CURLY_BRACES, $node)) {
       if ($this->tryMatch(T_STRING_VARNAME, $node)) {
         if ($this->tryMatch('[', $node)) {
@@ -1406,9 +1404,7 @@ class Parser {
           throw new ParserException($this->iterator->getSourcePosition(),
             'expected encaps_var_offset (T_STRING or T_NUM_STRING or T_VARIABLE)');
         }
-        $this->tryMatch(T_STRING, $node) ||
-        $this->tryMatch(T_NUM_STRING, $node) ||
-        $this->tryMatch(T_VARIABLE, $node);
+        $node->appendChild($this->tryMatchToken(T_STRING, T_NUM_STRING, T_VARIABLE));
         $this->mustMatch(']', $node);
       }
       elseif ($this->tryMatch(T_OBJECT_OPERATOR, $node)) {

@@ -888,12 +888,12 @@ class Parser {
 
   /**
    * Parse a goto statement.
-   * @return Node
+   * @return GotoStatementNode
    */
   private function _goto() {
-    $node = new Node();
+    $node = new GotoStatementNode();
     $this->mustMatch(T_GOTO, $node);
-    $this->mustMatch(T_STRING, $node);
+    $node->label = $this->mustMatch(T_STRING, $node);
     $this->mustMatch(';', $node, TRUE);
     return $node;
   }

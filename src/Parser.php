@@ -629,15 +629,15 @@ class Parser {
 
   /**
    * Parse a return statement.
-   * @return Node
+   * @return ReturnStatementNode
    */
   private function _return() {
-    $node = new Node();
+    $node = new ReturnStatementNode();
     $this->mustMatch(T_RETURN, $node);
     if ($this->tryMatch(';', $node, TRUE)) {
       return $node;
     }
-    $node->appendChild($this->expr());
+    $node->value = $node->appendChild($this->expr());
     $this->mustMatch(';', $node, TRUE);
     return $node;
   }

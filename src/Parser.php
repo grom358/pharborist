@@ -958,47 +958,10 @@ class Parser {
    * @return OperatorNode
    */
   private function staticOperator() {
-    static $operators = array(
-      T_LOGICAL_OR => array(OperatorNode::ASSOC_LEFT, 1, TRUE, FALSE),
-      T_LOGICAL_XOR => array(OperatorNode::ASSOC_LEFT, 2, TRUE, FALSE),
-      T_LOGICAL_AND => array(OperatorNode::ASSOC_LEFT, 3, TRUE, FALSE),
-      '?' => array(OperatorNode::ASSOC_LEFT, 5, FALSE, FALSE),
-      T_BOOLEAN_OR => array(OperatorNode::ASSOC_LEFT, 6, TRUE, FALSE),
-      T_BOOLEAN_AND => array(OperatorNode::ASSOC_LEFT, 7, TRUE, FALSE),
-      '|' => array(OperatorNode::ASSOC_LEFT, 8, TRUE, FALSE),
-      '^' => array(OperatorNode::ASSOC_LEFT, 9, TRUE, FALSE),
-      '&' => array(OperatorNode::ASSOC_LEFT, 10, TRUE, FALSE),
-      T_IS_EQUAL => array(OperatorNode::ASSOC_NONE, 11, TRUE, FALSE),
-      T_IS_IDENTICAL => array(OperatorNode::ASSOC_NONE, 11, TRUE, FALSE),
-      T_IS_NOT_EQUAL => array(OperatorNode::ASSOC_NONE, 11, TRUE, FALSE),
-      T_IS_NOT_IDENTICAL => array(OperatorNode::ASSOC_NONE, 11, TRUE, FALSE),
-      '<' => array(OperatorNode::ASSOC_NONE, 12, TRUE, FALSE),
-      T_IS_SMALLER_OR_EQUAL => array(OperatorNode::ASSOC_NONE, 12, TRUE, FALSE),
-      T_IS_GREATER_OR_EQUAL => array(OperatorNode::ASSOC_NONE, 12, TRUE, FALSE),
-      '>' => array(OperatorNode::ASSOC_NONE, 12, TRUE, FALSE),
-      T_SL => array(OperatorNode::ASSOC_LEFT, 13, TRUE, FALSE),
-      T_SR => array(OperatorNode::ASSOC_LEFT, 13, TRUE, FALSE),
-      '+' => array(OperatorNode::ASSOC_LEFT, 14, TRUE, TRUE),
-      '-' => array(OperatorNode::ASSOC_LEFT, 14, TRUE, TRUE),
-      '.' => array(OperatorNode::ASSOC_LEFT, 14, TRUE, FALSE),
-      '*' => array(OperatorNode::ASSOC_LEFT, 15, TRUE, FALSE),
-      '/' => array(OperatorNode::ASSOC_LEFT, 15, TRUE, FALSE),
-      '%' => array(OperatorNode::ASSOC_LEFT, 15, TRUE, FALSE),
-      '!' => array(OperatorNode::ASSOC_RIGHT, 16, FALSE, TRUE),
-      '~' => array(OperatorNode::ASSOC_RIGHT, 18, FALSE, TRUE),
-      T_POW => array(OperatorNode::ASSOC_RIGHT, 19, TRUE, FALSE),
-    );
     $token_type = $this->getTokenType();
-    if (array_key_exists($token_type, $operators)) {
-      list($assoc, $precedence, $hasBinaryMode, $hasUnaryMode) = $operators[$token_type];
-      $node = new OperatorNode();
-      $node->type = $token_type;
-      $node->associativity = $assoc;
-      $node->precedence = $precedence;
-      $node->hasBinaryMode = $hasBinaryMode;
-      $node->hasUnaryMode = $hasUnaryMode;
-      $this->mustMatch($token_type, $node);
-      return $node;
+    if ($operator_node = OperatorFactory::createOperator($token_type, TRUE)) {
+      $this->mustMatch($token_type, $operator_node);
+      return $operator_node;
     }
     return NULL;
   }
@@ -1124,75 +1087,10 @@ class Parser {
    * @return OperatorNode
    */
   private function exprOperator() {
-    // Expression operator settings
-    // Associativity, Precedence, Binary Operator, Unary Operator
-    static $operators = array(
-      T_LOGICAL_OR => array(OperatorNode::ASSOC_LEFT, 1, TRUE, FALSE),
-      T_LOGICAL_XOR => array(OperatorNode::ASSOC_LEFT, 2, TRUE, FALSE),
-      T_LOGICAL_AND => array(OperatorNode::ASSOC_LEFT, 3, TRUE, FALSE),
-      '=' => array(OperatorNode::ASSOC_RIGHT, 4, TRUE, FALSE),
-      T_AND_EQUAL => array(OperatorNode::ASSOC_RIGHT, 4, TRUE, FALSE),
-      T_CONCAT_EQUAL => array(OperatorNode::ASSOC_RIGHT, 4, TRUE, FALSE),
-      T_DIV_EQUAL => array(OperatorNode::ASSOC_RIGHT, 4, TRUE, FALSE),
-      T_MINUS_EQUAL => array(OperatorNode::ASSOC_RIGHT, 4, TRUE, FALSE),
-      T_MOD_EQUAL => array(OperatorNode::ASSOC_RIGHT, 4, TRUE, FALSE),
-      T_MUL_EQUAL => array(OperatorNode::ASSOC_RIGHT, 4, TRUE, FALSE),
-      T_OR_EQUAL => array(OperatorNode::ASSOC_RIGHT, 4, TRUE, FALSE),
-      T_PLUS_EQUAL => array(OperatorNode::ASSOC_RIGHT, 4, TRUE, FALSE),
-      T_SL_EQUAL => array(OperatorNode::ASSOC_RIGHT, 4, TRUE, FALSE),
-      T_SR_EQUAL => array(OperatorNode::ASSOC_RIGHT, 4, TRUE, FALSE),
-      T_XOR_EQUAL => array(OperatorNode::ASSOC_RIGHT, 4, TRUE, FALSE),
-      T_POW_EQUAL => array(OperatorNode::ASSOC_RIGHT, 4, TRUE, FALSE),
-      '?' => array(OperatorNode::ASSOC_LEFT, 5, FALSE, FALSE),
-      T_BOOLEAN_OR => array(OperatorNode::ASSOC_LEFT, 6, TRUE, FALSE),
-      T_BOOLEAN_AND => array(OperatorNode::ASSOC_LEFT, 7, TRUE, FALSE),
-      '|' => array(OperatorNode::ASSOC_LEFT, 8, TRUE, FALSE),
-      '^' => array(OperatorNode::ASSOC_LEFT, 9, TRUE, FALSE),
-      '&' => array(OperatorNode::ASSOC_LEFT, 10, TRUE, FALSE),
-      T_IS_EQUAL => array(OperatorNode::ASSOC_NONE, 11, TRUE, FALSE),
-      T_IS_IDENTICAL => array(OperatorNode::ASSOC_NONE, 11, TRUE, FALSE),
-      T_IS_NOT_EQUAL => array(OperatorNode::ASSOC_NONE, 11, TRUE, FALSE),
-      T_IS_NOT_IDENTICAL => array(OperatorNode::ASSOC_NONE, 11, TRUE, FALSE),
-      '<' => array(OperatorNode::ASSOC_NONE, 12, TRUE, FALSE),
-      T_IS_SMALLER_OR_EQUAL => array(OperatorNode::ASSOC_NONE, 12, TRUE, FALSE),
-      T_IS_GREATER_OR_EQUAL => array(OperatorNode::ASSOC_NONE, 12, TRUE, FALSE),
-      '>' => array(OperatorNode::ASSOC_NONE, 12, TRUE, FALSE),
-      T_SL => array(OperatorNode::ASSOC_LEFT, 13, TRUE, FALSE),
-      T_SR => array(OperatorNode::ASSOC_LEFT, 13, TRUE, FALSE),
-      '+' => array(OperatorNode::ASSOC_LEFT, 14, TRUE, TRUE),
-      '-' => array(OperatorNode::ASSOC_LEFT, 14, TRUE, TRUE),
-      '.' => array(OperatorNode::ASSOC_LEFT, 14, TRUE, FALSE),
-      '*' => array(OperatorNode::ASSOC_LEFT, 15, TRUE, FALSE),
-      '/' => array(OperatorNode::ASSOC_LEFT, 15, TRUE, FALSE),
-      '%' => array(OperatorNode::ASSOC_LEFT, 15, TRUE, FALSE),
-      '!' => array(OperatorNode::ASSOC_RIGHT, 16, FALSE, TRUE),
-      T_INSTANCEOF => array(OperatorNode::ASSOC_NONE, 17, TRUE, FALSE),
-      T_INC => array(OperatorNode::ASSOC_RIGHT, 18, FALSE, TRUE),
-      T_DEC => array(OperatorNode::ASSOC_RIGHT, 18, FALSE, TRUE),
-      T_BOOL_CAST => array(OperatorNode::ASSOC_RIGHT, 18, FALSE, TRUE),
-      T_INT_CAST => array(OperatorNode::ASSOC_RIGHT, 18, FALSE, TRUE),
-      T_DOUBLE_CAST => array(OperatorNode::ASSOC_RIGHT, 18, FALSE, TRUE),
-      T_STRING_CAST => array(OperatorNode::ASSOC_RIGHT, 18, FALSE, TRUE),
-      T_ARRAY_CAST => array(OperatorNode::ASSOC_RIGHT, 18, FALSE, TRUE),
-      T_OBJECT_CAST => array(OperatorNode::ASSOC_RIGHT, 18, FALSE, TRUE),
-      T_UNSET_CAST  => array(OperatorNode::ASSOC_RIGHT, 18, FALSE, TRUE),
-      '@' => array(OperatorNode::ASSOC_RIGHT, 18, FALSE, TRUE),
-      '~' => array(OperatorNode::ASSOC_RIGHT, 18, FALSE, TRUE),
-      T_POW => array(OperatorNode::ASSOC_RIGHT, 19, TRUE, FALSE),
-      T_CLONE => array(OperatorNode::ASSOC_RIGHT, 20, FALSE, TRUE),
-      T_PRINT => array(OperatorNode::ASSOC_RIGHT, 21, FALSE, TRUE),
-    );
     $token_type = $this->getTokenType();
-    if (array_key_exists($token_type, $operators)) {
-      list($assoc, $precedence, $hasBinaryMode, $hasUnaryMode) = $operators[$token_type];
-      $node = new OperatorNode();
-      $node->type = $token_type;
-      $node->associativity = $assoc;
-      $node->precedence = $precedence;
-      $node->hasBinaryMode = $hasBinaryMode;
-      $node->hasUnaryMode = $hasUnaryMode;
-      $this->mustMatch($token_type, $node);
-      return $node;
+    if ($operator_node = OperatorFactory::createOperator($token_type)) {
+      $this->mustMatch($token_type, $operator_node);
+      return $operator_node;
     }
     return NULL;
   }

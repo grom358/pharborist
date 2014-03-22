@@ -301,7 +301,7 @@ class Parser {
       case T_STATIC:
         // Check if static variable list.
         $this->mark();
-        $node = new Node();
+        $node = new StaticVariableStatementNode();
         $this->mustMatch(T_STATIC, $node);
         if ($this->isTokenType(T_VARIABLE)) {
           return $this->staticVariableList($node);
@@ -329,12 +329,12 @@ class Parser {
 
   /**
    * Parse a static variable list.
-   * @param Node $node static token.
-   * @return Node
+   * @param StaticVariableStatementNode $node Node being created.
+   * @return StaticVariableStatementNode
    */
-  private function staticVariableList(Node $node) {
+  private function staticVariableList(StaticVariableStatementNode $node) {
     do {
-      $node->appendChild($this->staticVariable());
+      $node->variables[] = $node->appendChild($this->staticVariable());
     } while ($this->tryMatch(',', $node));
     $this->mustMatch(';', $node, TRUE);
     return $node;
@@ -342,13 +342,13 @@ class Parser {
 
   /**
    * Parse a static variable.
-   * @return Node
+   * @return StaticVariableNode
    */
   private function staticVariable() {
-    $node = new Node();
-    $this->mustMatch(T_VARIABLE, $node);
+    $node = new StaticVariableNode();
+    $node->name = $this->mustMatch(T_VARIABLE, $node);
     if ($this->tryMatch('=', $node)) {
-      $node->appendChild($this->staticScalar());
+      $node->initialValue = $node->appendChild($this->staticScalar());
     }
     return $node;
   }

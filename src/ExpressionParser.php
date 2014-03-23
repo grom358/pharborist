@@ -7,7 +7,7 @@ namespace Pharborist;
  */
 class ExpressionParser {
   /**
-   * @var OperatorNode[]
+   * @var Operator[]
    */
   private $operators = array();
 
@@ -17,12 +17,12 @@ class ExpressionParser {
   private $operands = array();
 
   /**
-   * @var OperatorNode
+   * @var Operator
    */
   private $sentinel;
 
   /**
-   * @var OperatorNode[]
+   * @var Node[]
    */
   private $nodes;
 
@@ -40,8 +40,8 @@ class ExpressionParser {
    * Constructor.
    */
   public function __construct() {
-    $sentinel = new OperatorNode();
-    $sentinel->associativity = OperatorNode::ASSOC_NONE;
+    $sentinel = new Operator();
+    $sentinel->associativity = Operator::ASSOC_NONE;
     $sentinel->precedence = -1;
     $sentinel->type = ';';
     $this->sentinel = $sentinel;
@@ -49,7 +49,7 @@ class ExpressionParser {
 
   /**
    * @param $array
-   * @return OperatorNode
+   * @return Operator
    */
   static private function arrayLast($array) {
     if (count($array) < 1) {
@@ -79,19 +79,16 @@ class ExpressionParser {
 
   private function E() {
     $this->P();
-    while (($node = $this->next()) && ($node instanceof OperatorNode)) {
+    while (($node = $this->next()) && ($node instanceof Operator)) {
       // Special case ternary operator
       if ($node->type === '?') {
         $this->expect('?');
-        if (($n = $this->next()) && $n->type === ':') {
+        $next = $this->next();
+        if ($next && $next->type === ':') {
           // Elvis operator
-          $this->expect(':');
-          // Merge ? and : nodes
-          foreach ($n->children as $child) {
-            $node->appendChild($child);
-          }
-          $node->type = '?:';
-          $this->pushOperator($node, OperatorNode::MODE_BINARY);
+          $colon = $this->expect(':');
+          $elvis_operator = OperatorFactory::createElvisOperator($node, $colon);
+          $this->pushOperator($elvis_operator, Operator::MODE_BINARY);
           $this->P();
         } else {
           $this->operators[] = $this->sentinel;
@@ -99,7 +96,7 @@ class ExpressionParser {
           array_pop($this->operators);
           $node->colon = $this->expect(':');
           $node->then = array_pop($this->operands);
-          $this->pushOperator($node, OperatorNode::MODE_BINARY);
+          $this->pushOperator($node, Operator::MODE_BINARY);
           $this->P();
         }
       }
@@ -107,13 +104,10 @@ class ExpressionParser {
       elseif ($node->type == T_INC || $node->type == T_DEC) {
         $this->consume();
         $operand = array_pop($this->operands);
-        $n = new Node();
-        $n->appendChild($operand);
-        $n->appendChild($node);
-        $this->operands[] = $n;
+        $this->operands[] = OperatorFactory::createPostfixOperatorNode($operand, $node);
       }
       elseif ($node->hasBinaryMode) {
-        $this->pushOperator($node, OperatorNode::MODE_BINARY);
+        $this->pushOperator($node, Operator::MODE_BINARY);
         $this->consume();
         $this->P();
       }
@@ -131,14 +125,14 @@ class ExpressionParser {
     $last = self::arrayLast($this->operators);
     if ($node->type === '&' && $last->type === '=') {
       // reference assignment
-      $node->associativity = OperatorNode::ASSOC_RIGHT;
+      $node->associativity = Operator::ASSOC_RIGHT;
       $node->precedence = self::arrayLast($this->operators)->precedence;
-      $this->pushOperator($node, OperatorNode::MODE_UNARY);
+      $this->pushOperator($node, Operator::MODE_UNARY);
       $this->consume();
       $this->P();
     }
-    elseif ($node instanceof OperatorNode && $node->hasUnaryMode) {
-      $this->pushOperator($node, OperatorNode::MODE_UNARY);
+    elseif ($node instanceof Operator && $node->hasUnaryMode) {
+      $this->pushOperator($node, Operator::MODE_UNARY);
       $this->consume();
       $this->P();
     }
@@ -160,11 +154,11 @@ class ExpressionParser {
     if ($a === $this->sentinel) {
       return FALSE;
     }
-    if ($a->mode === OperatorNode::MODE_BINARY && $b->mode === OperatorNode::MODE_BINARY) {
+    if ($a->mode === Operator::MODE_BINARY && $b->mode === Operator::MODE_BINARY) {
       if ($a->precedence > $b->precedence) return TRUE;
-      if ($a->associativity === OperatorNode::ASSOC_LEFT && $a->precedence === $b->precedence) return TRUE;
+      if ($a->associativity === Operator::ASSOC_LEFT && $a->precedence === $b->precedence) return TRUE;
     }
-    elseif ($a->mode === OperatorNode::MODE_UNARY && $b->mode === OperatorNode::MODE_BINARY) {
+    elseif ($a->mode === Operator::MODE_UNARY && $b->mode === Operator::MODE_BINARY) {
       if ($a->precedence >= $b->precedence) return TRUE;
     }
     return FALSE;
@@ -176,30 +170,23 @@ class ExpressionParser {
       $else = array_pop($this->operands);
       $colon = $op->colon;
       $then = $op->then;
-      $cond = array_pop($this->operands);
-      $node = new Node();
-      $node->appendChild($cond);
-      $node->appendChild($op);
-      $node->appendChild($then);
-      $node->appendChild($colon);
-      $node->appendChild($else);
-      $this->operands[] = $node;
+      $condition = array_pop($this->operands);
+      $this->operands[] = OperatorFactory::createTernaryOperatorNode(
+        $condition,
+        $op,
+        $then,
+        $colon,
+        $else
+      );
     }
-    elseif ($op->mode === OperatorNode::MODE_UNARY) {
+    elseif ($op->mode === Operator::MODE_UNARY) {
       $operand = array_pop($this->operands);
-      $node = new Node();
-      $node->appendChild($op);
-      $node->appendChild($operand);
-      $this->operands[] = $node;
+      $this->operands[] = OperatorFactory::createUnaryOperatorNode($op, $operand);
     }
     else {
       $right = array_pop($this->operands);
       $left = array_pop($this->operands);
-      $node = new Node();
-      $node->appendChild($left);
-      $node->appendChild($op);
-      $node->appendChild($right);
-      $this->operands[] = $node;
+      $this->operands[] = OperatorFactory::createBinaryOperatorNode($left, $op, $right);
     }
   }
 
@@ -207,6 +194,9 @@ class ExpressionParser {
     $this->position++;
   }
 
+  /**
+   * @return Node
+   */
   private function next() {
     if ($this->position >= $this->length) {
       return NULL;
@@ -216,7 +206,7 @@ class ExpressionParser {
 
   /**
    * @param $expected_type
-   * @return OperatorNode
+   * @return Operator
    * @throws ParserException
    */
   private function expect($expected_type) {

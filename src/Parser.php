@@ -955,13 +955,13 @@ class Parser {
 
   /**
    * Parse static operator.
-   * @return OperatorNode
+   * @return Operator
    */
   private function staticOperator() {
     $token_type = $this->getTokenType();
-    if ($operator_node = OperatorFactory::createOperator($token_type, TRUE)) {
-      $this->mustMatch($token_type, $operator_node);
-      return $operator_node;
+    if ($operator = OperatorFactory::createOperator($token_type, TRUE)) {
+      $operator->operatorNode = $this->mustMatch($token_type, $operator);
+      return $operator;
     }
     return NULL;
   }
@@ -1084,13 +1084,13 @@ class Parser {
 
   /**
    * Parse an expression operator.
-   * @return OperatorNode
+   * @return Operator
    */
   private function exprOperator() {
     $token_type = $this->getTokenType();
-    if ($operator_node = OperatorFactory::createOperator($token_type)) {
-      $this->mustMatch($token_type, $operator_node);
-      return $operator_node;
+    if ($operator = OperatorFactory::createOperator($token_type)) {
+      $operator->operatorNode = $this->mustMatch($token_type, $operator);
+      return $operator;
     }
     return NULL;
   }

@@ -68,7 +68,10 @@ class OperatorFactory {
   );
 
   /**
-   * @param $token_type
+   * Create an OperatorNode for the given token type.
+   * @param int|string $token_type
+   * @param bool $static_only
+   * @return OperatorNode
    */
   public static function createOperator($token_type, $static_only = FALSE) {
     if (array_key_exists($token_type, self::$operators)) {

@@ -81,7 +81,6 @@ class OperatorFactory {
         return NULL;
       }
       $operator = new Operator();
-      $operator->node = new PartialNode();
       $operator->type = $token_type;
       $operator->associativity = $assoc;
       $operator->precedence = $precedence;
@@ -101,14 +100,13 @@ class OperatorFactory {
    */
   public static function createElvisOperator(Operator $question_operator, PartialNode $colon_node) {
     $operator = new Operator();
-    $operator->node = new PartialNode();
     $operator->appendChildren($question_operator->children);
     $operator->appendChildren($colon_node->children);
     $operator->associativity = Operator::ASSOC_LEFT;
     $operator->precedence = 5;
     $operator->hasBinaryMode = TRUE;
     $operator->hasUnaryMode = FALSE;
-    $operator->className = '\Pharborist\ElvisNode';
+    $operator->binaryClassName = '\Pharborist\ElvisNode';
     return $operator;
   }
 

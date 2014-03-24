@@ -14,9 +14,21 @@ class Operator extends PartialNode {
   const ASSOC_NONE = 3;
 
   /**
+   * Operator node.
    * @var TokenNode
    */
   public $operatorNode;
+
+  /**
+   * Colon node. Only used by ternary operator.
+   * @var PartialNode
+   */
+  public $colon;
+
+  /**
+   * Then node. Only used by ternary operator.
+   */
+  public $then;
 
   /**
    * @var int
@@ -49,11 +61,13 @@ class Operator extends PartialNode {
   public $hasUnaryMode;
 
   /**
+   * Node class to create if unary operator.
    * @var string
    */
   public $unaryClassName;
 
   /**
+   * Node class to create if binary operator.
    * @var string
    */
   public $binaryClassName;

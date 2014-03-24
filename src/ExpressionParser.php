@@ -122,19 +122,28 @@ class ExpressionParser {
 
   private function P() {
     $node = $this->next();
-    $last = self::arrayLast($this->operators);
-    if ($node->type === '&' && $last->type === '=') {
-      // reference assignment
-      $node->associativity = Operator::ASSOC_RIGHT;
-      $node->precedence = self::arrayLast($this->operators)->precedence;
-      $this->pushOperator($node, Operator::MODE_UNARY);
-      $this->consume();
-      $this->P();
-    }
-    elseif ($node instanceof Operator && $node->hasUnaryMode) {
-      $this->pushOperator($node, Operator::MODE_UNARY);
-      $this->consume();
-      $this->P();
+    if ($node instanceof Operator) {
+      if ($node->type === '&') {
+        $last = self::arrayLast($this->operators);
+        if ($last->type === '=') {
+          $node->associativity = Operator::ASSOC_RIGHT;
+          $node->precedence = $last->precedence;
+          $this->pushOperator($node, Operator::MODE_UNARY);
+          $this->consume();
+          $this->P();
+        }
+        else {
+          throw new ParserException($node->getSourcePosition(), 'unexpected & operator!');
+        }
+      }
+      elseif ($node->hasUnaryMode) {
+        $this->pushOperator($node, Operator::MODE_UNARY);
+        $this->consume();
+        $this->P();
+      }
+      else {
+        throw new ParserException($node->getSourcePosition(), 'unexpected ' . $node->operatorNode . ' operator!');
+      }
     }
     else {
       $this->operands[] = $node;

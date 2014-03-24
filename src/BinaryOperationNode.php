@@ -2,10 +2,10 @@
 namespace Pharborist;
 
 /**
- * A binary operator.
+ * A binary operation.
  * @package Pharborist
  */
-class BinaryOperatorNode extends Node {
+abstract class BinaryOperationNode extends Node {
   /**
    * @var Node
    */

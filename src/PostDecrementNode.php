@@ -2,9 +2,9 @@
 namespace Pharborist;
 
 /**
- * A post decrement. Eg. $a--
+ * A post decrement '--' operation. Eg. $a--
  * @package Pharborist
  */
-class PostDecrementNode extends PostOperatorNode {
+class PostDecrementNode extends UnaryOperationNode {
 
 }

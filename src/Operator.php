@@ -49,6 +49,11 @@ class Operator extends PartialNode {
   public $hasUnaryMode;
 
   /**
+   * @var string
+   */
+  public $className;
+
+  /**
    * Get the position of the operator.
    */
   public function getSourcePosition() {

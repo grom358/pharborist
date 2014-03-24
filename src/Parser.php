@@ -1185,16 +1185,9 @@ class Parser {
           return $this->exprClass($static);
         }
       case '$':
-        $operand = $this->indirectReference();
-        if ($this->isTokenType('(')) {
-          return $this->functionCall($operand);
-        }
-        else {
-          return $this->objectDereference($operand);
-        }
       case T_VARIABLE:
-        $operand = $this->referenceVariable();
-        if ($this->isTokenType(T_DOUBLE_COLON)) {
+        $operand = $this->indirectReference();
+        if (!($operand instanceof VariableVariableNode) && $this->isTokenType(T_DOUBLE_COLON)) {
           return $this->exprClass($operand);
         }
         elseif ($this->isTokenType('(')) {
@@ -1332,9 +1325,7 @@ class Parser {
       case T_NAMESPACE:
         $namespace_path = $this->namespacePath();
         if ($this->isTokenType(T_DOUBLE_COLON)) {
-          $colon_node = new PartialNode();
-          $this->mustMatch(T_DOUBLE_COLON, $colon_node);
-          $node = $this->classMemberLookup($namespace_path, $colon_node, $this->indirectReference());
+          $node = $this->staticMember($namespace_path);
           return $this->dynamicClassNameReference($node);
         }
         else {
@@ -1343,24 +1334,43 @@ class Parser {
       case T_STATIC:
         $static_node = $this->mustMatchToken(T_STATIC);
         if ($this->isTokenType(T_DOUBLE_COLON)) {
-          $colon_node = new PartialNode();
-          $this->mustMatch(T_DOUBLE_COLON, $colon_node);
-          $node = $this->classMemberLookup($static_node, $colon_node, $this->indirectReference());
+          $node = $this->staticMember($static_node);
           return $this->dynamicClassNameReference($node);
         }
         else {
           return $static_node;
         }
-      case '$':
-        return $this->dynamicClassNameReference($this->indirectReference());
       default:
+        if ($this->isTokenType('$') && !$this->isLookAhead('{')) {
+          return $this->dynamicClassNameReference($this->indirectReference());
+        }
         $var_node = $this->referenceVariable();
         if ($this->isTokenType(T_DOUBLE_COLON)) {
-          $colon_node = new PartialNode();
-          $this->mustMatch(T_DOUBLE_COLON, $colon_node);
-          $var_node = $this->classMemberLookup($var_node, $colon_node, $this->indirectReference());
+          $var_node = $this->staticMember($var_node);
         }
         return $this->dynamicClassNameReference($var_node);
+    }
+  }
+
+  /**
+   * Parse static member.
+   * @param Node $var_node
+   * @return ClassMemberLookupNode
+   */
+  private function staticMember($var_node) {
+    if ($this->isTokenType('$') && $this->isLookAhead('{')) {
+      $node = new ClassMemberLookupNode();
+      $node->className = $node->appendChild($var_node);
+      $this->mustMatch(T_DOUBLE_COLON, $node);
+      $node->memberName = $node->appendChild($this->indirectReference());
+      return $node;
+    }
+    else {
+      $node = new ClassMemberLookupNode();
+      $node->className = $node->appendChild($var_node);
+      $this->mustMatch(T_DOUBLE_COLON, $node);
+      $node->memberName = $node->appendChild($this->compoundVariable());
+      return $this->offsetVariable($node);
     }
   }
 
@@ -1534,22 +1544,8 @@ class Parser {
     elseif ($this->isTokenType(T_CLASS)) {
       return $this->classNameScalar($class_name, $colon_node);
     }
-    elseif ($this->isTokenType('{')) {
-      $node = new ClassMethodCallNode();
-      $node->className = $node->appendChild($class_name);
-      $node->appendChildren($colon_node->children);
-      $node->methodName = $node->appendChild($this->bracesExpr());
-      $this->functionCallParameterList($node);
-      return $this->objectDereference($this->arrayDeference($node));
-    }
     else {
-      $var_node = $this->indirectReference();
-      if ($this->isTokenType('(')) {
-        return $this->classMethodCall($class_name, $colon_node, $var_node);
-      }
-      else {
-        return $this->classMemberLookup($class_name, $colon_node, $var_node);
-      }
+      return $this->classVariable($class_name, $colon_node);
     }
   }
 
@@ -1585,21 +1581,6 @@ class Parser {
   }
 
   /**
-   * Construct a class member lookup.
-   * @param Node $class_name
-   * @param Node $colon_node
-   * @param Node $member_name
-   * @return Node
-   */
-  private function classMemberLookup($class_name, $colon_node, $member_name) {
-    $node = new ClassMemberLookupNode();
-    $node->className = $node->appendChild($class_name);
-    $node->appendChildren($colon_node->children);
-    $node->memberName = $node->appendChild($member_name);
-    return $this->objectDereference($node);
-  }
-
-  /**
    * Construct a class name scalar.
    * @param $class_name
    * @param $colon_node
@@ -1611,6 +1592,60 @@ class Parser {
     $node->appendChildren($colon_node->children);
     $this->mustMatch(T_CLASS, $node, TRUE);
     return $node;
+  }
+
+  /**
+   * Parse a class variable given $class_name::
+   * @param $class_name
+   * @param $colon_node
+   * @return Node
+   */
+  private function classVariable($class_name, $colon_node) {
+    if ($this->isTokenType('{')) {
+      // Must be $class_name::{expr()}().
+      return $this->classMethodCall($class_name, $colon_node, $this->bracesExpr());
+    }
+
+    /*
+     * Note $var_node contains possible array lookup, eg. $a[0]. This must
+     * happen cause $class::$var[0]() is treated as $class::($var[0])();
+     * However $class::$var[0] is treated as ($class::$var)[0], but in order
+     * to determine between these two cases, the [0] has to be matched.
+     */
+    $var_node = $this->indirectReference();
+    if ($this->isTokenType('(')) {
+      return $this->classMethodCall($class_name, $colon_node, $var_node);
+    }
+    else {
+      /*
+       * Since $class::$var[0] is treated as ($class::$var)[0] then have
+       * to replace the $var in $var[0] with $class::$var.
+       */
+      if ($var_node instanceof ArrayLookupNode) {
+        // Find the member name, eg. $var
+        $member_name = $var_node;
+        while ($member_name instanceof ArrayLookupNode) {
+          $member_name = $member_name->array;
+        }
+        /** @var ArrayLookupNode $parent */
+        $parent = $member_name->parent;
+        // Replace the member name with ClassMemberLookupNode, eg. $class::$var
+        $node = new ClassMemberLookupNode();
+        $node->className = $node->appendChild($class_name);
+        $node->appendChildren($colon_node->children);
+        $node->memberName = $node->appendChild($member_name);
+        array_shift($parent->children);
+        $parent->array = $parent->prependChild($node);
+        return $this->objectDereference($var_node);
+      }
+      else {
+        $node = new ClassMemberLookupNode();
+        $node->className = $node->appendChild($class_name);
+        $node->appendChildren($colon_node->children);
+        $node->memberName = $node->appendChild($var_node);
+        return $this->objectDereference($node);
+      }
+    }
   }
 
   /**
@@ -1635,19 +1670,12 @@ class Parser {
         $class_name = $this->mustMatchToken(T_STATIC);
         return $this->varClass($class_name);
       case '$':
+      case T_VARIABLE:
         $var = $this->indirectReference();
         if ($this->isTokenType('(')) {
           return $this->functionCall($var);
         }
-        else {
-          return $this->objectDereference($var);
-        }
-      case T_VARIABLE:
-        $var = $this->referenceVariable();
-        if ($this->isTokenType('(')) {
-          return $this->functionCall($var);
-        }
-        elseif ($this->isTokenType(T_DOUBLE_COLON)) {
+        elseif (!($var instanceof VariableVariableNode) && $this->isTokenType(T_DOUBLE_COLON)) {
           return $this->varClass($var);
         }
         else {
@@ -1668,16 +1696,8 @@ class Parser {
     if ($method_name = $this->tryMatchToken(T_STRING)) {
       return $this->classMethodCall($class_name, $colon_node, $method_name);
     }
-    elseif ($this->isTokenType('{')) {
-      return $this->classMethodCall($class_name, $colon_node, $this->bracesExpr());
-    }
     else {
-      $var_node = $this->indirectReference();
-      if ($this->isTokenType('(')) {
-        return $this->classMethodCall($class_name, $colon_node, $var_node);
-      } else {
-        return $this->classMemberLookup($class_name, $colon_node, $var_node);
-      }
+      return $this->classVariable($class_name, $colon_node);
     }
   }
 
@@ -1744,11 +1764,7 @@ class Parser {
    * @return Node
    */
   private function indirectReference() {
-    if ($this->isTokenType('$')) {
-      if ($this->isLookAhead('{')) {
-        return $this->offsetVariable($this->compoundVariable());
-      }
-      // Otherwise its an indirect reference
+    if ($this->isTokenType('$') && !$this->isLookAhead('{')) {
       $node = new VariableVariableNode();
       $this->mustMatch('$', $node);
       $node->variable = $node->appendChild($this->indirectReference());

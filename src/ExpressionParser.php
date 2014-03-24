@@ -159,6 +159,12 @@ class ExpressionParser {
     $this->operators[] = $operator;
   }
 
+  /**
+   * @param Operator $a
+   * @param Operator $b
+   * @return bool
+   * @throws ParserException
+   */
   private function operatorCompare($a, $b) {
     if ($a === $this->sentinel) {
       return FALSE;
@@ -166,6 +172,13 @@ class ExpressionParser {
     if ($a->mode === Operator::MODE_BINARY && $b->mode === Operator::MODE_BINARY) {
       if ($a->precedence > $b->precedence) return TRUE;
       if ($a->associativity === Operator::ASSOC_LEFT && $a->precedence === $b->precedence) return TRUE;
+      $non_associative = $a->associativity === Operator::ASSOC_NONE && $b->associativity === Operator::ASSOC_NONE;
+      if ($non_associative && $a->precedence === $b->precedence) {
+        throw new ParserException(
+          $b->getSourcePosition(),
+          'Non-associative operators of equal precedence can not be next to each other!'
+        );
+      }
     }
     elseif ($a->mode === Operator::MODE_UNARY && $b->mode === Operator::MODE_BINARY) {
       if ($a->precedence >= $b->precedence) return TRUE;

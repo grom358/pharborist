@@ -7,7 +7,7 @@ namespace Pharborist;
  */
 class UnsetStatementNode extends StatementNode {
   /**
-   * @var Node
+   * @var UnsetNode
    */
   public $functionCall;
 }

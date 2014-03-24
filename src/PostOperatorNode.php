@@ -2,7 +2,7 @@
 namespace Pharborist;
 
 /**
- * An operator that takes effect after the current statement.
+ * An operator that returns its operand then applies its operator.
  * @package Pharborist
  */
 abstract class PostOperatorNode extends UnaryOperatorNode {

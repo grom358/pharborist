@@ -8,64 +8,64 @@ namespace Pharborist;
  */
 class OperatorFactory {
   /**
-   * Associativity, Precedence, Binary Operator, Unary Operator, Static, Class Name
+   * Associativity, Precedence, Static, Binary Class, Unary Class
    * @var array
    */
   private static $operators = array(
-    T_LOGICAL_OR => array(Operator::ASSOC_LEFT, 1, TRUE, FALSE, TRUE, '\Pharborist\LogicalOrNode'),
-    T_LOGICAL_XOR => array(Operator::ASSOC_LEFT, 2, TRUE, FALSE, TRUE, '\Pharborist\LogicalXorNode'),
-    T_LOGICAL_AND => array(Operator::ASSOC_LEFT, 3, TRUE, FALSE, TRUE, '\Pharborist\LogicalAndNode'),
-    '=' => array(Operator::ASSOC_RIGHT, 4, TRUE, FALSE, FALSE, '\Pharborist\AssignNode'),
-    T_AND_EQUAL => array(Operator::ASSOC_RIGHT, 4, TRUE, FALSE, FALSE, '\Pharborist\BitwiseAndAssignNode'),
-    T_CONCAT_EQUAL => array(Operator::ASSOC_RIGHT, 4, TRUE, FALSE, FALSE, '\Pharborist\ConcatAssignNode'),
-    T_DIV_EQUAL => array(Operator::ASSOC_RIGHT, 4, TRUE, FALSE, FALSE, '\Pharborist\DivideAssignNode'),
-    T_MINUS_EQUAL => array(Operator::ASSOC_RIGHT, 4, TRUE, FALSE, FALSE, '\Pharborist\SubtractAssignNode'),
-    T_MOD_EQUAL => array(Operator::ASSOC_RIGHT, 4, TRUE, FALSE, FALSE, '\Pharborist\ModulusAssignNode'),
-    T_MUL_EQUAL => array(Operator::ASSOC_RIGHT, 4, TRUE, FALSE, FALSE, '\Pharborist\MultiplyAssignNode'),
-    T_OR_EQUAL => array(Operator::ASSOC_RIGHT, 4, TRUE, FALSE, FALSE, '\Pharborist\BitwiseOrAssignNode'),
-    T_PLUS_EQUAL => array(Operator::ASSOC_RIGHT, 4, TRUE, FALSE, FALSE, '\Pharborist\AddAssignNode'),
-    T_SL_EQUAL => array(Operator::ASSOC_RIGHT, 4, TRUE, FALSE, FALSE, '\Pharborist\BitwiseShiftLeftAssignNode'),
-    T_SR_EQUAL => array(Operator::ASSOC_RIGHT, 4, TRUE, FALSE, FALSE, '\Pharborist\BitwiseShiftRightAssignNode'),
-    T_XOR_EQUAL => array(Operator::ASSOC_RIGHT, 4, TRUE, FALSE, FALSE, '\Pharborist\BitwiseXorAssignNode'),
-    T_POW_EQUAL => array(Operator::ASSOC_RIGHT, 4, TRUE, FALSE, FALSE, '\Pharborist\PowerAssignNode'),
-    '?' => array(Operator::ASSOC_LEFT, 5, FALSE, FALSE, TRUE, '\Pharborist\TernaryOperatorNode'),
-    T_BOOLEAN_OR => array(Operator::ASSOC_LEFT, 6, TRUE, FALSE, TRUE, '\Pharborist\BooleanOrNode'),
-    T_BOOLEAN_AND => array(Operator::ASSOC_LEFT, 7, TRUE, FALSE, TRUE, '\Pharborist\BooleanAndNode'),
-    '|' => array(Operator::ASSOC_LEFT, 8, TRUE, FALSE, TRUE, '\Pharborist\BitwiseOrNode'),
-    '^' => array(Operator::ASSOC_LEFT, 9, TRUE, FALSE, TRUE, '\Pharborist\BitwiseXorNode'),
-    '&' => array(Operator::ASSOC_LEFT, 10, TRUE, FALSE, TRUE, '\Pharborist\BitwiseAndNode'),
-    T_IS_EQUAL => array(Operator::ASSOC_NONE, 11, TRUE, FALSE, TRUE, '\Pharborist\EqualNode'),
-    T_IS_IDENTICAL => array(Operator::ASSOC_NONE, 11, TRUE, FALSE, TRUE, '\Pharborist\IdenticalNode'),
-    T_IS_NOT_EQUAL => array(Operator::ASSOC_NONE, 11, TRUE, FALSE, TRUE, '\Pharborist\NotEqualNode'),
-    T_IS_NOT_IDENTICAL => array(Operator::ASSOC_NONE, 11, TRUE, FALSE, TRUE, '\Pharborist\NotIdenticalNode'),
-    '<' => array(Operator::ASSOC_NONE, 12, TRUE, FALSE, TRUE, '\Pharborist\LessThanNode'),
-    T_IS_SMALLER_OR_EQUAL => array(Operator::ASSOC_NONE, 12, TRUE, FALSE, TRUE, '\Pharborist\LessThanOrEqualToNode'),
-    T_IS_GREATER_OR_EQUAL => array(Operator::ASSOC_NONE, 12, TRUE, FALSE, TRUE, '\Pharborist\GreaterThanOrEqualToNode'),
-    '>' => array(Operator::ASSOC_NONE, 12, TRUE, FALSE, TRUE, '\Pharborist\GreaterThanNode'),
-    T_SL => array(Operator::ASSOC_LEFT, 13, TRUE, FALSE, TRUE, '\Pharborist\BitwiseShiftLeftNode'),
-    T_SR => array(Operator::ASSOC_LEFT, 13, TRUE, FALSE, TRUE, '\Pharborist\BitwiseShiftRightNode'),
-    '+' => array(Operator::ASSOC_LEFT, 14, TRUE, TRUE, TRUE, '\Pharborist\AddNode'),
-    '-' => array(Operator::ASSOC_LEFT, 14, TRUE, TRUE, TRUE, '\Pharborist\SubtractNode'),
-    '.' => array(Operator::ASSOC_LEFT, 14, TRUE, FALSE, TRUE, '\Pharborist\ConcatNode'),
-    '*' => array(Operator::ASSOC_LEFT, 15, TRUE, FALSE, TRUE, '\Pharborist\MultiplyNode'),
-    '/' => array(Operator::ASSOC_LEFT, 15, TRUE, FALSE, TRUE, '\Pharborist\DivideNode'),
-    '%' => array(Operator::ASSOC_LEFT, 15, TRUE, FALSE, TRUE, '\Pharborist\ModulusNode'),
-    '!' => array(Operator::ASSOC_RIGHT, 16, FALSE, TRUE, TRUE, '\Pharborist\BooleanNotNode'),
-    T_INSTANCEOF => array(Operator::ASSOC_NONE, 17, TRUE, FALSE, FALSE, '\Pharborist\InstanceOfNode'),
-    T_INC => array(Operator::ASSOC_RIGHT, 18, FALSE, TRUE, FALSE, '\Pharborist\PreIncrementNode'),
-    T_DEC => array(Operator::ASSOC_RIGHT, 18, FALSE, TRUE, FALSE, '\Pharborist\PreDecrementNode'),
-    T_BOOL_CAST => array(Operator::ASSOC_RIGHT, 18, FALSE, TRUE, FALSE, '\Pharborist\BooleanCastNode'),
-    T_INT_CAST => array(Operator::ASSOC_RIGHT, 18, FALSE, TRUE, FALSE, '\Pharborist\IntegerCastNode'),
-    T_DOUBLE_CAST => array(Operator::ASSOC_RIGHT, 18, FALSE, TRUE, FALSE, '\Pharborist\FloatCastNode'),
-    T_STRING_CAST => array(Operator::ASSOC_RIGHT, 18, FALSE, TRUE, FALSE, '\Pharborist\StringCastNode'),
-    T_ARRAY_CAST => array(Operator::ASSOC_RIGHT, 18, FALSE, TRUE, FALSE, '\Pharborist\ArrayCastNode'),
-    T_OBJECT_CAST => array(Operator::ASSOC_RIGHT, 18, FALSE, TRUE, FALSE, '\Pharborist\ObjectCastNode'),
-    T_UNSET_CAST  => array(Operator::ASSOC_RIGHT, 18, FALSE, TRUE, FALSE, '\Pharborist\UnsetCastNode'),
-    '@' => array(Operator::ASSOC_RIGHT, 18, FALSE, TRUE, FALSE, '\Pharborist\SuppressWarningNode'),
-    '~' => array(Operator::ASSOC_RIGHT, 18, FALSE, TRUE, TRUE, '\Pharborist\BitwiseNotNode'),
-    T_POW => array(Operator::ASSOC_RIGHT, 19, TRUE, FALSE, TRUE, '\Pharborist\PowerNode'),
-    T_CLONE => array(Operator::ASSOC_RIGHT, 20, FALSE, TRUE, FALSE, '\Pharborist\CloneNode'),
-    T_PRINT => array(Operator::ASSOC_RIGHT, 21, FALSE, TRUE, FALSE, '\Pharborist\PrintNode'),
+    T_LOGICAL_OR => array(Operator::ASSOC_LEFT, 1, TRUE, '\Pharborist\LogicalOrNode', NULL),
+    T_LOGICAL_XOR => array(Operator::ASSOC_LEFT, 2, TRUE, '\Pharborist\LogicalXorNode', NULL),
+    T_LOGICAL_AND => array(Operator::ASSOC_LEFT, 3, TRUE, '\Pharborist\LogicalAndNode', NULL),
+    '=' => array(Operator::ASSOC_RIGHT, 4, FALSE, '\Pharborist\AssignNode', NULL),
+    T_AND_EQUAL => array(Operator::ASSOC_RIGHT, 4, FALSE, '\Pharborist\BitwiseAndAssignNode', NULL),
+    T_CONCAT_EQUAL => array(Operator::ASSOC_RIGHT, 4, FALSE, '\Pharborist\ConcatAssignNode', NULL),
+    T_DIV_EQUAL => array(Operator::ASSOC_RIGHT, 4, FALSE, '\Pharborist\DivideAssignNode', NULL),
+    T_MINUS_EQUAL => array(Operator::ASSOC_RIGHT, 4, FALSE, '\Pharborist\SubtractAssignNode', NULL),
+    T_MOD_EQUAL => array(Operator::ASSOC_RIGHT, 4, FALSE, '\Pharborist\ModulusAssignNode', NULL),
+    T_MUL_EQUAL => array(Operator::ASSOC_RIGHT, 4, FALSE, '\Pharborist\MultiplyAssignNode', NULL),
+    T_OR_EQUAL => array(Operator::ASSOC_RIGHT, 4, FALSE, '\Pharborist\BitwiseOrAssignNode', NULL),
+    T_PLUS_EQUAL => array(Operator::ASSOC_RIGHT, 4, FALSE, '\Pharborist\AddAssignNode', NULL),
+    T_SL_EQUAL => array(Operator::ASSOC_RIGHT, 4, FALSE, '\Pharborist\BitwiseShiftLeftAssignNode', NULL),
+    T_SR_EQUAL => array(Operator::ASSOC_RIGHT, 4, FALSE, '\Pharborist\BitwiseShiftRightAssignNode', NULL),
+    T_XOR_EQUAL => array(Operator::ASSOC_RIGHT, 4, FALSE, '\Pharborist\BitwiseXorAssignNode', NULL),
+    T_POW_EQUAL => array(Operator::ASSOC_RIGHT, 4, FALSE, '\Pharborist\PowerAssignNode', NULL),
+    '?' => array(Operator::ASSOC_LEFT, 5, TRUE, NULL, NULL),
+    T_BOOLEAN_OR => array(Operator::ASSOC_LEFT, 6, TRUE, '\Pharborist\BooleanOrNode', NULL),
+    T_BOOLEAN_AND => array(Operator::ASSOC_LEFT, 7, TRUE, '\Pharborist\BooleanAndNode', NULL),
+    '|' => array(Operator::ASSOC_LEFT, 8, TRUE, '\Pharborist\BitwiseOrNode', NULL),
+    '^' => array(Operator::ASSOC_LEFT, 9, TRUE, '\Pharborist\BitwiseXorNode', NULL),
+    '&' => array(Operator::ASSOC_LEFT, 10, TRUE, '\Pharborist\BitwiseAndNode', NULL),
+    T_IS_EQUAL => array(Operator::ASSOC_NONE, 11, TRUE, '\Pharborist\EqualNode', NULL),
+    T_IS_IDENTICAL => array(Operator::ASSOC_NONE, 11, TRUE, '\Pharborist\IdenticalNode', NULL),
+    T_IS_NOT_EQUAL => array(Operator::ASSOC_NONE, 11, TRUE, '\Pharborist\NotEqualNode', NULL),
+    T_IS_NOT_IDENTICAL => array(Operator::ASSOC_NONE, 11, TRUE, '\Pharborist\NotIdenticalNode', NULL),
+    '<' => array(Operator::ASSOC_NONE, 12, TRUE, '\Pharborist\LessThanNode', NULL),
+    T_IS_SMALLER_OR_EQUAL => array(Operator::ASSOC_NONE, 12, TRUE, '\Pharborist\LessThanOrEqualToNode', NULL),
+    T_IS_GREATER_OR_EQUAL => array(Operator::ASSOC_NONE, 12, TRUE, '\Pharborist\GreaterThanOrEqualToNode', NULL),
+    '>' => array(Operator::ASSOC_NONE, 12, TRUE, '\Pharborist\GreaterThanNode', NULL),
+    T_SL => array(Operator::ASSOC_LEFT, 13, TRUE, '\Pharborist\BitwiseShiftLeftNode', NULL),
+    T_SR => array(Operator::ASSOC_LEFT, 13, TRUE, '\Pharborist\BitwiseShiftRightNode', NULL),
+    '+' => array(Operator::ASSOC_LEFT, 14, TRUE, '\Pharborist\AddNode', '\Pharborist\PlusNode'),
+    '-' => array(Operator::ASSOC_LEFT, 14, TRUE, '\Pharborist\SubtractNode', '\Pharborist\NegateNode'),
+    '.' => array(Operator::ASSOC_LEFT, 14, TRUE, '\Pharborist\ConcatNode', NULL),
+    '*' => array(Operator::ASSOC_LEFT, 15, TRUE, '\Pharborist\MultiplyNode', NULL),
+    '/' => array(Operator::ASSOC_LEFT, 15, TRUE, '\Pharborist\DivideNode', NULL),
+    '%' => array(Operator::ASSOC_LEFT, 15, TRUE, '\Pharborist\ModulusNode', NULL),
+    '!' => array(Operator::ASSOC_RIGHT, 16, TRUE, NULL, '\Pharborist\BooleanNotNode'),
+    T_INSTANCEOF => array(Operator::ASSOC_NONE, 17, FALSE, '\Pharborist\InstanceOfNode', NULL),
+    T_INC => array(Operator::ASSOC_RIGHT, 18, FALSE, NULL, '\Pharborist\PreIncrementNode'),
+    T_DEC => array(Operator::ASSOC_RIGHT, 18, FALSE, NULL, '\Pharborist\PreDecrementNode'),
+    T_BOOL_CAST => array(Operator::ASSOC_RIGHT, 18, FALSE, NULL, '\Pharborist\BooleanCastNode'),
+    T_INT_CAST => array(Operator::ASSOC_RIGHT, 18, FALSE, NULL, '\Pharborist\IntegerCastNode'),
+    T_DOUBLE_CAST => array(Operator::ASSOC_RIGHT, 18, FALSE, NULL, '\Pharborist\FloatCastNode'),
+    T_STRING_CAST => array(Operator::ASSOC_RIGHT, 18, FALSE, NULL, '\Pharborist\StringCastNode'),
+    T_ARRAY_CAST => array(Operator::ASSOC_RIGHT, 18, FALSE, NULL, '\Pharborist\ArrayCastNode'),
+    T_OBJECT_CAST => array(Operator::ASSOC_RIGHT, 18, FALSE, NULL, '\Pharborist\ObjectCastNode'),
+    T_UNSET_CAST  => array(Operator::ASSOC_RIGHT, 18, FALSE, NULL, '\Pharborist\UnsetCastNode'),
+    '@' => array(Operator::ASSOC_RIGHT, 18, FALSE, NULL, '\Pharborist\SuppressWarningNode'),
+    '~' => array(Operator::ASSOC_RIGHT, 18, TRUE, NULL, '\Pharborist\BitwiseNotNode'),
+    T_POW => array(Operator::ASSOC_RIGHT, 19, TRUE, '\Pharborist\PowerNode'),
+    T_CLONE => array(Operator::ASSOC_RIGHT, 20, FALSE, NULL, '\Pharborist\CloneNode'),
+    T_PRINT => array(Operator::ASSOC_RIGHT, 21, FALSE, NULL, '\Pharborist\PrintNode'),
   );
 
   /**
@@ -76,7 +76,7 @@ class OperatorFactory {
    */
   public static function createOperator($token_type, $static_only = FALSE) {
     if (array_key_exists($token_type, self::$operators)) {
-      list($assoc, $precedence, $hasBinaryMode, $hasUnaryMode, $static, $class_name) = self::$operators[$token_type];
+      list($assoc, $precedence, $static, $binary_class_name, $unary_class_name) = self::$operators[$token_type];
       if ($static_only && !$static) {
         return NULL;
       }
@@ -85,9 +85,10 @@ class OperatorFactory {
       $operator->type = $token_type;
       $operator->associativity = $assoc;
       $operator->precedence = $precedence;
-      $operator->hasBinaryMode = $hasBinaryMode;
-      $operator->hasUnaryMode = $hasUnaryMode;
-      $operator->className = $class_name;
+      $operator->hasBinaryMode = $binary_class_name !== NULL;
+      $operator->hasUnaryMode = $unary_class_name !== NULL;
+      $operator->binaryClassName = $binary_class_name;
+      $operator->unaryClassName = $unary_class_name;
       return $operator;
     }
     return NULL;
@@ -117,7 +118,7 @@ class OperatorFactory {
    * @return UnaryOperationNode
    */
   public static function createUnaryOperatorNode(Operator $operator, Node $operand) {
-    $class_name = $operator->className;
+    $class_name = $operator->unaryClassName;
     /** @var \Pharborist\UnaryOperationNode $node */
     $node = new $class_name();
     $node->appendChildren($operator->children);
@@ -133,7 +134,7 @@ class OperatorFactory {
    * @return BinaryOperationNode
    */
   public static function createBinaryOperatorNode(Node $left, Operator $operator, Node $right) {
-    $class_name = $operator->className;
+    $class_name = $operator->binaryClassName;
     /** @var \Pharborist\BinaryOperationNode $node */
     $node = new $class_name();
     $node->left = $node->appendChild($left);

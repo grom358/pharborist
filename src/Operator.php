@@ -51,7 +51,12 @@ class Operator extends PartialNode {
   /**
    * @var string
    */
-  public $className;
+  public $unaryClassName;
+
+  /**
+   * @var string
+   */
+  public $binaryClassName;
 
   /**
    * Get the position of the operator.

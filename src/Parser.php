@@ -837,10 +837,10 @@ class Parser {
 
   /**
    * Parse a try control structure.
-   * @return TryNode
+   * @return TryCatchNode
    */
   private function _try() {
-    $node = new TryNode();
+    $node = new TryCatchNode();
     $this->mustMatch(T_TRY, $node);
     $node->try = $node->appendChild($this->innerStatementBlock());
     $catch_node = new CatchNode();

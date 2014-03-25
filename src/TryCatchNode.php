@@ -4,7 +4,7 @@ namespace Pharborist;
 /**
  * A try control structure.
  */
-class TryNode extends StatementNode {
+class TryCatchNode extends StatementNode {
   /**
    * @var Node
    */

@@ -120,10 +120,10 @@ class Parser {
 
   /**
    * Parse zero or more template statements.
-   * @param Node $node Node to append matches to.
+   * @param ParentNode $node Node to append matches to.
    * @throws ParserException
    */
-  private function templateStatementList(Node $node) {
+  private function templateStatementList(ParentNode $node) {
     while ($this->iterator->hasNext()) {
       if ($this->isTokenType(T_OPEN_TAG)) {
         return;
@@ -1554,7 +1554,7 @@ class Parser {
   /**
    * Construct a class method call.
    * @param Node $class_name
-   * @param Node $colon_node
+   * @param ParentNode $colon_node
    * @param Node $method_name
    * @return Node
    */
@@ -2463,9 +2463,9 @@ class Parser {
 
   /**
    * Add any previously skipped tokens to $parent.
-   * @param Node $parent
+   * @param ParentNode $parent
    */
-  private function addSkipped(Node $parent) {
+  private function addSkipped(ParentNode $parent) {
     foreach ($this->skipped as $node) {
       $parent->appendChild($node);
     }
@@ -2474,21 +2474,21 @@ class Parser {
 
   /**
    * Match hidden tokens and add to $parent.
-   * @param Node $parent
+   * @param ParentNode $parent
    */
-  private function matchHidden(Node $parent) {
+  private function matchHidden(ParentNode $parent) {
     $this->skipHidden();
     $this->addSkipped($parent);
   }
 
   /**
    * @param int $expected_type
-   * @param Node $parent
+   * @param ParentNode $parent
    * @param bool $maybe_last TRUE if this may be the last match for rule.
    * @return TokenNode
    * @throws ParserException
    */
-  private function mustMatch($expected_type, Node $parent, $maybe_last = FALSE) {
+  private function mustMatch($expected_type, ParentNode $parent, $maybe_last = FALSE) {
     $this->skipHidden();
     $token = $this->iterator->current();
     if ($token === NULL || $token->getType() !== $expected_type) {
@@ -2508,11 +2508,11 @@ class Parser {
 
   /**
    * @param int $expected_type
-   * @param Node $parent
+   * @param ParentNode $parent
    * @param bool $maybe_last TRUE if this may be the last match for rule.
    * @return TokenNode
    */
-  private function tryMatch($expected_type, Node $parent, $maybe_last = FALSE) {
+  private function tryMatch($expected_type, ParentNode $parent, $maybe_last = FALSE) {
     $this->skipHidden();
     $token = $this->iterator->current();
     if ($token === NULL || $token->getType() !== $expected_type) {

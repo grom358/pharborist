@@ -170,7 +170,7 @@ class OperatorFactory {
    * @param Node $condition
    * @param Operator $operator
    * @param Node $then
-   * @param Node $colon
+   * @param ParentNode $colon
    * @param Node $else
    * @return TernaryOperationNode
    */
@@ -178,7 +178,7 @@ class OperatorFactory {
     Node $condition,
     Operator $operator,
     Node $then,
-    Node $colon,
+    ParentNode $colon,
     Node $else
   ) {
     $node = new TernaryOperationNode();

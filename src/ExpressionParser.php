@@ -229,11 +229,12 @@ class ExpressionParser {
   }
 
   /**
-   * @param $expected_type
+   * @param int $expected_type
    * @return Operator
    * @throws ParserException
    */
   private function expect($expected_type) {
+    /** @var Operator $node */
     $node = $this->next();
     if ($node === NULL) {
       throw new ParserException($this->nodes[$this->length - 1]->getSourcePosition(), "expected " . $expected_type);

@@ -48,6 +48,7 @@ class TokenNode extends Node {
   }
 
   /**
+   * @param int $type
    * @return string
    */
   public static function typeName($type) {

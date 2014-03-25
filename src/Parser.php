@@ -2606,6 +2606,12 @@ class Parser {
         return new MethodMagicConstantNode($token);
       case T_NS_C:
         return new NamespaceMagicConstantNode($token);
+      case T_COMMENT:
+        return new CommentNode($token);
+      case T_DOC_COMMENT:
+        return new DocCommentNode($token);
+      case T_WHITESPACE:
+        return new WhitespaceNode($token);
       default:
         return new TokenNode($token);
     }

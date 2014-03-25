@@ -2466,7 +2466,7 @@ class Parser {
   private function skipHidden() {
     $token = $this->iterator->current();
     while ($token && self::isHidden($token->type)) {
-      $node = new TokenNode($token);
+      $node = static::createTokenNode($token);
       if ($token->type === T_DOC_COMMENT) {
         $this->docComment = $node;
       }
@@ -2590,6 +2590,22 @@ class Parser {
         return new IntegerNode($token);
       case T_DNUMBER:
         return new FloatNode($token);
+      case T_LINE:
+        return new LineMagicConstantNode($token);
+      case T_FILE:
+        return new FileMagicConstantNode($token);
+      case T_DIR:
+        return new DirMagicConstantNode($token);
+      case T_FUNC_C:
+        return new FunctionMagicConstantNode($token);
+      case T_CLASS_C:
+        return new ClassMagicConstantNode($token);
+      case T_TRAIT_C:
+        return new TraitMagicConstantNode($token);
+      case T_METHOD_C:
+        return new MethodMagicConstantNode($token);
+      case T_NS_C:
+        return new NamespaceMagicConstantNode($token);
       default:
         return new TokenNode($token);
     }

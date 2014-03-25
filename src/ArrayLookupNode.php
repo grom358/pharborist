@@ -2,10 +2,11 @@
 namespace Pharborist;
 
 /**
- * An array lookup. Eg. $array[0]
- * @package Pharborist
+ * An array lookup.
+ *
+ * For example $array[0]
  */
-class ArrayLookupNode extends Node {
+class ArrayLookupNode extends ParentNode {
   /**
    * @var Node
    */

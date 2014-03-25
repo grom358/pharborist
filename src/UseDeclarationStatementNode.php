@@ -3,7 +3,6 @@ namespace Pharborist;
 
 /**
  * Use declaration statement.
- * @package Pharborist
  */
 class UseDeclarationStatementNode extends StatementNode {
   /**

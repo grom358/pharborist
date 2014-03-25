@@ -3,9 +3,8 @@ namespace Pharborist;
 
 /**
  * An include_once.
- * @package Pharborist
  */
-class IncludeOnceNode extends Node {
+class IncludeOnceNode extends ParentNode {
   /**
    * @var Node
    */

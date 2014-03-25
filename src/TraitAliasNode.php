@@ -2,10 +2,11 @@
 namespace Pharborist;
 
 /**
- * A trait alias. Eg. B::bigTalk as talk;
- * @package Pharborist
+ * A trait alias.
+ *
+ * For example, B::bigTalk as talk;
  */
-class TraitAliasNode extends Node {
+class TraitAliasNode extends ParentNode {
   /**
    * @var Node
    */

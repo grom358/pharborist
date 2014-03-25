@@ -3,9 +3,8 @@ namespace Pharborist;
 
 /**
  * A key/value pair element in php array.
- * @package Pharborist
  */
-class ArrayPairNode extends Node {
+class ArrayPairNode extends ParentNode {
   /**
    * @var Node
    */

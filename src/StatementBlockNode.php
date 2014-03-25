@@ -3,9 +3,8 @@ namespace Pharborist;
 
 /**
  * A block of statements.
- * @package Pharborist
  */
-class StatementBlockNode extends Node {
+class StatementBlockNode extends ParentNode {
   /**
    * @var StatementNode[]
    */

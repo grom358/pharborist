@@ -2,10 +2,11 @@
 namespace Pharborist;
 
 /**
- * A class name scalar. Eg. MyClass::class
- * @package Pharborist
+ * A class name scalar.
+ *
+ * For example, MyClass::class
  */
-class ClassNameScalarNode extends Node {
+class ClassNameScalarNode extends ParentNode {
   /**
    * @var Node
    */

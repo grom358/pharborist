@@ -2,9 +2,10 @@
 namespace Pharborist;
 
 /**
+ * An Operator factory.
+ *
  * Factory for building OperatorNode and also creating Operator for use in
  * ExpressionParser.
- * @package Pharborist
  */
 class OperatorFactory {
   /**

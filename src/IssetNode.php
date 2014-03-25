@@ -2,8 +2,7 @@
 namespace Pharborist;
 
 /**
- * A isset function call.
- * @package Pharborist
+ * An isset function call.
  */
 class IssetNode extends FunctionCallNode {
 

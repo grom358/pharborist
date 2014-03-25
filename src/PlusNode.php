@@ -2,8 +2,7 @@
 namespace Pharborist;
 
 /**
- * Unary '+' operation. Does nothing.
- * @package Pharborist
+ * Unary '+' operation, which does nothing.
  */
 class PlusNode extends UnaryOperationNode {
 

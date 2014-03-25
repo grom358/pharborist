@@ -3,9 +3,8 @@ namespace Pharborist;
 
 /**
  * A default statement in switch control structure.
- * @package Pharborist
  */
-class DefaultNode extends Node {
+class DefaultNode extends ParentNode {
   /**
    * @var Node
    */

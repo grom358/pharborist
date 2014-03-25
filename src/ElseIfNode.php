@@ -3,9 +3,8 @@ namespace Pharborist;
 
 /**
  * elseif control structure.
- * @package Pharborist
  */
-class ElseIfNode extends Node {
+class ElseIfNode extends ParentNode {
   /**
    * @var Node
    */

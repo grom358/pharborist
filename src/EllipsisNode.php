@@ -2,10 +2,11 @@
 namespace Pharborist;
 
 /**
- * Class EllipsisNode
- * @package Pharborist
+ * Ellipsis parameter.
+ *
+ * For example, a_func($a, ...$b);
  */
-class EllipsisNode extends Node {
+class EllipsisNode extends ParentNode {
   /**
    * @var Node
    */

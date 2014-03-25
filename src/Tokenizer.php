@@ -3,7 +3,6 @@ namespace Pharborist;
 
 /**
  * Convert PHP source into an array of tokens.
- * @package Pharborist
  */
 class Tokenizer {
   private $lineNo;

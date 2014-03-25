@@ -3,9 +3,8 @@ namespace Pharborist;
 
 /**
  * A yield expression.
- * @package Pharborist
  */
-class YieldNode extends Node {
+class YieldNode extends ParentNode {
   /**
    * @var Node
    */

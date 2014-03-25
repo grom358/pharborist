@@ -3,9 +3,8 @@ namespace Pharborist;
 
 /**
  * A declare directive.
- * @package Pharborist
  */
-class DeclareDirectiveNode extends Node {
+class DeclareDirectiveNode extends ParentNode {
   /**
    * @var Node
    */

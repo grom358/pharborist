@@ -2,10 +2,11 @@
 namespace Pharborist;
 
 /**
- * A lookup to a class method. Eg. MyClass::classMethod
- * @package Pharborist
+ * A lookup to a class method.
+ *
+ * For example, MyClass::classMethod
  */
-class ClassMethodCallNode extends Node {
+class ClassMethodCallNode extends ParentNode {
   /**
    * @var Node
    */

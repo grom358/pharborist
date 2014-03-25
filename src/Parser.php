@@ -3,7 +3,6 @@ namespace Pharborist;
 
 /**
  * Parses PHP tokens into syntax tree.
- * @package Pharborist
  */
 class Parser {
   /**
@@ -62,7 +61,7 @@ class Parser {
   /**
    * Build a syntax tree from the token iterator.
    * @param TokenIterator $iterator
-   * @return Node Root node of the tree
+   * @return StatementBlockNode Root node of the tree
    */
   public function buildTree(TokenIterator $iterator) {
     $this->iterator = $iterator;
@@ -79,7 +78,7 @@ class Parser {
   /**
    * Parse a file and return the parsed tree
    * @param string $filename Path to file
-   * @return Node|bool
+   * @return ParentNode|bool
    *   The top-level node of the parsed tree or FALSE if the file contents
    *   could not be read.
    */
@@ -93,7 +92,7 @@ class Parser {
   /**
    * Parse PHP source code and return the parsed tree.
    * @param string $source PHP source code
-   * @return Node
+   * @return ParentNode
    *   The top-level node of the parsed tree
    */
   public static function parseSource($source) {
@@ -109,7 +108,7 @@ class Parser {
   /**
    * Parse a snippet of PHP and return the parsed tree.
    * @param string $snippet PHP snippet without the opening PHP tag
-   * @return Node
+   * @return ParentNode
    *   The top-level node of the parsed tree
    */
   public static function parseSnippet($snippet) {

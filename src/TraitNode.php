@@ -3,7 +3,6 @@ namespace Pharborist;
 
 /**
  * A trait declaration.
- * @package Pharborist
  */
 class TraitNode extends StatementNode {
   /**

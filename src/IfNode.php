@@ -2,8 +2,7 @@
 namespace Pharborist;
 
 /**
- * if control structure.
- * @package Pharborist
+ * An if control structure.
  */
 class IfNode extends StatementNode {
   /**

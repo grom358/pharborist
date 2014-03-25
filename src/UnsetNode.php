@@ -2,8 +2,9 @@
 namespace Pharborist;
 
 /**
- * Unset function call. Eg. unset($a)
- * @package Pharborist
+ * Unset function call.
+ *
+ * For example, unset($a)
  */
 class UnsetNode extends FunctionCallNode {
 

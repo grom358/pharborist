@@ -2,8 +2,7 @@
 namespace Pharborist;
 
 /**
- * switch control structure.
- * @package Pharborist
+ * A switch control structure.
  */
 class SwitchNode extends StatementNode {
   /**

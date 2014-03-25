@@ -3,9 +3,8 @@ namespace Pharborist;
 
 /**
  * A trait use declaration.
- * @package Pharborist
  */
-class TraitUseNode extends Node {
+class TraitUseNode extends ParentNode {
   /**
    * @var NamespacePathNode[]
    */

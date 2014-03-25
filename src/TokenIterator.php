@@ -3,7 +3,6 @@ namespace Pharborist;
 
 /**
  * Iterator over tokens that supports peek.
- * @package Pharborist
  */
 class TokenIterator {
   /**

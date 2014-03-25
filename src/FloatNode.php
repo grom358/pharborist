@@ -2,8 +2,7 @@
 namespace Pharborist;
 
 /**
- * A float. Eg. 4.2
- * @package Pharborist
+ * A float scalar.
  */
 class FloatNode extends TokenNode {
 

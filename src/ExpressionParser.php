@@ -3,7 +3,6 @@ namespace Pharborist;
 
 /**
  * Parse expression using the shunting yard algorithm.
- * @package Pharborist
  */
 class ExpressionParser {
   /**

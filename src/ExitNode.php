@@ -3,9 +3,8 @@ namespace Pharborist;
 
 /**
  * An exit.
- * @package Pharborist
  */
-class ExitNode extends Node {
+class ExitNode extends ParentNode {
   /**
    * @var Node
    */

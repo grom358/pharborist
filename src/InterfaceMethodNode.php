@@ -2,10 +2,9 @@
 namespace Pharborist;
 
 /**
- * Interface method.
- * @package Pharborist
+ * An interface method.
  */
-class InterfaceMethodNode extends Node {
+class InterfaceMethodNode extends ParentNode {
   /**
    * @var Node
    */

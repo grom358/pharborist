@@ -2,7 +2,7 @@
 namespace Pharborist;
 
 /**
- * A commment.
+ * A comment.
  */
 class CommentNode extends TokenNode {
 

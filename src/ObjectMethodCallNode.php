@@ -2,10 +2,11 @@
 namespace Pharborist;
 
 /**
- * An object method call. Eg. $object->method()
- * @package Pharborist
+ * An object method call.
+ *
+ * For example, $object->method()
  */
-class ObjectMethodCallNode extends Node {
+class ObjectMethodCallNode extends ParentNode {
   /**
    * @var Node
    */

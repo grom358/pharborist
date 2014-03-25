@@ -3,7 +3,6 @@ namespace Pharborist;
 
 /**
  * Constant declaration statement.
- * @package Pharborist
  */
 class ConstantDeclarationStatementNode extends StatementNode {
   /**

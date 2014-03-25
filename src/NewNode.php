@@ -2,10 +2,11 @@
 namespace Pharborist;
 
 /**
- * A new expression. Eg. new MyClass()
- * @package Pharborist
+ * A new expression.
+ *
+ * For example, new MyClass()
  */
-class NewNode extends Node {
+class NewNode extends ParentNode {
   /**
    * @var NamespacePathNode
    */

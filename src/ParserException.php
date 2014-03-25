@@ -3,7 +3,6 @@ namespace Pharborist;
 
 /**
  * An exception occurred in parsing.
- * @package Pharborist
  */
 class ParserException extends \Exception {
   /**

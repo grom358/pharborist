@@ -2,8 +2,9 @@
 namespace Pharborist;
 
 /**
- * A string constant. Eg. 'hello world'.
- * @package Pharborist
+ * A string constant.
+ *
+ * For example, 'hello world'
  */
 class StringNode extends TokenNode {
 

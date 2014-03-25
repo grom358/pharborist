@@ -3,8 +3,7 @@ namespace Pharborist;
 
 /**
  * A parenthesis expression.
- * @package Pharborist
  */
-class ParenthesisNode extends Node {
+class ParenthesisNode extends ParentNode {
 
 }

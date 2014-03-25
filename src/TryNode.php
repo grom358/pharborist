@@ -3,7 +3,6 @@ namespace Pharborist;
 
 /**
  * A try control structure.
- * @package Pharborist
  */
 class TryNode extends StatementNode {
   /**

@@ -3,9 +3,8 @@ namespace Pharborist;
 
 /**
  * A require.
- * @package Pharborist
  */
-class RequireNode extends Node {
+class RequireNode extends ParentNode {
   /**
    * @var Node
    */

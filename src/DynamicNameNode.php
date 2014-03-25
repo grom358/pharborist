@@ -2,9 +2,10 @@
 namespace Pharborist;
 
 /**
- * A dynamic name for method/member. Eg. MyClass::{$dynamic_name}
- * @package Pharborist
+ * A dynamic name for method/member.
+ *
+ * For example, MyClass::{$dynamic_name}
  */
-class DynamicNameNode extends Node {
+class DynamicNameNode extends ParentNode {
 
 }

@@ -2,10 +2,11 @@
 namespace Pharborist;
 
 /**
- * A trait precedence declaration. Eg. A::bigTalk insteadof B;
- * @package Pharborist
+ * A trait precedence declaration.
+ *
+ * For example, A::bigTalk insteadof B;
  */
-class TraitPrecedenceNode extends Node {
+class TraitPrecedenceNode extends ParentNode {
   /**
    * @var Node
    */

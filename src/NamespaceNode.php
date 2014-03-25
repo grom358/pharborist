@@ -3,7 +3,6 @@ namespace Pharborist;
 
 /**
  * Namespace declaration.
- * @package Pharborist
  */
 class NamespaceNode extends StatementNode {
   /**

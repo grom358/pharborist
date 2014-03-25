@@ -3,9 +3,8 @@ namespace Pharborist;
 
 /**
  * A catch in a try control structure.
- * @package Pharborist
  */
-class CatchNode extends Node {
+class CatchNode extends ParentNode {
   /**
    * @var NamespacePathNode
    */

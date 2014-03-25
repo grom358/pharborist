@@ -3,7 +3,6 @@ namespace Pharborist;
 
 /**
  * A token.
- * @package Pharborist
  */
 class TokenNode extends Node {
   /**

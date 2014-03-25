@@ -2,10 +2,11 @@
 namespace Pharborist;
 
 /**
- * A ternary operation. Eg. $condition ? $then : $else
- * @package Pharborist
+ * A ternary operation.
+ *
+ * For example, $condition ? $then : $else
  */
-class TernaryOperationNode extends Node {
+class TernaryOperationNode extends ParentNode {
   /**
    * @var Node
    */

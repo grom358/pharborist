@@ -3,9 +3,8 @@ namespace Pharborist;
 
 /**
  * A class member.
- * @package Pharborist
  */
-class ClassMemberNode extends Node {
+class ClassMemberNode extends ParentNode {
   /**
    * @var Node
    */

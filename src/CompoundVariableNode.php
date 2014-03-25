@@ -2,10 +2,11 @@
 namespace Pharborist;
 
 /**
- * A compound variable. eg ${expr()}
- * @package Pharborist
+ * A compound variable.
+ *
+ * For example, ${expr()}
  */
-class CompoundVariableNode extends Node {
+class CompoundVariableNode extends ParentNode {
   /**
    * @var Node
    */

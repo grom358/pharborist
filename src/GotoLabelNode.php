@@ -3,9 +3,8 @@ namespace Pharborist;
 
 /**
  * A goto label.
- * @package Pharborist
  */
-class GotoLabelNode extends Node {
+class GotoLabelNode extends ParentNode {
   /**
    * @var Node
    */

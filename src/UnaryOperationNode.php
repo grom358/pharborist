@@ -3,9 +3,8 @@ namespace Pharborist;
 
 /**
  * An unary operation.
- * @package Pharborist
  */
-abstract class UnaryOperationNode extends Node {
+abstract class UnaryOperationNode extends ParentNode {
   /**
    * @var Node
    */

@@ -2,10 +2,11 @@
 namespace Pharborist;
 
 /**
- * A variable variable. Eg. $$a
- * @package Pharborist
+ * A variable variable.
+ *
+ * For example, $$a
  */
-class VariableVariableNode extends Node {
+class VariableVariableNode extends ParentNode {
   /**
    * @var Node
    */

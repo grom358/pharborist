@@ -3,9 +3,8 @@ namespace Pharborist;
 
 /**
  * A case statement in switch control structure.
- * @package Pharborist
  */
-class CaseNode extends Node {
+class CaseNode extends ParentNode {
   /**
    * @var Node
    */

@@ -3,9 +3,8 @@ namespace Pharborist;
 
 /**
  * A class method.
- * @package Pharborist
  */
-class ClassMethodNode extends Node {
+class ClassMethodNode extends ParentNode {
   /**
    * @var ModifiersNode
    */

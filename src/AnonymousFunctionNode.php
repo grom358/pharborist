@@ -2,10 +2,9 @@
 namespace Pharborist;
 
 /**
- * Class AnonymousFunctionNode
- * @package Pharborist
+ * An anonymous function.
  */
-class AnonymousFunctionNode extends Node {
+class AnonymousFunctionNode extends ParentNode {
   /**
    * @var Node
    */

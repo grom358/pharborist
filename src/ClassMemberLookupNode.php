@@ -2,10 +2,11 @@
 namespace Pharborist;
 
 /**
- * A class member lookup. Eg. MyClass::$a
- * @package Pharborist
+ * A class member lookup.
+ *
+ * For example, MyClass::$a
  */
-class ClassMemberLookupNode extends Node {
+class ClassMemberLookupNode extends ParentNode {
   /**
    * @var Node
    */

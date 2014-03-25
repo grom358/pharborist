@@ -2,10 +2,9 @@
 namespace Pharborist;
 
 /**
- * A reference to trait method name instead a trait use declaration.
- * @package Pharborist
+ * A reference to trait method name as part of a trait use declaration.
  */
-class TraitMethodReferenceNode extends Node {
+class TraitMethodReferenceNode extends ParentNode {
   /**
    * @var NamespacePathNode
    */

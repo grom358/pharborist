@@ -2,8 +2,7 @@
 namespace Pharborist;
 
 /**
- * A break statement
- * @package Pharborist
+ * A continue statement.
  */
 class ContinueStatementNode extends StatementNode {
   /**

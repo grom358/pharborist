@@ -3,7 +3,6 @@ namespace Pharborist;
 
 /**
  * Position in source.
- * @package Pharborist
  */
 class SourcePosition {
   /**

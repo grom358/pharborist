@@ -3,7 +3,6 @@ namespace Pharborist;
 
 /**
  * An interface declaration.
- * @package Pharborist
  */
 class InterfaceNode extends StatementNode {
   /**

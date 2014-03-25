@@ -3,7 +3,6 @@ namespace Pharborist;
 
 /**
  * foreach control structure.
- * @package Pharborist
  */
 class ForeachNode extends StatementNode {
   /**

@@ -2,8 +2,9 @@
 namespace Pharborist;
 
 /**
- * A variable. Eg. $a
- * @package Pharborist
+ * A basic variable.
+ *
+ * For example, $a
  */
 class VariableNode extends TokenNode {
 

@@ -2,10 +2,11 @@
 namespace Pharborist;
 
 /**
- * An object property. Eg. $object->property
- * @package Pharborist
+ * An object property.
+ *
+ * For example, $object->property
  */
-class ObjectPropertyNode extends Node {
+class ObjectPropertyNode extends ParentNode {
   /**
    * @var Node
    */

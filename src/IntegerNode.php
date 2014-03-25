@@ -2,8 +2,7 @@
 namespace Pharborist;
 
 /**
- * An integer scalar. Eg. 42
- * @package Pharborist
+ * An integer scalar.
  */
 class IntegerNode extends TokenNode {
 

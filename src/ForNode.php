@@ -2,8 +2,7 @@
 namespace Pharborist;
 
 /**
- * for control structure
- * @package Pharborist
+ * A for control structure.
  */
 class ForNode extends StatementNode {
   /**

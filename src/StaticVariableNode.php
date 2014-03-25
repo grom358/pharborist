@@ -2,10 +2,11 @@
 namespace Pharborist;
 
 /**
- * A static variable declaration. Eg. $a = A_SCALAR_VALUE
- * @package Pharborist
+ * A static variable declaration.
+ *
+ * For example, $a = A_SCALAR_VALUE
  */
-class StaticVariableNode extends Node {
+class StaticVariableNode extends ParentNode {
   /**
    * @var Node
    */

@@ -2,10 +2,11 @@
 namespace Pharborist;
 
 /**
- * A reference variable. Eg. &$a
- * @package Pharborist
+ * A reference variable.
+ *
+ * For example, &$a
  */
-class ReferenceVariableNode extends Node {
+class ReferenceVariableNode extends ParentNode {
   /**
    * @var Node
    */

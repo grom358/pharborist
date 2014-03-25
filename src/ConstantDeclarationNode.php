@@ -3,9 +3,8 @@ namespace Pharborist;
 
 /**
  * Constant declaration.
- * @package Pharborist
  */
-class ConstantDeclarationNode extends Node {
+class ConstantDeclarationNode extends ParentNode {
   /**
    * @var Node
    */

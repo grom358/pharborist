@@ -3,9 +3,8 @@ namespace Pharborist;
 
 /**
  * A function call.
- * @package Pharborist
  */
-class FunctionCallNode extends Node {
+class FunctionCallNode extends ParentNode {
   /**
    * @var Node
    */

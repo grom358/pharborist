@@ -2,9 +2,10 @@
 namespace Pharborist;
 
 /**
- * An interpolated string. Eg. "Hello $name, welcome to php."
- * @package Pharborist
+ * An interpolated string.
+ *
+ * For example, "Hello $name, welcome to php."
  */
-class ComplexStringNode extends Node {
+class ComplexStringNode extends ParentNode {
 
 }

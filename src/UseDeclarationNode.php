@@ -3,9 +3,8 @@ namespace Pharborist;
 
 /**
  * Use declaration.
- * @package Pharborist
  */
-class UseDeclarationNode extends Node {
+class UseDeclarationNode extends ParentNode {
   /**
    * @var Node
    */

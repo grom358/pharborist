@@ -1,7 +1,7 @@
 <?php
 namespace Pharborist;
 
-class ExpressionListNode extends Node {
+class ExpressionListNode extends ParentNode {
   /**
    * @var Node[]
    */

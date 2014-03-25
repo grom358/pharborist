@@ -3,9 +3,8 @@ namespace Pharborist;
 
 /**
  * A class member list declaration.
- * @package Pharborist
  */
-class ClassMemberListNode extends Node {
+class ClassMemberListNode extends ParentNode {
   /**
    * @var ModifiersNode
    */

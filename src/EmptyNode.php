@@ -2,8 +2,9 @@
 namespace Pharborist;
 
 /**
- * A empty function call. Eg. empty($a)
- * @package Pharborist
+ * A empty function call.
+ *
+ * For example, empty($a)
  */
 class EmptyNode extends FunctionCallNode {
 

@@ -3,7 +3,6 @@ namespace Pharborist;
 
 /**
  * A return statement.
- * @package Pharborist
  */
 class ReturnStatementNode extends StatementNode {
   /**

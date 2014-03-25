@@ -2,8 +2,7 @@
 namespace Pharborist;
 
 /**
- * A post increment '++' operation. Eg. $a++
- * @package Pharborist
+ * A post increment '++' operation.
  */
 class PostIncrementNode extends UnaryOperationNode {
 

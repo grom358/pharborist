@@ -3,7 +3,6 @@ namespace Pharborist;
 
 /**
  * while control structure.
- * @package Pharborist
  */
 class WhileNode extends StatementNode {
   /**

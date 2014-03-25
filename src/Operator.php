@@ -2,8 +2,9 @@
 namespace Pharborist;
 
 /**
- * An operator in an expression. Used only by the parser internally.
- * @package Pharborist
+ * An operator in an expression.
+ *
+ * Used by the parser to hold data about an operator.
  */
 class Operator extends PartialNode {
   const MODE_UNARY = 1;

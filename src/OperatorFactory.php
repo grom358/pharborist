@@ -29,6 +29,7 @@ class OperatorFactory {
     T_XOR_EQUAL => array(Operator::ASSOC_RIGHT, 4, FALSE, '\Pharborist\BitwiseXorAssignNode', NULL),
     T_POW_EQUAL => array(Operator::ASSOC_RIGHT, 4, FALSE, '\Pharborist\PowerAssignNode', NULL),
     '?' => array(Operator::ASSOC_LEFT, 5, TRUE, NULL, NULL),
+    ':' => array(Operator::ASSOC_NONE, 5, TRUE, NULL, NULL),
     T_BOOLEAN_OR => array(Operator::ASSOC_LEFT, 6, TRUE, '\Pharborist\BooleanOrNode', NULL),
     T_BOOLEAN_AND => array(Operator::ASSOC_LEFT, 7, TRUE, '\Pharborist\BooleanAndNode', NULL),
     '|' => array(Operator::ASSOC_LEFT, 8, TRUE, '\Pharborist\BitwiseOrNode', NULL),

@@ -81,10 +81,13 @@ class ExpressionParser {
     $this->P();
     while (($node = $this->next()) && ($node instanceof Operator)) {
       // Special case ternary operator
-      if ($node->type === '?') {
+      if ($node->type === ':') {
+        break;
+      }
+      elseif ($node->type === '?') {
         $this->expect('?');
         $next = $this->next();
-        if ($next && $next->type === ':') {
+        if ($next instanceof Operator && $next->type === ':') {
           // Elvis operator
           $colon = $this->expect(':');
           $elvis_operator = OperatorFactory::createElvisOperator($node, $colon);

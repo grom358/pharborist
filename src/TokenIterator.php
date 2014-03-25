@@ -25,7 +25,7 @@ class TokenIterator {
   private $length;
 
   /**
-   * @param Token[] $tokens
+   * @param TokenNode[] $tokens
    */
   public function __construct(array $tokens) {
     $this->tokens = $tokens;
@@ -35,7 +35,7 @@ class TokenIterator {
 
   /**
    * Return the current token.
-   * @return Token
+   * @return TokenNode
    */
   public function current() {
     if ($this->position >= $this->length) {
@@ -47,7 +47,7 @@ class TokenIterator {
   /**
    * Peek ahead.
    * @param int $offset Offset from current position.
-   * @return Token
+   * @return TokenNode
    */
   public function peek($offset) {
     if ($this->position + $offset >= $this->length) {
@@ -58,7 +58,7 @@ class TokenIterator {
 
   /**
    * Move to the next token and return it.
-   * @return Token
+   * @return TokenNode
    */
   public function next() {
     $this->position++;
@@ -89,24 +89,6 @@ class TokenIterator {
     if ($token === NULL) {
       $token = $this->tokens[$this->length - 1];
     }
-    return new SourcePosition($token->lineNo, $token->colNo);
-  }
-
-  /**
-   * Return the current token type.
-   * @return int|string
-   */
-  public function getTokenType() {
-    $token = $this->current();
-    return $token ?: $token->type;
-  }
-
-  /**
-   * Return the current token text.
-   * @return int|string
-   */
-  public function getTokenText() {
-    $token = $this->current();
-    return $token ?: $token->text;
+    return $token->getSourcePosition();
   }
 }

@@ -137,7 +137,7 @@ class Parser {
       }
       else {
         throw new ParserException($this->iterator->getSourcePosition(),
-          'expected PHP opening tag, but got ' . $this->iterator->getTokenText());
+          'expected PHP opening tag, but got ' . $this->iterator->current()->getText());
       }
     }
   }
@@ -934,13 +934,7 @@ class Parser {
             'unbalanced : with ? ternary operator');
         }
       }
-      if ($this->isTokenType(':')) {
-        $node = new PartialNode();
-        $node->type = ':';
-        $this->mustMatch(':', $node);
-        $expression_nodes[] = $node;
-      }
-      elseif ($op = $this->staticOperator()) {
+      if ($op = $this->staticOperator()) {
         $expression_nodes[] = $op;
       }
       elseif ($operand = $this->staticOperand()) {
@@ -1063,13 +1057,7 @@ class Parser {
             $this->iterator->getSourcePosition(), "unbalanced : with ? ternary operator");
         }
       }
-      if ($this->isTokenType(':')) {
-        $node = new PartialNode();
-        $node->type = ':';
-        $this->mustMatch(':', $node);
-        $expression_nodes[] = $node;
-      }
-      elseif ($op = $this->exprOperator()) {
+      if ($op = $this->exprOperator()) {
         $expression_nodes[] = $op;
       }
       elseif ($operand = $this->exprOperand()) {
@@ -2465,12 +2453,11 @@ class Parser {
    */
   private function skipHidden() {
     $token = $this->iterator->current();
-    while ($token && self::isHidden($token->type)) {
-      $node = static::createTokenNode($token);
-      if ($token->type === T_DOC_COMMENT) {
-        $this->docComment = $node;
+    while ($token && self::isHidden($token->getType())) {
+      if ($token->getType() === T_DOC_COMMENT) {
+        $this->docComment = $token;
       }
-      $this->skipped[] = $node;
+      $this->skipped[] = $token;
       $token = $this->iterator->next();
     }
   }
@@ -2505,20 +2492,19 @@ class Parser {
   private function mustMatch($expected_type, Node $parent, $maybe_last = FALSE) {
     $this->skipHidden();
     $token = $this->iterator->current();
-    if ($token === NULL || $token->type !== $expected_type) {
+    if ($token === NULL || $token->getType() !== $expected_type) {
       throw new ParserException(
         $this->iterator->getSourcePosition(),
-        'expected ' . Token::typeName($expected_type));
+        'expected ' . TokenNode::typeName($expected_type));
     }
     $this->addSkipped($parent);
     $this->docComment = NULL;
-    $node = static::createTokenNode($token);
-    $parent->appendChild($node);
+    $parent->appendChild($token);
     $this->iterator->next();
     if (!$maybe_last) {
       $this->matchHidden($parent);
     }
-    return $node;
+    return $token;
   }
 
   /**
@@ -2530,18 +2516,17 @@ class Parser {
   private function tryMatch($expected_type, Node $parent, $maybe_last = FALSE) {
     $this->skipHidden();
     $token = $this->iterator->current();
-    if ($token === NULL || $token->type !== $expected_type) {
+    if ($token === NULL || $token->getType() !== $expected_type) {
       return NULL;
     }
     $this->addSkipped($parent);
     $this->docComment = NULL;
-    $node = static::createTokenNode($token);
-    $parent->appendChild($node);
+    $parent->appendChild($token);
     $this->iterator->next();
     if (!$maybe_last) {
       $this->matchHidden($parent);
     }
-    return $node;
+    return $token;
   }
 
   /**
@@ -2553,9 +2538,9 @@ class Parser {
       return NULL;
     }
     foreach (func_get_args() as $expected_type) {
-      if ($expected_type === $token->type) {
+      if ($expected_type === $token->getType()) {
         $this->iterator->next();
-        return static::createTokenNode($token);
+        return $token;
       }
     }
     return NULL;
@@ -2568,53 +2553,13 @@ class Parser {
    */
   private function mustMatchToken($expected_type) {
     $token = $this->iterator->current();
-    if ($token === NULL || $token->type !== $expected_type) {
+    if ($token === NULL || $token->getType() !== $expected_type) {
       throw new ParserException(
         $this->iterator->getSourcePosition(),
-        'expected ' . Token::typeName($expected_type));
+        'expected ' . TokenNode::typeName($expected_type));
     }
     $this->iterator->next();
-    return static::createTokenNode($token);
-  }
-
-  /**
-   * Create a TokenNode from Token.
-   * @param Token $token Token to create node for
-   * @return TokenNode
-   */
-  private static function createTokenNode(Token $token) {
-    switch ($token->type) {
-      case T_VARIABLE:
-        return new VariableNode($token);
-      case T_LNUMBER:
-        return new IntegerNode($token);
-      case T_DNUMBER:
-        return new FloatNode($token);
-      case T_LINE:
-        return new LineMagicConstantNode($token);
-      case T_FILE:
-        return new FileMagicConstantNode($token);
-      case T_DIR:
-        return new DirMagicConstantNode($token);
-      case T_FUNC_C:
-        return new FunctionMagicConstantNode($token);
-      case T_CLASS_C:
-        return new ClassMagicConstantNode($token);
-      case T_TRAIT_C:
-        return new TraitMagicConstantNode($token);
-      case T_METHOD_C:
-        return new MethodMagicConstantNode($token);
-      case T_NS_C:
-        return new NamespaceMagicConstantNode($token);
-      case T_COMMENT:
-        return new CommentNode($token);
-      case T_DOC_COMMENT:
-        return new DocCommentNode($token);
-      case T_WHITESPACE:
-        return new WhitespaceNode($token);
-      default:
-        return new TokenNode($token);
-    }
+    return $token;
   }
 
   /**
@@ -2624,7 +2569,7 @@ class Parser {
   private function getTokenType() {
     $this->skipHidden();
     $token = $this->iterator->current();
-    return $token === NULL ? NULL : $token->type;
+    return $token === NULL ? NULL : $token->getType();
   }
 
   /**
@@ -2655,8 +2600,8 @@ class Parser {
       if ($token === NULL) {
         return FALSE;
       }
-      if (!static::isHidden($token->type) && $token->type !== $skip_type) {
-        return $expected_type === $token->type;
+      if (!static::isHidden($token->getType()) && $token->getType() !== $skip_type) {
+        return $expected_type === $token->getType();
       }
     }
     return FALSE;

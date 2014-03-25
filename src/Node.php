@@ -17,11 +17,6 @@ class Node {
   public $children = array();
 
   /**
-   * @var int|string
-   */
-  public $type;
-
-  /**
    * Prepend a child to node.
    */
   public function prependChild(Node $child) {

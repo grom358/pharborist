@@ -1884,9 +1884,9 @@ class Parser {
       case '&':
         return $this->writeVariable();
       case T_ELLIPSIS:
-        $node = new Node();
+        $node = new EllipsisNode();
         $this->mustMatch(T_ELLIPSIS, $node);
-        $node->appendChild($this->expr());
+        $node->expression = $node->appendChild($this->expr());
         return $node;
       default:
         return $this->expr();

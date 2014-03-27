@@ -2301,6 +2301,7 @@ class Parser {
     if ($this->tryMatch('{', $node)) {
       while ($this->iterator->hasNext() && !$this->isTokenType('}')) {
         $node->adaptations[] = $node->appendChild($this->traitAdaptation());
+        $this->matchHidden($node);
       }
       $this->mustMatch('}', $node, TRUE);
       return $node;
@@ -2322,13 +2323,13 @@ class Parser {
     $node = new TraitMethodReferenceNode();
     $node->traitName = $node->appendChild($qualified_name);
     $this->mustMatch(T_DOUBLE_COLON, $node);
-    $node->methodReference = $this->mustMatch(T_STRING, $node);
+    $node->methodReference = $this->mustMatch(T_STRING, $node, TRUE);
     if ($this->isTokenType(T_AS)) {
       return $this->traitAlias($node);
     }
     $method_reference_node = $node;
     $node = new TraitPrecedenceNode();
-    $node->methodReference = $node->appendChild($method_reference_node);
+    $node->traitMethodReference = $node->appendChild($method_reference_node);
     $this->mustMatch(T_INSTEADOF, $node);
     do {
       $node->traitNames[] = $node->appendChild($this->namespacePath());
@@ -2344,7 +2345,7 @@ class Parser {
    */
   private function traitAlias($trait_method_reference) {
     $node = new TraitAliasNode();
-    $node->methodReference = $node->appendChild($trait_method_reference);
+    $node->traitMethodReference = $node->appendChild($trait_method_reference);
     $this->mustMatch(T_AS, $node);
     if ($trait_modifier = $this->tryMatchToken(T_PUBLIC, T_PROTECTED, T_PRIVATE)) {
       $node->visibility = $node->appendChild($trait_modifier);

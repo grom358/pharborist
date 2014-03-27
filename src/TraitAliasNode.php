@@ -8,9 +8,9 @@ namespace Pharborist;
  */
 class TraitAliasNode extends ParentNode {
   /**
-   * @var Node
+   * @var NamespacePathNode|TraitMethodReferenceNode
    */
-  public $methodReference;
+  public $traitMethodReference;
 
   /**
    * @var Node

@@ -57,12 +57,12 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
   public function testNamespace() {
     /** @var NamespaceNode $namespace_node */
     $namespace_node = $this->parseSnippet('namespace MyNamespace\Test ;', '\Pharborist\NamespaceNode');
-    $this->assertEquals('MyNamespace\Test', $namespace_node->name);
+    $this->assertEquals('MyNamespace\Test', (string) $namespace_node->name);
 
     // Test with body
     /** @var NamespaceNode $namespace_node */
     $namespace_node = $this->parseSnippet('namespace MyNamespace\Test\Body { }', '\Pharborist\NamespaceNode');
-    $this->assertEquals('MyNamespace\Test\Body', $namespace_node->name);
+    $this->assertEquals('MyNamespace\Test\Body', (string) $namespace_node->name);
     $this->assertNotNull($namespace_node->body);
 
     // Test global
@@ -96,14 +96,22 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
       'function my_func(array $a, callable $b, namespace\Test $c, \MyNamespace\Test $d, $e = 1) { }',
       '\Pharborist\FunctionDeclarationNode'
     );
-    $this->assertEquals('my_func', $function_declaration->name);
+    $this->assertEquals('my_func', (string) $function_declaration->name);
     $parameter = $function_declaration->parameters[0];
-    $this->assertEquals('$a', $parameter->name);
-    $this->assertEquals('array', $parameter->classType);
+    $this->assertEquals('$a', (string) $parameter->name);
+    $this->assertEquals('array', (string) $parameter->classType);
     $parameter = $function_declaration->parameters[1];
-    $this->assertEquals('$b', $parameter->name);
-    $this->assertEquals('callable', $parameter->classType);
-    //@todo
+    $this->assertEquals('$b', (string) $parameter->name);
+    $this->assertEquals('callable', (string) $parameter->classType);
+    $parameter = $function_declaration->parameters[2];
+    $this->assertEquals('$c', (string) $parameter->name);
+    $this->assertEquals('namespace\Test', (string) $parameter->classType);
+    $parameter = $function_declaration->parameters[3];
+    $this->assertEquals('$d', (string) $parameter->name);
+    $this->assertEquals('\MyNamespace\Test', (string) $parameter->classType);
+    $parameter = $function_declaration->parameters[4];
+    $this->assertEquals('$e', (string) $parameter->name);
+    $this->assertEquals('1', (string) $parameter->defaultValue);
   }
 
   /**
@@ -113,8 +121,8 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
     /** @var ConstantDeclarationStatementNode $const_declaration_list */
     $const_declaration_list = $this->parseSnippet('const MyConst = 1;', '\Pharborist\ConstantDeclarationStatementNode');
     $const_declaration = $const_declaration_list->declarations[0];
-    $this->assertEquals('MyConst', $const_declaration->name);
-    $this->assertEquals('1', $const_declaration->value);
+    $this->assertEquals('MyConst', (string) $const_declaration->name);
+    $this->assertEquals('1', (string) $const_declaration->value);
   }
 
   /**
@@ -136,7 +144,6 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
 
   /**
    * Test parsing a class declaration.
-   * @covers Pharborist\Parser
    */
   public function testClassDeclaration() {
     $snippet = <<<'EOF'
@@ -173,6 +180,7 @@ EOF;
     $this->assertEquals('SomeInterface', (string) $class_declaration->implements[0]);
     $this->assertEquals('AnotherInterface', (string) $class_declaration->implements[1]);
     $this->assertInstanceOf('\Pharborist\ConstantDeclarationStatementNode', $class_declaration->statements[0]);
+
     /** @var ClassMemberListNode $class_member_list */
     $class_member_list = $class_declaration->statements[1];
     $this->assertInstanceOf('\Pharborist\ClassMemberListNode', $class_member_list);
@@ -180,18 +188,81 @@ EOF;
     $class_member = $class_member_list->members[0];
     $this->assertEquals('$publicProperty', (string) $class_member->name);
     $this->assertEquals('1', (string) $class_member->initialValue);
-    //@todo test other properties
+
+    $class_member_list = $class_declaration->statements[2];
+    $this->assertEquals('protected', (string) $class_member_list->modifiers->visibility);
+    $class_member = $class_member_list->members[0];
+    $this->assertEquals('$protectedProperty', (string) $class_member->name);
+
+    $class_member_list = $class_declaration->statements[3];
+    $this->assertEquals('private', (string) $class_member_list->modifiers->visibility);
+    $class_member = $class_member_list->members[0];
+    $this->assertEquals('$privateProperty', (string) $class_member->name);
+
+    $class_member_list = $class_declaration->statements[4];
+    $this->assertEquals('public', (string) $class_member_list->modifiers->visibility);
+    $this->assertEquals('static', (string) $class_member_list->modifiers->static);
+    $class_member = $class_member_list->members[0];
+    $this->assertEquals('$classProperty', (string) $class_member->name);
+
     /** @var ClassMethodNode $method */
     $method = $class_declaration->statements[6];
     $this->assertInstanceOf('\Pharborist\ClassMethodNode', $method);
     $this->assertEquals('myMethod', (string) $method->name);
-    //@todo test other methods
-    //@todo test trait stuff
+    $this->assertEquals('public', (string) $method->modifiers->visibility);
+
+    $method = $class_declaration->statements[7];
+    $this->assertEquals('noOverride', (string) $method->name);
+    $this->assertEquals('public', (string) $method->modifiers->visibility);
+    $this->assertEquals('final', (string) $method->modifiers->final);
+
+    $method = $class_declaration->statements[8];
+    $this->assertEquals('classMethod', (string) $method->name);
+    $this->assertEquals('public', (string) $method->modifiers->visibility);
+    $this->assertEquals('static', (string) $method->modifiers->static);
+
+    $method = $class_declaration->statements[9];
+    $this->assertEquals('mustImplement', (string) $method->name);
+    $this->assertEquals('public', (string) $method->modifiers->visibility);
+    $this->assertEquals('abstract', (string) $method->modifiers->abstract);
+
+    /** @var TraituseNode $trait_use */
+    $trait_use = $class_declaration->statements[10];
+    $this->assertInstanceOf('\Pharborist\TraitUseNode', $trait_use);
+    $this->assertEquals('A', (string) $trait_use->traits[0]);
+    $this->assertEquals('B', (string) $trait_use->traits[1]);
+    $this->assertEquals('C', (string) $trait_use->traits[2]);
+
+    /** @var TraitPrecedenceNode $trait_adaptation */
+    $trait_precedence = $trait_use->adaptations[0];
+    $this->assertInstanceOf('\Pharborist\TraitPrecedenceNode', $trait_precedence);
+    $this->assertInstanceOf('\Pharborist\TraitMethodReferenceNode', $trait_precedence->traitMethodReference);
+    $this->assertEquals('B::smallTalk', (string) $trait_precedence->traitMethodReference);
+    $this->assertEquals('B', (string) $trait_precedence->traitMethodReference->traitName);
+    $this->assertEquals('smallTalk', (string) $trait_precedence->traitMethodReference->methodReference);
+    $this->assertEquals('A', (string) $trait_precedence->traitNames[0]);
+
+    $trait_precedence = $trait_use->adaptations[1];
+    $this->assertInstanceOf('\Pharborist\TraitPrecedenceNode', $trait_precedence);
+    $this->assertInstanceOf('\Pharborist\TraitMethodReferenceNode', $trait_precedence->traitMethodReference);
+    $this->assertEquals('A::bigTalk', (string) $trait_precedence->traitMethodReference);
+    $this->assertEquals('A', (string) $trait_precedence->traitMethodReference->traitName);
+    $this->assertEquals('bigTalk', (string) $trait_precedence->traitMethodReference->methodReference);
+    $this->assertEquals('B', (string) $trait_precedence->traitNames[0]);
+    $this->assertEquals('C', (string) $trait_precedence->traitNames[1]);
+
+    /** @var TraitAliasNode $trait_alias */
+    $trait_alias = $trait_use->adaptations[2];
+    $this->assertInstanceOf('\Pharborist\TraitAliasNode', $trait_alias);
+    $this->assertInstanceOf('\Pharborist\TraitMethodReferenceNode', $trait_alias->traitMethodReference);
+    $this->assertEquals('B::bigTalk', (string) $trait_alias->traitMethodReference);
+    $this->assertEquals('B', (string) $trait_alias->traitMethodReference->traitName);
+    $this->assertEquals('bigTalk', (string) $trait_alias->traitMethodReference->methodReference);
+    $this->assertEquals('talk', (string) $trait_alias->alias);
   }
 
   /**
    * Test interface declaration.
-   * @covers Pharborist\Parser
    */
   public function testInterfaceDeclaration() {
     $snippet = <<<'EOF'
@@ -205,16 +276,22 @@ EOF;
     $this->assertEquals('MyInterface', (string) $interface_declaration->name);
     $this->assertEquals('SomeInterface', (string) $interface_declaration->extends[0]);
     $this->assertEquals('AnotherInterface', (string) $interface_declaration->extends[1]);
+
+    /** @var ConstantDeclarationStatementNode $constant_declaration_statement */
+    $constant_declaration_statement = $interface_declaration->statements[0];
+    $this->assertInstanceOf('\Pharborist\ConstantDeclarationStatementNode', $constant_declaration_statement);
+    $constant_declaration = $constant_declaration_statement->declarations[0];
+    $this->assertEquals('MY_CONST', (string) $constant_declaration->name);
+    $this->assertEquals('1', (string) $constant_declaration->value);
+
     /** @var InterfaceMethodNode $method */
     $method = $interface_declaration->statements[1];
     $this->assertEquals('myMethod', (string) $method->name);
     $this->assertEquals('public', (string) $method->visibility);
-    //@todo test interface constant
   }
 
   /**
    * Test trait declaration.
-   * @covers Pharborist\Parser
    */
   public function testTraitDeclaration() {
     $snippet = <<<'EOF'
@@ -233,7 +310,6 @@ EOF;
 
   /**
    * Test if control structure.
-   * @covers Pharborist\Parser
    */
   public function testIf() {
     $snippet = <<<'EOF'
@@ -246,13 +322,17 @@ elseif ($another_condition) {
 else {
 }
 EOF;
-    $this->parseSnippet($snippet, '\Pharborist\IfNode');
-    //@todo
+    /** @var IfNode $if */
+    $if = $this->parseSnippet($snippet, '\Pharborist\IfNode');
+    $this->assertEquals('($condition)', (string) $if->condition);
+    $this->assertEquals(2, count($if->elseIfList));
+    $this->assertEquals('($other_condition)', (string) $if->elseIfList[0]->condition);
+    $this->assertEquals('($another_condition)', (string) $if->elseIfList[1]->condition);
+    $this->assertNotNull($if->else);
   }
 
   /**
    * Test alternative if control structure.
-   * @covers Pharborist\Parser
    */
   public function testAlternativeIf() {
     $snippet = <<<'EOF'
@@ -266,13 +346,17 @@ else:
 
 endif;
 EOF;
-    $this->parseSnippet($snippet, '\Pharborist\IfNode');
-    //@todo
+    /** @var IfNode $if */
+    $if = $this->parseSnippet($snippet, '\Pharborist\IfNode');
+    $this->assertEquals('($condition)', (string) $if->condition);
+    $this->assertEquals(2, count($if->elseIfList));
+    $this->assertEquals('($other_condition)', (string) $if->elseIfList[0]->condition);
+    $this->assertEquals('($another_condition)', (string) $if->elseIfList[1]->condition);
+    $this->assertNotNull($if->else);
   }
 
   /**
    * Test foreach control structure.
-   * @covers Pharborist\Parser
    */
   public function testForeach() {
     $snippet = <<<'EOF'
@@ -285,7 +369,6 @@ EOF;
 
   /**
    * Test alternative foreach control structure.
-   * @covers Pharborist\Parser
    */
   public function testAlternativeForeach() {
     $snippet = <<<'EOF'
@@ -299,7 +382,6 @@ EOF;
 
   /**
    * Test while control structure.
-   * @covers Pharborist\Parser
    */
   public function testWhile() {
     $snippet = <<<'EOF'
@@ -312,7 +394,6 @@ EOF;
 
   /**
    * Test while control structure.
-   * @covers Pharborist\Parser
    */
   public function testAlternativeWhile() {
     $snippet = <<<'EOF'
@@ -326,7 +407,6 @@ EOF;
 
   /**
    * Test do..while control structure.
-   * @covers Pharborist\Parser
    */
   public function testDoWhile() {
     $snippet = <<<'EOF'
@@ -339,7 +419,6 @@ EOF;
 
   /**
    * Test for control structure.
-   * @covers Pharborist\Parser
    */
   public function testFor() {
     $snippet = <<<'EOF'
@@ -352,7 +431,6 @@ EOF;
 
   /**
    * Test for control structure.
-   * @covers Pharborist\Parser
    */
   public function testAlternativeFor() {
     $snippet = <<<'EOF'
@@ -378,7 +456,6 @@ EOF;
 
   /**
    * Test switch control structure.
-   * @covers Pharborist\Parser
    */
   public function testSwitch() {
     $snippet = <<<'EOF'
@@ -398,7 +475,6 @@ EOF;
 
   /**
    * Test switch control structure.
-   * @covers Pharborist\Parser
    */
   public function testAlternativeSwitch() {
     $snippet = <<<'EOF'
@@ -418,7 +494,6 @@ EOF;
 
   /**
    * Test try/catch control structure.
-   * @covers Pharborist\Parser
    */
   public function testTryCatch() {
     $snippet = <<<'EOF'
@@ -643,7 +718,6 @@ EOF;
 
   /**
    * Test function call.
-   * @covers Pharborist\Parser
    */
   public function testFunctionCall() {
     //@todo
@@ -652,7 +726,6 @@ EOF;
 
   /**
    * Test static variable list.
-   * @covers Pharborist\Parser
    */
   public function testStaticVariableList() {
     //@todo

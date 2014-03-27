@@ -102,8 +102,8 @@ class OperatorFactory {
    */
   public static function createElvisOperator(Operator $question_operator, PartialNode $colon_node) {
     $operator = new Operator();
-    $operator->appendChildren($question_operator->children);
-    $operator->appendChildren($colon_node->children);
+    $operator->mergeNode($question_operator);
+    $operator->mergeNode($colon_node);
     $operator->associativity = Operator::ASSOC_LEFT;
     $operator->precedence = 5;
     $operator->hasBinaryMode = TRUE;
@@ -121,7 +121,7 @@ class OperatorFactory {
     $class_name = $operator->unaryClassName;
     /** @var \Pharborist\UnaryOperationNode $node */
     $node = new $class_name();
-    $node->appendChildren($operator->children);
+    $node->mergeNode($operator);
     $node->operator = $operator->operatorNode;
     $node->operand = $node->appendChild($operand);
     return $node;
@@ -138,7 +138,7 @@ class OperatorFactory {
     /** @var \Pharborist\BinaryOperationNode $node */
     $node = new $class_name();
     $node->left = $node->appendChild($left);
-    $node->appendChildren($operator->children);
+    $node->mergeNode($operator);
     $node->operator = $operator->operatorNode;
     $node->right = $node->appendChild($right);
     return $node;
@@ -161,7 +161,7 @@ class OperatorFactory {
       throw new ParserException($operator->operatorNode->getSourcePosition(), "Invalid postfix operator!");
     }
     $node->operand = $node->appendChild($operand);
-    $node->appendChildren($operator->children);
+    $node->mergeNode($operator);
     $node->operator = $operator->operatorNode;
     return $node;
   }
@@ -183,9 +183,9 @@ class OperatorFactory {
   ) {
     $node = new TernaryOperationNode();
     $node->condition = $node->appendChild($condition);
-    $node->appendChildren($operator->children);
+    $node->mergeNode($operator);
     $node->then = $node->appendChild($then);
-    $node->appendChildren($colon->children);
+    $node->mergeNode($colon);
     $node->else = $node->appendChild($else);
     return $node;
   }

@@ -8,7 +8,38 @@ abstract class ParentNode extends Node {
   /**
    * @var Node[]
    */
-  public $children = array();
+  protected $children = array();
+
+  /**
+   * Get child at index.
+   * @param int $index
+   * @return Node
+   */
+  public function getChild($index) {
+    return $this->children[$index];
+  }
+
+  /**
+   * Get the number of children.
+   * @return int
+   */
+  public function getChildCount() {
+    return count($this->children);
+  }
+
+  /**
+   * @param Node $child
+   * @return int
+   * @throws \Exception
+   */
+  public function indexOf(Node $child) {
+    foreach ($this->children as $i => $element) {
+      if ($element === $child) {
+        return $i;
+      }
+    }
+    throw new \Exception('Child node not found!');
+  }
 
   /**
    * Prepend a child to node.
@@ -38,6 +69,51 @@ abstract class ParentNode extends Node {
     foreach ($children as $child) {
       $this->appendChild($child);
     }
+  }
+
+  /**
+   * Merge another parent node into this node.
+   * @param ParentNode $node
+   */
+  public function mergeNode(ParentNode $node) {
+    $this->appendChildren($node->children);
+  }
+
+  /**
+   * Remove the first child.
+   * @return Node The removed child.
+   */
+  public function removeFirst() {
+    $first = $this->children[0];
+    $first->parent = NULL;
+    array_splice($this->children, 0, 1);
+    return $first;
+  }
+
+  /**
+   * Remove the child from this node.
+   * @param Node $child
+   * @return Node The removed child
+   */
+  public function removeChild(Node $child) {
+    $index = $this->indexOf($child);
+    $child->parent = NULL;
+    array_splice($this->children, $index, 1);
+    return $child;
+  }
+
+  /**
+   * Replace a child in this node.
+   * @param Node $replacement
+   * @param Node $old_child
+   * @return Node The replaced old child.
+   */
+  public function replaceChild(Node $replacement, Node $old_child) {
+    $index = $this->indexOf($old_child);
+    $replacement->parent = $this;
+    $old_child->parent = NULL;
+    array_splice($this->children, $index, 1, array($replacement));
+    return $old_child;
   }
 
   /**

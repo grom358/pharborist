@@ -114,7 +114,7 @@ class Parser {
   public static function parseSnippet($snippet) {
     $tree = self::parseSource('<?php ' . $snippet);
     // Strip the inserted opening php tag
-    array_shift($tree->children);
+    $tree->removeFirst();
     return $tree;
   }
 
@@ -1235,7 +1235,7 @@ class Parser {
         $node = new ExitNode();
         $this->mustMatch(T_EXIT, $node, TRUE);
         if (!$this->isTokenType('(')) {
-          return $node->children[0];
+          return $node;
         }
         $this->mustMatch('(', $node);
         if ($this->tryMatch(')', $node, TRUE)) {
@@ -1546,7 +1546,7 @@ class Parser {
   private function classConstant($class_name, $colon_node, $class_constant) {
     $node = new ClassConstantLookupNode();
     $node->className = $node->appendChild($class_name);
-    $node->appendChildren($colon_node->children);
+    $node->mergeNode($colon_node);
     $node->constantName = $node->appendChild($class_constant);
     return $node;
   }
@@ -1561,7 +1561,7 @@ class Parser {
   private function classMethodCall($class_name, $colon_node, $method_name) {
     $node = new ClassMethodCallNode();
     $node->className = $node->appendChild($class_name);
-    $node->appendChildren($colon_node->children);
+    $node->mergeNode($colon_node);
     $node->methodName = $node->appendChild($method_name);
     $this->functionCallParameterList($node);
     return $this->objectDereference($this->arrayDeference($node));
@@ -1576,7 +1576,7 @@ class Parser {
   private function classNameScalar($class_name, $colon_node) {
     $node = new ClassNameScalarNode();
     $node->className = $node->appendChild($class_name);
-    $node->appendChildren($colon_node->children);
+    $node->mergeNode($colon_node);
     $this->mustMatch(T_CLASS, $node, TRUE);
     return $node;
   }
@@ -1615,20 +1615,19 @@ class Parser {
           $member_name = $member_name->array;
         }
         /** @var ArrayLookupNode $parent */
-        $parent = $member_name->parent;
+        $parent = $member_name->getParent();
         // Replace the member name with ClassMemberLookupNode, eg. $class::$var
         $node = new ClassMemberLookupNode();
         $node->className = $node->appendChild($class_name);
-        $node->appendChildren($colon_node->children);
+        $node->mergeNode($colon_node);
         $node->memberName = $node->appendChild($member_name);
-        array_shift($parent->children);
-        $parent->array = $parent->prependChild($node);
+        $parent->array = $parent->replaceChild($node, $member_name);
         return $this->objectDereference($var_node);
       }
       else {
         $node = new ClassMemberLookupNode();
         $node->className = $node->appendChild($class_name);
-        $node->appendChildren($colon_node->children);
+        $node->mergeNode($colon_node);
         $node->memberName = $node->appendChild($var_node);
         return $this->objectDereference($node);
       }
@@ -1716,14 +1715,14 @@ class Parser {
     if ($this->isTokenType('(')) {
       $node = new ObjectMethodCallNode();
       $node->object = $node->appendChild($object);
-      $node->appendChildren($operator_node->children);
+      $node->mergeNode($operator_node);
       $node->methodName = $node->appendChild($object_property);
       $this->functionCallParameterList($node);
     }
     else {
       $node = new ObjectPropertyNode();
       $node->object = $node->appendChild($object);
-      $node->appendChildren($operator_node->children);
+      $node->mergeNode($operator_node);
       $node->property = $node->appendChild($object_property);
     }
 
@@ -2317,8 +2316,7 @@ class Parser {
   private function traitAdaptation() {
     /** @var NamespacePathNode $qualified_name */
     $qualified_name = $this->namespacePath();
-    if (count($qualified_name->children) === 1 && !$this->isTokenType(T_DOUBLE_COLON)) {
-      $qualified_name = $qualified_name->children[0];
+    if ($qualified_name->getChildCount() === 1 && !$this->isTokenType(T_DOUBLE_COLON)) {
       return $this->traitAlias($qualified_name);
     }
     $node = new TraitMethodReferenceNode();
@@ -2466,9 +2464,7 @@ class Parser {
    * @param ParentNode $parent
    */
   private function addSkipped(ParentNode $parent) {
-    foreach ($this->skipped as $node) {
-      $parent->appendChild($node);
-    }
+    $parent->appendChildren($this->skipped);
     $this->skipped = array();
   }
 

@@ -26,7 +26,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
     $tree = Parser::parseSnippet($snippet);
     $source = (string) $tree;
     $this->assertEquals($snippet, $source);
-    $first_child = $tree->children[0];
+    $first_child = $tree->getChild(0);
     $this->assertInstanceOf($expected_type, $first_child);
     return $first_child;
   }
@@ -36,7 +36,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
    */
   public function testParseEmpty() {
     $tree = Parser::parseSource('');
-    $this->assertEmpty($tree->children);
+    $this->assertEquals(0, $tree->getChildCount());
   }
 
   /**
@@ -44,10 +44,10 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
    */
   public function testParseBlank() {
     $tree = Parser::parseSource("<?php\n");
-    $this->assertNotEmpty($tree->children);
-    $this->assertInstanceOf('\Pharborist\TokenNode', $tree->children[0]);
+    $this->assertEquals(1, $tree->getChildCount());
+    $this->assertInstanceOf('\Pharborist\TokenNode', $tree->getChild(0));
     /** @var TokenNode $child */
-    $child = $tree->children[0];
+    $child = $tree->getChild(0);
     $this->assertEquals(T_OPEN_TAG, $child->getType());
   }
 
@@ -443,7 +443,7 @@ EOF;
     $statement_snippet = $expression . ';';
     /** @var ExpressionStatementNode $statement_node */
     $statement_node = $this->parseSnippet($statement_snippet, '\Pharborist\ExpressionStatementNode');
-    $expression_node = $statement_node->children[0];
+    $expression_node = $statement_node->getChild(0);
     $this->assertInstanceOf($expected_type, $expression_node);
     return $expression_node;
   }
@@ -676,5 +676,5 @@ EOF;
     $this->parseSnippet('function($a, $b) use ($x, $y) { };', '\Pharborist\ExpressionStatementNode');
     $this->parseSnippet('$f = function($a, $b) use ($x, $y) { };', '\Pharborist\ExpressionStatementNode');
   }
-  
+
 }

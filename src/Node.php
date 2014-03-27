@@ -6,9 +6,17 @@ namespace Pharborist;
  */
 abstract class Node {
   /**
-   * @var Node
+   * @var ParentNode
    */
-  public $parent = NULL;
+  protected $parent = NULL;
+
+  /**
+   * Get the parent node.
+   * @return ParentNode
+   */
+  public function getParent() {
+    return $this->parent;
+  }
 
   abstract public function getSourcePosition();
 }

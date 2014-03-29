@@ -4,6 +4,6 @@ namespace Pharborist;
 /**
  * An integer cast operation.
  */
-class IntegerCastNode extends BinaryOperationNode {
+class IntegerCastNode extends UnaryOperationNode {
 
 }

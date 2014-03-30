@@ -935,6 +935,9 @@ class Parser {
       }
       if ($op = $this->staticOperator()) {
         $expression_nodes[] = $op;
+        if ($op->type === T_INSTANCEOF) {
+          $expression_nodes[] = $this->classNameReference();
+        }
       }
       elseif ($operand = $this->staticOperand()) {
         $expression_nodes[] = $operand;
@@ -1058,6 +1061,9 @@ class Parser {
       }
       if ($op = $this->exprOperator()) {
         $expression_nodes[] = $op;
+        if ($op->type === T_INSTANCEOF) {
+          $expression_nodes[] = $this->classNameReference();
+        }
       }
       elseif ($operand = $this->exprOperand()) {
         $expression_nodes[] = $operand;

@@ -144,6 +144,9 @@ abstract class ParentNode extends Node {
       $matches[] = $this;
     }
     foreach ($this->children as $child) {
+      if ($child instanceof $type) {
+        $matches[] = $child;
+      }
       if ($child instanceof ParentNode) {
         $matches = array_merge($matches, $child->find($type));
       }

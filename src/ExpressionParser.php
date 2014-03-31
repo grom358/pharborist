@@ -108,6 +108,20 @@ class ExpressionParser {
         $operand = array_pop($this->operands);
         $this->operands[] = OperatorFactory::createPostfixOperatorNode($operand, $node);
       }
+      // Special case: handle = &
+      elseif ($node->type === '=') {
+        $this->expect('=');
+        $next = $this->next();
+        if ($next instanceof Operator && $next->type === '&') {
+          $by_ref_operator = $this->expect('&');
+          $assign_ref_operator = OperatorFactory::createAssignReferenceOperator($node, $by_ref_operator);
+          $this->pushOperator($assign_ref_operator, Operator::MODE_BINARY);
+        }
+        else {
+          $this->pushOperator($node, Operator::MODE_BINARY);
+        }
+        $this->P();
+      }
       elseif ($node->hasBinaryMode) {
         $this->pushOperator($node, Operator::MODE_BINARY);
         $this->consume();
@@ -125,20 +139,7 @@ class ExpressionParser {
   private function P() {
     $node = $this->next();
     if ($node instanceof Operator) {
-      if ($node->type === '&') {
-        $last = self::arrayLast($this->operators);
-        if ($last->type === '=') {
-          $node->associativity = Operator::ASSOC_RIGHT;
-          $node->precedence = $last->precedence;
-          $this->pushOperator($node, Operator::MODE_UNARY);
-          $this->consume();
-          $this->P();
-        }
-        else {
-          throw new ParserException($node->getSourcePosition(), 'unexpected & operator!');
-        }
-      }
-      elseif ($node->hasUnaryMode) {
+      if ($node->hasUnaryMode) {
         $this->pushOperator($node, Operator::MODE_UNARY);
         $this->consume();
         $this->P();

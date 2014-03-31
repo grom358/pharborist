@@ -113,6 +113,23 @@ class OperatorFactory {
   }
 
   /**
+   * @param Operator $assign_operator
+   * @param Operator $by_ref_operator
+   * @return Operator
+   */
+  public static function createAssignReferenceOperator(Operator $assign_operator, Operator $by_ref_operator) {
+    $operator = new Operator();
+    $operator->mergeNode($assign_operator);
+    $operator->mergeNode($by_ref_operator);
+    $operator->associativity = Operator::ASSOC_RIGHT;
+    $operator->precedence = 4;
+    $operator->hasBinaryMode = TRUE;
+    $operator->hasUnaryMode = FALSE;
+    $operator->binaryClassName = '\Pharborist\AssignReferenceNode';
+    return $operator;
+  }
+
+  /**
    * @param Operator $operator
    * @param Node $operand
    * @return UnaryOperationNode

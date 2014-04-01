@@ -6,6 +6,11 @@ namespace Pharborist;
  */
 class ClassMethodNode extends ParentNode {
   /**
+   * @var DocCommentNode
+   */
+  public $docComment;
+
+  /**
    * @var ModifiersNode
    */
   public $modifiers;

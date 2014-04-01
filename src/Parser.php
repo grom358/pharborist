@@ -13,7 +13,7 @@ class Parser {
 
   /**
    * The previously parsed document comment.
-   * @var Node
+   * @var DocCommentNode
    */
   private $docComment = NULL;
 
@@ -222,6 +222,7 @@ class Parser {
    */
   private function _const() {
     $node = new ConstantDeclarationStatementNode();
+    $node->docComment = $this->docComment;
     $this->mustMatch(T_CONST, $node);
     do {
       $node->declarations[] = $node->appendChild($this->constDeclaration());
@@ -354,6 +355,7 @@ class Parser {
    */
   private function exprStatement() {
     $node = new ExpressionStatementNode();
+    $node->docComment = $this->docComment;
     $node->appendChild($this->expr());
     $this->mustMatch(';', $node, TRUE);
     return $node;
@@ -1229,6 +1231,7 @@ class Parser {
         else {
           $node = new RequireOnceNode();
         }
+        $node->docComment = $this->docComment;
         $this->mustMatch($token_type, $node);
         $node->expression = $node->appendChild($this->expr());
         return $node;
@@ -1712,7 +1715,13 @@ class Parser {
    * @return Node
    */
   private function functionCall(Node $function_reference) {
-    $node = new FunctionCallNode();
+    if ($function_reference instanceof NamespacePathNode && $function_reference->getChildCount() === 1 && $function_reference == 'define') {
+      $node = new DefineNode();
+      $node->docComment = $this->docComment;
+    }
+    else {
+      $node = new FunctionCallNode();
+    }
     $node->functionReference = $node->appendChild($function_reference);
     $this->functionCallParameterList($node);
     return $this->objectDereference($this->arrayDeference($node));
@@ -1919,6 +1928,7 @@ class Parser {
    */
   private function functionDeclaration() {
     $node = new FunctionDeclarationNode();
+    $node->docComment = $this->docComment;
     $this->mustMatch(T_FUNCTION, $node);
     $node->reference = $this->tryMatch('&', $node);
     $node->name = $this->mustMatch(T_STRING, $node);
@@ -2064,6 +2074,7 @@ class Parser {
    */
   private function _namespace() {
     $node = new NamespaceNode();
+    $node->docComment = $this->docComment;
     $this->mustMatch(T_NAMESPACE, $node);
     if ($this->isTokenType(T_STRING)) {
       $node->name = $node->appendChild($this->namespaceName());
@@ -2131,6 +2142,7 @@ class Parser {
    */
   private function classDeclaration() {
     $node = new ClassNode();
+    $node->docComment = $this->docComment;
     if ($abstract = $this->tryMatch(T_ABSTRACT, $node)) {
       $node->abstract = $abstract;
     }
@@ -2165,12 +2177,13 @@ class Parser {
   private function classStatement($is_abstract) {
     if ($this->isTokenType(T_FUNCTION)) {
       $modifiers = new ModifiersNode();
-      return $this->classMethod($modifiers);
+      return $this->classMethod($this->docComment, $modifiers);
     }
     elseif ($this->isTokenType(T_VAR)) {
+      $doc_comment = $this->docComment;
       $modifiers = new ModifiersNode();
       $modifiers->visibility = $this->mustMatch(T_VAR, $modifiers);
-      return $this->classMemberList($modifiers);
+      return $this->classMemberList($doc_comment, $modifiers);
     }
     elseif ($this->isTokenType(T_CONST)) {
       return $this->_const();
@@ -2179,6 +2192,7 @@ class Parser {
       return $this->traitUse();
     }
     // Match modifiers
+    $doc_comment = $this->docComment;
     $modifiers = new ModifiersNode();
     while ($this->iterator->hasNext()) {
       switch ($this->getTokenType()) {
@@ -2230,9 +2244,9 @@ class Parser {
           $modifiers->abstract = $this->mustMatch(T_ABSTRACT, $modifiers);
           break;
         case T_FUNCTION:
-          return $this->classMethod($modifiers);
+          return $this->classMethod($doc_comment, $modifiers);
         case T_VARIABLE:
-          return $this->classMemberList($modifiers);
+          return $this->classMemberList($doc_comment, $modifiers);
         default:
           throw new ParserException(
             $this->iterator->getSourcePosition(),
@@ -2246,11 +2260,12 @@ class Parser {
 
   /**
    * Parse a class member list.
+   * @param DocCommentNode $doc_comment DocBlock associated with method
    * @param ModifiersNode $modifiers Member modifiers
    * @return ClassMemberListNode
    * @throws ParserException
    */
-  private function classMemberList(ModifiersNode $modifiers) {
+  private function classMemberList(DocCommentNode $doc_comment, ModifiersNode $modifiers) {
     // Modifier checks
     if ($modifiers->abstract) {
       throw new ParserException(
@@ -2263,6 +2278,7 @@ class Parser {
         "members can not be declared final");
     }
     $node = new ClassMemberListNode();
+    $node->docComment = $doc_comment;
     $node->modifiers = $node->appendChild($modifiers);
     do {
       $node->members[] = $node->appendChild($this->classMember());
@@ -2286,11 +2302,13 @@ class Parser {
 
   /**
    * Parse a class method
+   * @param DocCommentNode $doc_comment DocBlock associated with method
    * @param ModifiersNode $modifiers Method modifiers
    * @return ClassMethodNode
    */
-  private function classMethod(ModifiersNode $modifiers) {
+  private function classMethod(DocCommentNode $doc_comment, ModifiersNode $modifiers) {
     $node = new ClassMethodNode();
+    $node->docComment = $doc_comment;
     $node->modifiers = $modifiers;
     $node->appendChild($modifiers);
     $this->mustMatch(T_FUNCTION, $node);
@@ -2383,6 +2401,7 @@ class Parser {
    */
   private function interfaceDeclaration() {
     $node = new InterfaceNode();
+    $node->docComment = $this->docComment;
     $this->mustMatch(T_INTERFACE, $node);
     $node->name = $this->mustMatch(T_STRING, $node);
     if ($this->tryMatch(T_EXTENDS, $node)) {
@@ -2410,6 +2429,7 @@ class Parser {
    */
   private function interfaceMethod() {
     $node = new InterfaceMethodNode();
+    $node->docComment = $this->docComment;
     $is_static = $this->tryMatch(T_STATIC, $node);
     while ($this->isTokenType(T_PUBLIC, T_PROTECTED, T_PRIVATE)) {
       if ($node->visibility) {
@@ -2436,6 +2456,7 @@ class Parser {
    */
   private function traitDeclaration() {
     $node = new TraitNode();
+    $node->docComment = $this->docComment;
     $this->mustMatch(T_TRAIT, $node);
     $node->name = $this->mustMatch(T_STRING, $node);
     if ($this->tryMatch(T_EXTENDS, $node)) {
@@ -2554,6 +2575,7 @@ class Parser {
     }
     foreach (func_get_args() as $expected_type) {
       if ($expected_type === $token->getType()) {
+        $this->docComment = NULL;
         $this->iterator->next();
         return $token;
       }
@@ -2573,6 +2595,7 @@ class Parser {
         $this->iterator->getSourcePosition(),
         'expected ' . TokenNode::typeName($expected_type));
     }
+    $this->docComment = NULL;
     $this->iterator->next();
     return $token;
   }

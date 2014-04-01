@@ -7,5 +7,8 @@ namespace Pharborist;
  * For example, expr();
  */
 class ExpressionStatementNode extends StatementNode {
-
+  /**
+   * @var DocCommentNode
+   */
+  public $docComment;
 }

@@ -6,6 +6,11 @@ namespace Pharborist;
  */
 class InterfaceMethodNode extends ParentNode {
   /**
+   * @var DocCommentNode
+   */
+  public $docComment;
+
+  /**
    * @var Node
    */
   public $visibility;

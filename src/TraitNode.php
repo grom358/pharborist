@@ -6,6 +6,11 @@ namespace Pharborist;
  */
 class TraitNode extends StatementNode {
   /**
+   * @var DocCommentNode
+   */
+  public $docComment;
+
+  /**
    * @var Node
    */
   public $name;

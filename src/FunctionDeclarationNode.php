@@ -6,6 +6,11 @@ namespace Pharborist;
  */
 class FunctionDeclarationNode extends StatementNode {
   /**
+   * @var DocCommentNode
+   */
+  public $docComment;
+
+  /**
    * @var Node
    */
   public $reference;

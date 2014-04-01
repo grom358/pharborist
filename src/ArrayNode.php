@@ -4,7 +4,7 @@ namespace Pharborist;
 /**
  * Node for php array.
  */
-class ArrayNode extends ParentNode {
+class ArrayNode extends ParentNode implements ExpressionNode {
   /**
    * @var Node[]
    */

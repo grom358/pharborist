@@ -4,7 +4,7 @@ namespace Pharborist;
 /**
  * A yield expression.
  */
-class YieldNode extends ParentNode {
+class YieldNode extends ParentNode implements ExpressionNode {
   /**
    * @var Node
    */

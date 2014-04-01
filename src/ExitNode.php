@@ -4,7 +4,7 @@ namespace Pharborist;
 /**
  * An exit.
  */
-class ExitNode extends ParentNode {
+class ExitNode extends ParentNode implements ExpressionNode {
   /**
    * @var Node
    */

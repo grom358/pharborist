@@ -6,7 +6,7 @@ namespace Pharborist;
  */
 class WhileNode extends StatementNode {
   /**
-   * @var Node
+   * @var ExpressionNode
    */
   public $condition;
 

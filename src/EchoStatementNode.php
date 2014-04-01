@@ -6,7 +6,7 @@ namespace Pharborist;
  */
 class EchoStatementNode extends StatementNode {
   /**
-   * @var Node[]
+   * @var ExpressionNode[]
    */
   public $expressions = array();
 }

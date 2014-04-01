@@ -4,9 +4,9 @@ namespace Pharborist;
 /**
  * A binary operation.
  */
-abstract class BinaryOperationNode extends ParentNode {
+abstract class BinaryOperationNode extends ParentNode implements ExpressionNode {
   /**
-   * @var Node
+   * @var ExpressionNode
    */
   public $left;
 
@@ -16,7 +16,7 @@ abstract class BinaryOperationNode extends ParentNode {
   public $operator;
 
   /**
-   * @var Node
+   * @var ExpressionNode
    */
   public $right;
 }

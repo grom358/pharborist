@@ -6,7 +6,7 @@ namespace Pharborist;
  */
 class DoWhileNode extends StatementNode {
   /**
-   * @var Node
+   * @var ExpressionNode
    */
   public $condition;
 

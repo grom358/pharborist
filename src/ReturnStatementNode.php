@@ -7,7 +7,7 @@ namespace Pharborist;
 class ReturnStatementNode extends StatementNode {
   /**
    * An optional value to return.
-   * @var Node
+   * @var ExpressionNode
    */
   public $value;
 }

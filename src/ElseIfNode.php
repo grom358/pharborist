@@ -6,7 +6,7 @@ namespace Pharborist;
  */
 class ElseIfNode extends ParentNode {
   /**
-   * @var Node
+   * @var ExpressionNode
    */
   public $condition;
 

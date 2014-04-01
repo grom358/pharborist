@@ -4,6 +4,6 @@ namespace Pharborist;
 /**
  * A heredoc.
  */
-class HeredocNode extends ParentNode {
+class HeredocNode extends ParentNode implements ExpressionNode {
 
 }

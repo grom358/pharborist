@@ -6,7 +6,7 @@ namespace Pharborist;
  *
  * For example, MyClass::class
  */
-class ClassNameScalarNode extends ParentNode {
+class ClassNameScalarNode extends ParentNode implements ExpressionNode {
   /**
    * @var Node
    */

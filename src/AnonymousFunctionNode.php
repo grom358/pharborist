@@ -4,7 +4,7 @@ namespace Pharborist;
 /**
  * An anonymous function.
  */
-class AnonymousFunctionNode extends ParentNode {
+class AnonymousFunctionNode extends ParentNode implements ExpressionNode {
   /**
    * @var Node
    */

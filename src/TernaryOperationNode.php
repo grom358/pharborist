@@ -6,7 +6,7 @@ namespace Pharborist;
  *
  * For example, $condition ? $then : $else
  */
-class TernaryOperationNode extends ParentNode {
+class TernaryOperationNode extends ParentNode implements ExpressionNode {
   /**
    * @var Node
    */

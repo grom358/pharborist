@@ -6,7 +6,7 @@ namespace Pharborist;
  */
 class IfNode extends StatementNode {
   /**
-   * @var Node
+   * @var ExpressionNode
    */
   public $condition;
 
@@ -16,7 +16,7 @@ class IfNode extends StatementNode {
   public $then;
 
   /**
-   * @var Node[]
+   * @var ElseIfNode[]
    */
   public $elseIfList = array();
 

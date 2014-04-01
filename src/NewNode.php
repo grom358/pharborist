@@ -6,7 +6,7 @@ namespace Pharborist;
  *
  * For example, new MyClass()
  */
-class NewNode extends ParentNode {
+class NewNode extends ParentNode implements ExpressionNode {
   /**
    * @var NamespacePathNode
    */

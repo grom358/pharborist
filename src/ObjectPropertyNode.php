@@ -6,7 +6,7 @@ namespace Pharborist;
  *
  * For example, $object->property
  */
-class ObjectPropertyNode extends ParentNode {
+class ObjectPropertyNode extends ParentNode implements ExpressionNode {
   /**
    * @var Node
    */

@@ -6,7 +6,7 @@ namespace Pharborist;
  *
  * For example: MyClass::MY_CONST
  */
-class ClassConstantLookupNode extends ParentNode {
+class ClassConstantLookupNode extends ParentNode implements ExpressionNode {
   /**
    * @var Node
    */

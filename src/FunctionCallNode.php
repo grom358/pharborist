@@ -4,14 +4,14 @@ namespace Pharborist;
 /**
  * A function call.
  */
-class FunctionCallNode extends ParentNode {
+class FunctionCallNode extends ParentNode implements ExpressionNode {
   /**
    * @var Node
    */
   public $functionReference;
 
   /**
-   * @var Node[]
+   * @var ExpressionNode[]
    */
   public $arguments = array();
 }

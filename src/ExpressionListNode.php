@@ -3,7 +3,7 @@ namespace Pharborist;
 
 class ExpressionListNode extends ParentNode {
   /**
-   * @var Node[]
+   * @var ExpressionNode[]
    */
   public $expressions = array();
 }

@@ -4,9 +4,9 @@ namespace Pharborist;
 /**
  * An include.
  */
-class IncludeNode extends ParentNode {
+class IncludeNode extends ParentNode implements ExpressionNode {
   /**
-   * @var Node
+   * @var ExpressionNode
    */
   public $expression;
 }

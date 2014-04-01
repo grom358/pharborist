@@ -4,14 +4,14 @@ namespace Pharborist;
 /**
  * An unary operation.
  */
-abstract class UnaryOperationNode extends ParentNode {
+abstract class UnaryOperationNode extends ParentNode implements ExpressionNode {
   /**
    * @var Node
    */
   public $operator;
 
   /**
-   * @var Node
+   * @var ExpressionNode
    */
   public $operand;
 }

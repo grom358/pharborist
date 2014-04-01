@@ -755,7 +755,7 @@ class Parser {
 
   /**
    * Parse a foreach variable.
-   * @return ReferenceVariableNode
+   * @return Node
    */
   private function foreachVariable() {
     if ($this->isTokenType(T_LIST)) {

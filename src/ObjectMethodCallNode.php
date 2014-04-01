@@ -6,7 +6,7 @@ namespace Pharborist;
  *
  * For example, $object->method()
  */
-class ObjectMethodCallNode extends ParentNode {
+class ObjectMethodCallNode extends ParentNode implements ExpressionNode {
   /**
    * @var Node
    */
@@ -18,7 +18,7 @@ class ObjectMethodCallNode extends ParentNode {
   public $methodName;
 
   /**
-   * @var Node[]
+   * @var ExpressionNode[]
    */
   public $arguments = array();
 }

@@ -6,6 +6,6 @@ namespace Pharborist;
  *
  * For example, 'hello world'
  */
-class StringNode extends TokenNode {
+class StringNode extends TokenNode implements ExpressionNode {
 
 }

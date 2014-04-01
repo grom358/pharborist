@@ -6,7 +6,7 @@ namespace Pharborist;
  *
  * For example $array[0]
  */
-class ArrayLookupNode extends ParentNode {
+class ArrayLookupNode extends ParentNode implements ExpressionNode {
   /**
    * @var Node
    */

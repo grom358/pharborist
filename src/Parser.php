@@ -354,7 +354,6 @@ class Parser {
    */
   private function exprStatement() {
     $node = new ExpressionStatementNode();
-    $this->matchHidden($node);
     $node->appendChild($this->expr());
     $this->mustMatch(';', $node, TRUE);
     return $node;

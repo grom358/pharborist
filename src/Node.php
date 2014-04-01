@@ -18,5 +18,21 @@ abstract class Node {
     return $this->parent;
   }
 
+  /**
+   * Get the ancestor of given type.
+   * @param string $type
+   * @return ParentNode
+   */
+  public function getAncestor($type) {
+    $ancestor = $this->parent;
+    while ($ancestor !== NULL) {
+      if ($ancestor instanceof $type) {
+        return $ancestor;
+      }
+      $ancestor = $ancestor->parent;
+    }
+    return NULL;
+  }
+
   abstract public function getSourcePosition();
 }

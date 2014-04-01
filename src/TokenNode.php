@@ -75,6 +75,15 @@ class TokenNode extends Node {
   }
 
   /**
+   * @param string $text
+   * @return $this
+   */
+  public function setText($text) {
+    $this->text = $text;
+    return $this;
+  }
+
+  /**
    * @return string
    */
   public function __toString() {

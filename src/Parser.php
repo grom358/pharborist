@@ -1256,8 +1256,22 @@ class Parser {
         return $node;
       case T_FUNCTION:
         return $this->anonymousFunction();
+      case '`':
+        return $this->backtick();
     }
     throw new ParserException($this->iterator->getSourcePosition(), "expression operand");
+  }
+
+  /**
+   * Parse a backtick expression.
+   * @return BacktickNode
+   */
+  private function backtick() {
+    $node = new BacktickNode();
+    $this->mustMatch('`', $node);
+    $this->encapsList($node, '`', TRUE);
+    $this->mustMatch('`', $node, TRUE);
+    return $node;
   }
 
   /**
@@ -1458,7 +1472,7 @@ class Parser {
 
   /**
    * Parse an encaps list.
-   * @param ComplexStringNode|HeredocNode $node Interpolated string.
+   * @param ComplexStringNode|HeredocNode|BacktickNode $node Interpolated string.
    * @param int|string $terminator Token type that terminates the encaps list
    * @param bool $encaps_whitespace_allowed
    */

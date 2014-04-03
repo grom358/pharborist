@@ -6,6 +6,16 @@ namespace Pharborist;
  */
 class Parser {
   /**
+   * @var array
+   */
+  private static $namespacePathTypes = [T_STRING, T_NS_SEPARATOR, T_NAMESPACE];
+
+  /**
+   * @var array
+   */
+  private static $visibilityTypes = [T_PUBLIC, T_PROTECTED, T_PRIVATE];
+
+  /**
    * Iterator over PHP tokens.
    * @var TokenIterator
    */
@@ -19,7 +29,7 @@ class Parser {
 
   /**
    * Array of skipped hidden tokens.
-   * @var Node[]
+   * @var TokenNode[]
    */
   private $skipped = [];
 
@@ -34,6 +44,16 @@ class Parser {
    * @var ExpressionParser
    */
   private $expressionParser;
+
+  /**
+   * @var TokenNode
+   */
+  private $current;
+
+  /**
+   * @var int
+   */
+  private $currentType;
 
   /**
    * Constructor.
@@ -65,6 +85,8 @@ class Parser {
    */
   public function buildTree(TokenIterator $iterator) {
     $this->iterator = $iterator;
+    $this->current = $this->iterator->current();
+    $this->currentType = $this->current ? $this->current->getType() : NULL;
     $top = new StatementBlockNode();
     $this->top = $top;
     // Parse any template statements that proceed the opening PHP tag.
@@ -124,14 +146,14 @@ class Parser {
    * @throws ParserException
    */
   private function templateStatementList(ParentNode $node) {
-    while ($this->iterator->hasNext()) {
-      if ($this->isTokenType(T_OPEN_TAG)) {
+    while ($this->current) {
+      if ($this->currentType === T_OPEN_TAG) {
         return;
       }
-      if ($child = $this->tryMatchToken(T_INLINE_HTML)) {
-        $node->appendChild($child);
+      elseif ($this->currentType === T_INLINE_HTML) {
+        $node->appendChild($this->mustMatchToken(T_INLINE_HTML));
       }
-      elseif ($child = $this->tryMatchToken(T_OPEN_TAG_WITH_ECHO)) {
+      elseif ($this->currentType === T_OPEN_TAG_WITH_ECHO) {
         $node->appendChild($this->echoTagStatement());
       }
       else {
@@ -160,9 +182,7 @@ class Parser {
    */
   private function topStatementList(StatementBlockNode $node, $terminator = '') {
     $this->matchHidden($node);
-    while ($this->iterator->hasNext() &&
-      !$this->isTokenType($terminator) &&
-      ($statement = $this->topStatement())) {
+    while ($this->currentType !== NULL && $this->currentType !== $terminator && ($statement = $this->topStatement())) {
       $node->statements[] = $node->appendChild($statement);
       $this->matchHidden($node);
     }
@@ -185,7 +205,7 @@ class Parser {
    * @return Node
    */
   private function topStatement() {
-    switch ($this->getTokenType()) {
+    switch ($this->currentType) {
       case T_USE:
         return $this->_use();
       case T_CONST:
@@ -206,10 +226,10 @@ class Parser {
         $this->mustMatch(';', $node);
         return $node;
       default:
-        if ($this->getTokenType() === T_FUNCTION && $this->isLookAhead(T_STRING, '&')) {
+        if ($this->currentType === T_FUNCTION && $this->isLookAhead(T_STRING, '&')) {
           return $this->functionDeclaration();
         }
-        elseif ($this->getTokenType() === T_NAMESPACE && !$this->isLookAhead(T_NS_SEPARATOR)) {
+        elseif ($this->currentType === T_NAMESPACE && !$this->isLookAhead(T_NS_SEPARATOR)) {
           return $this->_namespace();
         }
         return $this->statement();
@@ -249,7 +269,7 @@ class Parser {
    * @return Node
    */
   private function statement() {
-    switch ($this->getTokenType()) {
+    switch ($this->currentType) {
       case T_CLOSE_TAG:
         // A close tag escapes into template mode.
         $node = new TemplateNode();
@@ -368,7 +388,7 @@ class Parser {
   private function parenExpr() {
     $node = new ParenthesisNode();
     $this->mustMatch('(', $node);
-    if ($this->isTokenType(T_YIELD)) {
+    if ($this->currentType === T_YIELD) {
       $node->appendChild($this->_yield());
     }
     else {
@@ -388,7 +408,7 @@ class Parser {
     $node->condition = $node->appendChild($this->parenExpr());
     if ($this->tryMatch(':', $node)) {
       $node->then = $node->appendChild($this->innerIfInnerStatementList());
-      while ($this->isTokenType(T_ELSEIF)) {
+      while ($this->currentType === T_ELSEIF) {
         $elseIf = new ElseIfNode();
         $this->mustMatch(T_ELSEIF, $elseIf);
         $elseIf->condition = $elseIf->appendChild($this->parenExpr());
@@ -407,7 +427,7 @@ class Parser {
     else {
       $this->matchHidden($node);
       $node->appendChild($this->statement());
-      while ($this->isTokenType(T_ELSEIF)) {
+      while ($this->currentType === T_ELSEIF) {
         $elseIf = new ElseIfNode();
         $this->mustMatch(T_ELSEIF, $elseIf);
         $elseIf->condition = $elseIf->appendChild($this->parenExpr());
@@ -427,9 +447,10 @@ class Parser {
    * @return Node
    */
   private function innerIfInnerStatementList() {
+    static $terminators = [T_ELSEIF, T_ELSE, T_ENDIF];
     $node = new StatementBlockNode();
     $this->matchHidden($node);
-    while ($this->iterator->hasNext() && !$this->isTokenType(T_ELSEIF, T_ELSE, T_ENDIF)) {
+    while ($this->currentType !== NULL && !in_array($this->currentType, $terminators)) {
       $node->statements[] = $node->appendChild($this->innerStatement());
       $this->matchHidden($node);
     }
@@ -521,7 +542,7 @@ class Parser {
     $node->switchOn = $node->appendChild($this->parenExpr());
     if ($this->tryMatch(':', $node)) {
       $this->tryMatch(';', $node);
-      while ($this->iterator->hasNext() && !$this->isTokenType(T_ENDSWITCH)) {
+      while ($this->currentType !== NULL && $this->currentType !== T_ENDSWITCH) {
         $node->cases[] = $node->appendChild($this->caseStatement(T_ENDSWITCH));
       }
       $this->mustMatch(T_ENDSWITCH, $node);
@@ -531,7 +552,7 @@ class Parser {
     else {
       $this->mustMatch('{', $node);
       $this->tryMatch(';', $node);
-      while ($this->iterator->hasNext() && !$this->isTokenType('}')) {
+      while ($this->currentType !== NULL && $this->currentType !== '}') {
         $node->cases[] = $node->appendChild($this->caseStatement('}'));
       }
       $this->mustMatch('}', $node, TRUE);
@@ -546,7 +567,7 @@ class Parser {
    * @throws ParserException
    */
   private function caseStatement($terminator) {
-    if ($this->isTokenType(T_CASE)) {
+    if ($this->currentType === T_CASE) {
       $node = new CaseNode();
       $this->mustMatch(T_CASE, $node);
       $node->matchOn = $node->appendChild($this->expr(TRUE));
@@ -556,7 +577,7 @@ class Parser {
       $node->body = $node->appendChild($this->innerCaseStatementList($terminator));
       return $node;
     }
-    elseif ($this->isTokenType(T_DEFAULT)) {
+    elseif ($this->currentType === T_DEFAULT) {
       $node = new DefaultNode();
       $this->mustMatch(T_DEFAULT, $node);
       if (!$this->tryMatch(':', $node, TRUE) && !$this->tryMatch(';', $node, TRUE)) {
@@ -574,9 +595,10 @@ class Parser {
    * @return Node
    */
   private function innerCaseStatementList($terminator) {
+    static $terminators = [T_CASE, T_DEFAULT];
     $node = new StatementBlockNode();
     $this->matchHidden($node);
-    while ($this->iterator->hasNext() && !$this->isTokenType($terminator, T_CASE, T_DEFAULT)) {
+    while ($this->currentType !== NULL && $this->currentType !== $terminator && !in_array($this->currentType, $terminators)) {
       $node->statements[] = $node->appendChild($this->innerStatement());
       $this->matchHidden($node);
     }
@@ -677,10 +699,10 @@ class Parser {
    * @throws ParserException
    */
   private function globalVar() {
-    if ($var = $this->tryMatchToken(T_VARIABLE)) {
-      return $var;
+    if ($this->currentType === T_VARIABLE) {
+      return $this->mustMatchToken(T_VARIABLE);
     }
-    elseif ($this->isTokenType('$')) {
+    elseif ($this->currentType === '$') {
       if ($this->isLookAhead('{')) {
         return $this->_compoundVariable();
       }
@@ -759,11 +781,11 @@ class Parser {
    * @return Node
    */
   private function foreachVariable() {
-    if ($this->isTokenType(T_LIST)) {
+    if ($this->currentType === T_LIST) {
       return $this->_list();
     }
     else {
-      if ($this->isTokenType('&')) {
+      if ($this->currentType === '&') {
         return $this->writeVariable();
       }
       else {
@@ -784,7 +806,7 @@ class Parser {
       if ($this->tryMatch(')', $node, TRUE)) {
         return $node;
       }
-      if (!$this->isTokenType(',')) {
+      if ($this->currentType !== ',') {
         $node->arguments[] = $node->appendChild($this->listElement());
       }
     } while ($this->tryMatch(',', $node));
@@ -797,7 +819,7 @@ class Parser {
    * @return Node
    */
   private function listElement() {
-    if ($this->isTokenType(T_LIST)) {
+    if ($this->currentType === T_LIST) {
       return $this->_list();
     }
     else {
@@ -902,8 +924,9 @@ class Parser {
    * @throws ParserException
    */
   private function staticScalar() {
+    static $terminators = [';', ',', ')', T_DOUBLE_ARROW];
     // Handle static array
-    if ($this->isTokenType(T_ARRAY)) {
+    if ($this->currentType === T_ARRAY) {
       $node = new ArrayNode();
       $this->mustMatch(T_ARRAY, $node);
       $this->mustMatch('(', $node);
@@ -911,7 +934,7 @@ class Parser {
       $this->mustMatch(')', $node, TRUE);
       return $node;
     }
-    elseif ($this->isTokenType('[')) {
+    elseif ($this->currentType === '[') {
       $node = new ArrayNode();
       $this->mustMatch('[', $node);
       $this->staticArrayPairList($node, ']');
@@ -922,12 +945,12 @@ class Parser {
     // Group tokens into operands & operators to pass to the expression parser
     $expression_nodes = array();
     $ternary_count = 0;
-    while ($this->iterator->hasNext() && !$this->isTokenType(';', ',', ')', T_DOUBLE_ARROW)) {
+    while ($this->currentType !== NULL && !in_array($this->currentType, $terminators)) {
       // Check balance of ? and : symbols for ternary operators
-      if ($this->isTokenType('?')) {
+      if ($this->currentType === '?') {
         $ternary_count++;
       }
-      elseif ($this->isTokenType(':')) {
+      elseif ($this->currentType === ':') {
         $ternary_count--;
         if ($ternary_count < 0) {
           throw new ParserException($this->iterator->getSourcePosition(),
@@ -955,7 +978,7 @@ class Parser {
    * @return Operator
    */
   private function staticOperator() {
-    $token_type = $this->getTokenType();
+    $token_type = $this->currentType;
     if ($operator = OperatorFactory::createOperator($token_type, TRUE)) {
       $operator->operatorNode = $this->mustMatch($token_type, $operator);
       return $operator;
@@ -968,7 +991,7 @@ class Parser {
    * @return Node
    */
   private function staticOperand() {
-    if ($scalar = $this->tryMatchToken(
+    static $scalar_types = [
       T_STRING_VARNAME,
       T_CLASS_C,
       T_LNUMBER,
@@ -980,23 +1003,24 @@ class Parser {
       T_TRAIT_C,
       T_METHOD_C,
       T_FUNC_C,
-      T_NS_C
-    )) {
+      T_NS_C,
+    ];
+    if ($scalar = $this->tryMatchToken($scalar_types)) {
       return $scalar;
     }
-    elseif ($this->isTokenType('(')) {
+    elseif ($this->currentType === '(') {
       $node = new ParenthesisNode();
       $this->mustMatch('(', $node);
       $node->appendChild($this->staticScalar());
       $this->mustMatch(')', $node, TRUE);
       return $node;
     }
-    elseif ($this->isTokenType(T_STRING, T_NAMESPACE, T_NS_SEPARATOR)) {
+    elseif (in_array($this->currentType, self::$namespacePathTypes)) {
       $namespace_path = $this->namespacePath();
-      if ($this->isTokenType(T_DOUBLE_COLON)) {
+      if ($this->currentType === T_DOUBLE_COLON) {
         $colon_node = new PartialNode();
         $this->mustMatch(T_DOUBLE_COLON, $colon_node);
-        if ($this->isTokenType(T_CLASS)) {
+        if ($this->currentType === T_CLASS) {
           return $this->classNameScalar($namespace_path, $colon_node);
         }
         else {
@@ -1008,11 +1032,11 @@ class Parser {
         return $namespace_path;
       }
     }
-    elseif ($this->isTokenType(T_STATIC)) {
+    elseif ($this->currentType === T_STATIC) {
       $static_node = $this->mustMatchToken(T_STATIC);
       $colon_node = new PartialNode();
       $this->mustMatch(T_DOUBLE_COLON, $colon_node);
-      if ($this->isTokenType(T_CLASS)) {
+      if ($this->currentType === T_CLASS) {
         return $this->classNameScalar($static_node, $colon_node);
       }
       else {
@@ -1020,7 +1044,7 @@ class Parser {
         return $this->classConstant($static_node, $colon_node, $class_constant);
       }
     }
-    elseif ($this->isTokenType(T_START_HEREDOC)) {
+    elseif ($this->currentType === T_START_HEREDOC) {
       $node = new HeredocNode();
       $this->mustMatch(T_START_HEREDOC, $node);
       if ($this->tryMatch(T_END_HEREDOC, $node)) {
@@ -1042,15 +1066,16 @@ class Parser {
    * @throws ParserException
    */
   private function expr($is_case = FALSE) {
+    static $end_expression_types = [';', ',', ')', ']', '}', T_AS, T_DOUBLE_ARROW];
     // Group tokens into operands & operators to pass to the expression parser
     $expression_nodes = array();
     $ternary_count = 0;
-    while ($this->iterator->hasNext() && !$this->isTokenType(';', ',', ')', ']', '}', T_AS, T_DOUBLE_ARROW)) {
+    while ($this->currentType !== NULL && !in_array($this->currentType, $end_expression_types)) {
       // Check balance of ? and : symbols for ternary operators
-      if ($this->isTokenType('?')) {
+      if ($this->currentType === '?') {
         $ternary_count++;
       }
-      elseif ($this->isTokenType(':')) {
+      elseif ($this->currentType === ':') {
         $ternary_count--;
         if ($ternary_count < 0) {
           if ($is_case) {
@@ -1081,7 +1106,7 @@ class Parser {
    * @return Operator
    */
   private function exprOperator() {
-    $token_type = $this->getTokenType();
+    $token_type = $this->currentType;
     if ($operator = OperatorFactory::createOperator($token_type)) {
       $operator->operatorNode = $this->mustMatch($token_type, $operator);
       return $operator;
@@ -1095,7 +1120,7 @@ class Parser {
    * @throws ParserException
    */
   private function exprOperand() {
-    switch ($this->getTokenType()) {
+    switch ($this->currentType) {
       case T_STRING_VARNAME:
       case T_CLASS_C:
       case T_LNUMBER:
@@ -1108,7 +1133,7 @@ class Parser {
       case T_FUNC_C:
       case T_NS_C:
       case T_YIELD:
-        return $this->mustMatchToken($this->getTokenType());
+        return $this->mustMatchToken($this->currentType);
       case T_CONSTANT_ENCAPSED_STRING:
         return $this->arrayDeference($this->mustMatchToken(T_CONSTANT_ENCAPSED_STRING));
       case T_ARRAY:
@@ -1127,12 +1152,12 @@ class Parser {
       case '(':
         $node = new ParenthesisNode();
         $this->mustMatch('(', $node);
-        if ($this->isTokenType(T_NEW)) {
+        if ($this->currentType === T_NEW) {
           $node->appendChild($this->newExpr());
           $this->mustMatch(')', $node, TRUE);
           $node = $this->objectDereference($this->arrayDeference($node));
         }
-        elseif ($this->isTokenType(T_YIELD)) {
+        elseif ($this->currentType === T_YIELD) {
           $node->appendChild($this->_yield());
           $this->mustMatch(')', $node, TRUE);
         }
@@ -1162,10 +1187,10 @@ class Parser {
       case T_NS_SEPARATOR:
       case T_NAMESPACE:
         $namespace_path = $this->namespacePath();
-        if ($this->isTokenType(T_DOUBLE_COLON)) {
+        if ($this->currentType === T_DOUBLE_COLON) {
           return $this->exprClass($namespace_path);
         }
-        elseif ($this->isTokenType('(')) {
+        elseif ($this->currentType === '(') {
           return $this->functionCall($namespace_path);
         }
         else {
@@ -1173,7 +1198,7 @@ class Parser {
         }
       case T_STATIC:
         $static = $this->mustMatchToken(T_STATIC);
-        if ($this->isTokenType(T_FUNCTION)) {
+        if ($this->currentType === T_FUNCTION) {
           return $this->anonymousFunction($static);
         } else {
           return $this->exprClass($static);
@@ -1181,10 +1206,10 @@ class Parser {
       case '$':
       case T_VARIABLE:
         $operand = $this->indirectReference();
-        if (!($operand instanceof VariableVariableNode) && $this->isTokenType(T_DOUBLE_COLON)) {
+        if (!($operand instanceof VariableVariableNode) && $this->currentType === T_DOUBLE_COLON) {
           return $this->exprClass($operand);
         }
-        elseif ($this->isTokenType('(')) {
+        elseif ($this->currentType === '(') {
           return $this->functionCall($operand);
         }
         else {
@@ -1202,13 +1227,13 @@ class Parser {
         return $node;
       case T_EMPTY:
       case T_EVAL:
-        if ($this->getTokenType() === T_EMPTY) {
+        if ($this->currentType === T_EMPTY) {
           $node = new EmptyNode();
         }
         else {
           $node = new EvalNode();
         }
-        $node->functionReference = $this->mustMatch($this->getTokenType(), $node);
+        $node->functionReference = $this->mustMatch($this->currentType, $node);
         $node->arguments = array();
         $this->mustMatch('(', $node);
         $node->arguments[] = $node->appendChild($this->expr());
@@ -1218,21 +1243,20 @@ class Parser {
       case T_REQUIRE:
       case T_INCLUDE_ONCE:
       case T_REQUIRE_ONCE:
-        $token_type = $this->getTokenType();
-        if ($token_type === T_INCLUDE) {
+        if ($this->currentType === T_INCLUDE) {
           $node = new IncludeNode();
         }
-        elseif ($token_type === T_INCLUDE_ONCE) {
+        elseif ($this->currentType === T_INCLUDE_ONCE) {
           $node = new IncludeOnceNode();
         }
-        elseif ($token_type === T_REQUIRE) {
+        elseif ($this->currentType === T_REQUIRE) {
           $node = new RequireNode();
         }
         else {
           $node = new RequireOnceNode();
         }
         $node->docComment = $this->docComment;
-        $this->mustMatch($token_type, $node);
+        $this->mustMatch($this->currentType, $node);
         $node->expression = $node->appendChild($this->expr());
         return $node;
       case T_NEW:
@@ -1242,14 +1266,14 @@ class Parser {
       case T_EXIT:
         $node = new ExitNode();
         $this->mustMatch(T_EXIT, $node, TRUE);
-        if (!$this->isTokenType('(')) {
+        if ($this->currentType !== '(') {
           return $node;
         }
         $this->mustMatch('(', $node);
         if ($this->tryMatch(')', $node, TRUE)) {
           return $node;
         }
-        if ($this->isTokenType(T_YIELD)) {
+        if ($this->currentType === T_YIELD) {
           $node->status = $node->appendChild($this->_yield());
         }
         else {
@@ -1293,7 +1317,7 @@ class Parser {
     if ($this->tryMatch(T_USE, $node)) {
       $this->mustMatch('(', $node);
       do {
-        if ($this->isTokenType('&')) {
+        if ($this->currentType === '&') {
           $var = new ReferenceVariableNode();
           $this->mustMatch('&', $var);
           $var->variable = $this->mustMatch(T_VARIABLE, $var);
@@ -1317,7 +1341,7 @@ class Parser {
     $node = new NewNode();
     $this->mustMatch(T_NEW, $node);
     $node->className = $node->appendChild($this->classNameReference());
-    if ($this->isTokenType('(')) {
+    if ($this->currentType === '(') {
       $this->functionCallParameterList($node);
     }
     return $node;
@@ -1328,12 +1352,12 @@ class Parser {
    * @return Node
    */
   private function classNameReference() {
-    switch ($this->getTokenType()) {
+    switch ($this->currentType) {
       case T_STRING:
       case T_NS_SEPARATOR:
       case T_NAMESPACE:
         $namespace_path = $this->namespacePath();
-        if ($this->isTokenType(T_DOUBLE_COLON)) {
+        if ($this->currentType === T_DOUBLE_COLON) {
           $node = $this->staticMember($namespace_path);
           return $this->dynamicClassNameReference($node);
         }
@@ -1342,7 +1366,7 @@ class Parser {
         }
       case T_STATIC:
         $static_node = $this->mustMatchToken(T_STATIC);
-        if ($this->isTokenType(T_DOUBLE_COLON)) {
+        if ($this->currentType === T_DOUBLE_COLON) {
           $node = $this->staticMember($static_node);
           return $this->dynamicClassNameReference($node);
         }
@@ -1350,11 +1374,11 @@ class Parser {
           return $static_node;
         }
       default:
-        if ($this->isTokenType('$') && !$this->isLookAhead('{')) {
+        if ($this->currentType === '$' && !$this->isLookAhead('{')) {
           return $this->dynamicClassNameReference($this->indirectReference());
         }
         $var_node = $this->referenceVariable();
-        if ($this->isTokenType(T_DOUBLE_COLON)) {
+        if ($this->currentType === T_DOUBLE_COLON) {
           $var_node = $this->staticMember($var_node);
         }
         return $this->dynamicClassNameReference($var_node);
@@ -1367,7 +1391,7 @@ class Parser {
    * @return ClassMemberLookupNode
    */
   private function staticMember($var_node) {
-    if ($this->isTokenType('$') && $this->isLookAhead('{')) {
+    if ($this->currentType === '$' && $this->isLookAhead('{')) {
       $node = new ClassMemberLookupNode();
       $node->className = $node->appendChild($var_node);
       $this->mustMatch(T_DOUBLE_COLON, $node);
@@ -1390,7 +1414,7 @@ class Parser {
    */
   private function dynamicClassNameReference(Node $object) {
     $node = $object;
-    while ($this->isTokenType(T_OBJECT_OPERATOR)) {
+    while ($this->currentType === T_OBJECT_OPERATOR) {
       $node = new ObjectPropertyNode();
       $node->object = $node->appendChild($object);
       $this->mustMatch(T_OBJECT_OPERATOR, $node);
@@ -1407,7 +1431,7 @@ class Parser {
    */
   private function arrayPairList(ArrayNode $node, $terminator) {
     do {
-      if ($this->isTokenType($terminator)) {
+      if ($this->currentType === $terminator) {
         break;
       }
       $node->appendChild($this->arrayPair());
@@ -1421,11 +1445,11 @@ class Parser {
    */
   private function staticArrayPairList(ArrayNode $node, $terminator) {
     do {
-      if ($this->isTokenType($terminator)) {
+      if ($this->currentType === $terminator) {
         break;
       }
       $value = $this->staticScalar();
-      if ($this->isTokenType(T_DOUBLE_ARROW)) {
+      if ($this->currentType === T_DOUBLE_ARROW) {
         $pair = new ArrayPairNode();
         $pair->key = $pair->appendChild($value);
         $this->mustMatch(T_DOUBLE_ARROW, $pair);
@@ -1443,16 +1467,16 @@ class Parser {
    * @return Node
    */
   private function arrayPair() {
-    if ($this->isTokenType('&')) {
+    if ($this->currentType === '&') {
       return $this->writeVariable();
     }
     $node = $this->expr();
-    if ($this->isTokenType(T_DOUBLE_ARROW)) {
+    if ($this->currentType === T_DOUBLE_ARROW) {
       $expr = $node;
       $node = new ArrayPairNode();
       $node->key = $node->appendChild($expr);
       $this->mustMatch(T_DOUBLE_ARROW, $node);
-      if ($this->isTokenType('&')) {
+      if ($this->currentType === '&') {
         $node->value = $node->appendChild($this->writeVariable());
       }
       else {
@@ -1485,7 +1509,7 @@ class Parser {
         $node->appendChild($this->encapsVar());
       }
     }
-    while ($this->iterator->hasNext() && !$this->isTokenType($terminator)) {
+    while ($this->currentType !== NULL && $this->currentType !== $terminator) {
       $this->tryMatch(T_ENCAPSED_AND_WHITESPACE, $node) ||
         $node->appendChild($this->encapsVar());
     }
@@ -1497,6 +1521,7 @@ class Parser {
    * @throws ParserException
    */
   private function encapsVar() {
+    static $offset_types = [T_STRING, T_NUM_STRING, T_VARIABLE];
     $node = new StringVariableNode();
     if ($this->tryMatch(T_DOLLAR_OPEN_CURLY_BRACES, $node)) {
       if ($this->tryMatch(T_STRING_VARNAME, $node)) {
@@ -1518,11 +1543,11 @@ class Parser {
     }
     elseif ($this->mustMatch(T_VARIABLE, $node)) {
       if ($this->tryMatch('[', $node)) {
-        if (!$this->isTokenType(T_STRING, T_NUM_STRING, T_VARIABLE)) {
+        if (!in_array($this->currentType, $offset_types)) {
           throw new ParserException($this->iterator->getSourcePosition(),
             'expected encaps_var_offset (T_STRING or T_NUM_STRING or T_VARIABLE)');
         }
-        $node->appendChild($this->tryMatchToken(T_STRING, T_NUM_STRING, T_VARIABLE));
+        $node->appendChild($this->tryMatchToken($offset_types));
         $this->mustMatch(']', $node);
       }
       elseif ($this->tryMatch(T_OBJECT_OPERATOR, $node)) {
@@ -1541,16 +1566,16 @@ class Parser {
   private function exprClass(Node $class_name) {
     $colon_node = new PartialNode();
     $this->mustMatch(T_DOUBLE_COLON, $colon_node);
-    if ($this->isTokenType(T_STRING)) {
+    if ($this->currentType === T_STRING) {
       $class_constant = $this->mustMatchToken(T_STRING);
-      if ($this->isTokenType('(')) {
+      if ($this->currentType === '(') {
         return $this->classMethodCall($class_name, $colon_node, $class_constant);
       }
       else {
         return $this->classConstant($class_name, $colon_node, $class_constant);
       }
     }
-    elseif ($this->isTokenType(T_CLASS)) {
+    elseif ($this->currentType === T_CLASS) {
       return $this->classNameScalar($class_name, $colon_node);
     }
     else {
@@ -1610,7 +1635,7 @@ class Parser {
    * @return Node
    */
   private function classVariable($class_name, $colon_node) {
-    if ($this->isTokenType('{')) {
+    if ($this->currentType === '{') {
       // Must be $class_name::{expr()}().
       return $this->classMethodCall($class_name, $colon_node, $this->bracesExpr());
     }
@@ -1622,7 +1647,7 @@ class Parser {
      * to determine between these two cases, the [0] has to be matched.
      */
     $var_node = $this->indirectReference();
-    if ($this->isTokenType('(')) {
+    if ($this->currentType === '(') {
       return $this->classMethodCall($class_name, $colon_node, $var_node);
     }
     else {
@@ -1662,15 +1687,15 @@ class Parser {
    * @throws ParserException
    */
   private function variable() {
-    switch ($this->getTokenType()) {
+    switch ($this->currentType) {
       case T_STRING:
       case T_NS_SEPARATOR:
       case T_NAMESPACE:
         $namespace_path = $this->namespacePath();
-        if ($this->isTokenType('(')) {
+        if ($this->currentType === '(') {
           return $this->functionCall($namespace_path);
         }
-        elseif ($this->isTokenType(T_DOUBLE_COLON)) {
+        elseif ($this->currentType === T_DOUBLE_COLON) {
           return $this->varClass($namespace_path);
         }
         break;
@@ -1680,10 +1705,10 @@ class Parser {
       case '$':
       case T_VARIABLE:
         $var = $this->indirectReference();
-        if ($this->isTokenType('(')) {
+        if ($this->currentType === '(') {
           return $this->functionCall($var);
         }
-        elseif (!($var instanceof VariableVariableNode) && $this->isTokenType(T_DOUBLE_COLON)) {
+        elseif (!($var instanceof VariableVariableNode) && $this->currentType === T_DOUBLE_COLON) {
           return $this->varClass($var);
         }
         else {
@@ -1701,7 +1726,8 @@ class Parser {
   private function varClass(Node $class_name) {
     $colon_node = new PartialNode();
     $this->mustMatch(T_DOUBLE_COLON, $colon_node);
-    if ($method_name = $this->tryMatchToken(T_STRING)) {
+    if ($this->currentType === T_STRING) {
+      $method_name = $this->mustMatchToken(T_STRING);
       return $this->classMethodCall($class_name, $colon_node, $method_name);
     }
     else {
@@ -1733,14 +1759,14 @@ class Parser {
    * @return Node
    */
   private function objectDereference(Node $object) {
-    if (!$this->isTokenType(T_OBJECT_OPERATOR)) {
+    if ($this->currentType !== T_OBJECT_OPERATOR) {
       return $object;
     }
     $operator_node = new PartialNode();
     $this->mustMatch(T_OBJECT_OPERATOR, $operator_node);
 
     $object_property = $this->objectProperty();
-    if ($this->isTokenType('(')) {
+    if ($this->currentType === '(') {
       $node = new ObjectMethodCallNode();
       $node->object = $node->appendChild($object);
       $node->mergeNode($operator_node);
@@ -1762,10 +1788,10 @@ class Parser {
    * @return Node
    */
   private function objectProperty() {
-    if ($this->isTokenType(T_STRING)) {
+    if ($this->currentType === T_STRING) {
       return $this->offsetVariable($this->mustMatchToken(T_STRING));
     }
-    elseif ($this->isTokenType('{')) {
+    elseif ($this->currentType === '{') {
       return $this->offsetVariable($this->bracesExpr());
     }
     else {
@@ -1778,7 +1804,7 @@ class Parser {
    * @return Node
    */
   private function indirectReference() {
-    if ($this->isTokenType('$') && !$this->isLookAhead('{')) {
+    if ($this->currentType === '$' && !$this->isLookAhead('{')) {
       $node = new VariableVariableNode();
       $this->mustMatch('$', $node);
       $node->variable = $node->appendChild($this->indirectReference());
@@ -1801,7 +1827,7 @@ class Parser {
    * @return Node
    */
   private function offsetVariable(Node $var) {
-    if ($this->isTokenType('{')) {
+    if ($this->currentType === '{') {
       $node = new ArrayLookupNode();
       $node->array = $node->appendChild($var);
       $this->mustMatch('{', $node);
@@ -1809,7 +1835,7 @@ class Parser {
       $this->mustMatch('}', $node, TRUE);
       return $this->offsetVariable($node);
     }
-    elseif ($this->isTokenType('[')) {
+    elseif ($this->currentType === '[') {
       $node = new ArrayLookupNode();
       $node->array = $node->appendChild($var);
       $this->dimOffset($node);
@@ -1825,7 +1851,7 @@ class Parser {
    * @return Node
    */
   private function compoundVariable() {
-    if ($this->isTokenType('$')) {
+    if ($this->currentType === '$') {
       return $this->_compoundVariable();
     }
     else {
@@ -1864,7 +1890,7 @@ class Parser {
    */
   private function dimOffset(ArrayLookupNode $node) {
     $this->mustMatch('[', $node);
-    if (!$this->isTokenType(']')) {
+    if ($this->currentType !== ']') {
       $node->key = $node->appendChild($this->expr());
     }
     $this->mustMatch(']', $node, TRUE);
@@ -1879,7 +1905,7 @@ class Parser {
     if ($this->tryMatch(')', $node, TRUE)) {
       return;
     }
-    if ($this->isTokenType(T_YIELD)) {
+    if ($this->currentType === T_YIELD) {
       $node->arguments[] = $node->appendChild($this->_yield());
     } else {
       do {
@@ -1894,7 +1920,7 @@ class Parser {
    * @return Node
    */
   private function functionCallParameter() {
-    switch ($this->getTokenType()) {
+    switch ($this->currentType) {
       case '&':
         return $this->writeVariable();
       case T_ELLIPSIS:
@@ -1913,7 +1939,7 @@ class Parser {
    * @return Node
    */
   private function arrayDeference(Node $node) {
-    while ($this->isTokenType('[')) {
+    while ($this->currentType === '[') {
       $n = $node;
       $node = new ArrayLookupNode();
       $node->array = $node->appendChild($n);
@@ -1975,11 +2001,12 @@ class Parser {
    * @return Node
    */
   private function optionalClassType() {
+    static $array_callable_types = [T_ARRAY, T_CALLABLE];
     $node = NULL;
-    if ($node = $this->tryMatchToken(T_ARRAY, T_CALLABLE)) {
+    if ($node = $this->tryMatchToken($array_callable_types)) {
       return $node;
     }
-    elseif ($this->isTokenType(T_STRING, T_NAMESPACE, T_NS_SEPARATOR)) {
+    elseif (in_array($this->currentType, self::$namespacePathTypes)) {
       return $this->namespacePath();
     }
     return NULL;
@@ -1992,7 +2019,7 @@ class Parser {
    */
   private function innerStatementList(StatementBlockNode $parent, $terminator) {
     $this->matchHidden($parent);
-    while ($this->iterator->hasNext() && !$this->isTokenType($terminator)) {
+    while ($this->currentType !== NULL && $this->currentType !== $terminator) {
       $parent->statements[] = $parent->appendChild($this->innerStatement());
       $this->matchHidden($parent);
     }
@@ -2027,7 +2054,7 @@ class Parser {
    * @throws ParserException
    */
   private function innerStatement() {
-    switch ($this->getTokenType()) {
+    switch ($this->currentType) {
       case T_HALT_COMPILER:
         throw new ParserException($this->iterator->getSourcePosition(),
           "__halt_compiler can only be used from the outermost scope");
@@ -2040,7 +2067,7 @@ class Parser {
       case T_TRAIT:
         return $this->traitDeclaration();
       default:
-        if ($this->getTokenType() === T_FUNCTION) {
+        if ($this->currentType === T_FUNCTION) {
           if ($function_declaration = $this->functionDeclaration()) {
             return $function_declaration;
           }
@@ -2076,7 +2103,7 @@ class Parser {
     $node = new NamespaceNode();
     $node->docComment = $this->docComment;
     $this->mustMatch(T_NAMESPACE, $node);
-    if ($this->isTokenType(T_STRING)) {
+    if ($this->currentType === T_STRING) {
       $node->name = $node->appendChild($this->namespaceName());
     }
     if ($this->tryMatch('{', $node)) {
@@ -2160,7 +2187,7 @@ class Parser {
       } while ($this->tryMatch(',', $node));
     }
     $this->mustMatch('{', $node);
-    while (!$this->isTokenType('}')) {
+    while ($this->currentType !== NULL && $this->currentType !== '}') {
       $is_abstract = isset($node->abstract);
       $node->statements[] = $node->appendChild($this->classStatement($is_abstract));
     }
@@ -2175,27 +2202,27 @@ class Parser {
    * @throws ParserException
    */
   private function classStatement($is_abstract) {
-    if ($this->isTokenType(T_FUNCTION)) {
+    if ($this->currentType === T_FUNCTION) {
       $modifiers = new ModifiersNode();
       return $this->classMethod($this->docComment, $modifiers);
     }
-    elseif ($this->isTokenType(T_VAR)) {
+    elseif ($this->currentType === T_VAR) {
       $doc_comment = $this->docComment;
       $modifiers = new ModifiersNode();
       $modifiers->visibility = $this->mustMatch(T_VAR, $modifiers);
       return $this->classMemberList($doc_comment, $modifiers);
     }
-    elseif ($this->isTokenType(T_CONST)) {
+    elseif ($this->currentType === T_CONST) {
       return $this->_const();
     }
-    elseif ($this->isTokenType(T_USE)) {
+    elseif ($this->currentType === T_USE) {
       return $this->traitUse();
     }
     // Match modifiers
     $doc_comment = $this->docComment;
     $modifiers = new ModifiersNode();
     while ($this->iterator->hasNext()) {
-      switch ($this->getTokenType()) {
+      switch ($this->currentType) {
         case T_PUBLIC:
         case T_PROTECTED:
         case T_PRIVATE:
@@ -2205,7 +2232,7 @@ class Parser {
               "can only have one visibility modifier on class member/method."
             );
           }
-          $modifiers->visibility = $this->mustMatch($this->getTokenType(), $modifiers);
+          $modifiers->visibility = $this->mustMatch($this->currentType, $modifiers);
           break;
         case T_STATIC:
           if ($modifiers->static) {
@@ -2260,12 +2287,12 @@ class Parser {
 
   /**
    * Parse a class member list.
-   * @param DocCommentNode $doc_comment DocBlock associated with method
+   * @param DocCommentNode|null $doc_comment DocBlock associated with method
    * @param ModifiersNode $modifiers Member modifiers
    * @return ClassMemberListNode
    * @throws ParserException
    */
-  private function classMemberList(DocCommentNode $doc_comment, ModifiersNode $modifiers) {
+  private function classMemberList($doc_comment, ModifiersNode $modifiers) {
     // Modifier checks
     if ($modifiers->abstract) {
       throw new ParserException(
@@ -2302,11 +2329,11 @@ class Parser {
 
   /**
    * Parse a class method
-   * @param DocCommentNode $doc_comment DocBlock associated with method
+   * @param DocCommentNode|null $doc_comment DocBlock associated with method
    * @param ModifiersNode $modifiers Method modifiers
    * @return ClassMethodNode
    */
-  private function classMethod(DocCommentNode $doc_comment, ModifiersNode $modifiers) {
+  private function classMethod($doc_comment, ModifiersNode $modifiers) {
     $node = new ClassMethodNode();
     $node->docComment = $doc_comment;
     $node->modifiers = $modifiers;
@@ -2336,7 +2363,7 @@ class Parser {
     } while ($this->tryMatch(',', $node));
     // trait_adaptations
     if ($this->tryMatch('{', $node)) {
-      while ($this->iterator->hasNext() && !$this->isTokenType('}')) {
+      while ($this->currentType !== NULL && $this->currentType !== '}') {
         $node->adaptations[] = $node->appendChild($this->traitAdaptation());
         $this->matchHidden($node);
       }
@@ -2354,14 +2381,14 @@ class Parser {
   private function traitAdaptation() {
     /** @var NamespacePathNode $qualified_name */
     $qualified_name = $this->namespacePath();
-    if ($qualified_name->getChildCount() === 1 && !$this->isTokenType(T_DOUBLE_COLON)) {
+    if ($qualified_name->getChildCount() === 1 && $this->currentType !== T_DOUBLE_COLON) {
       return $this->traitAlias($qualified_name);
     }
     $node = new TraitMethodReferenceNode();
     $node->traitName = $node->appendChild($qualified_name);
     $this->mustMatch(T_DOUBLE_COLON, $node);
     $node->methodReference = $this->mustMatch(T_STRING, $node, TRUE);
-    if ($this->isTokenType(T_AS)) {
+    if ($this->currentType === T_AS) {
       return $this->traitAlias($node);
     }
     $method_reference_node = $node;
@@ -2384,7 +2411,7 @@ class Parser {
     $node = new TraitAliasNode();
     $node->traitMethodReference = $node->appendChild($trait_method_reference);
     $this->mustMatch(T_AS, $node);
-    if ($trait_modifier = $this->tryMatchToken(T_PUBLIC, T_PROTECTED, T_PRIVATE)) {
+    if ($trait_modifier = $this->tryMatchToken(self::$visibilityTypes)) {
       $node->visibility = $node->appendChild($trait_modifier);
       $node->alias = $this->tryMatch(T_STRING, $node);
       $this->mustMatch(';', $node, TRUE);
@@ -2410,8 +2437,8 @@ class Parser {
       } while ($this->tryMatch(',', $node));
     }
     $this->mustMatch('{', $node);
-    while (!$this->isTokenType('}')) {
-      if ($this->isTokenType(T_CONST)) {
+    while ($this->currentType !== NULL && $this->currentType !== '}') {
+      if ($this->currentType === T_CONST) {
         $node->statements[] = $node->appendChild($this->_const());
       }
       else {
@@ -2428,17 +2455,18 @@ class Parser {
    * @throws ParserException
    */
   private function interfaceMethod() {
+    static $visibility_keyword_types = [T_PUBLIC, T_PROTECTED, T_PRIVATE];
     $node = new InterfaceMethodNode();
     $node->docComment = $this->docComment;
     $is_static = $this->tryMatch(T_STATIC, $node);
-    while ($this->isTokenType(T_PUBLIC, T_PROTECTED, T_PRIVATE)) {
+    while (in_array($this->currentType, $visibility_keyword_types)) {
       if ($node->visibility) {
         throw new ParserException(
           $this->iterator->getSourcePosition(),
           "can only have one visibility modifier on interface method."
         );
       }
-      $node->visibility = $this->mustMatch($this->getTokenType(), $node);
+      $node->visibility = $this->mustMatch($this->currentType, $node);
     }
     !$is_static && $this->tryMatch(T_STATIC, $node);
     $this->mustMatch(T_FUNCTION, $node);
@@ -2468,7 +2496,7 @@ class Parser {
       } while ($this->tryMatch(',', $node));
     }
     $this->mustMatch('{', $node);
-    while (!$this->isTokenType('}')) {
+    while ($this->currentType !== NULL && $this->currentType !== '}') {
       $node->statements[] = $node->appendChild($this->classStatement(TRUE));
     }
     $this->mustMatch('}', $node, TRUE);
@@ -2526,21 +2554,20 @@ class Parser {
    * @throws ParserException
    */
   private function mustMatch($expected_type, ParentNode $parent, $maybe_last = FALSE) {
-    $this->skipHidden();
-    $token = $this->iterator->current();
-    if ($token === NULL || $token->getType() !== $expected_type) {
+    if ($this->currentType !== $expected_type) {
       throw new ParserException(
         $this->iterator->getSourcePosition(),
         'expected ' . TokenNode::typeName($expected_type));
     }
+    $token_node = $this->current;
     $this->addSkipped($parent);
     $this->docComment = NULL;
-    $parent->appendChild($token);
-    $this->iterator->next();
+    $parent->appendChild($token_node);
+    $this->nextToken();
     if (!$maybe_last) {
-      $this->matchHidden($parent);
+      $this->addSkipped($parent);
     }
-    return $token;
+    return $token_node;
   }
 
   /**
@@ -2550,34 +2577,34 @@ class Parser {
    * @return TokenNode
    */
   private function tryMatch($expected_type, ParentNode $parent, $maybe_last = FALSE) {
-    $this->skipHidden();
-    $token = $this->iterator->current();
-    if ($token === NULL || $token->getType() !== $expected_type) {
+    if ($this->currentType !== $expected_type) {
       return NULL;
     }
+    $token_node = $this->current;
     $this->addSkipped($parent);
     $this->docComment = NULL;
-    $parent->appendChild($token);
-    $this->iterator->next();
+    $parent->appendChild($token_node);
+    $this->nextToken();
     if (!$maybe_last) {
-      $this->matchHidden($parent);
+      $this->addSkipped($parent);
     }
-    return $token;
+    return $token_node;
   }
 
   /**
+   * @param array $expected_types
    * @return TokenNode
    */
-  private function tryMatchToken() {
-    $token = $this->iterator->current();
-    if ($token === NULL) {
+  private function tryMatchToken($expected_types) {
+    if ($this->current === NULL) {
       return NULL;
     }
-    foreach (func_get_args() as $expected_type) {
-      if ($expected_type === $token->getType()) {
+    foreach ($expected_types as $expected_type) {
+      if ($expected_type === $this->currentType) {
         $this->docComment = NULL;
-        $this->iterator->next();
-        return $token;
+        $token_node = $this->current;
+        $this->nextToken();
+        return $token_node;
       }
     }
     return NULL;
@@ -2589,39 +2616,30 @@ class Parser {
    * @throws ParserException
    */
   private function mustMatchToken($expected_type) {
-    $token = $this->iterator->current();
-    if ($token === NULL || $token->getType() !== $expected_type) {
+    if ($this->currentType !== $expected_type) {
       throw new ParserException(
         $this->iterator->getSourcePosition(),
         'expected ' . TokenNode::typeName($expected_type));
     }
+    $token_node = $this->current;
     $this->docComment = NULL;
+    $this->nextToken();
+    return $token_node;
+  }
+
+  /**
+   * Move iterator to next non hidden token.
+   */
+  private function nextToken() {
     $this->iterator->next();
-    return $token;
-  }
-
-  /**
-   * Return the current token type.
-   * @return mixed
-   */
-  private function getTokenType() {
     $this->skipHidden();
-    $token = $this->iterator->current();
-    return $token === NULL ? NULL : $token->getType();
-  }
-
-  /**
-   * Test if current token is one of the types.
-   * @return bool
-   */
-  private function isTokenType() {
-    $actual_type = $this->getTokenType();
-    foreach (func_get_args() as $expected_type) {
-      if ($expected_type === $actual_type) {
-        return TRUE;
-      }
+    $this->current = $this->iterator->current();
+    if ($this->current) {
+      $this->currentType = $this->current->getType();
     }
-    return FALSE;
+    else {
+      $this->currentType = NULL;
+    }
   }
 
   /**

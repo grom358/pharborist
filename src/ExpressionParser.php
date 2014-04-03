@@ -191,22 +191,4 @@ class ExpressionParser {
     }
     return $this->nodes[$this->position];
   }
-
-  /**
-   * @param int $expected_type
-   * @return Operator
-   * @throws ParserException
-   */
-  private function expect($expected_type) {
-    /** @var Operator $node */
-    $node = $this->next();
-    if ($node === NULL) {
-      throw new ParserException($this->nodes[$this->length - 1]->getSourcePosition(), "expected " . $expected_type);
-    }
-    if ($node->type !== $expected_type) {
-      throw new ParserException($node->getSourcePosition(), "expected " . $expected_type);
-    }
-    $this->consume();
-    return $node;
-  }
 }

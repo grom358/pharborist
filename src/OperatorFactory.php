@@ -30,7 +30,6 @@ class OperatorFactory {
     T_XOR_EQUAL => array(Operator::ASSOC_RIGHT, 4, FALSE, '\Pharborist\BitwiseXorAssignNode', NULL),
     T_POW_EQUAL => array(Operator::ASSOC_RIGHT, 4, FALSE, '\Pharborist\PowerAssignNode', NULL),
     '?' => array(Operator::ASSOC_LEFT, 5, TRUE, NULL, NULL),
-    ':' => array(Operator::ASSOC_NONE, 5, TRUE, NULL, NULL),
     T_BOOLEAN_OR => array(Operator::ASSOC_LEFT, 6, TRUE, '\Pharborist\BooleanOrNode', NULL),
     T_BOOLEAN_AND => array(Operator::ASSOC_LEFT, 7, TRUE, '\Pharborist\BooleanAndNode', NULL),
     '|' => array(Operator::ASSOC_LEFT, 8, TRUE, '\Pharborist\BitwiseOrNode', NULL),
@@ -115,13 +114,13 @@ class OperatorFactory {
 
   /**
    * @param Operator $assign_operator
-   * @param Operator $by_ref_operator
+   * @param PartialNode $by_ref_node
    * @return Operator
    */
-  public static function createAssignReferenceOperator(Operator $assign_operator, Operator $by_ref_operator) {
+  public static function createAssignReferenceOperator(Operator $assign_operator, PartialNode $by_ref_node) {
     $operator = new Operator();
     $operator->mergeNode($assign_operator);
-    $operator->mergeNode($by_ref_operator);
+    $operator->mergeNode($by_ref_node);
     $operator->associativity = Operator::ASSOC_RIGHT;
     $operator->precedence = 4;
     $operator->hasBinaryMode = TRUE;

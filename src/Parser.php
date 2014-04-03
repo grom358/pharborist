@@ -1055,9 +1055,9 @@ class Parser {
       $operator->operatorNode = $this->mustMatch($token_type, $operator);
       if ($token_type === '?') {
         if ($this->currentType === ':') {
-          $colon_operator = OperatorFactory::createOperator(':');
-          $colon_operator->operatorNode = $this->mustMatch(':', $colon_operator);
-          return OperatorFactory::createElvisOperator($operator, $colon_operator);
+          $colon = new PartialNode();
+          $this->mustMatch(':', $colon);
+          return OperatorFactory::createElvisOperator($operator, $colon);
         }
         else {
           $operator->then = $static ? $this->staticScalar() : $this->expr();
@@ -1068,9 +1068,9 @@ class Parser {
         }
       }
       elseif ($token_type === '=' && $this->currentType === '&') {
-        $ref_operator = OperatorFactory::createOperator('&');
-        $ref_operator->operatorNode = $this->mustMatch('&', $ref_operator);
-        return OperatorFactory::createAssignReferenceOperator($operator, $ref_operator);
+        $by_ref_node = new PartialNode();
+        $this->mustMatch('&', $by_ref_node);
+        return OperatorFactory::createAssignReferenceOperator($operator, $by_ref_node);
       }
       return $operator;
     }

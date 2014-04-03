@@ -104,6 +104,7 @@ class OperatorFactory {
     $operator = new Operator();
     $operator->mergeNode($question_operator);
     $operator->mergeNode($colon_node);
+    $operator->type = '?:';
     $operator->associativity = Operator::ASSOC_LEFT;
     $operator->precedence = 5;
     $operator->hasBinaryMode = TRUE;

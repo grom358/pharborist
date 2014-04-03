@@ -79,50 +79,13 @@ class ExpressionParser {
   private function E() {
     $this->P();
     while (($node = $this->next()) && ($node instanceof Operator)) {
-      // Special case ternary operator
-      if ($node->type === ':') {
-        break;
-      }
-      elseif ($node->type === '?') {
-        $this->expect('?');
-        $next = $this->next();
-        if ($next instanceof Operator && $next->type === ':') {
-          // Elvis operator
-          $colon = $this->expect(':');
-          $elvis_operator = OperatorFactory::createElvisOperator($node, $colon);
-          $this->pushOperator($elvis_operator, Operator::MODE_BINARY);
-          $this->P();
-        } else {
-          $this->operators[] = $this->sentinel;
-          $this->E();
-          array_pop($this->operators);
-          $node->colon = $this->expect(':');
-          $node->then = array_pop($this->operands);
-          $this->pushOperator($node, Operator::MODE_BINARY);
-          $this->P();
-        }
-      }
       // Special case: post T_INC and T_DEC
-      elseif ($node->type == T_INC || $node->type == T_DEC) {
+      if ($node->type == T_INC || $node->type == T_DEC) {
         $this->consume();
         $operand = array_pop($this->operands);
         $this->operands[] = OperatorFactory::createPostfixOperatorNode($operand, $node);
       }
-      // Special case: handle = &
-      elseif ($node->type === '=') {
-        $this->expect('=');
-        $next = $this->next();
-        if ($next instanceof Operator && $next->type === '&') {
-          $by_ref_operator = $this->expect('&');
-          $assign_ref_operator = OperatorFactory::createAssignReferenceOperator($node, $by_ref_operator);
-          $this->pushOperator($assign_ref_operator, Operator::MODE_BINARY);
-        }
-        else {
-          $this->pushOperator($node, Operator::MODE_BINARY);
-        }
-        $this->P();
-      }
-      elseif ($node->hasBinaryMode) {
+      elseif ($node->type === '?' || $node->hasBinaryMode) {
         $this->pushOperator($node, Operator::MODE_BINARY);
         $this->consume();
         $this->P();

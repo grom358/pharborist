@@ -570,7 +570,7 @@ class Parser {
     if ($this->currentType === T_CASE) {
       $node = new CaseNode();
       $this->mustMatch(T_CASE, $node);
-      $node->matchOn = $node->appendChild($this->expr(TRUE));
+      $node->matchOn = $node->appendChild($this->expr());
       if (!$this->tryMatch(':', $node, TRUE) && !$this->tryMatch(';', $node, TRUE)) {
         throw new ParserException($this->iterator->getSourcePosition(), 'expected :');
       }
@@ -924,8 +924,6 @@ class Parser {
    * @throws ParserException
    */
   private function staticScalar() {
-    static $terminators = [';', ',', ')', T_DOUBLE_ARROW];
-    // Handle static array
     if ($this->currentType === T_ARRAY) {
       $node = new ArrayNode();
       $this->mustMatch(T_ARRAY, $node);
@@ -941,49 +939,9 @@ class Parser {
       $this->mustMatch(']', $node, TRUE);
       return $node;
     }
-
-    // Group tokens into operands & operators to pass to the expression parser
-    $expression_nodes = array();
-    $ternary_count = 0;
-    while ($this->currentType !== NULL && !in_array($this->currentType, $terminators)) {
-      // Check balance of ? and : symbols for ternary operators
-      if ($this->currentType === '?') {
-        $ternary_count++;
-      }
-      elseif ($this->currentType === ':') {
-        $ternary_count--;
-        if ($ternary_count < 0) {
-          throw new ParserException($this->iterator->getSourcePosition(),
-            'unbalanced : with ? ternary operator');
-        }
-      }
-      if ($op = $this->staticOperator()) {
-        $expression_nodes[] = $op;
-        if ($op->type === T_INSTANCEOF) {
-          $expression_nodes[] = $this->classNameReference();
-        }
-      }
-      elseif ($operand = $this->staticOperand()) {
-        $expression_nodes[] = $operand;
-      }
-      else {
-        throw new ParserException($this->iterator->getSourcePosition(), 'invalid scalar expression');
-      }
+    else {
+      return $this->expr(TRUE);
     }
-    return $this->expressionParser->parse($expression_nodes);
-  }
-
-  /**
-   * Parse static operator.
-   * @return Operator
-   */
-  private function staticOperator() {
-    $token_type = $this->currentType;
-    if ($operator = OperatorFactory::createOperator($token_type, TRUE)) {
-      $operator->operatorNode = $this->mustMatch($token_type, $operator);
-      return $operator;
-    }
-    return NULL;
   }
 
   /**
@@ -1061,37 +1019,22 @@ class Parser {
 
   /**
    * Parse an expression.
-   * @param bool $is_case TRUE if parsing case expression.
+   * @param bool $static TRUE if static expression
    * @return Node
    * @throws ParserException
    */
-  private function expr($is_case = FALSE) {
-    static $end_expression_types = [';', ',', ')', ']', '}', T_AS, T_DOUBLE_ARROW];
+  private function expr($static = FALSE) {
+    static $end_expression_types = [':', ';', ',', ')', ']', '}', T_AS, T_DOUBLE_ARROW];
     // Group tokens into operands & operators to pass to the expression parser
     $expression_nodes = array();
-    $ternary_count = 0;
     while ($this->currentType !== NULL && !in_array($this->currentType, $end_expression_types)) {
-      // Check balance of ? and : symbols for ternary operators
-      if ($this->currentType === '?') {
-        $ternary_count++;
-      }
-      elseif ($this->currentType === ':') {
-        $ternary_count--;
-        if ($ternary_count < 0) {
-          if ($is_case) {
-            break;
-          }
-          throw new ParserException(
-            $this->iterator->getSourcePosition(), "unbalanced : with ? ternary operator");
-        }
-      }
-      if ($op = $this->exprOperator()) {
+      if ($op = $this->exprOperator($static)) {
         $expression_nodes[] = $op;
         if ($op->type === T_INSTANCEOF) {
           $expression_nodes[] = $this->classNameReference();
         }
       }
-      elseif ($operand = $this->exprOperand()) {
+      elseif ($operand = ($static ? $this->staticOperand() : $this->exprOperand())) {
         $expression_nodes[] = $operand;
       }
       else {
@@ -1103,12 +1046,32 @@ class Parser {
 
   /**
    * Parse an expression operator.
+   * @param bool $static Static operator
    * @return Operator
    */
-  private function exprOperator() {
+  private function exprOperator($static = FALSE) {
     $token_type = $this->currentType;
-    if ($operator = OperatorFactory::createOperator($token_type)) {
+    if ($operator = OperatorFactory::createOperator($token_type, $static)) {
       $operator->operatorNode = $this->mustMatch($token_type, $operator);
+      if ($token_type === '?') {
+        if ($this->currentType === ':') {
+          $colon_operator = OperatorFactory::createOperator(':');
+          $colon_operator->operatorNode = $this->mustMatch(':', $colon_operator);
+          return OperatorFactory::createElvisOperator($operator, $colon_operator);
+        }
+        else {
+          $operator->then = $static ? $this->staticScalar() : $this->expr();
+          $colon = new PartialNode();
+          $this->mustMatch(':', $colon);
+          $operator->colon = $colon;
+          return $operator;
+        }
+      }
+      elseif ($token_type === '=' && $this->currentType === '&') {
+        $ref_operator = OperatorFactory::createOperator('&');
+        $ref_operator->operatorNode = $this->mustMatch('&', $ref_operator);
+        return OperatorFactory::createAssignReferenceOperator($operator, $ref_operator);
+      }
       return $operator;
     }
     return NULL;

@@ -2504,23 +2504,12 @@ class Parser {
   }
 
   /**
-   * Test if $token_type is a hidden token type.
-   * @param $token_type
-   * @return bool
-   */
-  static private function isHidden($token_type) {
-    return $token_type === T_WHITESPACE ||
-    $token_type === T_COMMENT ||
-    $token_type === T_DOC_COMMENT;
-  }
-
-  /**
    * Skip hidden tokens.
    */
   private function skipHidden() {
     $token = $this->iterator->current();
-    while ($token && self::isHidden($token->getType())) {
-      if ($token->getType() === T_DOC_COMMENT) {
+    while ($token && $token instanceof HiddenNode) {
+      if ($token instanceof DocCommentNode) {
         $this->docComment = $token;
       }
       $this->skipped[] = $token;
@@ -2656,7 +2645,7 @@ class Parser {
       if ($token === NULL) {
         return FALSE;
       }
-      if (!static::isHidden($token->getType()) && $token->getType() !== $skip_type) {
+      if (!($token instanceof HiddenNode) && $token->getType() !== $skip_type) {
         return $expected_type === $token->getType();
       }
     }

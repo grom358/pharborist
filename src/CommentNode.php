@@ -4,6 +4,6 @@ namespace Pharborist;
 /**
  * A comment.
  */
-class CommentNode extends TokenNode {
+class CommentNode extends HiddenNode {
 
 }

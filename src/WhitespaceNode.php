@@ -4,6 +4,6 @@ namespace Pharborist;
 /**
  * Whitespace.
  */
-class WhitespaceNode extends TokenNode {
+class WhitespaceNode extends HiddenNode {
 
 }

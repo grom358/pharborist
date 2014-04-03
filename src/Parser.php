@@ -182,8 +182,8 @@ class Parser {
    */
   private function topStatementList(StatementBlockNode $node, $terminator = '') {
     $this->matchHidden($node);
-    while ($this->currentType !== NULL && $this->currentType !== $terminator && ($statement = $this->topStatement())) {
-      $node->statements[] = $node->appendChild($statement);
+    while ($this->currentType !== NULL && $this->currentType !== $terminator) {
+      $node->statements[] = $node->appendChild($this->topStatement());
       $this->matchHidden($node);
     }
     $this->matchHidden($node);
@@ -194,7 +194,7 @@ class Parser {
    * @param string $terminator Character that ends the statement block
    * @return Node
    */
-  private function topStatementBlock($terminator = '') {
+  private function topStatementBlock($terminator) {
     $node = new StatementBlockNode();
     $this->topStatementList($node, $terminator);
     return $node;

@@ -750,4 +750,19 @@ EOF;
     $this->parseSnippet('$f = function($a, $b) use ($x, $y) { };', '\Pharborist\ExpressionStatementNode');
   }
 
+  public function testTokenIteration() {
+    /** @var \Pharborist\ExpressionStatementNode $tree */
+    $tree = $this->parseSnippet('1 + 2;', '\Pharborist\ExpressionStatementNode');
+    $one = $tree->getFirstToken();
+    $this->assertNull($one->previousToken());
+    $this->assertEquals('1', $one->getText());
+    $op = $one->nextToken()->nextToken();
+    $this->assertEquals('+', $op->getText());
+    $two = $op->nextToken()->nextToken();
+    $this->assertEquals('2', $two->getText());
+    $semicolon = $two->nextToken();
+    $this->assertEquals(';', $semicolon->getText());
+    $this->assertNull($semicolon->nextToken());
+    $this->assertEquals('2', $semicolon->previousToken()->getText());
+  }
 }

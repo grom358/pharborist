@@ -212,6 +212,30 @@ abstract class ParentNode extends Node {
   }
 
   /**
+   * Get the first (i.e. leftmost leaf) token.
+   * @return TokenNode
+   */
+  public function getFirstToken() {
+    $head = $this->head;
+    while ($head instanceof ParentNode) {
+      $head = $head->head;
+    }
+    return $head;
+  }
+
+  /**
+   * Get the last (i.e. rightmost leaf) token.
+   * @return TokenNode
+   */
+  public function getLastToken() {
+    $tail = $this->tail;
+    while ($tail instanceof ParentNode) {
+      $tail = $tail->tail;
+    }
+    return $tail;
+  }
+
+  /**
    * Find descendants that match given type.
    * @param string $type
    *   Type of nodes to return.

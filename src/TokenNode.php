@@ -84,6 +84,52 @@ class TokenNode extends Node {
   }
 
   /**
+   * @return TokenNode
+   */
+  public function previousToken() {
+    $prev_node = $this->previousSibling();
+    if ($prev_node === NULL) {
+      $parent = $this->getParent();
+      while ($parent !== NULL && $parent->previousSibling() === NULL) {
+        $parent = $parent->getParent();
+      }
+      if ($parent === NULL) {
+        return NULL;
+      }
+      $prev_node = $parent->previousSibling();
+    }
+    if ($prev_node instanceof ParentNode) {
+      return $prev_node->getLastToken();
+    }
+    else {
+      return $prev_node;
+    }
+  }
+
+  /**
+   * @return TokenNode
+   */
+  public function nextToken() {
+    $next_node = $this->nextSibling();
+    if ($next_node === NULL) {
+      $parent = $this->getParent();
+      while ($parent !== NULL && $parent->nextSibling() === NULL) {
+        $parent = $parent->getParent();
+      }
+      if ($parent === NULL) {
+        return NULL;
+      }
+      $next_node = $parent->nextSibling();
+    }
+    if ($next_node instanceof ParentNode) {
+      return $next_node->getFirstToken();
+    }
+    else {
+      return $next_node;
+    }
+  }
+
+  /**
    * @return string
    */
   public function __toString() {

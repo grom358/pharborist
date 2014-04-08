@@ -6,59 +6,78 @@ namespace Pharborist;
  */
 abstract class ParentNode extends Node {
   /**
-   * @var Node[]
+   * @var Node
    */
-  protected $children = array();
+  protected $head;
 
   /**
-   * Get child at index.
-   * @param int $index
-   * @return Node
+   * @var Node
    */
-  public function getChild($index) {
-    return $this->children[$index];
-  }
+  protected $tail;
+
+  /**
+   * @var int
+   */
+  protected $childCount;
 
   /**
    * Get the number of children.
    * @return int
    */
   public function getChildCount() {
-    return count($this->children);
+    return $this->childCount;
   }
 
   /**
-   * @param Node $child
-   * @return int
-   * @throws \Exception
+   * Return the first child.
+   * @return Node
    */
-  public function indexOf(Node $child) {
-    foreach ($this->children as $i => $element) {
-      if ($element === $child) {
-        return $i;
-      }
-    }
-    throw new \Exception('Child node not found!');
+  public function getFirst() {
+    return $this->head;
+  }
+
+  /**
+   * Return the last child.
+   * @return Node
+   */
+  public function getLast() {
+    return $this->tail;
   }
 
   /**
    * Prepend a child to node.
+   * @param Node $node
+   * @return $this
    */
-  public function prependChild(Node $child) {
-    $child->parent = $this;
-    array_unshift($this->children, $child);
-    return $child;
+  public function prependChild(Node $node) {
+    if ($this->head === NULL) {
+      $this->childCount++;
+      $node->parent = $this;
+      $node->previous = NULL;
+      $node->next = NULL;
+      $this->head = $this->tail = $node;
+    }
+    else {
+      $this->insertBeforeChild($this->head, $node);
+      $this->head = $node;
+    }
+    return $this;
   }
 
   /**
    * Append a child to node.
-   * @param Node $child
+   * @param Node $node
    * @return Node
    */
-  public function appendChild(Node $child) {
-    $child->parent = $this;
-    $this->children[] = $child;
-    return $child;
+  public function appendChild(Node $node) {
+    if ($this->tail === NULL) {
+      $this->prependChild($node);
+    }
+    else {
+      $this->insertAfterChild($this->tail, $node);
+      $this->tail = $node;
+    }
+    return $node;
   }
 
   /**
@@ -76,7 +95,78 @@ abstract class ParentNode extends Node {
    * @param ParentNode $node
    */
   public function mergeNode(ParentNode $node) {
-    $this->appendChildren($node->children);
+    $child = $node->head;
+    while ($child) {
+      $next = $child->next;
+      $this->appendChild($child);
+      $child = $next;
+    }
+  }
+
+  /**
+   * Insert a node before a child.
+   * @param Node $child
+   * @param Node $node
+   * @return $this
+   */
+  protected function insertBeforeChild(Node $child, Node $node) {
+    $this->childCount++;
+    $node->parent = $this;
+    if ($child->previous === NULL) {
+      $this->head = $node;
+    }
+    else {
+      $child->previous->next = $node;
+    }
+    $node->previous = $child->previous;
+    $node->next = $child;
+    $child->previous = $node;
+    return $this;
+  }
+
+  /**
+   * Insert a node after a child.
+   * @param Node $child
+   * @param Node $node
+   * @return $this
+   */
+  protected function insertAfterChild(Node $child, Node $node) {
+    $this->childCount++;
+    $node->parent = $this;
+    if ($child->next === NULL) {
+      $this->tail = $node;
+    }
+    else {
+      $child->next->previous = $node;
+    }
+    $node->previous = $child;
+    $node->next = $child->next;
+    $child->next = $node;
+    return $this;
+  }
+
+  /**
+   * Remove a child node.
+   * @param Node $child
+   * @return $this
+   */
+  protected function removeChild(Node $child) {
+    $this->childCount--;
+    if ($child->previous === NULL) {
+      $this->head = $child->next;
+    }
+    else {
+      $child->previous->next = $child->next;
+    }
+    if ($child->next === NULL) {
+      $this->tail = $child->previous;
+    }
+    else {
+      $child->next->previous = $child->previous;
+    }
+    $child->previous = NULL;
+    $child->next = NULL;
+    return $this;
   }
 
   /**
@@ -84,36 +174,23 @@ abstract class ParentNode extends Node {
    * @return Node The removed child.
    */
   public function removeFirst() {
-    $first = $this->children[0];
-    $first->parent = NULL;
-    array_splice($this->children, 0, 1);
-    return $first;
+    $head = $this->head;
+    if ($head) {
+      $this->removeChild($head);
+    }
+    return $head;
   }
 
   /**
-   * Remove the child from this node.
+   * Replace a child node.
    * @param Node $child
-   * @return Node The removed child
-   */
-  public function removeChild(Node $child) {
-    $index = $this->indexOf($child);
-    $child->parent = NULL;
-    array_splice($this->children, $index, 1);
-    return $child;
-  }
-
-  /**
-   * Replace a child in this node.
    * @param Node $replacement
-   * @param Node $old_child
-   * @return Node The replaced old child.
+   * @return $this
    */
-  public function replaceChild(Node $replacement, Node $old_child) {
-    $index = $this->indexOf($old_child);
-    $replacement->parent = $this;
-    $old_child->parent = NULL;
-    array_splice($this->children, $index, 1, array($replacement));
-    return $old_child;
+  protected function replaceChild(Node $child, Node $replacement) {
+    $this->insertBeforeChild($child, $replacement);
+    $this->removeChild($child);
+    return $this;
   }
 
   /**
@@ -124,10 +201,12 @@ abstract class ParentNode extends Node {
    */
   public function filter($type) {
     $matches = array();
-    foreach ($this->children as $child) {
+    $child = $this->head;
+    while ($child) {
       if ($child instanceof $type) {
         $matches[] = $child;
       }
+      $child = $child->next;
     }
     return $matches;
   }
@@ -143,13 +222,15 @@ abstract class ParentNode extends Node {
     if ($this instanceof $type) {
       $matches[] = $this;
     }
-    foreach ($this->children as $child) {
+    $child = $this->head;
+    while ($child) {
       if ($child instanceof $type) {
         $matches[] = $child;
       }
       if ($child instanceof ParentNode) {
         $matches = array_merge($matches, $child->find($type));
       }
+      $child = $child->next;
     }
     return $matches;
   }
@@ -158,10 +239,10 @@ abstract class ParentNode extends Node {
    * @return SourcePosition
    */
   public function getSourcePosition() {
-    if (count($this->children) === 0) {
+    if ($this->head === NULL) {
       return $this->parent->getSourcePosition();
     }
-    $child = $this->children[0];
+    $child = $this->head;
     return $child->getSourcePosition();
   }
 
@@ -170,8 +251,10 @@ abstract class ParentNode extends Node {
    */
   public function __toString() {
     $str = '';
-    foreach ($this->children as $child) {
+    $child = $this->head;
+    while ($child) {
       $str .= (string) $child;
+      $child = $child->next;
     }
     return $str;
   }

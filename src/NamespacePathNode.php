@@ -14,11 +14,13 @@ class NamespacePathNode extends ParentNode {
   public function getPath() {
     $path = '';
     /** @var TokenNode $child */
-    foreach ($this->children as $child) {
+    $child = $this->head;
+    while ($child) {
       $type = $child->getType();
       if ($type === T_NAMESPACE || $type === T_NS_SEPARATOR || $type === T_STRING) {
         $path .= $child->getText();
       }
+      $child = $child->next;
     }
     return $path;
   }

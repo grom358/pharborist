@@ -1624,14 +1624,12 @@ class Parser {
         while ($member_name instanceof ArrayLookupNode) {
           $member_name = $member_name->array;
         }
-        /** @var ArrayLookupNode $parent */
-        $parent = $member_name->getParent();
         // Replace the member name with ClassMemberLookupNode, eg. $class::$var
         $node = new ClassMemberLookupNode();
         $node->className = $node->appendChild($class_name);
         $node->mergeNode($colon_node);
-        $node->memberName = $node->appendChild($member_name);
-        $parent->array = $parent->replaceChild($node, $member_name);
+        $node->memberName = $node->appendChild(clone $member_name);
+        $member_name->replace($node);
         return $this->objectDereference($var_node);
       }
       else {

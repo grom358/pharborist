@@ -26,7 +26,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
     $tree = Parser::parseSnippet($snippet);
     $source = (string) $tree;
     $this->assertEquals($snippet, $source);
-    $first_child = $tree->getChild(0);
+    $first_child = $tree->getFirst();
     $this->assertInstanceOf($expected_type, $first_child);
     return $first_child;
   }
@@ -45,9 +45,9 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
   public function testParseBlank() {
     $tree = Parser::parseSource("<?php\n");
     $this->assertEquals(1, $tree->getChildCount());
-    $this->assertInstanceOf('\Pharborist\TokenNode', $tree->getChild(0));
+    $this->assertInstanceOf('\Pharborist\TokenNode', $tree->getFirst());
     /** @var TokenNode $child */
-    $child = $tree->getChild(0);
+    $child = $tree->getFirst();
     $this->assertEquals(T_OPEN_TAG, $child->getType());
   }
 
@@ -518,7 +518,7 @@ EOF;
     $statement_snippet = $expression . ';';
     /** @var ExpressionStatementNode $statement_node */
     $statement_node = $this->parseSnippet($statement_snippet, '\Pharborist\ExpressionStatementNode');
-    $expression_node = $statement_node->getChild(0);
+    $expression_node = $statement_node->getFirst();
     $this->assertInstanceOf($expected_type, $expression_node);
     return $expression_node;
   }

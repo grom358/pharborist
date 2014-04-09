@@ -5,28 +5,43 @@ namespace Pharborist;
  * A trait declaration.
  */
 class TraitNode extends StatementNode {
+  protected $properties = array(
+    'name' => NULL,
+    'extends' => NULL,
+    'implements' => array(),
+    'statements' => NULL,
+  );
+
   /**
    * @var DocCommentNode
    */
   public $docComment;
 
   /**
-   * @var Node
+   * @return TokenNode
    */
-  public $name;
+  public function getName() {
+    return $this->properties['name'];
+  }
 
   /**
-   * @var NamespacePathNode
+   * @return NamespacePathNode
    */
-  public $extends;
+  public function getExtends() {
+    return $this->properties['extends'];
+  }
 
   /**
-   * @var NamespacePathNode[]
+   * @return NamespacePathNode[]
    */
-  public $implements = array();
+  public function getImplements() {
+    return $this->properties['implements'];
+  }
 
   /**
-   * @var (ClassMemberListNode|ClassMethodNode|ConstantDeclarationNode|TraitUseNode)[]
+   * @return (ClassMemberListNode|ClassMethodNode|ConstantDeclarationNode|TraitUseNode)[]
    */
-  public $statements = array();
+  public function getStatements() {
+    return $this->properties['statements'];
+  }
 }

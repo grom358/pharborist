@@ -14,11 +14,16 @@ class Operator extends PartialNode {
   const ASSOC_RIGHT = 2;
   const ASSOC_NONE = 3;
 
+  protected $properties = array(
+    'operator' => NULL
+  );
+
   /**
-   * Operator node.
-   * @var TokenNode
+   * @return TokenNode
    */
-  public $operatorNode;
+  public function getOperator() {
+    return $this->properties['operator'];
+  }
 
   /**
    * Colon node. Only used by ternary operator.
@@ -77,6 +82,6 @@ class Operator extends PartialNode {
    * Get the position of the operator.
    */
   public function getSourcePosition() {
-    return $this->operatorNode->getSourcePosition();
+    return $this->getOperator()->getSourcePosition();
   }
 }

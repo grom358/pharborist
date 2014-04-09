@@ -7,8 +7,14 @@ namespace Pharborist;
  * For example, MyClass::class
  */
 class ClassNameScalarNode extends ParentNode implements ExpressionNode {
+  protected $properties = array(
+    'className' => NULL,
+  );
+
   /**
-   * @var Node
+   * @return Node
    */
-  public $className;
+  public function getClassName() {
+    return $this->properties['className'];
+  }
 }

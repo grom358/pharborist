@@ -7,13 +7,22 @@ namespace Pharborist;
  * For example, $a = A_SCALAR_VALUE
  */
 class StaticVariableNode extends ParentNode {
-  /**
-   * @var Node
-   */
-  public $name;
+  protected $properties = array(
+    'name' => NULL,
+    'initialValue' => NULL,
+  );
 
   /**
-   * @var Node
+   * @return Node
    */
-  public $initialValue;
+  public function getName() {
+    return $this->properties['name'];
+  }
+
+  /**
+   * @return Node
+   */
+  public function getInitialValue() {
+    return $this->properties['initialValue'];
+  }
 }

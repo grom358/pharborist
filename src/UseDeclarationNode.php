@@ -5,13 +5,22 @@ namespace Pharborist;
  * Use declaration.
  */
 class UseDeclarationNode extends ParentNode {
-  /**
-   * @var Node
-   */
-  public $namespacePath;
+  protected $properties = array(
+    'namespacePath' => NULL,
+    'alias' => NULL,
+  );
 
   /**
-   * @var Node
+   * @return Node
    */
-  public $alias;
+  public function getNamespacePath() {
+    return $this->properties['namespacePath'];
+  }
+
+  /**
+   * @return Node
+   */
+  public function getAlias() {
+    return $this->properties['alias'];
+  }
 }

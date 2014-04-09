@@ -5,18 +5,30 @@ namespace Pharborist;
  * A try control structure.
  */
 class TryCatchNode extends StatementNode {
-  /**
-   * @var Node
-   */
-  public $try;
+  protected $properties = array(
+    'try' => NULL,
+    'catches' => NULL,
+    'finally' => NULL,
+  );
 
   /**
-   * @var Node[]
+   * @return Node
    */
-  public $catches = array();
+  public function getTry() {
+    return $this->properties['try'];
+  }
 
   /**
-   * @var Node
+   * @return CatchNode[]
    */
-  public $finally;
+  public function getCatches() {
+    return $this->properties['catches'];
+  }
+
+  /**
+   * @return Node
+   */
+  public function getFinally() {
+    return $this->properties['finally'];
+  }
 }

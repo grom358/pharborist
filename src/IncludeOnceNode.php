@@ -5,6 +5,10 @@ namespace Pharborist;
  * An include_once.
  */
 class IncludeOnceNode extends ParentNode implements ExpressionNode {
+  protected $properties = array(
+    'expression' => NULL,
+  );
+
   /**
    * @var DocCommentNode
    */
@@ -13,5 +17,7 @@ class IncludeOnceNode extends ParentNode implements ExpressionNode {
   /**
    * @var ExpressionNode
    */
-  public $expression;
+  public function getExpression() {
+    return $this->properties['expression'];
+  }
 }

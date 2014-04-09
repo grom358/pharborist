@@ -5,13 +5,22 @@ namespace Pharborist;
  * do while control structure.
  */
 class DoWhileNode extends StatementNode {
-  /**
-   * @var ExpressionNode
-   */
-  public $condition;
+  protected $properties = array(
+    'condition' => NULL,
+    'body' => NULL,
+  );
 
   /**
-   * @var Node
+   * @return ExpressionNode
    */
-  public $body;
+  public function getCondition() {
+    return $this->properties['condition'];
+  }
+
+  /**
+   * @return Node
+   */
+  public function getBody() {
+    return $this->properties['body'];
+  }
 }

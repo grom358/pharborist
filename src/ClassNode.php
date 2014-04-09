@@ -5,38 +5,59 @@ namespace Pharborist;
  * Class declaration.
  */
 class ClassNode extends StatementNode {
+  protected $properties = array(
+    'abstract' => NULL,
+    'final' => NULL,
+    'name' => NULL,
+    'extends' => NULL,
+    'implements' => array(),
+    'statements' => array(),
+  );
+
   /**
    * @var DocCommentNode
    */
   public $docComment;
 
   /**
-   * @var Node
+   * @return TokenNode
    */
-  public $abstract;
+  public function getAbstract() {
+    return $this->properties['abstract'];
+  }
 
   /**
-   * @var Node
+   * @return TokenNode
    */
-  public $final;
+  public function getFinal() {
+    return $this->properties['final'];
+  }
 
   /**
-   * @var Node
+   * @return TokenNode
    */
-  public $name;
+  public function getName() {
+    return $this->properties['name'];
+  }
 
   /**
-   * @var NamespacePathNode
+   * @return NamespacePathNode
    */
-  public $extends;
+  public function getExtends() {
+    return $this->properties['extends'];
+  }
 
   /**
-   * @var NamespacePathNode[]
+   * @return NamespacePathNode[]
    */
-  public $implements = array();
+  public function getImplements() {
+    return $this->properties['implements'];
+  }
 
   /**
-   * @var (ClassMemberListNode|ClassMethodNode|ConstantDeclarationNode|TraitUseNode)[]
+   * @return (ClassMemberListNode|ClassMethodNode|ConstantDeclarationNode|TraitUseNode)[]
    */
-  public $statements = array();
+  public function getStatements() {
+    return $this->properties['statements'];
+  }
 }

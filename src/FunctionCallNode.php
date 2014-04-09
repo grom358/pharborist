@@ -5,13 +5,22 @@ namespace Pharborist;
  * A function call.
  */
 class FunctionCallNode extends ParentNode implements ExpressionNode {
-  /**
-   * @var Node
-   */
-  public $functionReference;
+  protected $properties = array(
+    'functionReference' => NULL,
+    'arguments' => array(),
+  );
 
   /**
-   * @var ExpressionNode[]
+   * @return Node
    */
-  public $arguments = array();
+  public function getFunctionReference() {
+    return $this->properties['functionReference'];
+  }
+
+  /**
+   * @return ExpressionNode[]
+   */
+  public function getArguments() {
+    return $this->properties['arguments'];
+  }
 }

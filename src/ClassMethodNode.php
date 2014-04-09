@@ -5,33 +5,51 @@ namespace Pharborist;
  * A class method.
  */
 class ClassMethodNode extends ParentNode {
+  protected $properties = array(
+    'modifiers' => NULL,
+    'reference' => NULL,
+    'name' => NULL,
+    'parameters' => array(),
+    'body' => NULL,
+  );
+
   /**
    * @var DocCommentNode
    */
   public $docComment;
 
   /**
-   * @var ModifiersNode
+   * @return ModifiersNode
    */
-  public $modifiers;
+  public function getModifiers() {
+    return $this->properties['modifiers'];
+  }
 
   /**
-   * @var Node
+   * @return TokenNode
    */
-  public $reference;
+  public function getReference() {
+    return $this->properties['reference'];
+  }
 
   /**
-   * @var Node
+   * @return TokenNode
    */
-  public $name;
+  public function getName() {
+    return $this->properties['name'];
+  }
 
   /**
-   * @var ParameterNode[]
+   * @return ParameterNode[]
    */
-  public $parameters = array();
+  public function getParameters() {
+    return $this->properties['parameters'];
+  }
 
   /**
-   * @var Node
+   * @return Node
    */
-  public $body;
+  public function getBody() {
+    return $this->properties['body'];
+  }
 }

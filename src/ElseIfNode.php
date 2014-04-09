@@ -5,13 +5,22 @@ namespace Pharborist;
  * elseif control structure.
  */
 class ElseIfNode extends ParentNode {
-  /**
-   * @var ExpressionNode
-   */
-  public $condition;
+  protected $properties = array(
+    'condition' => NULL,
+    'then' => NULL,
+  );
 
   /**
-   * @var Node
+   * @return ExpressionNode
    */
-  public $then;
+  public function getCondition() {
+    return $this->properties['condition'];
+  }
+
+  /**
+   * @return Node
+   */
+  public function getThen() {
+    return $this->properties['then'];
+  }
 }

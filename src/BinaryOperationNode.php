@@ -5,18 +5,30 @@ namespace Pharborist;
  * A binary operation.
  */
 abstract class BinaryOperationNode extends ParentNode implements ExpressionNode {
-  /**
-   * @var ExpressionNode
-   */
-  public $left;
+  protected $properties = array(
+    'left' => NULL,
+    'operator' => NULL,
+    'right' => NULL,
+  );
 
   /**
-   * @var Node
+   * @return ExpressionNode
    */
-  public $operator;
+  public function getLeft() {
+    return $this->properties['left'];
+  }
 
   /**
-   * @var ExpressionNode
+   * @return Node
    */
-  public $right;
+  public function getOperator() {
+    return $this->properties['operator'];
+  }
+
+  /**
+   * @return ExpressionNode
+   */
+  public function getRight() {
+    return $this->properties['right'];
+  }
 }

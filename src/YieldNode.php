@@ -5,13 +5,22 @@ namespace Pharborist;
  * A yield expression.
  */
 class YieldNode extends ParentNode implements ExpressionNode {
-  /**
-   * @var Node
-   */
-  public $key;
+  protected $properties = array(
+    'key' => NULL,
+    'value' => NULL,
+  );
 
   /**
-   * @var Node
+   * @return Node
    */
-  public $value;
+  public function getKey() {
+    return $this->properties['key'];
+  }
+
+  /**
+   * @return Node
+   */
+  public function getValue() {
+    return $this->properties['value'];
+  }
 }

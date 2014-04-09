@@ -5,8 +5,14 @@ namespace Pharborist;
  * Use declaration statement.
  */
 class UseDeclarationStatementNode extends StatementNode {
+  protected $properties = array(
+    'declarations' => array(),
+  );
+
   /**
-   * @var UseDeclarationNode[]
+   * @return UseDeclarationNode[]
    */
-  public $declarations = array();
+  public function getDeclarations() {
+    return $this->properties['declarations'];
+  }
 }

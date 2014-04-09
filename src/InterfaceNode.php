@@ -5,23 +5,35 @@ namespace Pharborist;
  * An interface declaration.
  */
 class InterfaceNode extends StatementNode {
+  protected $properties = array(
+    'name' => NULL,
+    'extends' => array(),
+    'statements' => array(),
+  );
+
   /**
    * @var DocCommentNode
    */
   public $docComment;
 
   /**
-   * @var Node
+   * @return Node
    */
-  public $name;
+  public function getName() {
+    return $this->properties['name'];
+  }
 
   /**
-   * @var NamespacePathNode[]
+   * @return NamespacePathNode[]
    */
-  public $extends = array();
+  public function getExtends() {
+    return $this->properties['extends'];
+  }
 
   /**
-   * @var (InterfaceMethodNode|ConstantDeclarationNode)[]
+   * @return (InterfaceMethodNode|ConstantDeclarationNode)[]
    */
-  public $statements = array();
+  public function getStatements() {
+    return $this->properties['statements'];
+  }
 }

@@ -7,8 +7,14 @@ namespace Pharborist;
  * For example, static $a, $b = A_SCALAR;
  */
 class StaticVariableStatementNode extends StatementNode {
+  protected $properties = array(
+    'variables' => array(),
+  );
+
   /**
-   * @var StaticVariableNode[]
+   * @return StaticVariableNode[]
    */
-  public $variables = array();
+  public function getVariables() {
+    return $this->properties['variables'];
+  }
 }

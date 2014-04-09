@@ -7,8 +7,14 @@ namespace Pharborist;
  * For example, global $a, $b;
  */
 class GlobalStatementNode extends StatementNode {
+  protected $properties = array(
+    'variables' => array(),
+  );
+
   /**
-   * @var (VariableNode|VariableVariableNode|CompoundVariableNode)[]
+   * @return (VariableNode|VariableVariableNode|CompoundVariableNode)[]
    */
-  public $variables = array();
+  public function getVariables() {
+    return $this->properties['variables'];
+  }
 }

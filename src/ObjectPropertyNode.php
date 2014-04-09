@@ -7,13 +7,22 @@ namespace Pharborist;
  * For example, $object->property
  */
 class ObjectPropertyNode extends ParentNode implements ExpressionNode {
-  /**
-   * @var Node
-   */
-  public $object;
+  protected $properties = array(
+    'object' => NULL,
+    'property' => NULL,
+  );
 
   /**
-   * @var Node
+   * @return Node
    */
-  public $property;
+  public function getObject() {
+    return $this->properties['object'];
+  }
+
+  /**
+   * @return Node
+   */
+  public function getProperty() {
+    return $this->properties['property'];
+  }
 }

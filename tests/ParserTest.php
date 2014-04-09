@@ -57,19 +57,19 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
   public function testNamespace() {
     /** @var NamespaceNode $namespace_node */
     $namespace_node = $this->parseSnippet('namespace MyNamespace\Test ;', '\Pharborist\NamespaceNode');
-    $this->assertEquals('MyNamespace\Test', (string) $namespace_node->name);
+    $this->assertEquals('MyNamespace\Test', (string) $namespace_node->getName());
 
     // Test with body
     /** @var NamespaceNode $namespace_node */
     $namespace_node = $this->parseSnippet('namespace MyNamespace\Test\Body { }', '\Pharborist\NamespaceNode');
-    $this->assertEquals('MyNamespace\Test\Body', (string) $namespace_node->name);
-    $this->assertNotNull($namespace_node->body);
+    $this->assertEquals('MyNamespace\Test\Body', (string) $namespace_node->getName());
+    $this->assertNotNull($namespace_node->getBody());
 
     // Test global
     /** @var NamespaceNode $namespace_node */
     $namespace_node = $this->parseSnippet('namespace { }', '\Pharborist\NamespaceNode');
-    $this->assertNull($namespace_node->name);
-    $this->assertNotNull($namespace_node->body);
+    $this->assertNull($namespace_node->getName());
+    $this->assertNotNull($namespace_node->getBody());
   }
 
   /**
@@ -81,9 +81,9 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
       'use MyNamespace\MyClass as MyAlias ;',
       '\Pharborist\UseDeclarationStatementNode'
     );
-    $use_declaration = $use_declaration_statement->declarations[0];
-    $this->assertEquals('MyNamespace\MyClass', (string) $use_declaration->namespacePath);
-    $this->assertEquals('MyAlias', (string) $use_declaration->alias);
+    $use_declaration = $use_declaration_statement->getDeclarations()[0];
+    $this->assertEquals('MyNamespace\MyClass', (string) $use_declaration->getNamespacePath());
+    $this->assertEquals('MyAlias', (string) $use_declaration->getAlias());
     $this->assertEquals('MyNamespace\MyClass as MyAlias', (string) $use_declaration);
   }
 
@@ -96,22 +96,23 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
       'function my_func(array $a, callable $b, namespace\Test $c, \MyNamespace\Test $d, $e = 1) { }',
       '\Pharborist\FunctionDeclarationNode'
     );
-    $this->assertEquals('my_func', (string) $function_declaration->name);
-    $parameter = $function_declaration->parameters[0];
-    $this->assertEquals('$a', (string) $parameter->name);
-    $this->assertEquals('array', (string) $parameter->classType);
-    $parameter = $function_declaration->parameters[1];
-    $this->assertEquals('$b', (string) $parameter->name);
-    $this->assertEquals('callable', (string) $parameter->classType);
-    $parameter = $function_declaration->parameters[2];
-    $this->assertEquals('$c', (string) $parameter->name);
-    $this->assertEquals('namespace\Test', (string) $parameter->classType);
-    $parameter = $function_declaration->parameters[3];
-    $this->assertEquals('$d', (string) $parameter->name);
-    $this->assertEquals('\MyNamespace\Test', (string) $parameter->classType);
-    $parameter = $function_declaration->parameters[4];
-    $this->assertEquals('$e', (string) $parameter->name);
-    $this->assertEquals('1', (string) $parameter->defaultValue);
+    $this->assertEquals('my_func', (string) $function_declaration->getName());
+    $parameters = $function_declaration->getParameters();
+    $parameter = $parameters[0];
+    $this->assertEquals('$a', (string) $parameter->getName());
+    $this->assertEquals('array', (string) $parameter->getClassType());
+    $parameter = $parameters[1];
+    $this->assertEquals('$b', (string) $parameter->getName());
+    $this->assertEquals('callable', (string) $parameter->getClassType());
+    $parameter = $parameters[2];
+    $this->assertEquals('$c', (string) $parameter->getName());
+    $this->assertEquals('namespace\Test', (string) $parameter->getClassType());
+    $parameter = $parameters[3];
+    $this->assertEquals('$d', (string) $parameter->getName());
+    $this->assertEquals('\MyNamespace\Test', (string) $parameter->getClassType());
+    $parameter = $parameters[4];
+    $this->assertEquals('$e', (string) $parameter->getName());
+    $this->assertEquals('1', (string) $parameter->getDefaultValue());
   }
 
   /**
@@ -120,9 +121,9 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
   public function testConstDeclaration() {
     /** @var ConstantDeclarationStatementNode $const_declaration_list */
     $const_declaration_list = $this->parseSnippet('const MyConst = 1;', '\Pharborist\ConstantDeclarationStatementNode');
-    $const_declaration = $const_declaration_list->declarations[0];
-    $this->assertEquals('MyConst', (string) $const_declaration->name);
-    $this->assertEquals('1', (string) $const_declaration->value);
+    $const_declaration = $const_declaration_list->getDeclarations()[0];
+    $this->assertEquals('MyConst', (string) $const_declaration->getName());
+    $this->assertEquals('1', (string) $const_declaration->getValue());
   }
 
   /**
@@ -175,90 +176,93 @@ abstract class MyClass extends ParentClass implements SomeInterface, AnotherInte
 EOF;
     /** @var ClassNode $class_declaration */
     $class_declaration = $this->parseSnippet($snippet, '\Pharborist\ClassNode');
-    $this->assertEquals('MyClass', (string) $class_declaration->name);
-    $this->assertEquals('ParentClass', (string) $class_declaration->extends);
-    $this->assertEquals('SomeInterface', (string) $class_declaration->implements[0]);
-    $this->assertEquals('AnotherInterface', (string) $class_declaration->implements[1]);
-    $this->assertInstanceOf('\Pharborist\ConstantDeclarationStatementNode', $class_declaration->statements[0]);
+    $this->assertEquals('MyClass', (string) $class_declaration->getName());
+    $this->assertEquals('ParentClass', (string) $class_declaration->getExtends());
+    $this->assertEquals('SomeInterface', (string) $class_declaration->getImplements()[0]);
+    $this->assertEquals('AnotherInterface', (string) $class_declaration->getImplements()[1]);
+    $this->assertInstanceOf('\Pharborist\ConstantDeclarationStatementNode', $class_declaration->getStatements()[0]);
 
     /** @var ClassMemberListNode $class_member_list */
-    $class_member_list = $class_declaration->statements[1];
+    $statements = $class_declaration->getStatements();
+    $class_member_list = $statements[1];
     $this->assertInstanceOf('\Pharborist\ClassMemberListNode', $class_member_list);
-    $this->assertEquals('public', (string) $class_member_list->modifiers->visibility);
-    $class_member = $class_member_list->members[0];
-    $this->assertEquals('$publicProperty', (string) $class_member->name);
-    $this->assertEquals('1', (string) $class_member->initialValue);
+    $this->assertEquals('public', (string) $class_member_list->getModifiers()->getVisibility());
+    $class_member = $class_member_list->getMembers()[0];
+    $this->assertEquals('$publicProperty', (string) $class_member->getName());
+    $this->assertEquals('1', (string) $class_member->getInitialValue());
 
-    $class_member_list = $class_declaration->statements[2];
-    $this->assertEquals('protected', (string) $class_member_list->modifiers->visibility);
-    $class_member = $class_member_list->members[0];
-    $this->assertEquals('$protectedProperty', (string) $class_member->name);
+    $class_member_list = $statements[2];
+    $this->assertEquals('protected', (string) $class_member_list->getModifiers()->getVisibility());
+    $class_member = $class_member_list->getMembers()[0];
+    $this->assertEquals('$protectedProperty', (string) $class_member->getName());
 
-    $class_member_list = $class_declaration->statements[3];
-    $this->assertEquals('private', (string) $class_member_list->modifiers->visibility);
-    $class_member = $class_member_list->members[0];
-    $this->assertEquals('$privateProperty', (string) $class_member->name);
+    $class_member_list = $statements[3];
+    $this->assertEquals('private', (string) $class_member_list->getModifiers()->getVisibility());
+    $class_member = $class_member_list->getMembers()[0];
+    $this->assertEquals('$privateProperty', (string) $class_member->getName());
 
-    $class_member_list = $class_declaration->statements[4];
-    $this->assertEquals('public', (string) $class_member_list->modifiers->visibility);
-    $this->assertEquals('static', (string) $class_member_list->modifiers->static);
-    $class_member = $class_member_list->members[0];
-    $this->assertEquals('$classProperty', (string) $class_member->name);
+    $class_member_list = $statements[4];
+    $this->assertEquals('public', (string) $class_member_list->getModifiers()->getVisibility());
+    $this->assertEquals('static', (string) $class_member_list->getModifiers()->getStatic());
+    $class_member = $class_member_list->getMembers()[0];
+    $this->assertEquals('$classProperty', (string) $class_member->getName());
 
     /** @var ClassMethodNode $method */
-    $method = $class_declaration->statements[6];
+    $method = $statements[6];
     $this->assertInstanceOf('\Pharborist\ClassMethodNode', $method);
-    $this->assertEquals('myMethod', (string) $method->name);
-    $this->assertEquals('public', (string) $method->modifiers->visibility);
+    $this->assertEquals('myMethod', (string) $method->getName());
+    $this->assertEquals('public', (string) $method->getModifiers()->getVisibility());
 
-    $method = $class_declaration->statements[7];
-    $this->assertEquals('noOverride', (string) $method->name);
-    $this->assertEquals('public', (string) $method->modifiers->visibility);
-    $this->assertEquals('final', (string) $method->modifiers->final);
+    $method = $statements[7];
+    $this->assertEquals('noOverride', (string) $method->getName());
+    $this->assertEquals('public', (string) $method->getModifiers()->getVisibility());
+    $this->assertEquals('final', (string) $method->getModifiers()->getFinal());
 
-    $method = $class_declaration->statements[8];
-    $this->assertEquals('classMethod', (string) $method->name);
-    $this->assertEquals('public', (string) $method->modifiers->visibility);
-    $this->assertEquals('static', (string) $method->modifiers->static);
+    $method = $statements[8];
+    $this->assertEquals('classMethod', (string) $method->getName());
+    $this->assertEquals('public', (string) $method->getModifiers()->getVisibility());
+    $this->assertEquals('static', (string) $method->getModifiers()->getStatic());
 
-    $method = $class_declaration->statements[9];
-    $this->assertEquals('mustImplement', (string) $method->name);
-    $this->assertEquals('public', (string) $method->modifiers->visibility);
-    $this->assertEquals('abstract', (string) $method->modifiers->abstract);
+    $method = $statements[9];
+    $this->assertEquals('mustImplement', (string) $method->getName());
+    $this->assertEquals('public', (string) $method->getModifiers()->getVisibility());
+    $this->assertEquals('abstract', (string) $method->getModifiers()->getAbstract());
 
-    /** @var TraituseNode $trait_use */
-    $trait_use = $class_declaration->statements[10];
+    /** @var TraitUseNode $trait_use */
+    $trait_use = $statements[10];
+    $traits = $trait_use->getTraits();
     $this->assertInstanceOf('\Pharborist\TraitUseNode', $trait_use);
-    $this->assertEquals('A', (string) $trait_use->traits[0]);
-    $this->assertEquals('B', (string) $trait_use->traits[1]);
-    $this->assertEquals('C', (string) $trait_use->traits[2]);
+    $this->assertEquals('A', (string) $traits[0]);
+    $this->assertEquals('B', (string) $traits[1]);
+    $this->assertEquals('C', (string) $traits[2]);
 
-    /** @var TraitPrecedenceNode $trait_adaptation */
-    $trait_precedence = $trait_use->adaptations[0];
+    $adaptations = $trait_use->getAdaptations();
+    /** @var TraitPrecedenceNode $trait_precedence */
+    $trait_precedence = $adaptations[0];
     $this->assertInstanceOf('\Pharborist\TraitPrecedenceNode', $trait_precedence);
-    $this->assertInstanceOf('\Pharborist\TraitMethodReferenceNode', $trait_precedence->traitMethodReference);
-    $this->assertEquals('B::smallTalk', (string) $trait_precedence->traitMethodReference);
-    $this->assertEquals('B', (string) $trait_precedence->traitMethodReference->traitName);
-    $this->assertEquals('smallTalk', (string) $trait_precedence->traitMethodReference->methodReference);
-    $this->assertEquals('A', (string) $trait_precedence->traitNames[0]);
+    $this->assertInstanceOf('\Pharborist\TraitMethodReferenceNode', $trait_precedence->getTraitMethodReference());
+    $this->assertEquals('B::smallTalk', (string) $trait_precedence->getTraitMethodReference());
+    $this->assertEquals('B', (string) $trait_precedence->getTraitMethodReference()->getTraitName());
+    $this->assertEquals('smallTalk', (string) $trait_precedence->getTraitMethodReference()->getMethodReference());
+    $this->assertEquals('A', (string) $trait_precedence->getTraitNames()[0]);
 
-    $trait_precedence = $trait_use->adaptations[1];
+    $trait_precedence = $adaptations[1];
     $this->assertInstanceOf('\Pharborist\TraitPrecedenceNode', $trait_precedence);
-    $this->assertInstanceOf('\Pharborist\TraitMethodReferenceNode', $trait_precedence->traitMethodReference);
-    $this->assertEquals('A::bigTalk', (string) $trait_precedence->traitMethodReference);
-    $this->assertEquals('A', (string) $trait_precedence->traitMethodReference->traitName);
-    $this->assertEquals('bigTalk', (string) $trait_precedence->traitMethodReference->methodReference);
-    $this->assertEquals('B', (string) $trait_precedence->traitNames[0]);
-    $this->assertEquals('C', (string) $trait_precedence->traitNames[1]);
+    $this->assertInstanceOf('\Pharborist\TraitMethodReferenceNode', $trait_precedence->getTraitMethodReference());
+    $this->assertEquals('A::bigTalk', (string) $trait_precedence->getTraitMethodReference());
+    $this->assertEquals('A', (string) $trait_precedence->getTraitMethodReference()->getTraitName());
+    $this->assertEquals('bigTalk', (string) $trait_precedence->getTraitMethodReference()->getMethodReference());
+    $this->assertEquals('B', (string) $trait_precedence->getTraitNames()[0]);
+    $this->assertEquals('C', (string) $trait_precedence->getTraitNames()[1]);
 
     /** @var TraitAliasNode $trait_alias */
-    $trait_alias = $trait_use->adaptations[2];
+    $trait_alias = $adaptations[2];
     $this->assertInstanceOf('\Pharborist\TraitAliasNode', $trait_alias);
-    $this->assertInstanceOf('\Pharborist\TraitMethodReferenceNode', $trait_alias->traitMethodReference);
-    $this->assertEquals('B::bigTalk', (string) $trait_alias->traitMethodReference);
-    $this->assertEquals('B', (string) $trait_alias->traitMethodReference->traitName);
-    $this->assertEquals('bigTalk', (string) $trait_alias->traitMethodReference->methodReference);
-    $this->assertEquals('talk', (string) $trait_alias->alias);
+    $this->assertInstanceOf('\Pharborist\TraitMethodReferenceNode', $trait_alias->getTraitMethodReference());
+    $this->assertEquals('B::bigTalk', (string) $trait_alias->getTraitMethodReference());
+    $this->assertEquals('B', (string) $trait_alias->getTraitMethodReference()->getTraitName());
+    $this->assertEquals('bigTalk', (string) $trait_alias->getTraitMethodReference()->getMethodReference());
+    $this->assertEquals('talk', (string) $trait_alias->getAlias());
   }
 
   /**
@@ -273,21 +277,21 @@ interface MyInterface extends SomeInterface, AnotherInterface {
 EOF;
     /** @var InterfaceNode $interface_declaration */
     $interface_declaration = $this->parseSnippet($snippet, '\Pharborist\InterfaceNode');
-    $this->assertEquals('MyInterface', (string) $interface_declaration->name);
-    $this->assertEquals('SomeInterface', (string) $interface_declaration->extends[0]);
-    $this->assertEquals('AnotherInterface', (string) $interface_declaration->extends[1]);
+    $this->assertEquals('MyInterface', (string) $interface_declaration->getName());
+    $this->assertEquals('SomeInterface', (string) $interface_declaration->getExtends()[0]);
+    $this->assertEquals('AnotherInterface', (string) $interface_declaration->getExtends()[1]);
 
     /** @var ConstantDeclarationStatementNode $constant_declaration_statement */
-    $constant_declaration_statement = $interface_declaration->statements[0];
+    $constant_declaration_statement = $interface_declaration->getStatements()[0];
     $this->assertInstanceOf('\Pharborist\ConstantDeclarationStatementNode', $constant_declaration_statement);
-    $constant_declaration = $constant_declaration_statement->declarations[0];
-    $this->assertEquals('MY_CONST', (string) $constant_declaration->name);
-    $this->assertEquals('1', (string) $constant_declaration->value);
+    $constant_declaration = $constant_declaration_statement->getDeclarations()[0];
+    $this->assertEquals('MY_CONST', (string) $constant_declaration->getName());
+    $this->assertEquals('1', (string) $constant_declaration->getValue());
 
     /** @var InterfaceMethodNode $method */
-    $method = $interface_declaration->statements[1];
-    $this->assertEquals('myMethod', (string) $method->name);
-    $this->assertEquals('public', (string) $method->visibility);
+    $method = $interface_declaration->getStatements()[1];
+    $this->assertEquals('myMethod', (string) $method->getName());
+    $this->assertEquals('public', (string) $method->getVisibility());
   }
 
   /**
@@ -302,10 +306,11 @@ trait MyTrait extends ParentClass implements SomeInterface, AnotherInterface {
 EOF;
     /** @var TraitNode $trait_declaration */
     $trait_declaration = $this->parseSnippet($snippet, '\Pharborist\TraitNode');
-    $this->assertEquals('MyTrait', (string) $trait_declaration->name);
-    $this->assertEquals('ParentClass', (string) $trait_declaration->extends);
-    $this->assertEquals('SomeInterface', (string) $trait_declaration->implements[0]);
-    $this->assertEquals('AnotherInterface', (string) $trait_declaration->implements[1]);
+    $this->assertEquals('MyTrait', (string) $trait_declaration->getName());
+    $this->assertEquals('ParentClass', (string) $trait_declaration->getExtends());
+    $implements = $trait_declaration->getImplements();
+    $this->assertEquals('SomeInterface', (string) $implements[0]);
+    $this->assertEquals('AnotherInterface', (string) $implements[1]);
   }
 
   /**
@@ -324,11 +329,11 @@ else {
 EOF;
     /** @var IfNode $if */
     $if = $this->parseSnippet($snippet, '\Pharborist\IfNode');
-    $this->assertEquals('($condition)', (string) $if->condition);
-    $this->assertEquals(2, count($if->elseIfList));
-    $this->assertEquals('($other_condition)', (string) $if->elseIfList[0]->condition);
-    $this->assertEquals('($another_condition)', (string) $if->elseIfList[1]->condition);
-    $this->assertNotNull($if->else);
+    $this->assertEquals('($condition)', (string) $if->getCondition());
+    $this->assertEquals(2, count($if->getElseIfList()));
+    $this->assertEquals('($other_condition)', (string) $if->getElseIfList()[0]->getCondition());
+    $this->assertEquals('($another_condition)', (string) $if->getElseIfList()[1]->getCondition());
+    $this->assertNotNull($if->getElse());
   }
 
   /**
@@ -348,11 +353,11 @@ endif;
 EOF;
     /** @var IfNode $if */
     $if = $this->parseSnippet($snippet, '\Pharborist\IfNode');
-    $this->assertEquals('($condition)', (string) $if->condition);
-    $this->assertEquals(2, count($if->elseIfList));
-    $this->assertEquals('($other_condition)', (string) $if->elseIfList[0]->condition);
-    $this->assertEquals('($another_condition)', (string) $if->elseIfList[1]->condition);
-    $this->assertNotNull($if->else);
+    $this->assertEquals('($condition)', (string) $if->getCondition());
+    $this->assertEquals(2, count($if->getElseIfList()));
+    $this->assertEquals('($other_condition)', (string) $if->getElseIfList()[0]->getCondition());
+    $this->assertEquals('($another_condition)', (string) $if->getElseIfList()[1]->getCondition());
+    $this->assertNotNull($if->getElse());
   }
 
   /**
@@ -546,8 +551,8 @@ EOF;
     $statement_snippet = 'unset(' . $variable . ');';
     /** @var UnsetStatementNode $statement_node */
     $statement_node = $this->parseSnippet($statement_snippet, '\Pharborist\UnsetStatementNode');
-    $unset_node = $statement_node->functionCall;
-    $variable_node = $unset_node->arguments[0];
+    $unset_node = $statement_node->getFunctionCall();
+    $variable_node = $unset_node->getArguments()[0];
     $this->assertInstanceOf($expected_type, $variable_node);
     return $variable_node;
   }
@@ -615,9 +620,9 @@ EOF;
     $this->parseExpression('$a = $b ?: $c', '\Pharborist\AssignNode');
     /** @var TernaryOperationNode $ternary_node */
     $ternary_node = $this->parseExpression('$a ? $b : $c ? $d : $e', '\Pharborist\TernaryOperationNode');
-    $this->assertEquals('$a ? $b : $c', $ternary_node->condition);
-    $this->assertEquals('$d', $ternary_node->then);
-    $this->assertEquals('$e', $ternary_node->else);
+    $this->assertEquals('$a ? $b : $c', (string) $ternary_node->getCondition());
+    $this->assertEquals('$d', (string) $ternary_node->getThen());
+    $this->assertEquals('$e', (string) $ternary_node->getElse());
 
     $this->parseExpression('$a or $b', '\Pharborist\LogicalOrNode');
     $this->parseExpression('$a xor $b', '\Pharborist\LogicalXorNode');

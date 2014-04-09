@@ -5,9 +5,15 @@ namespace Pharborist;
  * A return statement.
  */
 class ReturnStatementNode extends StatementNode {
+  protected $properties = array(
+    'value' => NULL,
+  );
+
   /**
    * An optional value to return.
-   * @var ExpressionNode
+   * @return ExpressionNode
    */
-  public $value;
+  public function getValue() {
+    return $this->properties['value'];
+  }
 }

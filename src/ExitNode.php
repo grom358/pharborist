@@ -5,8 +5,14 @@ namespace Pharborist;
  * An exit.
  */
 class ExitNode extends ParentNode implements ExpressionNode {
+  protected $properties = array(
+    'status' => NULL,
+  );
+
   /**
-   * @var Node
+   * @return Node
    */
-  public $status;
+  public function getStatus() {
+    return $this->properties['status'];
+  }
 }

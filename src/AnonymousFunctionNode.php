@@ -5,23 +5,38 @@ namespace Pharborist;
  * An anonymous function.
  */
 class AnonymousFunctionNode extends ParentNode implements ExpressionNode {
-  /**
-   * @var Node
-   */
-  public $reference;
+  protected $properties = array(
+    'reference' => NULL,
+    'parameters' => array(),
+    'lexicalVariables' => array(),
+    'body' => NULL,
+  );
 
   /**
-   * @var ParameterNode[]
+   * @return Node
    */
-  public $parameters = array();
+  public function getReference() {
+    return $this->properties['reference'];
+  }
 
   /**
-   * @var (VariableNode|ReferenceVariableNode)[]
+   * @return ParameterNode[]
    */
-  public $lexicalVariables = array();
+  public function getParameters() {
+    return $this->properties['parameters'];
+  }
 
   /**
-   * @var Node
+   * @return (VariableNode|ReferenceVariableNode)[]
    */
-  public $body;
+  public function getLexicalVariables() {
+    return $this->properties['lexicalVariables'];
+  }
+
+  /**
+   * @return Node
+   */
+  public function getBody() {
+    return $this->properties['body'];
+  }
 }

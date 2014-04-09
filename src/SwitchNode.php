@@ -5,13 +5,22 @@ namespace Pharborist;
  * A switch control structure.
  */
 class SwitchNode extends StatementNode {
-  /**
-   * @var Node
-   */
-  public $switchOn;
+  protected $properties = array(
+    'switchOn' => NULL,
+    'cases' => array(),
+  );
 
   /**
-   * @var CaseNode[]
+   * @return Node
    */
-  public $cases = array();
+  public function getSwitchOn() {
+    return $this->properties['switchOn'];
+  }
+
+  /**
+   * @return CaseNode[]
+   */
+  public function getCases() {
+    return $this->properties['cases'];
+  }
 }

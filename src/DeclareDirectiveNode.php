@@ -5,13 +5,22 @@ namespace Pharborist;
  * A declare directive.
  */
 class DeclareDirectiveNode extends ParentNode {
-  /**
-   * @var Node
-   */
-  public $name;
+  protected $properties = array(
+    'name' => NULL,
+    'value' => NULL,
+  );
 
   /**
-   * @var Node
+   * @return Node
    */
-  public $value;
+  public function getName() {
+    return $this->properties['name'];
+  }
+
+  /**
+   * @return Node
+   */
+  public function getValue() {
+    return $this->properties['value'];
+  }
 }

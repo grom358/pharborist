@@ -5,23 +5,38 @@ namespace Pharborist;
  * foreach control structure.
  */
 class ForeachNode extends StatementNode {
-  /**
-   * @var Node
-   */
-  public $onEach;
+  protected $properties = array(
+    'onEach' => NULL,
+    'key' => NULL,
+    'value' => NULL,
+    'body' => NULL,
+  );
 
   /**
-   * @var Node
+   * @return Node
    */
-  public $key;
+  public function getOnEach() {
+    return $this->properties['onEach'];
+  }
 
   /**
-   * @var Node
+   * @return Node
    */
-  public $value;
+  public function getKey() {
+    return $this->properties['key'];
+  }
 
   /**
-   * @var Node
+   * @return Node
    */
-  public $body;
+  public function getValue() {
+    return $this->properties['value'];
+  }
+
+  /**
+   * @return Node
+   */
+  public function getBody() {
+    return $this->properties['body'];
+  }
 }

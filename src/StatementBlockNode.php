@@ -5,8 +5,14 @@ namespace Pharborist;
  * A block of statements.
  */
 class StatementBlockNode extends ParentNode {
+  protected $properties = array(
+    'statements' => array(),
+  );
+
   /**
-   * @var StatementNode[]
+   * @return StatementNode[]
    */
-  public $statements = array();
+  public function getStatements() {
+    return $this->properties['statements'];
+  }
 }

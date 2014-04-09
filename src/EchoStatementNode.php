@@ -5,8 +5,14 @@ namespace Pharborist;
  * An echo statement.
  */
 class EchoStatementNode extends StatementNode {
+  protected $properties = array(
+    'expressions' => array(),
+  );
+
   /**
-   * @var ExpressionNode[]
+   * @return ExpressionNode[]
    */
-  public $expressions = array();
+  public function getExpressions() {
+    return $this->properties['expressions'];
+  }
 }

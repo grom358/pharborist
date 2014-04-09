@@ -5,8 +5,14 @@ namespace Pharborist;
  * Node for php array.
  */
 class ArrayNode extends ParentNode implements ExpressionNode {
+  protected $properties = array(
+    'elements' => array(),
+  );
+
   /**
-   * @var Node[]
+   * @return Node[]
    */
-  public $elements = array();
+  public function getElements() {
+    return $this->properties['elements'];
+  }
 }

@@ -5,23 +5,38 @@ namespace Pharborist;
  * An if control structure.
  */
 class IfNode extends StatementNode {
-  /**
-   * @var ExpressionNode
-   */
-  public $condition;
+  protected $properties = array(
+    'condition' => NULL,
+    'then' => NULL,
+    'elseIfList' => array(),
+    'else' => NULL,
+  );
 
   /**
-   * @var Node
+   * @return ExpressionNode
    */
-  public $then;
+  public function getCondition() {
+    return $this->properties['condition'];
+  }
 
   /**
-   * @var ElseIfNode[]
+   * @return Node
    */
-  public $elseIfList = array();
+  public function getThen() {
+    return $this->properties['then'];
+  }
 
   /**
-   * @var Node
+   * @return ElseIfNode[]
    */
-  public $else;
+  public function getElseIfList() {
+    return $this->properties['elseIfList'];
+  }
+
+  /**
+   * @return Node
+   */
+  public function getElse() {
+    return $this->properties['else'];
+  }
 }

@@ -21,6 +21,11 @@ abstract class ParentNode extends Node {
   protected $childCount;
 
   /**
+   * @var array
+   */
+  protected $properties = array();
+
+  /**
    * Get the number of children.
    * @return int
    */
@@ -67,9 +72,10 @@ abstract class ParentNode extends Node {
   /**
    * Append a child to node.
    * @param Node $node
-   * @return Node
+   * @param string $property_name
+   * @return $this
    */
-  public function appendChild(Node $node) {
+  public function appendChild(Node $node, $property_name = NULL) {
     if ($this->tail === NULL) {
       $this->prependChild($node);
     }
@@ -77,7 +83,15 @@ abstract class ParentNode extends Node {
       $this->insertAfterChild($this->tail, $node);
       $this->tail = $node;
     }
-    return $node;
+    if ($property_name !== NULL) {
+      if (is_array($this->properties[$property_name])) {
+        $this->properties[$property_name][] = $node;
+      }
+      else {
+        $this->properties[$property_name] = $node;
+      }
+    }
+    return $this;
   }
 
   /**
@@ -100,6 +114,9 @@ abstract class ParentNode extends Node {
       $next = $child->next;
       $this->appendChild($child);
       $child = $next;
+    }
+    foreach ($node->properties as $name => $value) {
+      $this->properties[$name] = $value;
     }
   }
 
@@ -152,6 +169,20 @@ abstract class ParentNode extends Node {
    */
   protected function removeChild(Node $child) {
     $this->childCount--;
+    foreach ($this->properties as $name => $value) {
+      if (is_array($value)) {
+        foreach ($value as $k => $v) {
+          if ($child === $v) {
+            unset($this->properties[$name][$k]);
+            break 2;
+          }
+        }
+      }
+      elseif ($child === $value) {
+        $this->properties[$name] = NULL;
+        break;
+      }
+    }
     if ($child->previous === NULL) {
       $this->head = $child->next;
     }
@@ -164,6 +195,7 @@ abstract class ParentNode extends Node {
     else {
       $child->next->previous = $child->previous;
     }
+    $child->parent = NULL;
     $child->previous = NULL;
     $child->next = NULL;
     return $this;
@@ -188,8 +220,38 @@ abstract class ParentNode extends Node {
    * @return $this
    */
   protected function replaceChild(Node $child, Node $replacement) {
-    $this->insertBeforeChild($child, $replacement);
-    $this->removeChild($child);
+    foreach ($this->properties as $name => $value) {
+      if (is_array($value)) {
+        foreach ($value as $k => $v) {
+          if ($child === $v) {
+            $this->properties[$name][$k] = $replacement;
+            break 2;
+          }
+        }
+      }
+      elseif ($child === $value) {
+        $this->properties[$name] = $replacement;
+        break;
+      }
+    }
+    $replacement->parent = $this;
+    $replacement->previous = $child->previous;
+    $replacement->next = $child->next;
+    if ($child->previous === NULL) {
+      $this->head = $replacement;
+    }
+    else {
+      $child->previous->next = $replacement;
+    }
+    if ($child->next === NULL) {
+      $this->tail = $replacement;
+    }
+    else {
+      $child->next->previous = $replacement;
+    }
+    $child->parent = NULL;
+    $child->previous = NULL;
+    $child->next = NULL;
     return $this;
   }
 

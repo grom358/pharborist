@@ -7,13 +7,22 @@ namespace Pharborist;
  * For example, new MyClass()
  */
 class NewNode extends ParentNode implements ExpressionNode {
-  /**
-   * @var NamespacePathNode
-   */
-  public $className;
+  protected $properties = array(
+    'className' => NULL,
+    'arguments' => array(),
+  );
 
   /**
-   * @var Node[]
+   * @return NamespacePathNode
    */
-  public $arguments = array();
+  public function getClassName() {
+    return $this->properties['className'];
+  }
+
+  /**
+   * @return Node[]
+   */
+  public function getArguments() {
+    return $this->properties['arguments'];
+  }
 }

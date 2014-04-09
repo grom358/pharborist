@@ -5,28 +5,43 @@ namespace Pharborist;
  * An interface method.
  */
 class InterfaceMethodNode extends ParentNode {
+  protected $properties = array(
+    'visibility' => NULL,
+    'reference' => NULL,
+    'name' => NULL,
+    'parameters' => array(),
+  );
+
   /**
    * @var DocCommentNode
    */
   public $docComment;
 
   /**
-   * @var Node
+   * @return TokenNode
    */
-  public $visibility;
+  public function getVisibility() {
+    return $this->properties['visibility'];
+  }
 
   /**
-   * @var Node
+   * @return TokenNode
    */
-  public $reference;
+  public function getReference() {
+    return $this->properties['reference'];
+  }
 
   /**
-   * @var Node
+   * @return TokenNode
    */
-  public $name;
+  public function getName() {
+    return $this->properties['name'];
+  }
 
   /**
-   * @var ParameterNode[]
+   * @return ParameterNode[]
    */
-  public $parameters = array();
+  public function getParameters() {
+    return $this->properties['parameters'];
+  }
 }

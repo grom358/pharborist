@@ -5,28 +5,43 @@ namespace Pharborist;
  * A function declaration.
  */
 class FunctionDeclarationNode extends StatementNode {
+  protected $properties = array(
+    'reference' => NULL,
+    'name' => NULL,
+    'parameters' => array(),
+    'body' => NULL,
+  );
+
   /**
    * @var DocCommentNode
    */
   public $docComment;
 
   /**
-   * @var Node
+   * @return Node
    */
-  public $reference;
+  public function getReference() {
+    return $this->properties['reference'];
+  }
 
   /**
-   * @var Node
+   * @return Node
    */
-  public $name;
+  public function getName() {
+    return $this->properties['name'];
+  }
 
   /**
-   * @var ParameterNode[]
+   * @return ParameterNode[]
    */
-  public $parameters = array();
+  public function getParameters() {
+    return $this->properties['parameters'];
+  }
 
   /**
-   * @var Node
+   * @return Node
    */
-  public $body;
+  public function getBody() {
+    return $this->properties['body'];
+  }
 }

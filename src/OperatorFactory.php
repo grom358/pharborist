@@ -139,8 +139,7 @@ class OperatorFactory {
     /** @var \Pharborist\UnaryOperationNode $node */
     $node = new $class_name();
     $node->mergeNode($operator);
-    $node->operator = $operator->operatorNode;
-    $node->operand = $node->appendChild($operand);
+    $node->appendChild($operand, 'operand');
     return $node;
   }
 
@@ -154,10 +153,9 @@ class OperatorFactory {
     $class_name = $operator->binaryClassName;
     /** @var \Pharborist\BinaryOperationNode $node */
     $node = new $class_name();
-    $node->left = $node->appendChild($left);
+    $node->appendChild($left, 'left');
     $node->mergeNode($operator);
-    $node->operator = $operator->operatorNode;
-    $node->right = $node->appendChild($right);
+    $node->appendChild($right, 'right');
     return $node;
   }
 
@@ -175,11 +173,10 @@ class OperatorFactory {
       $node = new PostIncrementNode();
     }
     else {
-      throw new ParserException($operator->operatorNode->getSourcePosition(), "Invalid postfix operator!");
+      throw new ParserException($operator->getOperator()->getSourcePosition(), "Invalid postfix operator!");
     }
-    $node->operand = $node->appendChild($operand);
+    $node->appendChild($operand, 'operand');
     $node->mergeNode($operator);
-    $node->operator = $operator->operatorNode;
     return $node;
   }
 
@@ -199,11 +196,11 @@ class OperatorFactory {
     Node $else
   ) {
     $node = new TernaryOperationNode();
-    $node->condition = $node->appendChild($condition);
+    $node->appendChild($condition, 'condition');
     $node->mergeNode($operator);
-    $node->then = $node->appendChild($then);
+    $node->appendChild($then, 'then');
     $node->mergeNode($colon);
-    $node->else = $node->appendChild($else);
+    $node->appendChild($else, 'else');
     return $node;
   }
 }

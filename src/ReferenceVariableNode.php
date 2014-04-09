@@ -7,8 +7,14 @@ namespace Pharborist;
  * For example, &$a
  */
 class ReferenceVariableNode extends ParentNode {
+  protected $properties = array(
+    'variable' => NULL,
+  );
+
   /**
-   * @var Node
+   * @return Node
    */
-  public $variable;
+  public function getVariable() {
+    return $this->properties['variable'];
+  }
 }

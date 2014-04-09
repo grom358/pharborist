@@ -7,8 +7,14 @@ namespace Pharborist;
  * For example, $$a
  */
 class VariableVariableNode extends ParentNode implements ExpressionNode {
+  protected $properties = array(
+    'variable' => NULL,
+  );
+
   /**
-   * @var Node
+   * @return Node
    */
-  public $variable;
+  public function getVariable() {
+    return $this->properties['variable'];
+  }
 }

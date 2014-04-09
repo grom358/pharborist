@@ -5,23 +5,38 @@ namespace Pharborist;
  * A function parameter.
  */
 class ParameterNode extends ParentNode {
-  /**
-   * @var Node
-   */
-  public $classType;
+  protected $properties = array(
+    'classType' => NULL,
+    'reference' => NULL,
+    'name' => NULL,
+    'defaultValue' => NULL,
+  );
 
   /**
-   * @var Node
+   * @return Node
    */
-  public $reference;
+  public function getClassType() {
+    return $this->properties['classType'];
+  }
 
   /**
-   * @var Node
+   * @return TokenNode
    */
-  public $name;
+  public function getReference() {
+    return $this->properties['reference'];
+  }
 
   /**
-   * @var Node
+   * @return Node
    */
-  public $defaultValue;
+  public function getName() {
+    return $this->properties['name'];
+  }
+
+  /**
+   * @return Node
+   */
+  public function getDefaultValue() {
+    return $this->properties['defaultValue'];
+  }
 }

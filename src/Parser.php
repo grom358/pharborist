@@ -1671,7 +1671,7 @@ class Parser {
       case T_VARIABLE:
         $var = $this->indirectReference();
         if ($this->currentType === '(') {
-          return $this->functionCall($var);
+          return $this->functionCall($var, TRUE);
         }
         elseif (!($var instanceof VariableVariableNode) && $this->currentType === T_DOUBLE_COLON) {
           return $this->varClass($var);
@@ -1703,12 +1703,16 @@ class Parser {
   /**
    * Apply any function call, array and object deference.
    * @param Node $function_reference
+   * @param bool $dynamic TRUE if the function call is dynamic
    * @return Node
    */
-  private function functionCall(Node $function_reference) {
+  private function functionCall(Node $function_reference, $dynamic = FALSE) {
     if ($function_reference instanceof NamespacePathNode && $function_reference->getChildCount() === 1 && $function_reference == 'define') {
       $node = new DefineNode();
       $node->docComment = $this->docComment;
+    }
+    elseif ($dynamic) {
+      $node = new DynamicCallNode();
     }
     else {
       $node = new FunctionCallNode();

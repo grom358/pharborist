@@ -577,7 +577,7 @@ EOF;
     $this->parseVariable('$o->{$a}', '\Pharborist\ObjectPropertyNode');
     $this->parseVariable('$o->$a', '\Pharborist\ObjectPropertyNode');
     $this->parseVariable('$o->$$a', '\Pharborist\ObjectPropertyNode');
-    $this->parseVariable('$a()', '\Pharborist\FunctionCallNode');
+    $this->parseVariable('$a()', '\Pharborist\DynamicCallNode');
     $this->parseVariable('$o->$a()', '\Pharborist\ObjectMethodCallNode');
     $this->parseVariable('a()', '\Pharborist\FunctionCallNode');
     $this->parseVariable('namespace\MyClass::a()', '\Pharborist\ClassMethodCallNode');

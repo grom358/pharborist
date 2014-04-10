@@ -4,20 +4,6 @@ namespace Pharborist;
 /**
  * A require_once.
  */
-class RequireOnceNode extends ParentNode implements ExpressionNode {
-  protected $properties = array(
-    'expression' => NULL,
-  );
+class RequireOnceNode extends ImportNode {
 
-  /**
-   * @var DocCommentNode
-   */
-  public $docComment;
-
-  /**
-   * @var ExpressionNode
-   */
-  public function getExpression() {
-    return $this->properties['expression'];
-  }
 }

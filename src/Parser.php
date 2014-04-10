@@ -1712,7 +1712,7 @@ class Parser {
       $node->docComment = $this->docComment;
     }
     elseif ($dynamic) {
-      $node = new DynamicCallNode();
+      $node = new CallbackCallNode();
     }
     else {
       $node = new FunctionCallNode();

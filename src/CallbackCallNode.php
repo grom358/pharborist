@@ -2,11 +2,11 @@
 namespace Pharborist;
 
 /**
- * A dynamic function/method call.
+ * A callback call.
  *
  * For example, $callback().
  */
-class DynamicCallNode extends ParentNode implements ExpressionNode {
+class CallbackCallNode extends ParentNode implements ExpressionNode {
   protected $properties = array(
     'functionReference' => NULL,
     'arguments' => array(),

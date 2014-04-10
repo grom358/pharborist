@@ -220,7 +220,7 @@ class Parser {
         return $this->traitDeclaration();
       case T_HALT_COMPILER:
         $node = new HaltCompilerNode();
-        $this->mustMatch(T_HALT_COMPILER, $node, 'functionReference');
+        $this->mustMatch(T_HALT_COMPILER, $node, 'namespacePath');
         $this->mustMatch('(', $node);
         $this->mustMatch(')', $node);
         $this->mustMatch(';', $node, NULL, TRUE);
@@ -739,7 +739,7 @@ class Parser {
   private function _unset() {
     $statement_node = new UnsetStatementNode();
     $node = new UnsetNode();
-    $this->mustMatch(T_UNSET, $node, 'functionReference');
+    $this->mustMatch(T_UNSET, $node, 'namespacePath');
     $this->mustMatch('(', $node);
     do {
       $node->appendChild($this->variable(), 'arguments');
@@ -1709,15 +1709,17 @@ class Parser {
   private function functionCall(Node $function_reference, $dynamic = FALSE) {
     if ($function_reference instanceof NamespacePathNode && $function_reference->getChildCount() === 1 && $function_reference == 'define') {
       $node = new DefineNode();
+      $node->appendChild($function_reference, 'namespacePath');
       $node->docComment = $this->docComment;
     }
     elseif ($dynamic) {
       $node = new CallbackCallNode();
+      $node->appendChild($function_reference, 'callback');
     }
     else {
       $node = new FunctionCallNode();
+      $node->appendChild($function_reference, 'namespacePath');
     }
-    $node->appendChild($function_reference, 'functionReference');
     $this->functionCallParameterList($node);
     return $this->objectDereference($this->arrayDeference($node));
   }

@@ -8,15 +8,15 @@ namespace Pharborist;
  */
 class CallbackCallNode extends CallNode implements ExpressionNode {
   protected $properties = array(
-    'functionReference' => NULL,
+    'callback' => NULL,
     'arguments' => array(),
   );
 
   /**
    * @return Node
    */
-  public function getFunctionReference() {
-    return $this->properties['functionReference'];
+  public function getCallback() {
+    return $this->properties['callback'];
   }
 
   public function getArguments() {

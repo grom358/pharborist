@@ -6,20 +6,17 @@ namespace Pharborist;
  */
 class FunctionCallNode extends CallNode implements ExpressionNode {
   protected $properties = array(
-    'functionReference' => NULL,
+    'namespacePath' => NULL,
     'arguments' => array(),
   );
 
   /**
-   * @return Node
+   * @return NamespacePathNode
    */
-  public function getFunctionReference() {
-    return $this->properties['functionReference'];
+  public function getNamespacePath() {
+    return $this->properties['namespacePath'];
   }
 
-  /**
-   * @return ExpressionNode[]
-   */
   public function getArguments() {
     return $this->properties['arguments'];
   }

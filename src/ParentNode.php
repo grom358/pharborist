@@ -26,6 +26,13 @@ abstract class ParentNode extends Node {
   protected $properties = array();
 
   /**
+   * @return DocCommentNode
+   */
+  public function getDocComment() {
+    return array_key_exists('docComment', $this->properties) ? $this->properties['docComment'] : NULL;
+  }
+
+  /**
    * Get the number of children.
    * @return int
    */
@@ -84,7 +91,7 @@ abstract class ParentNode extends Node {
       $this->tail = $node;
     }
     if ($property_name !== NULL) {
-      if (is_array($this->properties[$property_name])) {
+      if (array_key_exists($property_name, $this->properties) && is_array($this->properties[$property_name])) {
         $this->properties[$property_name][] = $node;
       }
       else {

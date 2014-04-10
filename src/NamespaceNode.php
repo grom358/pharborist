@@ -6,17 +6,9 @@ namespace Pharborist;
  */
 class NamespaceNode extends StatementNode {
   protected $properties = array(
-    'docComment' => NULL,
     'name' => NULL,
     'body' => NULL,
   );
-
-  /**
-   * @return DocCommentNode
-   */
-  public function getDocComment() {
-    return $this->properties['docComment'];
-  }
 
   /**
    * @return Node

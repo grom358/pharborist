@@ -6,16 +6,8 @@ namespace Pharborist;
  */
 abstract class ImportNode extends ParentNode implements ExpressionNode {
   protected $properties = array(
-    'docComment' => NULL,
     'expression' => NULL,
   );
-
-  /**
-   * @return DocCommentNode
-   */
-  public function getDocComment() {
-    return $this->properties['docComment'];
-  }
 
   /**
    * @var ExpressionNode

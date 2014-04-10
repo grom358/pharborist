@@ -6,7 +6,7 @@ namespace Pharborist;
  *
  * For example, $object->method()
  */
-class ObjectMethodCallNode extends ParentNode implements ExpressionNode {
+class ObjectMethodCallNode extends CallNode implements ExpressionNode {
   protected $properties = array(
     'object' => NULL,
     'methodName' => NULL,
@@ -27,9 +27,6 @@ class ObjectMethodCallNode extends ParentNode implements ExpressionNode {
     return $this->properties['methodName'];
   }
 
-  /**
-   * @return ExpressionNode[]
-   */
   public function getArguments() {
     return $this->properties['arguments'];
   }

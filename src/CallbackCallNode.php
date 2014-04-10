@@ -6,7 +6,7 @@ namespace Pharborist;
  *
  * For example, $callback().
  */
-class CallbackCallNode extends ParentNode implements ExpressionNode {
+class CallbackCallNode extends CallNode implements ExpressionNode {
   protected $properties = array(
     'functionReference' => NULL,
     'arguments' => array(),
@@ -19,9 +19,6 @@ class CallbackCallNode extends ParentNode implements ExpressionNode {
     return $this->properties['functionReference'];
   }
 
-  /**
-   * @return ExpressionNode[]
-   */
   public function getArguments() {
     return $this->properties['arguments'];
   }

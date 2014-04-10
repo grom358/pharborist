@@ -108,7 +108,7 @@ class ExpressionParser {
         $this->P();
       }
       else {
-        throw new ParserException($node->getSourcePosition(), 'unexpected ' . $node->operatorNode . ' operator!');
+        throw new ParserException($node->getSourcePosition(), 'unexpected ' . $node->getOperator() . ' operator!');
       }
     }
     else {

@@ -525,7 +525,7 @@ class Parser {
    */
   private function forExpr(ForNode $parent, $terminator, $property_name, $is_last = FALSE) {
     if ($this->tryMatch($terminator, $parent)) {
-      return NULL;
+      return;
     }
     $parent->appendChild($this->exprList(), $property_name);
     $this->mustMatch($terminator, $parent, NULL, $is_last);
@@ -1418,9 +1418,9 @@ class Parser {
       $value = $this->staticScalar();
       if ($this->currentType === T_DOUBLE_ARROW) {
         $pair = new ArrayPairNode();
-        $pair->key = $pair->appendChild($value);
+        $pair->appendChild($value, 'key');
         $this->mustMatch(T_DOUBLE_ARROW, $pair);
-        $pair->value = $pair->appendChild($this->staticScalar());
+        $pair->appendChild($this->staticScalar(), 'value');
         $node->appendChild($pair, 'elements');
       }
       else {

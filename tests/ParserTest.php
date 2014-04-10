@@ -767,6 +767,9 @@ EOF;
     $this->parseSnippet('$f = function($a, $b) use ($x, $y) { };', '\Pharborist\ExpressionStatementNode');
   }
 
+  /**
+   * Test iteration of tokens.
+   */
   public function testTokenIteration() {
     /** @var \Pharborist\ExpressionStatementNode $tree */
     $tree = $this->parseSnippet('1 + 2;', '\Pharborist\ExpressionStatementNode');
@@ -781,5 +784,12 @@ EOF;
     $this->assertEquals(';', $semicolon->getText());
     $this->assertNull($semicolon->nextToken());
     $this->assertEquals('2', $semicolon->previousToken()->getText());
+  }
+
+  /**
+   * Test handling embedded doc comments
+   */
+  public function testEmbeddedDocComments() {
+    $this->parseSnippet('/** start */ 1 /** plus before */ + /** plus after */ 2 + /** ( */ ( /** open */ 3 * 2 /** close */ ) /** end */; /** end line */', '\Pharborist\ExpressionStatementNode');
   }
 }

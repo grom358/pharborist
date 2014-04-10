@@ -192,6 +192,7 @@ class Parser {
       $this->matchHidden($node);
     }
     $this->matchHidden($node);
+    $this->matchDocComment($node);
   }
 
   /**
@@ -379,6 +380,7 @@ class Parser {
    */
   private function exprStatement() {
     $node = new ExpressionStatementNode();
+    $this->matchDocComment($node);
     $node->appendChild($this->expr());
     $this->mustMatch(';', $node, NULL, TRUE);
     return $node;

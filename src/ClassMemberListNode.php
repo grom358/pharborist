@@ -6,14 +6,17 @@ namespace Pharborist;
  */
 class ClassMemberListNode extends ParentNode {
   protected $properties = array(
+    'docComment' => NULL,
     'modifiers' => NULL,
     'members' => array(),
   );
 
   /**
-   * @var DocCommentNode
+   * @return DocCommentNode
    */
-  public $docComment;
+  public function getDocComment() {
+    return $this->properties['docComment'];
+  }
 
   /**
    * @return ModifiersNode

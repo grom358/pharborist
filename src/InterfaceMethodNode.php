@@ -6,6 +6,7 @@ namespace Pharborist;
  */
 class InterfaceMethodNode extends ParentNode {
   protected $properties = array(
+    'docComment' => NULL,
     'visibility' => NULL,
     'reference' => NULL,
     'name' => NULL,
@@ -13,9 +14,11 @@ class InterfaceMethodNode extends ParentNode {
   );
 
   /**
-   * @var DocCommentNode
+   * @return DocCommentNode
    */
-  public $docComment;
+  public function getDocComment() {
+    return $this->properties['docComment'];
+  }
 
   /**
    * @return TokenNode

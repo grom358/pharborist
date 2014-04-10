@@ -22,16 +22,21 @@ class Parser {
   private $iterator;
 
   /**
-   * The previously parsed document comment.
+   * Skipped hidden tokens.
+   * @var TokenNode[]
+   */
+  private $skipped = [];
+
+  /**
+   * Skipped document comment.
    * @var DocCommentNode
    */
   private $docComment = NULL;
 
   /**
-   * Array of skipped hidden tokens.
-   * @var TokenNode[]
+   * Skipped hidden tokens after document comment.
    */
-  private $skipped = [];
+  private $skippedDocComment = [];
 
   /**
    * The root node of the syntax tree.
@@ -91,7 +96,7 @@ class Parser {
     $this->top = $top;
     // Parse any template statements that proceed the opening PHP tag.
     $this->templateStatementList($top);
-    if ($this->tryMatch(T_OPEN_TAG, $top)) {
+    if ($this->tryMatch(T_OPEN_TAG, $top, NULL, TRUE)) {
       $this->topStatementList($top);
     }
     return $top;
@@ -242,7 +247,7 @@ class Parser {
    */
   private function _const() {
     $node = new ConstantDeclarationStatementNode();
-    $node->docComment = $this->docComment;
+    $this->matchDocComment($node);
     $this->mustMatch(T_CONST, $node);
     do {
       $node->appendChild($this->constDeclaration(), 'declarations');
@@ -298,7 +303,7 @@ class Parser {
       case T_YIELD:
         $node = new YieldStatementNode();
         $node->appendChild($this->_yield());
-        $this->mustMatch(';', $node);
+        $this->mustMatch(';', $node, NULL, TRUE);
         return $node;
       case T_GLOBAL:
         return $this->_global();
@@ -375,7 +380,7 @@ class Parser {
    */
   private function exprStatement() {
     $node = new ExpressionStatementNode();
-    $node->docComment = $this->docComment;
+    $this->matchDocComment($node);
     $node->appendChild($this->expr());
     $this->mustMatch(';', $node, NULL, TRUE);
     return $node;
@@ -1222,7 +1227,7 @@ class Parser {
         else {
           $node = new RequireOnceNode();
         }
-        $node->docComment = $this->docComment;
+        $this->matchDocComment($node);
         $this->mustMatch($this->currentType, $node);
         $node->appendChild($this->expr(), 'expression');
         return $node;
@@ -1707,17 +1712,17 @@ class Parser {
    * @return Node
    */
   private function functionCall(Node $function_reference, $dynamic = FALSE) {
-    if ($function_reference instanceof NamespacePathNode && $function_reference->getChildCount() === 1 && $function_reference == 'define') {
-      $node = new DefineNode();
-      $node->appendChild($function_reference, 'namespacePath');
-      $node->docComment = $this->docComment;
-    }
-    elseif ($dynamic) {
+    if ($dynamic) {
       $node = new CallbackCallNode();
       $node->appendChild($function_reference, 'callback');
     }
     else {
-      $node = new FunctionCallNode();
+      if ($function_reference instanceof NamespacePathNode && $function_reference->getChildCount() === 1 && $function_reference == 'define') {
+        $node = new DefineNode();
+      }
+      else {
+        $node = new FunctionCallNode();
+      }
       $node->appendChild($function_reference, 'namespacePath');
     }
     $this->functionCallParameterList($node);
@@ -1925,7 +1930,7 @@ class Parser {
    */
   private function functionDeclaration() {
     $node = new FunctionDeclarationNode();
-    $node->docComment = $this->docComment;
+    $this->matchDocComment($node);
     $this->mustMatch(T_FUNCTION, $node);
     $this->tryMatch('&', $node, 'reference');
     $this->mustMatch(T_STRING, $node, 'name');
@@ -2072,7 +2077,7 @@ class Parser {
    */
   private function _namespace() {
     $node = new NamespaceNode();
-    $node->docComment = $this->docComment;
+    $this->matchDocComment($node);
     $this->mustMatch(T_NAMESPACE, $node);
     if ($this->currentType === T_STRING) {
       $node->appendChild($this->namespaceName(), 'name');
@@ -2140,7 +2145,7 @@ class Parser {
    */
   private function classDeclaration() {
     $node = new ClassNode();
-    $node->docComment = $this->docComment;
+    $this->matchDocComment($node);
     $this->tryMatch(T_ABSTRACT, $node, 'abstract') || $this->tryMatch(T_FINAL, $node, 'final');
     $this->mustMatch(T_CLASS, $node);
     $this->mustMatch(T_STRING, $node, 'name');
@@ -2153,9 +2158,10 @@ class Parser {
       } while ($this->tryMatch(',', $node));
     }
     $this->mustMatch('{', $node);
+    $is_abstract = $node->getAbstract() !== NULL;
     while ($this->currentType !== NULL && $this->currentType !== '}') {
-      $is_abstract = $node->getAbstract() !== NULL;
       $node->appendChild($this->classStatement($is_abstract), 'statements');
+      $this->matchHidden($node);
     }
     $this->mustMatch('}', $node, NULL, TRUE);
     return $node;
@@ -2170,10 +2176,13 @@ class Parser {
   private function classStatement($is_abstract) {
     if ($this->currentType === T_FUNCTION) {
       $modifiers = new ModifiersNode();
-      return $this->classMethod($this->docComment, $modifiers);
+      $doc_comment = new PartialNode();
+      $this->matchDocComment($doc_comment);
+      return $this->classMethod($doc_comment, $modifiers);
     }
     elseif ($this->currentType === T_VAR) {
-      $doc_comment = $this->docComment;
+      $doc_comment = new PartialNode();
+      $this->matchDocComment($doc_comment);
       $modifiers = new ModifiersNode();
       $this->mustMatch(T_VAR, $modifiers, 'visibility');
       return $this->classMemberList($doc_comment, $modifiers);
@@ -2185,7 +2194,8 @@ class Parser {
       return $this->traitUse();
     }
     // Match modifiers
-    $doc_comment = $this->docComment;
+    $doc_comment = new PartialNode();
+    $this->matchDocComment($doc_comment);
     $modifiers = new ModifiersNode();
     while ($this->iterator->hasNext()) {
       switch ($this->currentType) {
@@ -2253,7 +2263,7 @@ class Parser {
 
   /**
    * Parse a class member list.
-   * @param DocCommentNode|null $doc_comment DocBlock associated with method
+   * @param PartialNode|null $doc_comment DocBlock associated with method
    * @param ModifiersNode $modifiers Member modifiers
    * @return ClassMemberListNode
    * @throws ParserException
@@ -2271,7 +2281,7 @@ class Parser {
         "members can not be declared final");
     }
     $node = new ClassMemberListNode();
-    $node->docComment = $doc_comment;
+    $node->mergeNode($doc_comment);
     $node->appendChild($modifiers, 'modifiers');
     do {
       $node->appendChild($this->classMember(), 'members');
@@ -2295,20 +2305,20 @@ class Parser {
 
   /**
    * Parse a class method
-   * @param DocCommentNode|null $doc_comment DocBlock associated with method
+   * @param PartialNode|null $doc_comment DocBlock associated with method
    * @param ModifiersNode $modifiers Method modifiers
    * @return ClassMethodNode
    */
   private function classMethod($doc_comment, ModifiersNode $modifiers) {
     $node = new ClassMethodNode();
-    $node->docComment = $doc_comment;
+    $node->mergeNode($doc_comment);
     $node->appendChild($modifiers, 'modifiers');
     $this->mustMatch(T_FUNCTION, $node);
     $this->tryMatch('&', $node, 'reference');
     $this->mustMatch(T_STRING, $node, 'name');
     $this->parameterList($node);
     if ($modifiers->getAbstract()) {
-      $this->mustMatch(';', $node);
+      $this->mustMatch(';', $node, NULL, TRUE);
       return $node;
     }
     $node->appendChild($this->innerStatementBlock(), 'body');
@@ -2393,7 +2403,7 @@ class Parser {
    */
   private function interfaceDeclaration() {
     $node = new InterfaceNode();
-    $node->docComment = $this->docComment;
+    $this->matchDocComment($node);
     $this->mustMatch(T_INTERFACE, $node);
     $this->mustMatch(T_STRING, $node, 'name');
     if ($this->tryMatch(T_EXTENDS, $node)) {
@@ -2409,6 +2419,7 @@ class Parser {
       else {
         $node->appendChild($this->interfaceMethod(), 'statements');
       }
+      $this->matchHidden($node);
     }
     $this->mustMatch('}', $node, NULL, TRUE);
     return $node;
@@ -2422,7 +2433,7 @@ class Parser {
   private function interfaceMethod() {
     static $visibility_keyword_types = [T_PUBLIC, T_PROTECTED, T_PRIVATE];
     $node = new InterfaceMethodNode();
-    $node->docComment = $this->docComment;
+    $this->matchDocComment($node);
     $is_static = $this->tryMatch(T_STATIC, $node);
     while (in_array($this->currentType, $visibility_keyword_types)) {
       if ($node->getVisibility()) {
@@ -2438,7 +2449,7 @@ class Parser {
     $this->tryMatch('&', $node, 'reference');
     $this->mustMatch(T_STRING, $node, 'name');
     $this->parameterList($node);
-    $this->mustMatch(';', $node);
+    $this->mustMatch(';', $node, NULL, TRUE);
     return $node;
   }
 
@@ -2449,7 +2460,7 @@ class Parser {
    */
   private function traitDeclaration() {
     $node = new TraitNode();
-    $node->docComment = $this->docComment;
+    $this->matchDocComment($node);
     $this->mustMatch(T_TRAIT, $node);
     $this->mustMatch(T_STRING, $node, 'name');
     if ($this->tryMatch(T_EXTENDS, $node)) {
@@ -2463,6 +2474,7 @@ class Parser {
     $this->mustMatch('{', $node);
     while ($this->currentType !== NULL && $this->currentType !== '}') {
       $node->appendChild($this->classStatement(TRUE), 'statements');
+      $this->matchHidden($node);
     }
     $this->mustMatch('}', $node, NULL, TRUE);
     return $node;
@@ -2473,12 +2485,24 @@ class Parser {
    */
   private function skipHidden() {
     $token = $this->iterator->current();
-    while ($token && $token instanceof HiddenNode) {
-      if ($token instanceof DocCommentNode) {
-        $this->docComment = $token;
-      }
+    // Skip whitespace and comment
+    while ($token && ($token->getType() === T_COMMENT || $token->getType() === T_WHITESPACE)) {
       $this->skipped[] = $token;
       $token = $this->iterator->next();
+    }
+    while ($token && $token instanceof DocCommentNode) {
+      $this->skippedDocComment = array();
+      $this->docComment = $token;
+      $token = $this->iterator->next();
+      while ($token && ($token->getType() === T_COMMENT || $token->getType() === T_WHITESPACE)) {
+        $this->skippedDocComment[] = $token;
+        $token = $this->iterator->next();
+      }
+      if ($token && $token instanceof DocCommentNode) {
+        // Merge skippedDocComment with skipped
+        $this->skipped[] = $this->docComment;
+        $this->skipped = array_merge($this->skipped, $this->skippedDocComment);
+      }
     }
   }
 
@@ -2489,6 +2513,7 @@ class Parser {
   private function addSkipped(ParentNode $parent) {
     $parent->appendChildren($this->skipped);
     $this->skipped = array();
+    $this->matchDocComment($parent, NULL);
   }
 
   /**
@@ -2497,7 +2522,17 @@ class Parser {
    */
   private function matchHidden(ParentNode $parent) {
     $this->skipHidden();
-    $this->addSkipped($parent);
+    $parent->appendChildren($this->skipped);
+    $this->skipped = array();
+  }
+
+  private function matchDocComment(ParentNode $parent, $property_name = 'docComment') {
+    if ($this->docComment) {
+      $parent->appendChild($this->docComment, $property_name);
+      $parent->appendChildren($this->skippedDocComment);
+      $this->skippedDocComment = array();
+      $this->docComment = NULL;
+    }
   }
 
   /**
@@ -2516,7 +2551,6 @@ class Parser {
     }
     $token_node = $this->current;
     $this->addSkipped($parent);
-    $this->docComment = NULL;
     $parent->appendChild($token_node, $property_name);
     $this->nextToken();
     if (!$maybe_last) {
@@ -2538,7 +2572,6 @@ class Parser {
     }
     $token_node = $this->current;
     $this->addSkipped($parent);
-    $this->docComment = NULL;
     $parent->appendChild($token_node, $property_name);
     $this->nextToken();
     if (!$maybe_last) {
@@ -2557,7 +2590,6 @@ class Parser {
     }
     foreach ($expected_types as $expected_type) {
       if ($expected_type === $this->currentType) {
-        $this->docComment = NULL;
         $token_node = $this->current;
         $this->nextToken();
         return $token_node;
@@ -2578,7 +2610,6 @@ class Parser {
         'expected ' . TokenNode::typeName($expected_type));
     }
     $token_node = $this->current;
-    $this->docComment = NULL;
     $this->nextToken();
     return $token_node;
   }

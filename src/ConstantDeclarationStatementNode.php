@@ -6,13 +6,16 @@ namespace Pharborist;
  */
 class ConstantDeclarationStatementNode extends StatementNode {
   protected $properties = array(
+    'docComment' => NULL,
     'declarations' => array(),
   );
 
   /**
-   * @var DocCommentNode
+   * @return DocCommentNode
    */
-  public $docComment;
+  public function getDocComment() {
+    return $this->properties['docComment'];
+  }
 
   /**
    * @return ConstantDeclarationNode[]

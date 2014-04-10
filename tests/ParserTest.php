@@ -148,6 +148,9 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
    */
   public function testClassDeclaration() {
     $snippet = <<<'EOF'
+/**
+ * Class doc comment.
+ */
 abstract class MyClass extends ParentClass implements SomeInterface, AnotherInterface {
   const MY_CONST = 1;
   public $publicProperty = 1;
@@ -156,6 +159,9 @@ abstract class MyClass extends ParentClass implements SomeInterface, AnotherInte
   static public $classProperty;
   var $backwardsCompatibility;
 
+  /**
+   * method doc comment.
+   */
   public function myMethod() {
   }
 
@@ -176,6 +182,9 @@ abstract class MyClass extends ParentClass implements SomeInterface, AnotherInte
 EOF;
     /** @var ClassNode $class_declaration */
     $class_declaration = $this->parseSnippet($snippet, '\Pharborist\ClassNode');
+    $this->assertEquals('/**
+ * Class doc comment.
+ */', $class_declaration->getDocComment());
     $this->assertEquals('MyClass', (string) $class_declaration->getName());
     $this->assertEquals('ParentClass', (string) $class_declaration->getExtends());
     $this->assertEquals('SomeInterface', (string) $class_declaration->getImplements()[0]);
@@ -210,6 +219,9 @@ EOF;
     /** @var ClassMethodNode $method */
     $method = $statements[6];
     $this->assertInstanceOf('\Pharborist\ClassMethodNode', $method);
+    $this->assertEquals('/**
+   * method doc comment.
+   */', $method->getDocComment());
     $this->assertEquals('myMethod', (string) $method->getName());
     $this->assertEquals('public', (string) $method->getModifiers()->getVisibility());
 

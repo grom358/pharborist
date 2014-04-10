@@ -8,8 +8,5 @@ namespace Pharborist;
  * special treatment the function call.
  */
 class DefineNode extends FunctionCallNode {
-  /**
-   * @var DocCommentNode
-   */
-  public $docComment;
+
 }

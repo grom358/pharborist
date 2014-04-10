@@ -6,6 +6,7 @@ namespace Pharborist;
  */
 class ClassMethodNode extends ParentNode {
   protected $properties = array(
+    'docComment' => NULL,
     'modifiers' => NULL,
     'reference' => NULL,
     'name' => NULL,
@@ -14,9 +15,11 @@ class ClassMethodNode extends ParentNode {
   );
 
   /**
-   * @var DocCommentNode
+   * @return DocCommentNode
    */
-  public $docComment;
+  public function getDocComment() {
+    return $this->properties['docComment'];
+  }
 
   /**
    * @return ModifiersNode

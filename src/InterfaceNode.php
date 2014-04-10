@@ -6,15 +6,18 @@ namespace Pharborist;
  */
 class InterfaceNode extends StatementNode {
   protected $properties = array(
+    'docComment' => NULL,
     'name' => NULL,
     'extends' => array(),
     'statements' => array(),
   );
 
   /**
-   * @var DocCommentNode
+   * @return DocCommentNode
    */
-  public $docComment;
+  public function getDocComment() {
+    return $this->properties['docComment'];
+  }
 
   /**
    * @return Node

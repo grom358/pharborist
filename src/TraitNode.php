@@ -6,11 +6,19 @@ namespace Pharborist;
  */
 class TraitNode extends StatementNode {
   protected $properties = array(
+    'docComment' => NULL,
     'name' => NULL,
     'extends' => NULL,
     'implements' => array(),
     'statements' => NULL,
   );
+
+  /**
+   * @return DocCommentNode
+   */
+  public function getDocComment() {
+    return $this->properties['docComment'];
+  }
 
   /**
    * @return TokenNode

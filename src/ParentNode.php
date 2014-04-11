@@ -26,13 +26,6 @@ abstract class ParentNode extends Node {
   protected $properties = array();
 
   /**
-   * @return DocCommentNode
-   */
-  public function getDocComment() {
-    return array_key_exists('docComment', $this->properties) ? $this->properties['docComment'] : NULL;
-  }
-
-  /**
    * Get the number of children.
    * @return int
    */

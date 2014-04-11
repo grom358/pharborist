@@ -344,4 +344,13 @@ abstract class ParentNode extends Node {
     }
     return $str;
   }
+
+  public function debug() {
+    $r = array();
+    foreach ($this->properties as $k => $v) {
+      $r[$k] = (string) $v;
+    }
+    print_r($r);
+    echo 'DEBUG:' . PHP_EOL . $this . PHP_EOL;
+  }
 }

@@ -7,7 +7,7 @@ namespace Pharborist;
 class TryCatchNode extends StatementNode {
   protected $properties = array(
     'try' => NULL,
-    'catches' => NULL,
+    'catches' => array(),
     'finally' => NULL,
   );
 

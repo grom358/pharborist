@@ -588,7 +588,10 @@ class Parser {
       if (!$this->tryMatch(':', $node, NULL, TRUE, TRUE) && !$this->tryMatch(';', $node, NULL, TRUE, TRUE)) {
         throw new ParserException($this->iterator->getSourcePosition(), 'expected :');
       }
-      $node->appendChild($this->innerCaseStatementList($terminator), 'body');
+      $this->matchHidden($node);
+      if ($body = $this->innerCaseStatementList($terminator)) {
+        $node->appendChild($body, 'body');
+      }
       return $node;
     }
     elseif ($this->currentType === T_DEFAULT) {
@@ -597,7 +600,10 @@ class Parser {
       if (!$this->tryMatch(':', $node, NULL, TRUE, TRUE) && !$this->tryMatch(';', $node, NULL, TRUE, TRUE)) {
         throw new ParserException($this->iterator->getSourcePosition(), 'expected :');
       }
-      $node->appendChild($this->innerCaseStatementList($terminator), 'body');
+      $this->matchHidden($node);
+      if ($body = $this->innerCaseStatementList($terminator)) {
+        $node->appendChild($body, 'body');
+      }
       return $node;
     }
     throw new ParserException($this->iterator->getSourcePosition(), "expected case or default");
@@ -610,11 +616,13 @@ class Parser {
    */
   private function innerCaseStatementList($terminator) {
     static $terminators = [T_CASE, T_DEFAULT];
+    if ($this->currentType === $terminator || in_array($this->currentType, $terminators)) {
+      return NULL;
+    }
     $node = new StatementBlockNode();
-    $this->matchHidden($node);
     while ($this->currentType !== NULL && $this->currentType !== $terminator && !in_array($this->currentType, $terminators)) {
-      $node->appendChild($this->innerStatement(), 'statements');
       $this->matchHidden($node);
+      $node->appendChild($this->innerStatement(), 'statements');
     }
     return $node;
   }
@@ -777,7 +785,7 @@ class Parser {
     $this->mustMatch(T_AS, $node);
     $value = $this->foreachVariable();
     if ($this->currentType === T_DOUBLE_ARROW) {
-      $node->appendChild($value, 'value');
+      $node->appendChild($value, 'key');
       $this->mustMatch(T_DOUBLE_ARROW, $node);
       $node->appendChild($this->foreachVariable(), 'value');
     }
@@ -1194,7 +1202,7 @@ class Parser {
           return $this->exprClass($operand);
         }
         elseif ($this->currentType === '(') {
-          return $this->functionCall($operand);
+          return $this->functionCall($operand, TRUE);
         }
         else {
           return $this->objectDereference($operand);
@@ -1416,7 +1424,7 @@ class Parser {
       if ($this->currentType === $terminator) {
         break;
       }
-      $node->appendChild($this->arrayPair());
+      $node->appendChild($this->arrayPair(), 'elements');
     } while ($this->tryMatch(',', $node));
   }
 
@@ -2004,10 +2012,9 @@ class Parser {
    * @param int|string $terminator Token type that terminates the statement list
    */
   private function innerStatementList(StatementBlockNode $parent, $terminator) {
-    $this->matchHidden($parent);
     while ($this->currentType !== NULL && $this->currentType !== $terminator) {
-      $parent->appendChild($this->innerStatement(), 'statements');
       $this->matchHidden($parent);
+      $parent->appendChild($this->innerStatement(), 'statements');
     }
   }
 

@@ -374,11 +374,15 @@ EOF;
    */
   public function testForeach() {
     $snippet = <<<'EOF'
-foreach ($array as $k => &$v) {
-}
+foreach ($array as $k => &$v)
+  body();
 EOF;
-    $this->parseSnippet($snippet, '\Pharborist\ForeachNode');
-    //@todo
+    /** @var ForeachNode $foreach */
+    $foreach = $this->parseSnippet($snippet, '\Pharborist\ForeachNode');
+    $this->assertEquals('$array', (string) $foreach->getOnEach());
+    $this->assertEquals('$k', (string) $foreach->getKey());
+    $this->assertEquals('&$v', (string) $foreach->getValue());
+    $this->assertEquals('body();', (string) $foreach->getBody());
   }
 
   /**
@@ -387,11 +391,15 @@ EOF;
   public function testAlternativeForeach() {
     $snippet = <<<'EOF'
 foreach ($array as $k => &$v):
-
+  body();
 endforeach;
 EOF;
-    $this->parseSnippet($snippet, '\Pharborist\ForeachNode');
-    //@todo
+    /** @var ForeachNode $foreach */
+    $foreach = $this->parseSnippet($snippet, '\Pharborist\ForeachNode');
+    $this->assertEquals('$array', (string) $foreach->getOnEach());
+    $this->assertEquals('$k', (string) $foreach->getKey());
+    $this->assertEquals('&$v', (string) $foreach->getValue());
+    $this->assertEquals('body();', (string) $foreach->getBody());
   }
 
   /**
@@ -399,11 +407,13 @@ EOF;
    */
   public function testWhile() {
     $snippet = <<<'EOF'
-while ($cond) {
-}
+while ($cond)
+  body();
 EOF;
-    $this->parseSnippet($snippet, '\Pharborist\WhileNode');
-    //@todo
+    /** @var WhileNode $while */
+    $while = $this->parseSnippet($snippet, '\Pharborist\WhileNode');
+    $this->assertEquals('($cond)', (string) $while->getCondition());
+    $this->assertEquals('body();', (string) $while->getBody());
   }
 
   /**
@@ -412,11 +422,13 @@ EOF;
   public function testAlternativeWhile() {
     $snippet = <<<'EOF'
 while ($cond):
-
+  body();
 endwhile;
 EOF;
-    $this->parseSnippet($snippet, '\Pharborist\WhileNode');
-    //@todo
+    /** @var WhileNode $while */
+    $while = $this->parseSnippet($snippet, '\Pharborist\WhileNode');
+    $this->assertEquals('($cond)', (string) $while->getCondition());
+    $this->assertEquals('body();', (string) $while->getBody());
   }
 
   /**
@@ -424,11 +436,14 @@ EOF;
    */
   public function testDoWhile() {
     $snippet = <<<'EOF'
-do {
-} while ($cond);
+do
+  body();
+while ($cond);
 EOF;
-    $this->parseSnippet($snippet, '\Pharborist\DoWhileNode');
-    //@todo
+    /** @var DoWhileNode $do_while */
+    $do_while = $this->parseSnippet($snippet, '\Pharborist\DoWhileNode');
+    $this->assertEquals('body();', (string) $do_while->getBody());
+    $this->assertEquals('($cond)', (string) $do_while->getCondition());
   }
 
   /**
@@ -436,11 +451,15 @@ EOF;
    */
   public function testFor() {
     $snippet = <<<'EOF'
-for ($i = 0; $i < 10; ++$i) {
-}
+for ($i = 0; $i < 10; ++$i)
+  body();
 EOF;
-    $this->parseSnippet($snippet, '\Pharborist\ForNode');
-    //@todo
+    /** @var ForNode $for */
+    $for = $this->parseSnippet($snippet, '\Pharborist\ForNode');
+    $this->assertEquals('$i = 0', (string) $for->getInitial());
+    $this->assertEquals('$i < 10', (string) $for->getCondition());
+    $this->assertEquals('++$i', (string) $for->getStep());
+    $this->assertEquals('body();', (string) $for->getBody());
   }
 
   /**
@@ -449,11 +468,15 @@ EOF;
   public function testAlternativeFor() {
     $snippet = <<<'EOF'
 for ($i = 0; $i < 10; ++$i):
-
+  body();
 endfor;
 EOF;
-    $this->parseSnippet($snippet, '\Pharborist\ForNode');
-    //@todo
+    /** @var ForNode $for */
+    $for = $this->parseSnippet($snippet, '\Pharborist\ForNode');
+    $this->assertEquals('$i = 0', (string) $for->getInitial());
+    $this->assertEquals('$i < 10', (string) $for->getCondition());
+    $this->assertEquals('++$i', (string) $for->getStep());
+    $this->assertEquals('body();', (string) $for->getBody());
   }
 
   /**
@@ -461,11 +484,15 @@ EOF;
    */
   public function testForever() {
     $snippet = <<<'EOF'
-for (;;) {
-}
+for (;;)
+  body();
 EOF;
-    $this->parseSnippet($snippet, '\Pharborist\ForNode');
-    //@todo
+    /** @var ForNode $for */
+    $for = $this->parseSnippet($snippet, '\Pharborist\ForNode');
+    $this->assertEquals('', (string) $for->getInitial());
+    $this->assertEquals('', (string) $for->getCondition());
+    $this->assertEquals('', (string) $for->getStep());
+    $this->assertEquals('body();', (string) $for->getBody());
   }
 
   /**
@@ -483,8 +510,22 @@ switch ($cond) {
     break;
 }
 EOF;
-    $this->parseSnippet($snippet, '\Pharborist\SwitchNode');
-    //@todo
+    /** @var SwitchNode $switch */
+    $switch = $this->parseSnippet($snippet, '\Pharborist\SwitchNode');
+    $this->assertEquals('($cond)', (string) $switch->getSwitchOn());
+    $cases = $switch->getCases();
+    $case = $cases[0];
+    $this->assertEquals("'a'", (string) $case->getMatchOn());
+    $this->assertEquals('break;', (string) $case->getBody());
+    $case = $cases[1];
+    $this->assertEquals("'fall'", (string) $case->getMatchOn());
+    $this->assertNull($case->getBody());
+    $case = $cases[2];
+    $this->assertEquals("'through'", (string) $case->getMatchOn());
+    $this->assertEquals('break;', (string) $case->getBody());
+    $case = $cases[3];
+    $this->assertInstanceOf('\Pharborist\DefaultNode', $case);
+    $this->assertEquals('break;', (string) $case->getBody());
   }
 
   /**
@@ -502,8 +543,22 @@ switch ($cond):
     break;
 endswitch;
 EOF;
-    $this->parseSnippet($snippet, '\Pharborist\SwitchNode');
-    //@todo
+    /** @var SwitchNode $switch */
+    $switch = $this->parseSnippet($snippet, '\Pharborist\SwitchNode');
+    $this->assertEquals('($cond)', (string) $switch->getSwitchOn());
+    $cases = $switch->getCases();
+    $case = $cases[0];
+    $this->assertEquals("'a'", (string) $case->getMatchOn());
+    $this->assertEquals('break;', (string) $case->getBody());
+    $case = $cases[1];
+    $this->assertEquals("'fall'", (string) $case->getMatchOn());
+    $this->assertNull($case->getBody());
+    $case = $cases[2];
+    $this->assertEquals("'through'", (string) $case->getMatchOn());
+    $this->assertEquals('break;', (string) $case->getBody());
+    $case = $cases[3];
+    $this->assertInstanceOf('\Pharborist\DefaultNode', $case);
+    $this->assertEquals('break;', (string) $case->getBody());
   }
 
   /**
@@ -511,15 +566,22 @@ EOF;
    */
   public function testTryCatch() {
     $snippet = <<<'EOF'
-try {
-}
-catch (SomeException $e) {
-}
-catch (OtherException $e) {
-}
+try { try_body(); }
+catch (SomeException $e) { some_body(); }
+catch (OtherException $e) { other_body(); }
 EOF;
-    $this->parseSnippet($snippet, '\Pharborist\TryCatchNode');
-    //@todo
+    /** @var TryCatchNode $try_catch */
+    $try_catch = $this->parseSnippet($snippet, '\Pharborist\TryCatchNode');
+    $this->assertEquals('{ try_body(); }', (string) $try_catch->getTry());
+    $catches = $try_catch->getCatches();
+    $catch = $catches[0];
+    $this->assertEquals('SomeException', (string) $catch->getExceptionType());
+    $this->assertEquals('$e', (string) $catch->getVariable());
+    $this->assertEquals('{ some_body(); }', (string) $catch->getBody());
+    $catch = $catches[1];
+    $this->assertEquals('OtherException', (string) $catch->getExceptionType());
+    $this->assertEquals('$e', (string) $catch->getVariable());
+    $this->assertEquals('{ other_body(); }', (string) $catch->getBody());
   }
 
   /**
@@ -541,13 +603,52 @@ EOF;
    * Test array.
    */
   public function testArray() {
-    //@todo
-    $this->parseExpression('array(3, 5, 8, )', '\Pharborist\ArrayNode');
-    $this->parseExpression('[3, 5, 8]', '\Pharborist\ArrayNode');
-    $this->parseExpression('array("a" => 1, "b" => 2)', '\Pharborist\ArrayNode');
-    $this->parseExpression('["a" => 1, "b" => 2]', '\Pharborist\ArrayNode');
-    $this->parseExpression('[&$a, "k" => &$v]', '\Pharborist\ArrayNode');
-    $this->parseSnippet('const MY_ARRAY = array(3, 5, 8, );', '\Pharborist\ConstantDeclarationStatementNode');
+    /** @var ArrayNode $array */
+    $array = $this->parseExpression('array(3, 5, 8, )', '\Pharborist\ArrayNode');
+    $elements = $array->getElements();
+    $this->assertEquals('3', (string) $elements[0]);
+    $this->assertEquals('5', (string) $elements[1]);
+    $this->assertEquals('8', (string) $elements[2]);
+
+    $array = $this->parseExpression('[3, 5, 8]', '\Pharborist\ArrayNode');
+    $elements = $array->getElements();
+    $this->assertEquals('3', (string) $elements[0]);
+    $this->assertEquals('5', (string) $elements[1]);
+    $this->assertEquals('8', (string) $elements[2]);
+
+    $array = $this->parseExpression('array("a" => 1, "b" => 2)', '\Pharborist\ArrayNode');
+    $elements = $array->getElements();
+    /** @var ArrayPairNode $pair */
+    $pair = $elements[0];
+    $this->assertEquals('"a"', (string) $pair->getKey());
+    $this->assertEquals('1', (string) $pair->getValue());
+    $pair = $elements[1];
+    $this->assertEquals('"b"', (string) $pair->getKey());
+    $this->assertEquals('2', (string) $pair->getValue());
+
+    $array = $this->parseExpression('["a" => 1, "b" => 2]', '\Pharborist\ArrayNode');
+    $elements = $array->getElements();
+    $pair = $elements[0];
+    $this->assertEquals('"a"', (string) $pair->getKey());
+    $this->assertEquals('1', (string) $pair->getValue());
+    $pair = $elements[1];
+    $this->assertEquals('"b"', (string) $pair->getKey());
+    $this->assertEquals('2', (string) $pair->getValue());
+
+    $array = $this->parseExpression('[&$a, "k" => &$v]', '\Pharborist\ArrayNode');
+    $elements = $array->getElements();
+    $this->assertEquals('&$a', (string) $elements[0]);
+    $pair = $elements[1];
+    $this->assertEquals('"k"', (string) $pair->getKey());
+    $this->assertEquals('&$v', (string) $pair->getValue());
+
+    /** @var ConstantDeclarationStatementNode $constant_stmt */
+    $constant_stmt = $this->parseSnippet('const MY_ARRAY = array(3, 5, 8, );', '\Pharborist\ConstantDeclarationStatementNode');
+    $array = $constant_stmt->getDeclarations()[0]->getValue();
+    $elements = $array->getElements();
+    $this->assertEquals('3', (string) $elements[0]);
+    $this->assertEquals('5', (string) $elements[1]);
+    $this->assertEquals('8', (string) $elements[2]);
   }
 
   /**
@@ -570,62 +671,251 @@ EOF;
    * Test variable.
    */
   public function testVariable() {
-    //@todo
     $this->parseVariable('$a', '\Pharborist\VariableNode');
-    $this->parseVariable('${$a}', '\Pharborist\CompoundVariableNode');
-    $this->parseVariable('$a[0]', '\Pharborist\ArrayLookupNode');
-    $this->parseVariable('$a{0}', '\Pharborist\ArrayLookupNode');
-    $this->parseVariable('$$a', '\Pharborist\VariableVariableNode');
-    $this->parseVariable('MyClass::$a', '\Pharborist\ClassMemberLookupNode');
-    $this->parseVariable('MyClass::$a[0]', '\Pharborist\ArrayLookupNode');
-    $this->parseVariable('static::$a', '\Pharborist\ClassMemberLookupNode');
-    $this->parseVariable('$c::$a', '\Pharborist\ClassMemberLookupNode');
-    $this->parseVariable('$c[0]::$a', '\Pharborist\ClassMemberLookupNode');
-    $this->parseVariable('$c{0}::$a', '\Pharborist\ClassMemberLookupNode');
-    $this->parseVariable('$o->property', '\Pharborist\ObjectPropertyNode');
-    $this->parseVariable('$o->{$a}', '\Pharborist\ObjectPropertyNode');
-    $this->parseVariable('$o->$a', '\Pharborist\ObjectPropertyNode');
-    $this->parseVariable('$o->$$a', '\Pharborist\ObjectPropertyNode');
-    $this->parseVariable('$a()', '\Pharborist\CallbackCallNode');
-    $this->parseVariable('$o->$a()', '\Pharborist\ObjectMethodCallNode');
-    $this->parseVariable('a()', '\Pharborist\FunctionCallNode');
-    $this->parseVariable('namespace\MyClass::a()', '\Pharborist\ClassMethodCallNode');
-    $this->parseVariable('MyNamespace\MyClass::$a()', '\Pharborist\ClassMethodCallNode');
-    $this->parseVariable('MyClass::{$a}()', '\Pharborist\ClassMethodCallNode');
-    $this->parseVariable('a()[0]', '\Pharborist\ArrayLookupNode');
-    $this->parseVariable('$class::${$f}()', '\Pharborist\ClassMethodCallNode');
-    $this->parseVariable('$class::${$f}[0]', '\Pharborist\ArrayLookupNode');
+
+    /** @var CompoundVariableNode $compound_var */
+    $compound_var = $this->parseVariable('${$a}', '\Pharborist\CompoundVariableNode');
+    $this->assertEquals('$a', (string) $compound_var->getExpression());
+
+    /** @var ArrayLookupNode $array_lookup */
+    $array_lookup = $this->parseVariable('$a[0]', '\Pharborist\ArrayLookupNode');
+    $this->assertEquals('$a', (string) $array_lookup->getArray());
+    $this->assertEquals('0', (string) $array_lookup->getKey());
+
+    $array_lookup = $this->parseVariable('$a{0}', '\Pharborist\ArrayLookupNode');
+    $this->assertEquals('$a', (string) $array_lookup->getArray());
+    $this->assertEquals('0', (string) $array_lookup->getKey());
+
+    /** @var VariableVariableNode $var_var */
+    $var_var = $this->parseVariable('$$a', '\Pharborist\VariableVariableNode');
+    $this->assertEquals('$a', (string) $var_var->getVariable());
+
+    /** @var ClassMemberLookupNode $class_member_lookup */
+    $class_member_lookup = $this->parseVariable('MyClass::$a', '\Pharborist\ClassMemberLookupNode');
+    $this->assertEquals('MyClass', (string) $class_member_lookup->getClassName());
+    $this->assertEquals('$a', (string) $class_member_lookup->getMemberName());
+
+    $array_lookup = $this->parseVariable('MyClass::$a[0]', '\Pharborist\ArrayLookupNode');
+    $this->assertEquals('MyClass::$a', (string) $array_lookup->getArray());
+    $this->assertEquals('0', (string) $array_lookup->getKey());
+    $class_member_lookup = $array_lookup->getArray();
+    $this->assertEquals('MyClass', (string) $class_member_lookup->getClassName());
+    $this->assertEquals('$a', (string) $class_member_lookup->getMemberName());
+
+    $class_member_lookup = $this->parseVariable('static::$a', '\Pharborist\ClassMemberLookupNode');
+    $this->assertEquals('static', (string) $class_member_lookup->getClassName());
+    $this->assertEquals('$a', (string) $class_member_lookup->getMemberName());
+
+    $class_member_lookup = $this->parseVariable('$c::$a', '\Pharborist\ClassMemberLookupNode');
+    $this->assertEquals('$c', (string) $class_member_lookup->getClassName());
+    $this->assertEquals('$a', (string) $class_member_lookup->getMemberName());
+
+    $class_member_lookup = $this->parseVariable('$c[0]::$a', '\Pharborist\ClassMemberLookupNode');
+    $this->assertEquals('$c[0]', (string) $class_member_lookup->getClassName());
+    $this->assertEquals('$a', (string) $class_member_lookup->getMemberName());
+    $array_lookup = $class_member_lookup->getClassName();
+    $this->assertEquals('$c', (string) $array_lookup->getArray());
+    $this->assertEquals('0', (string) $array_lookup->getKey());
+
+    $class_member_lookup = $this->parseVariable('$c{0}::$a', '\Pharborist\ClassMemberLookupNode');
+    $this->assertEquals('$c{0}', (string) $class_member_lookup->getClassName());
+    $this->assertEquals('$a', (string) $class_member_lookup->getMemberName());
+    $array_lookup = $class_member_lookup->getClassName();
+    $this->assertEquals('$c', (string) $array_lookup->getArray());
+    $this->assertEquals('0', (string) $array_lookup->getKey());
+
+    /** @var ObjectPropertyNode $obj_property_lookup */
+    $obj_property_lookup = $this->parseVariable('$o->property', '\Pharborist\ObjectPropertyNode');
+    $this->assertEquals('$o', (string) $obj_property_lookup->getObject());
+    $this->assertEquals('property', (string) $obj_property_lookup->getProperty());
+
+    $obj_property_lookup = $this->parseVariable('$o->{$a}', '\Pharborist\ObjectPropertyNode');
+    $this->assertEquals('$o', (string) $obj_property_lookup->getObject());
+    $this->assertEquals('{$a}', (string) $obj_property_lookup->getProperty());
+
+    $obj_property_lookup = $this->parseVariable('$o->$a', '\Pharborist\ObjectPropertyNode');
+    $this->assertEquals('$o', (string) $obj_property_lookup->getObject());
+    $this->assertEquals('$a', (string) $obj_property_lookup->getProperty());
+
+    $obj_property_lookup = $this->parseVariable('$o->$$a', '\Pharborist\ObjectPropertyNode');
+    $this->assertEquals('$o', (string) $obj_property_lookup->getObject());
+    $this->assertEquals('$$a', (string) $obj_property_lookup->getProperty());
+    $var_var = $obj_property_lookup->getProperty();
+    $this->assertEquals('$a', (string) $var_var->getVariable());
+
+    /** @var CallbackCallNode $callback_call */
+    $callback_call = $this->parseVariable('$a()', '\Pharborist\CallbackCallNode');
+    $this->assertEquals('$a', (string) $callback_call->getCallback());
+
+    /** @var ObjectMethodCallNode $obj_method_call */
+    $obj_method_call = $this->parseVariable('$o->$a()', '\Pharborist\ObjectMethodCallNode');
+    $this->assertEquals('$o', (string) $obj_method_call->getObject());
+    $this->assertEquals('$a', (string) $obj_method_call->getMethodName());
+
+    /** @var FunctionCallNode $function_call */
+    $function_call = $this->parseVariable('a()', '\Pharborist\FunctionCallNode');
+    $this->assertEquals('a', (string) $function_call->getNamespacePath());
+
+    /** @var ClassMethodCallNode $class_method_call */
+    $class_method_call = $this->parseVariable('namespace\MyClass::a()', '\Pharborist\ClassMethodCallNode');
+    $this->assertEquals('namespace\MyClass', (string) $class_method_call->getClassName());
+    $this->assertEquals('a', (string) $class_method_call->getMethodName());
+
+    $class_method_call = $this->parseVariable('MyNamespace\MyClass::$a()', '\Pharborist\ClassMethodCallNode');
+    $this->assertEquals('MyNamespace\MyClass', $class_method_call->getClassName());
+    $this->assertEquals('$a', (string) $class_method_call->getMethodName());
+
+    $class_method_call = $this->parseVariable('MyClass::{$a}()', '\Pharborist\ClassMethodCallNode');
+    $this->assertEquals('MyClass', (string) $class_method_call->getClassName());
+    $this->assertEquals('{$a}', (string) $class_method_call->getMethodName());
+
+    $array_lookup = $this->parseVariable('a()[0]', '\Pharborist\ArrayLookupNode');
+    $this->assertEquals('a()', (string) $array_lookup->getArray());
+    $this->assertEquals('0', (string) $array_lookup->getKey());
+    $function_call = $array_lookup->getArray();
+    $this->assertEquals('a', $function_call->getNamespacePath());
+
+    $class_method_call = $this->parseVariable('$class::${$f}()', '\Pharborist\ClassMethodCallNode');
+    $this->assertEquals('$class', (string) $class_method_call->getClassName());
+    $this->assertEquals('${$f}', (string) $class_method_call->getMethodName());
+
+    $array_lookup = $this->parseVariable('$class::${$f}[0]', '\Pharborist\ArrayLookupNode');
+    $this->assertEquals('$class::${$f}', (string) $array_lookup->getArray());
+    $this->assertEquals('0', (string) $array_lookup->getKey());
+    $class_member_lookup = $array_lookup->getArray();
+    $this->assertEquals('$class', (string) $class_member_lookup->getClassName());
+    $this->assertEquals('${$f}', (string) $class_member_lookup->getMemberName());
+    $compound_var = $class_member_lookup->getMemberName();
+    $this->assertEquals('$f', (string) $compound_var->getExpression());
   }
 
   /**
    * Test expression.
    */
   public function testExpression() {
-    //@todo
     $this->parseExpression('$a', '\Pharborist\VariableNode');
-    $this->parseExpression('${$a}', '\Pharborist\CompoundVariableNode');
-    $this->parseExpression('$a[0]', '\Pharborist\ArrayLookupNode');
-    $this->parseExpression('$a{0}', '\Pharborist\ArrayLookupNode');
-    $this->parseExpression('$$a', '\Pharborist\VariableVariableNode');
-    $this->parseExpression('MyClass::$a', '\Pharborist\ClassMemberLookupNode');
-    $this->parseExpression('MyClass::$a[0]', '\Pharborist\ArrayLookupNode');
-    $this->parseExpression('static::$a', '\Pharborist\ClassMemberLookupNode');
-    $this->parseExpression('$c::$a', '\Pharborist\ClassMemberLookupNode');
-    $this->parseExpression('$c[0]::$a', '\Pharborist\ClassMemberLookupNode');
-    $this->parseExpression('$c{0}::$a', '\Pharborist\ClassMemberLookupNode');
-    $this->parseExpression('$o->property', '\Pharborist\ObjectPropertyNode');
-    $this->parseExpression('$o->{$a}', '\Pharborist\ObjectPropertyNode');
-    $this->parseExpression('$o->$a', '\Pharborist\ObjectPropertyNode');
-    $this->parseExpression('$o->$$a', '\Pharborist\ObjectPropertyNode');
-    $this->parseExpression('$a()', '\Pharborist\FunctionCallNode');
-    $this->parseExpression('$o->$a()', '\Pharborist\ObjectMethodCallNode');
-    $this->parseExpression('a()', '\Pharborist\FunctionCallNode');
-    $this->parseExpression('namespace\MyClass::a()', '\Pharborist\ClassMethodCallNode');
-    $this->parseExpression('MyNamespace\MyClass::$a()', '\Pharborist\ClassMethodCallNode');
-    $this->parseExpression('MyNamespace\MyClass::$a[0]()', '\Pharborist\ClassMethodCallNode');
-    $this->parseExpression('MyClass::{$a}()', '\Pharborist\ClassMethodCallNode');
-    $this->parseExpression('a()[0]', '\Pharborist\ArrayLookupNode');
-    $this->parseExpression('$a = $b++', '\Pharborist\AssignNode');
+
+    /** @var CompoundVariableNode $compound_var */
+    $compound_var = $this->parseExpression('${$a}', '\Pharborist\CompoundVariableNode');
+    $this->assertEquals('$a', (string) $compound_var->getExpression());
+
+    /** @var ArrayLookupNode $array_lookup */
+    $array_lookup = $this->parseExpression('$a[0]', '\Pharborist\ArrayLookupNode');
+    $this->assertEquals('$a', (string) $array_lookup->getArray());
+    $this->assertEquals('0', (string) $array_lookup->getKey());
+
+    $array_lookup = $this->parseExpression('$a{0}', '\Pharborist\ArrayLookupNode');
+    $this->assertEquals('$a', (string) $array_lookup->getArray());
+    $this->assertEquals('0', (string) $array_lookup->getKey());
+
+    /** @var VariableVariableNode $var_var */
+    $var_var = $this->parseExpression('$$a', '\Pharborist\VariableVariableNode');
+    $this->assertEquals('$a', (string) $var_var->getVariable());
+
+    /** @var ClassMemberLookupNode $class_member_lookup */
+    $class_member_lookup = $this->parseExpression('MyClass::$a', '\Pharborist\ClassMemberLookupNode');
+    $this->assertEquals('MyClass', (string) $class_member_lookup->getClassName());
+    $this->assertEquals('$a', (string) $class_member_lookup->getMemberName());
+
+    $array_lookup = $this->parseExpression('MyClass::$a[0]', '\Pharborist\ArrayLookupNode');
+    $this->assertEquals('MyClass::$a', (string) $array_lookup->getArray());
+    $this->assertEquals('0', (string) $array_lookup->getKey());
+    $class_member_lookup = $array_lookup->getArray();
+    $this->assertEquals('MyClass', (string) $class_member_lookup->getClassName());
+    $this->assertEquals('$a', (string) $class_member_lookup->getMemberName());
+
+    $class_member_lookup = $this->parseExpression('static::$a', '\Pharborist\ClassMemberLookupNode');
+    $this->assertEquals('static', (string) $class_member_lookup->getClassName());
+    $this->assertEquals('$a', (string) $class_member_lookup->getMemberName());
+
+    $class_member_lookup = $this->parseExpression('$c::$a', '\Pharborist\ClassMemberLookupNode');
+    $this->assertEquals('$c', (string) $class_member_lookup->getClassName());
+    $this->assertEquals('$a', (string) $class_member_lookup->getMemberName());
+
+    $class_member_lookup = $this->parseExpression('$c[0]::$a', '\Pharborist\ClassMemberLookupNode');
+    $this->assertEquals('$c[0]', (string) $class_member_lookup->getClassName());
+    $this->assertEquals('$a', (string) $class_member_lookup->getMemberName());
+    $array_lookup = $class_member_lookup->getClassName();
+    $this->assertEquals('$c', (string) $array_lookup->getArray());
+    $this->assertEquals('0', (string) $array_lookup->getKey());
+
+    $class_member_lookup = $this->parseExpression('$c{0}::$a', '\Pharborist\ClassMemberLookupNode');
+    $this->assertEquals('$c{0}', (string) $class_member_lookup->getClassName());
+    $this->assertEquals('$a', (string) $class_member_lookup->getMemberName());
+    $array_lookup = $class_member_lookup->getClassName();
+    $this->assertEquals('$c', (string) $array_lookup->getArray());
+    $this->assertEquals('0', (string) $array_lookup->getKey());
+
+    /** @var ObjectPropertyNode $obj_property_lookup */
+    $obj_property_lookup = $this->parseExpression('$o->property', '\Pharborist\ObjectPropertyNode');
+    $this->assertEquals('$o', (string) $obj_property_lookup->getObject());
+    $this->assertEquals('property', (string) $obj_property_lookup->getProperty());
+
+    $obj_property_lookup = $this->parseExpression('$o->{$a}', '\Pharborist\ObjectPropertyNode');
+    $this->assertEquals('$o', (string) $obj_property_lookup->getObject());
+    $this->assertEquals('{$a}', (string) $obj_property_lookup->getProperty());
+
+    $obj_property_lookup = $this->parseExpression('$o->$a', '\Pharborist\ObjectPropertyNode');
+    $this->assertEquals('$o', (string) $obj_property_lookup->getObject());
+    $this->assertEquals('$a', (string) $obj_property_lookup->getProperty());
+
+    $obj_property_lookup = $this->parseExpression('$o->$$a', '\Pharborist\ObjectPropertyNode');
+    $this->assertEquals('$o', (string) $obj_property_lookup->getObject());
+    $this->assertEquals('$$a', (string) $obj_property_lookup->getProperty());
+    $var_var = $obj_property_lookup->getProperty();
+    $this->assertEquals('$a', (string) $var_var->getVariable());
+
+    /** @var CallbackCallNode $callback_call */
+    $callback_call = $this->parseExpression('$a()', '\Pharborist\CallbackCallNode');
+    $this->assertEquals('$a', (string) $callback_call->getCallback());
+
+    /** @var ObjectMethodCallNode $obj_method_call */
+    $obj_method_call = $this->parseExpression('$o->$a()', '\Pharborist\ObjectMethodCallNode');
+    $this->assertEquals('$o', (string) $obj_method_call->getObject());
+    $this->assertEquals('$a', (string) $obj_method_call->getMethodName());
+
+    /** @var FunctionCallNode $function_call */
+    $function_call = $this->parseExpression('a()', '\Pharborist\FunctionCallNode');
+    $this->assertEquals('a', (string) $function_call->getNamespacePath());
+
+    /** @var ClassMethodCallNode $class_method_call */
+    $class_method_call = $this->parseExpression('namespace\MyClass::a()', '\Pharborist\ClassMethodCallNode');
+    $this->assertEquals('namespace\MyClass', (string) $class_method_call->getClassName());
+    $this->assertEquals('a', (string) $class_method_call->getMethodName());
+
+    $class_method_call = $this->parseExpression('MyNamespace\MyClass::$a()', '\Pharborist\ClassMethodCallNode');
+    $this->assertEquals('MyNamespace\MyClass', $class_method_call->getClassName());
+    $this->assertEquals('$a', (string) $class_method_call->getMethodName());
+
+    $class_method_call = $this->parseExpression('MyClass::{$a}()', '\Pharborist\ClassMethodCallNode');
+    $this->assertEquals('MyClass', (string) $class_method_call->getClassName());
+    $this->assertEquals('{$a}', (string) $class_method_call->getMethodName());
+
+    $array_lookup = $this->parseExpression('a()[0]', '\Pharborist\ArrayLookupNode');
+    $this->assertEquals('a()', (string) $array_lookup->getArray());
+    $this->assertEquals('0', (string) $array_lookup->getKey());
+    $function_call = $array_lookup->getArray();
+    $this->assertEquals('a', $function_call->getNamespacePath());
+
+    $class_method_call = $this->parseExpression('$class::${$f}()', '\Pharborist\ClassMethodCallNode');
+    $this->assertEquals('$class', (string) $class_method_call->getClassName());
+    $this->assertEquals('${$f}', (string) $class_method_call->getMethodName());
+
+    $array_lookup = $this->parseExpression('$class::${$f}[0]', '\Pharborist\ArrayLookupNode');
+    $this->assertEquals('$class::${$f}', (string) $array_lookup->getArray());
+    $this->assertEquals('0', (string) $array_lookup->getKey());
+    $class_member_lookup = $array_lookup->getArray();
+    $this->assertEquals('$class', (string) $class_member_lookup->getClassName());
+    $this->assertEquals('${$f}', (string) $class_member_lookup->getMemberName());
+    $compound_var = $class_member_lookup->getMemberName();
+    $this->assertEquals('$f', (string) $compound_var->getExpression());
+
+    /** @var BinaryOperationNode $binary_op */
+    $binary_op = $this->parseExpression('$a = $b++', '\Pharborist\AssignNode');
+    $this->assertEquals('$a', (string) $binary_op->getLeft());
+    $this->assertEquals('=', (string) $binary_op->getOperator());
+    $this->assertEquals('$b++', (string) $binary_op->getRight());
+
     $this->parseExpression('$a = $b ?: $c', '\Pharborist\AssignNode');
     /** @var TernaryOperationNode $ternary_node */
     $ternary_node = $this->parseExpression('$a ? $b : $c ? $d : $e', '\Pharborist\TernaryOperationNode');
@@ -715,53 +1005,120 @@ EOF;
    * Test static expression.
    */
   public function testStaticExpression() {
-    //@todo
-    $this->parseSnippet('const MY_CONST = namespace\MY_CONST;', '\Pharborist\ConstantDeclarationStatementNode');
-    $this->parseSnippet('const MY_CONST = MyNamespace\MyClass::MY_CONST;', '\Pharborist\ConstantDeclarationStatementNode');
-    $this->parseSnippet('const MY_CONST = MyNamespace\MyClass::class;', '\Pharborist\ConstantDeclarationStatementNode');
-    $this->parseSnippet('const MY_CONST = static::MY_CONST;', '\Pharborist\ConstantDeclarationStatementNode');
+    /** @var ConstantDeclarationStatementNode $const_stmt */
+    $const_stmt = $this->parseSnippet('const MY_CONST = namespace\MY_CONST;', '\Pharborist\ConstantDeclarationStatementNode');
+    $const = $const_stmt->getDeclarations()[0];
+    $this->assertEquals('MY_CONST', (string) $const->getName());
+    $this->assertEquals('namespace\MY_CONST', (string) $const->getValue());
+    $this->assertInstanceOf('\Pharborist\NamespacePathNode', $const->getValue());
+
+    $const_stmt = $this->parseSnippet('const MY_CONST = MyNamespace\MyClass::MY_CONST;', '\Pharborist\ConstantDeclarationStatementNode');
+    $const = $const_stmt->getDeclarations()[0];
+    $this->assertEquals('MY_CONST', (string) $const->getName());
+    $this->assertEquals('MyNamespace\MyClass::MY_CONST', (string) $const->getValue());
+    /** @var ClassConstantLookupNode $class_const_lookup */
+    $class_const_lookup = $const->getValue();
+    $this->assertInstanceOf('\Pharborist\ClassConstantLookupNode', $class_const_lookup);
+    $this->assertEquals('MyNamespace\MyClass', $class_const_lookup->getClassName());
+    $this->assertEquals('MY_CONST', $class_const_lookup->getConstantName());
+
+    $const_stmt = $this->parseSnippet('const MY_CONST = MyNamespace\MyClass::class;', '\Pharborist\ConstantDeclarationStatementNode');
+    $const = $const_stmt->getDeclarations()[0];
+    $this->assertEquals('MY_CONST', (string) $const->getName());
+    $this->assertEquals('MyNamespace\MyClass::class', (string) $const->getValue());
+    /** @var ClassNameScalarNode $class_scalar */
+    $class_scalar = $const->getValue();
+    $this->assertInstanceOf('\Pharborist\ClassNameScalarNode', $class_scalar);
+    $this->assertEquals('MyNamespace\MyClass', (string) $class_scalar->getClassName());
+
+    $const_stmt = $this->parseSnippet('const MY_CONST = static::MY_CONST;', '\Pharborist\ConstantDeclarationStatementNode');
+    $const = $const_stmt->getDeclarations()[0];
+    $this->assertEquals('MY_CONST', (string) $const->getName());
+    $this->assertEquals('static::MY_CONST', (string) $const->getValue());
   }
 
   /**
    * Test dynamic class name.
    */
   public function testDynamicClassName() {
-    //@todo
-    $this->parseExpression('new $a::$b->c', '\Pharborist\NewNode');
+    /** @var NewNode $new */
+    $new = $this->parseExpression('new $a::$b->c', '\Pharborist\NewNode');
+    $this->assertEquals('$a::$b->c', (string) $new->getClassName());
+    /** @var ObjectPropertyNode $obj_property */
+    $obj_property = $new->getClassName();
+    $this->assertEquals('$a::$b', (string) $obj_property->getObject());
+    $this->assertEquals('c', (string) $obj_property->getProperty());
+    /** @var ClassMemberLookupNode $class_member_lookup */
+    $class_member_lookup = $obj_property->getObject();
+    $this->assertEquals('$a', $class_member_lookup->getClassName());
+    $this->assertEquals('$b', $class_member_lookup->getMemberName());
   }
 
   /**
    * Test function call.
    */
   public function testFunctionCall() {
-    //@todo
-    $this->parseExpression('do_something(&$a, $b)', '\Pharborist\FunctionCallNode');
+    /** @var FunctionCallNode $function_call */
+    $function_call = $this->parseExpression('do_something(&$a, $b)', '\Pharborist\FunctionCallNode');
+    $this->assertEquals('do_something', (string) $function_call->getNamespacePath());
+    $arguments = $function_call->getArguments();
+    $this->assertEquals('&$a', (string) $arguments[0]);
+    $this->assertEquals('$b', (string) $arguments[1]);
   }
 
   /**
    * Test static variable list.
    */
   public function testStaticVariableList() {
-    //@todo
-    $this->parseSnippet('static $a, $b = 1;', '\Pharborist\StaticVariableStatementNode');
+    /** @var StaticVariableStatementNode $static_var_stmt */
+    $static_var_stmt = $this->parseSnippet('static $a, $b = 1;', '\Pharborist\StaticVariableStatementNode');
+    $static_vars = $static_var_stmt->getVariables();
+    $this->assertEquals('$a', (string) $static_vars[0]);
+    $this->assertEquals('$b', (string) $static_vars[1]->getName());
+    $this->assertEquals('1', (string) $static_vars[1]->getInitialValue());
   }
 
   /**
    * Test (new expr) expression.
    */
   public function testParenNewExpression() {
-    //@todo
-    $this->parseExpression('(new $class($a, $b))->$method()', '\Pharborist\ObjectMethodCallNode');
+    /** @var ObjectMethodCallNode $obj_method_call */
+    $obj_method_call = $this->parseExpression('(new $class($a, $b))->$method()', '\Pharborist\ObjectMethodCallNode');
+    $this->assertEquals('(new $class($a, $b))', (string) $obj_method_call->getObject());
+    $this->assertEquals('$method', (string) $obj_method_call->getMethodName());
   }
 
   /**
    * Test anonymous function.
    */
   public function testAnonymousFunction() {
-    //@todo
-    $this->parseSnippet('function(){};', '\Pharborist\ExpressionStatementNode');
-    $this->parseSnippet('function($a, $b) use ($x, $y) { };', '\Pharborist\ExpressionStatementNode');
-    $this->parseSnippet('$f = function($a, $b) use ($x, $y) { };', '\Pharborist\ExpressionStatementNode');
+    /** @var AnonymousFunctionNode $function */
+    $function = $this->parseExpression('function(){}', '\Pharborist\AnonymousFunctionNode');
+    $this->assertEquals(0, count($function->getParameters()));
+
+    $function = $this->parseExpression('function($a, $b) use ($x, $y) { }', '\Pharborist\AnonymousFunctionNode');
+    $parameters = $function->getParameters();
+    $this->assertEquals(2, count($parameters));
+    $this->assertEquals('$a', (string) $parameters[0]);
+    $this->assertEquals('$b', (string) $parameters[1]);
+    $lexical_vars = $function->getLexicalVariables();
+    $this->assertEquals(2, count($lexical_vars));
+    $this->assertEquals('$x', (string) $lexical_vars[0]);
+    $this->assertEquals('$y', (string) $lexical_vars[1]);
+
+    /** @var AssignNode $assign */
+    $assign = $this->parseExpression('$f = function($a, $b) use ($x, $y) { }', '\Pharborist\AssignNode');
+    $this->assertEquals('$f', (string) $assign->getLeft());
+    $this->assertInstanceOf('\Pharborist\AnonymousFunctionNode', $assign->getRight());
+    $function = $assign->getRight();
+    $parameters = $function->getParameters();
+    $this->assertEquals(2, count($parameters));
+    $this->assertEquals('$a', (string) $parameters[0]);
+    $this->assertEquals('$b', (string) $parameters[1]);
+    $lexical_vars = $function->getLexicalVariables();
+    $this->assertEquals(2, count($lexical_vars));
+    $this->assertEquals('$x', (string) $lexical_vars[0]);
+    $this->assertEquals('$y', (string) $lexical_vars[1]);
   }
 
   /**

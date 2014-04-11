@@ -116,10 +116,11 @@ class Parser {
    *   could not be read.
    */
   public static function parseFile($filename) {
-    if ($source = @file_get_contents($filename)) {
-      return self::parseSource($source);
+    $source = @file_get_contents($filename);
+    if ($source === FALSE) {
+      return FALSE;
     }
-    return FALSE;
+    return self::parseSource($source);
   }
 
   /**

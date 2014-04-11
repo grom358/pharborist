@@ -148,10 +148,9 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
    */
   public function testClassDeclaration() {
     $snippet = <<<'EOF'
-/**
- * Class doc comment.
- */
+/** Class doc comment. */
 abstract class MyClass extends ParentClass implements SomeInterface, AnotherInterface {
+  /** const doc comment */
   const MY_CONST = 1;
   public $publicProperty = 1;
   protected $protectedProperty;
@@ -159,9 +158,7 @@ abstract class MyClass extends ParentClass implements SomeInterface, AnotherInte
   static public $classProperty;
   var $backwardsCompatibility;
 
-  /**
-   * method doc comment.
-   */
+  /** method doc comment. */
   public function myMethod() {
   }
 
@@ -182,17 +179,19 @@ abstract class MyClass extends ParentClass implements SomeInterface, AnotherInte
 EOF;
     /** @var ClassNode $class_declaration */
     $class_declaration = $this->parseSnippet($snippet, '\Pharborist\ClassNode');
-    $this->assertEquals('/**
- * Class doc comment.
- */', $class_declaration->getDocComment());
+    $this->assertEquals('/** Class doc comment. */', $class_declaration->getDocComment());
     $this->assertEquals('MyClass', (string) $class_declaration->getName());
     $this->assertEquals('ParentClass', (string) $class_declaration->getExtends());
     $this->assertEquals('SomeInterface', (string) $class_declaration->getImplements()[0]);
     $this->assertEquals('AnotherInterface', (string) $class_declaration->getImplements()[1]);
-    $this->assertInstanceOf('\Pharborist\ConstantDeclarationStatementNode', $class_declaration->getStatements()[0]);
+    $statements = $class_declaration->getStatements();
+
+    /** @var ConstantDeclarationStatementNode $const_statement */
+    $const_statement = $statements[0];
+    $this->assertInstanceOf('\Pharborist\ConstantDeclarationStatementNode', $const_statement);
+    $this->assertEquals('/** const doc comment */', $const_statement->getDocComment());
 
     /** @var ClassMemberListNode $class_member_list */
-    $statements = $class_declaration->getStatements();
     $class_member_list = $statements[1];
     $this->assertInstanceOf('\Pharborist\ClassMemberListNode', $class_member_list);
     $this->assertEquals('public', (string) $class_member_list->getModifiers()->getVisibility());
@@ -219,9 +218,7 @@ EOF;
     /** @var ClassMethodNode $method */
     $method = $statements[6];
     $this->assertInstanceOf('\Pharborist\ClassMethodNode', $method);
-    $this->assertEquals('/**
-   * method doc comment.
-   */', $method->getDocComment());
+    $this->assertEquals('/** method doc comment. */', $method->getDocComment());
     $this->assertEquals('myMethod', (string) $method->getName());
     $this->assertEquals('public', (string) $method->getModifiers()->getVisibility());
 
@@ -787,9 +784,16 @@ EOF;
   }
 
   /**
-   * Test handling embedded doc comments
+   * Test handling embedded doc comments.
    */
   public function testEmbeddedDocComments() {
     $this->parseSnippet('/** start */ 1 /** plus before */ + /** plus after */ 2 + /** ( */ ( /** open */ 3 * 2 /** close */ ) /** end */; /** end line */', '\Pharborist\ExpressionStatementNode');
+  }
+
+  /**
+   * Test doc comment on non structural element.
+   */
+  public function testDocCommentNonStructural() {
+    $this->parseSnippet('/** doc comment */ use Test;', '\Pharborist\DocCommentNode');
   }
 }

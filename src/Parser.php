@@ -2060,10 +2060,8 @@ class Parser {
       case T_TRAIT:
         return $this->traitDeclaration();
       default:
-        if ($this->currentType === T_FUNCTION) {
-          if ($function_declaration = $this->functionDeclaration()) {
-            return $function_declaration;
-          }
+        if ($this->currentType === T_FUNCTION && $this->isLookAhead(T_STRING, '&')) {
+          return $this->functionDeclaration();
         }
         return $this->statement();
     }

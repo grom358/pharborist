@@ -331,7 +331,9 @@ class Parser {
       case '{':
         return $this->innerStatementBlock();
       case ';':
-        return $this->mustMatchToken(';');
+        $node = new EmptyStatementNode();
+        $this->mustMatch(';', $node, NULL, TRUE, TRUE);
+        return $node;
       case T_STATIC:
         if ($this->isLookAhead(T_VARIABLE)) {
           return $this->staticVariableList();

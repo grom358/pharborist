@@ -796,4 +796,15 @@ EOF;
   public function testDocCommentNonStructural() {
     $this->parseSnippet('/** doc comment */ use Test;', '\Pharborist\DocCommentNode');
   }
+
+  /**
+   * Test doc comment after empty statement.
+   */
+  public function testEmptyStatementBeforeDocComment() {
+    $empty_statement = $this->parseSnippet('; /** function */ function test() { }', '\Pharborist\EmptyStatementNode');
+    /** @var FunctionDeclarationNode $function */
+    $function = $empty_statement->nextSibling()->nextSibling();
+    $this->assertInstanceOf('\Pharborist\FunctionDeclarationNode', $function);
+    $this->assertEquals('/** function */', $function->getDocComment());
+  }
 }

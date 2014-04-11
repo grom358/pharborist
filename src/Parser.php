@@ -248,6 +248,7 @@ class Parser {
    */
   private function _const() {
     $node = new ConstantDeclarationStatementNode();
+    $this->matchDocComment($node);
     $this->mustMatch(T_CONST, $node);
     do {
       $node->appendChild($this->constDeclaration(), 'declarations');
@@ -353,6 +354,7 @@ class Parser {
    */
   private function staticVariableList() {
     $node = new StaticVariableStatementNode();
+    $this->matchDocComment($node);
     $this->mustMatch(T_STATIC, $node);
     do {
       $node->appendChild($this->staticVariable(), 'variables');
@@ -1227,6 +1229,7 @@ class Parser {
         else {
           $node = new RequireOnceNode();
         }
+        $this->matchDocComment($node);
         $this->mustMatch($this->currentType, $node);
         $node->appendChild($this->expr(), 'expression');
         return $node;
@@ -1929,6 +1932,7 @@ class Parser {
    */
   private function functionDeclaration() {
     $node = new FunctionDeclarationNode();
+    $this->matchDocComment($node);
     $this->mustMatch(T_FUNCTION, $node);
     $this->tryMatch('&', $node, 'reference');
     $this->mustMatch(T_STRING, $node, 'name');
@@ -2075,6 +2079,7 @@ class Parser {
    */
   private function _namespace() {
     $node = new NamespaceNode();
+    $this->matchDocComment($node);
     $this->mustMatch(T_NAMESPACE, $node);
     if ($this->currentType === T_STRING) {
       $node->appendChild($this->namespaceName(), 'name');
@@ -2142,6 +2147,7 @@ class Parser {
    */
   private function classDeclaration() {
     $node = new ClassNode();
+    $this->matchDocComment($node);
     $this->tryMatch(T_ABSTRACT, $node, 'abstract') || $this->tryMatch(T_FINAL, $node, 'final');
     $this->mustMatch(T_CLASS, $node);
     $this->mustMatch(T_STRING, $node, 'name');
@@ -2399,6 +2405,7 @@ class Parser {
    */
   private function interfaceDeclaration() {
     $node = new InterfaceNode();
+    $this->matchDocComment($node);
     $this->mustMatch(T_INTERFACE, $node);
     $this->mustMatch(T_STRING, $node, 'name');
     if ($this->tryMatch(T_EXTENDS, $node)) {
@@ -2428,6 +2435,7 @@ class Parser {
   private function interfaceMethod() {
     static $visibility_keyword_types = [T_PUBLIC, T_PROTECTED, T_PRIVATE];
     $node = new InterfaceMethodNode();
+    $this->matchDocComment($node);
     $is_static = $this->tryMatch(T_STATIC, $node);
     while (in_array($this->currentType, $visibility_keyword_types)) {
       if ($node->getVisibility()) {
@@ -2454,6 +2462,7 @@ class Parser {
    */
   private function traitDeclaration() {
     $node = new TraitNode();
+    $this->matchDocComment($node);
     $this->mustMatch(T_TRAIT, $node);
     $this->mustMatch(T_STRING, $node, 'name');
     if ($this->tryMatch(T_EXTENDS, $node)) {
@@ -2506,7 +2515,7 @@ class Parser {
   private function addSkipped(ParentNode $parent) {
     $parent->appendChildren($this->skipped);
     $this->skipped = array();
-    $this->matchDocComment($parent);
+    $this->matchDocComment($parent, NULL);
   }
 
   /**
@@ -2522,10 +2531,11 @@ class Parser {
   /**
    * Match doc comment and its following skipped tokens to $parent.
    * @param ParentNode $parent
+   * @param string $property_name
    */
-  private function matchDocComment(ParentNode $parent) {
+  private function matchDocComment(ParentNode $parent, $property_name = 'docComment') {
     if ($this->docComment) {
-      $parent->appendChild($this->docComment, 'docComment');
+      $parent->appendChild($this->docComment, $property_name);
       $parent->appendChildren($this->skippedDocComment);
       $this->skippedDocComment = array();
       $this->docComment = NULL;

@@ -100,8 +100,12 @@ class Parser {
     $this->currentType = $this->current ? $this->current->getType() : NULL;
     $top = new StatementBlockNode();
     $this->top = $top;
-    // Parse any template statements that proceed the opening PHP tag.
-    $this->templateStatementList($top);
+    if ($this->currentType && $this->currentType !== T_OPEN_TAG) {
+      $node = new TemplateNode();
+      // Parse any template statements that proceed the opening PHP tag.
+      $this->templateStatementList($node);
+      $top->appendChild($node);
+    }
     if ($this->tryMatch(T_OPEN_TAG, $top, NULL, TRUE, TRUE)) {
       $this->topStatementList($top);
     }
@@ -182,7 +186,9 @@ class Parser {
   private function echoTagStatement() {
     $node = new EchoTagStatementNode();
     $this->mustMatch(T_OPEN_TAG_WITH_ECHO, $node);
-    $node->appendChild($this->exprList());
+    do {
+      $node->appendChild($this->expr(), 'expressions');
+    } while ($this->tryMatch(',', $node));
     $this->mustMatch(T_CLOSE_TAG, $node, NULL, TRUE);
     return $node;
   }
@@ -1054,7 +1060,7 @@ class Parser {
    * @throws ParserException
    */
   private function expr($static = FALSE) {
-    static $end_expression_types = [':', ';', ',', ')', ']', '}', T_AS, T_DOUBLE_ARROW];
+    static $end_expression_types = [':', ';', ',', ')', ']', '}', T_AS, T_DOUBLE_ARROW, T_CLOSE_TAG];
     // Group tokens into operands & operators to pass to the expression parser
     $expression_nodes = array();
     while ($this->currentType !== NULL && !in_array($this->currentType, $end_expression_types)) {

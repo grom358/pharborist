@@ -1164,4 +1164,26 @@ EOF;
     $this->assertInstanceOf('\Pharborist\FunctionDeclarationNode', $function);
     $this->assertEquals('/** function */', $function->getDocComment());
   }
+
+  /**
+   * Test template file.
+   */
+  public function testTemplate() {
+    $source = <<<'EOF'
+<p>This is a template file</p>
+<p>Hello, <?=$name?>. Welcome to <?=$lego . 'world'?>!</p>
+<?php
+code();
+EOF;
+    $tree = Parser::parseSource($source);
+    /** @var TemplateNode $template */
+    $template = $tree->getFirst();
+    $this->assertInstanceOf('\Pharborist\TemplateNode', $template);
+    $this->assertEquals(5, $template->getChildCount());
+    /** @var EchoTagStatementNode $echo_tag */
+    $echo_tag = $template->getFirst()->nextSibling();
+    $this->assertInstanceOf('\Pharborist\EchoTagStatementNode', $echo_tag);
+    $this->assertEquals('<?=$name?>', (string) $echo_tag);
+    $expressions = $echo_tag->getExpressions();
+  }
 }

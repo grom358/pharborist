@@ -1318,4 +1318,19 @@ EOF;
     $this->assertEquals('$$b', (string) $variables[1]);
     $this->assertEquals('${expr()}', (string) $variables[2]);
   }
+
+  /**
+   * Test echo statement.
+   */
+  public function testEcho() {
+    $snippet = <<<'EOF'
+echo $a, expr(), PHP_EOL;
+EOF;
+    /** @var EchoStatementNode $echo */
+    $echo = $this->parseSnippet($snippet, '\Pharborist\EchoStatementNode');
+    $expressions = $echo->getExpressions();
+    $this->assertEquals('$a', (string) $expressions[0]);
+    $this->assertEquals('expr()', (string) $expressions[1]);
+    $this->assertEquals('PHP_EOL', (string) $expressions[2]);
+  }
 }

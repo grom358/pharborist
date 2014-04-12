@@ -394,6 +394,17 @@ EOF;
     $this->assertEquals('$k', (string) $foreach->getKey());
     $this->assertEquals('&$v', (string) $foreach->getValue());
     $this->assertEquals('body();', (string) $foreach->getBody());
+
+    $snippet = <<<'EOF'
+foreach ($array as $v)
+  body();
+EOF;
+    /** @var ForeachNode $foreach */
+    $foreach = $this->parseSnippet($snippet, '\Pharborist\ForeachNode');
+    $this->assertEquals('$array', (string) $foreach->getOnEach());
+    $this->assertNull($foreach->getKey());
+    $this->assertEquals('$v', (string) $foreach->getValue());
+    $this->assertEquals('body();', (string) $foreach->getBody());
   }
 
   /**
@@ -410,6 +421,18 @@ EOF;
     $this->assertEquals('$array', (string) $foreach->getOnEach());
     $this->assertEquals('$k', (string) $foreach->getKey());
     $this->assertEquals('&$v', (string) $foreach->getValue());
+    $this->assertEquals('body();', (string) $foreach->getBody());
+
+    $snippet = <<<'EOF'
+foreach ($array as $v):
+  body();
+endforeach;
+EOF;
+    /** @var ForeachNode $foreach */
+    $foreach = $this->parseSnippet($snippet, '\Pharborist\ForeachNode');
+    $this->assertEquals('$array', (string) $foreach->getOnEach());
+    $this->assertNull($foreach->getKey());
+    $this->assertEquals('$v', (string) $foreach->getValue());
     $this->assertEquals('body();', (string) $foreach->getBody());
   }
 
@@ -1388,5 +1411,19 @@ EOF;
     $return_statement = $statements[1];
     $this->assertInstanceOf('\Pharborist\ReturnStatementNode', $return_statement);
     $this->assertEquals('$done', $return_statement->getValue());
+  }
+
+  /**
+   * Test list.
+   */
+  public function testList() {
+    /** @var AssignNode $assign */
+    $assign = $this->parseExpression('list($a, $b) = [1, 2]', '\Pharborist\AssignNode');
+    /** @var ListNode $list */
+    $list = $assign->getLeft();
+    $this->assertInstanceOf('\Pharborist\ListNode', $list);
+    $arguments = $list->getArguments();
+    $this->assertEquals('$a', (string) $arguments[0]);
+    $this->assertEquals('$b', (string) $arguments[1]);
   }
 }

@@ -6,14 +6,13 @@ namespace Pharborist;
  */
 class ReturnStatementNode extends StatementNode {
   protected $properties = array(
-    'value' => NULL,
+    'expression' => NULL,
   );
 
   /**
-   * An optional value to return.
    * @return ExpressionNode
    */
-  public function getValue() {
-    return $this->properties['value'];
+  public function getExpression() {
+    return $this->properties['expression'];
   }
 }

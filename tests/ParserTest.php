@@ -1406,11 +1406,11 @@ EOF;
     /** @var ReturnStatementNode $return_statement */
     $return_statement = $if->getThen();
     $this->assertInstanceOf('\Pharborist\ReturnStatementNode', $return_statement);
-    $this->assertNull($return_statement->getValue());
+    $this->assertNull($return_statement->getExpression());
 
     $return_statement = $statements[1];
     $this->assertInstanceOf('\Pharborist\ReturnStatementNode', $return_statement);
-    $this->assertEquals('$done', $return_statement->getValue());
+    $this->assertEquals('$done', $return_statement->getExpression());
   }
 
   /**
@@ -1425,5 +1425,14 @@ EOF;
     $arguments = $list->getArguments();
     $this->assertEquals('$a', (string) $arguments[0]);
     $this->assertEquals('$b', (string) $arguments[1]);
+  }
+
+  /**
+   * Test throw statement.
+   */
+  public function testThrow() {
+    /** @var ThrowStatementNode $throw */
+    $throw = $this->parseSnippet('throw $e;', '\Pharborist\ThrowStatementNode');
+    $this->assertEquals('$e', $throw->getExpression());
   }
 }

@@ -9,6 +9,7 @@ namespace Pharborist;
 class ExpressionStatementNode extends StatementNode {
   protected $properties = array(
     'docComment' => NULL,
+    'expression' => NULL,
   );
 
   /**
@@ -16,5 +17,12 @@ class ExpressionStatementNode extends StatementNode {
    */
   public function getDocComment() {
     return $this->properties['docComment'];
+  }
+
+  /**
+   * @return ExpressionNode
+   */
+  public function getExpression() {
+    return $this->properties['expression'];
   }
 }

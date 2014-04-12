@@ -398,7 +398,7 @@ class Parser {
   private function exprStatement() {
     $node = new ExpressionStatementNode();
     $this->matchDocComment($node);
-    $node->appendChild($this->expr());
+    $node->appendChild($this->expr(), 'expression');
     $this->mustMatch(';', $node, NULL, TRUE, TRUE);
     return $node;
   }
@@ -687,7 +687,7 @@ class Parser {
     if ($this->tryMatch(';', $node, NULL, TRUE, TRUE)) {
       return $node;
     }
-    $node->appendChild($this->expr(), 'value');
+    $node->appendChild($this->expr(), 'expression');
     $this->mustMatch(';', $node, NULL, TRUE, TRUE);
     return $node;
   }
@@ -924,7 +924,7 @@ class Parser {
   private function _throw() {
     $node = new ThrowStatementNode();
     $this->mustMatch(T_THROW, $node);
-    $node->appendChild($this->expr());
+    $node->appendChild($this->expr(), 'expression');
     $this->mustMatch(';', $node, NULL, TRUE, TRUE);
     return $node;
   }

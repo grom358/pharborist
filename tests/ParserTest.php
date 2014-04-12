@@ -1230,53 +1230,20 @@ EOF;
    * Tests break statement.
    */
   public function testBreak() {
-    $snippet = <<<'EOF'
-while (TRUE) {
-  if ($first_test) {
-    break;
-  }
-  if ($second_test) {
-    break 1;
-  }
-  if ($third_test) {
-    break(1);
-  }
-  while ($fourth_test) {
-    break 2;
-  }
-}
-EOF;
-    /** @var WhileNode $while */
-    $while = $this->parseSnippet($snippet, '\Pharborist\WhileNode');
-    /** @var StatementBlockNode $stmt_block */
-    $stmt_block = $while->getBody();
-    $statements = $stmt_block->getStatements();
-    /** @var IfNode $if */
-    $if = $statements[0];
-    $stmt_block = $if->getThen();
     /** @var BreakStatementNode $break */
-    $break = $stmt_block->getStatements()[0];
-    $this->assertInstanceOf('\Pharborist\BreakStatementNode', $break);
+    $break = $this->parseSnippet('break;', '\Pharborist\BreakStatementNode');
     $this->assertNull($break->getLevel());
 
-    $if = $statements[1];
-    $stmt_block = $if->getThen();
-    $break = $stmt_block->getStatements()[0];
+    $break = $this->parseSnippet('break 1;', '\Pharborist\BreakStatementNode');
+    $this->assertInstanceOf('\Pharborist\IntegerNode', $break->getLevel());
+    $this->assertEquals('1', (string) $break->getLevel());
+
+    $break = $this->parseSnippet('break(1);', '\Pharborist\BreakStatementNode');
     $this->assertInstanceOf('\Pharborist\BreakStatementNode', $break);
     $this->assertInstanceOf('\Pharborist\IntegerNode', $break->getLevel());
     $this->assertEquals('1', (string) $break->getLevel());
 
-    $if = $statements[2];
-    $stmt_block = $if->getThen();
-    $break = $stmt_block->getStatements()[0];
-    $this->assertInstanceOf('\Pharborist\BreakStatementNode', $break);
-    $this->assertInstanceOf('\Pharborist\IntegerNode', $break->getLevel());
-    $this->assertEquals('1', (string) $break->getLevel());
-
-    $while = $statements[3];
-    $stmt_block = $while->getBody();
-    $break = $stmt_block->getStatements()[0];
-    $this->assertInstanceOf('\Pharborist\BreakStatementNode', $break);
+    $break = $this->parseSnippet('break (2);', '\Pharborist\BreakStatementNode');
     $this->assertInstanceOf('\Pharborist\IntegerNode', $break->getLevel());
     $this->assertEquals('2', (string) $break->getLevel());
   }
@@ -1285,53 +1252,19 @@ EOF;
    * Tests continue statement.
    */
   public function testContinue() {
-    $snippet = <<<'EOF'
-while (TRUE) {
-  if ($first_test) {
-    continue;
-  }
-  if ($second_test) {
-    continue 1;
-  }
-  if ($third_test) {
-    continue(1);
-  }
-  while ($fourth_test) {
-    continue 2;
-  }
-}
-EOF;
-    /** @var WhileNode $while */
-    $while = $this->parseSnippet($snippet, '\Pharborist\WhileNode');
-    /** @var StatementBlockNode $stmt_block */
-    $stmt_block = $while->getBody();
-    $statements = $stmt_block->getStatements();
-    /** @var IfNode $if */
-    $if = $statements[0];
-    $stmt_block = $if->getThen();
     /** @var ContinueStatementNode $continue */
-    $continue = $stmt_block->getStatements()[0];
-    $this->assertInstanceOf('\Pharborist\ContinueStatementNode', $continue);
+    $continue = $this->parseSnippet('continue;', '\Pharborist\ContinueStatementNode');
     $this->assertNull($continue->getLevel());
 
-    $if = $statements[1];
-    $stmt_block = $if->getThen();
-    $continue = $stmt_block->getStatements()[0];
-    $this->assertInstanceOf('\Pharborist\ContinueStatementNode', $continue);
+    $continue = $this->parseSnippet('continue 1;', '\Pharborist\ContinueStatementNode');
     $this->assertInstanceOf('\Pharborist\IntegerNode', $continue->getLevel());
     $this->assertEquals('1', (string) $continue->getLevel());
 
-    $if = $statements[2];
-    $stmt_block = $if->getThen();
-    $continue = $stmt_block->getStatements()[0];
-    $this->assertInstanceOf('\Pharborist\ContinueStatementNode', $continue);
+    $continue = $this->parseSnippet('continue(1);', '\Pharborist\ContinueStatementNode');
     $this->assertInstanceOf('\Pharborist\IntegerNode', $continue->getLevel());
     $this->assertEquals('1', (string) $continue->getLevel());
 
-    $while = $statements[3];
-    $stmt_block = $while->getBody();
-    $continue = $stmt_block->getStatements()[0];
-    $this->assertInstanceOf('\Pharborist\ContinueStatementNode', $continue);
+    $continue = $this->parseSnippet('continue (2);', '\Pharborist\ContinueStatementNode');
     $this->assertInstanceOf('\Pharborist\IntegerNode', $continue->getLevel());
     $this->assertEquals('2', (string) $continue->getLevel());
   }
@@ -1355,11 +1288,8 @@ EOF;
    * Test echo statement.
    */
   public function testEcho() {
-    $snippet = <<<'EOF'
-echo $a, expr(), PHP_EOL;
-EOF;
     /** @var EchoStatementNode $echo */
-    $echo = $this->parseSnippet($snippet, '\Pharborist\EchoStatementNode');
+    $echo = $this->parseSnippet('echo $a, expr(), PHP_EOL;', '\Pharborist\EchoStatementNode');
     $expressions = $echo->getExpressions();
     $this->assertEquals('$a', (string) $expressions[0]);
     $this->assertEquals('expr()', (string) $expressions[1]);
@@ -1389,27 +1319,11 @@ EOF;
    * Test return statement.
    */
   public function testReturn() {
-    $snippet = <<<'EOF'
-function test() {
-  if ($first_test) return;
-  return $done;
-}
-EOF;
-    /** @var FunctionDeclarationNode $function_declaration */
-    $function_declaration = $this->parseSnippet($snippet, '\Pharborist\FunctionDeclarationNode');
-    /** @var StatementBlockNode $stmt_block */
-    $stmt_block = $function_declaration->getBody();
-    $statements = $stmt_block->getStatements();
-    /** @var IfNode $if */
-    $if = $statements[0];
-
     /** @var ReturnStatementNode $return_statement */
-    $return_statement = $if->getThen();
-    $this->assertInstanceOf('\Pharborist\ReturnStatementNode', $return_statement);
+    $return_statement = $this->parseSnippet('return;', '\Pharborist\ReturnStatementNode');
     $this->assertNull($return_statement->getExpression());
 
-    $return_statement = $statements[1];
-    $this->assertInstanceOf('\Pharborist\ReturnStatementNode', $return_statement);
+    $return_statement = $this->parseSnippet('return $done;', '\Pharborist\ReturnStatementNode');
     $this->assertEquals('$done', $return_statement->getExpression());
   }
 

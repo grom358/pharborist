@@ -1518,13 +1518,18 @@ EOF;
    */
   public function testList() {
     /** @var AssignNode $assign */
-    $assign = $this->parseExpression('list($a, $b) = [1, 2]', '\Pharborist\AssignNode');
+    $assign = $this->parseExpression('list($a, $b, list($c1, $c2)) = [1, 2, [3.1, 3.2]]', '\Pharborist\AssignNode');
     /** @var ListNode $list */
     $list = $assign->getLeft();
     $this->assertInstanceOf('\Pharborist\ListNode', $list);
     $arguments = $list->getArguments();
     $this->assertEquals('$a', (string) $arguments[0]);
     $this->assertEquals('$b', (string) $arguments[1]);
+    $list = $arguments[2];
+    $this->assertInstanceOf('\Pharborist\ListNode', $list);
+    $arguments = $list->getArguments();
+    $this->assertEquals('$c1', (string) $arguments[0]);
+    $this->assertEquals('$c2', (string) $arguments[1]);
   }
 
   /**

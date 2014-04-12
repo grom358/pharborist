@@ -351,7 +351,7 @@ class Parser {
       case T_STRING:
         if ($this->isLookAhead(':')) {
           $node = new GotoLabelNode();
-          $this->mustMatch(T_STRING, $node);
+          $this->mustMatch(T_STRING, $node, 'label');
           $this->mustMatch(':', $node, NULL, TRUE, TRUE);
           return $node;
         }

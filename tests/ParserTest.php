@@ -20,12 +20,20 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
   }
 
   /**
-   * Helper function to parse a snippet.
+   * Helper function to parse a snippet block.
    */
-  public function parseSnippet($snippet, $expected_type) {
+  public function parseSnippetBlock($snippet) {
     $tree = Parser::parseSnippet($snippet);
     $source = (string) $tree;
     $this->assertEquals($snippet, $source);
+    return $tree;
+  }
+
+  /**
+   * Helper function to parse a snippet.
+   */
+  public function parseSnippet($snippet, $expected_type) {
+    $tree = $this->parseSnippetBlock($snippet);
     $first_child = $tree->getFirst();
     $this->assertInstanceOf($expected_type, $first_child);
     return $first_child;
@@ -1180,6 +1188,7 @@ code();
 ?><h1>End of template</h1><?php more_code();
 EOF;
     $tree = Parser::parseSource($source);
+    $this->assertEquals($source, (string) $tree);
     /** @var TemplateNode[] $templates */
     $templates = $tree->find('\Pharborist\TemplateNode');
     $template = $templates[0];
@@ -1332,5 +1341,24 @@ EOF;
     $this->assertEquals('$a', (string) $expressions[0]);
     $this->assertEquals('expr()', (string) $expressions[1]);
     $this->assertEquals('PHP_EOL', (string) $expressions[2]);
+  }
+
+  /**
+   * Test goto.
+   */
+  public function testGoto() {
+    $snippet = <<<'EOF'
+loop:
+  goto loop;
+EOF;
+    $tree = $this->parseSnippetBlock($snippet);
+    /** @var GotoLabelNode $goto_label */
+    $goto_label = $tree->getFirst();
+    $this->assertInstanceOf('\Pharborist\GotoLabelNode', $goto_label);
+    $this->assertEquals('loop', (string) $goto_label->getLabel());
+    /** @var GotoStatementNode $goto_statement */
+    $goto_statement = $tree->getLast();
+    $this->assertInstanceOf('\Pharborist\GotoStatementNode', $goto_statement);
+    $this->assertEquals('loop', (string) $goto_statement->getLabel());
   }
 }

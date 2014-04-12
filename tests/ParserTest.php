@@ -1193,4 +1193,114 @@ EOF;
     $template = $templates[1];
     $this->assertEquals('?><h1>End of template</h1><?php ', (string) $template);
   }
+
+  /**
+   * Tests break statement.
+   */
+  public function testBreak() {
+    $snippet = <<<'EOF'
+while (TRUE) {
+  if ($first_test) {
+    break;
+  }
+  if ($second_test) {
+    break 1;
+  }
+  if ($third_test) {
+    break(1);
+  }
+  while ($fourth_test) {
+    break 2;
+  }
+}
+EOF;
+    /** @var WhileNode $while */
+    $while = $this->parseSnippet($snippet, '\Pharborist\WhileNode');
+    /** @var StatementBlockNode $stmt_block */
+    $stmt_block = $while->getBody();
+    $statements = $stmt_block->getStatements();
+    /** @var IfNode $if */
+    $if = $statements[0];
+    $stmt_block = $if->getThen();
+    /** @var BreakStatementNode $break */
+    $break = $stmt_block->getStatements()[0];
+    $this->assertInstanceOf('\Pharborist\BreakStatementNode', $break);
+    $this->assertNull($break->getLevel());
+
+    $if = $statements[1];
+    $stmt_block = $if->getThen();
+    $break = $stmt_block->getStatements()[0];
+    $this->assertInstanceOf('\Pharborist\BreakStatementNode', $break);
+    $this->assertInstanceOf('\Pharborist\IntegerNode', $break->getLevel());
+    $this->assertEquals('1', (string) $break->getLevel());
+
+    $if = $statements[2];
+    $stmt_block = $if->getThen();
+    $break = $stmt_block->getStatements()[0];
+    $this->assertInstanceOf('\Pharborist\BreakStatementNode', $break);
+    $this->assertInstanceOf('\Pharborist\IntegerNode', $break->getLevel());
+    $this->assertEquals('1', (string) $break->getLevel());
+
+    $while = $statements[3];
+    $stmt_block = $while->getBody();
+    $break = $stmt_block->getStatements()[0];
+    $this->assertInstanceOf('\Pharborist\BreakStatementNode', $break);
+    $this->assertInstanceOf('\Pharborist\IntegerNode', $break->getLevel());
+    $this->assertEquals('2', (string) $break->getLevel());
+  }
+
+  /**
+   * Tests continue statement.
+   */
+  public function testContinue() {
+    $snippet = <<<'EOF'
+while (TRUE) {
+  if ($first_test) {
+    continue;
+  }
+  if ($second_test) {
+    continue 1;
+  }
+  if ($third_test) {
+    continue(1);
+  }
+  while ($fourth_test) {
+    continue 2;
+  }
+}
+EOF;
+    /** @var WhileNode $while */
+    $while = $this->parseSnippet($snippet, '\Pharborist\WhileNode');
+    /** @var StatementBlockNode $stmt_block */
+    $stmt_block = $while->getBody();
+    $statements = $stmt_block->getStatements();
+    /** @var IfNode $if */
+    $if = $statements[0];
+    $stmt_block = $if->getThen();
+    /** @var ContinueStatementNode $continue */
+    $continue = $stmt_block->getStatements()[0];
+    $this->assertInstanceOf('\Pharborist\ContinueStatementNode', $continue);
+    $this->assertNull($continue->getLevel());
+
+    $if = $statements[1];
+    $stmt_block = $if->getThen();
+    $continue = $stmt_block->getStatements()[0];
+    $this->assertInstanceOf('\Pharborist\ContinueStatementNode', $continue);
+    $this->assertInstanceOf('\Pharborist\IntegerNode', $continue->getLevel());
+    $this->assertEquals('1', (string) $continue->getLevel());
+
+    $if = $statements[2];
+    $stmt_block = $if->getThen();
+    $continue = $stmt_block->getStatements()[0];
+    $this->assertInstanceOf('\Pharborist\ContinueStatementNode', $continue);
+    $this->assertInstanceOf('\Pharborist\IntegerNode', $continue->getLevel());
+    $this->assertEquals('1', (string) $continue->getLevel());
+
+    $while = $statements[3];
+    $stmt_block = $while->getBody();
+    $continue = $stmt_block->getStatements()[0];
+    $this->assertInstanceOf('\Pharborist\ContinueStatementNode', $continue);
+    $this->assertInstanceOf('\Pharborist\IntegerNode', $continue->getLevel());
+    $this->assertEquals('2', (string) $continue->getLevel());
+  }
 }

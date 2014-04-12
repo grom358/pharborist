@@ -1387,20 +1387,11 @@ class Parser {
    * @return ClassMemberLookupNode
    */
   private function staticMember($var_node) {
-    if ($this->currentType === '$' && $this->isLookAhead('{')) {
-      $node = new ClassMemberLookupNode();
-      $node->appendChild($var_node, 'className');
-      $this->mustMatch(T_DOUBLE_COLON, $node);
-      $node->appendChild($this->indirectReference(), 'memberName');
-      return $node;
-    }
-    else {
-      $node = new ClassMemberLookupNode();
-      $node->appendChild($var_node, 'className');
-      $this->mustMatch(T_DOUBLE_COLON, $node);
-      $node->appendChild($this->compoundVariable(), 'memberName');
-      return $this->offsetVariable($node);
-    }
+    $node = new ClassMemberLookupNode();
+    $node->appendChild($var_node, 'className');
+    $this->mustMatch(T_DOUBLE_COLON, $node);
+    $node->appendChild($this->indirectReference(), 'memberName');
+    return $node;
   }
 
   /**

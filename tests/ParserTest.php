@@ -327,22 +327,22 @@ EOF;
    */
   public function testIf() {
     $snippet = <<<'EOF'
-if ($condition) {
-}
-elseif ($other_condition) {
-}
+if ($condition) { then(); }
+elseif ($other_condition) { other_then(); }
 elseif ($another_condition) {
 }
-else {
-}
+else { do_else(); }
 EOF;
     /** @var IfNode $if */
     $if = $this->parseSnippet($snippet, '\Pharborist\IfNode');
     $this->assertEquals('($condition)', (string) $if->getCondition());
-    $this->assertEquals(2, count($if->getElseIfList()));
-    $this->assertEquals('($other_condition)', (string) $if->getElseIfList()[0]->getCondition());
-    $this->assertEquals('($another_condition)', (string) $if->getElseIfList()[1]->getCondition());
-    $this->assertNotNull($if->getElse());
+    $this->assertEquals('{ then(); }', (string) $if->getThen());
+    $else_ifs = $if->getElseIfList();
+    $this->assertEquals(2, count($else_ifs));
+    $this->assertEquals('($other_condition)', (string) $else_ifs[0]->getCondition());
+    $this->assertEquals('{ other_then(); }', (string) $else_ifs[0]->getThen());
+    $this->assertEquals('($another_condition)', (string) $else_ifs[1]->getCondition());
+    $this->assertEquals('{ do_else(); }', (string) $if->getElse());
   }
 
   /**
@@ -351,22 +351,25 @@ EOF;
   public function testAlternativeIf() {
     $snippet = <<<'EOF'
 if ($condition):
-
+  then();
 elseif ($other_condition):
-
+  other_then();
 elseif ($another_condition):
   ;
 else:
-
+  do_else();
 endif;
 EOF;
     /** @var IfNode $if */
     $if = $this->parseSnippet($snippet, '\Pharborist\IfNode');
     $this->assertEquals('($condition)', (string) $if->getCondition());
-    $this->assertEquals(2, count($if->getElseIfList()));
-    $this->assertEquals('($other_condition)', (string) $if->getElseIfList()[0]->getCondition());
-    $this->assertEquals('($another_condition)', (string) $if->getElseIfList()[1]->getCondition());
-    $this->assertNotNull($if->getElse());
+    $this->assertEquals('then();', (string) $if->getThen());
+    $else_ifs = $if->getElseIfList();
+    $this->assertEquals(2, count($else_ifs));
+    $this->assertEquals('($other_condition)', (string) $else_ifs[0]->getCondition());
+    $this->assertEquals('other_then();', (string) $else_ifs[0]->getThen());
+    $this->assertEquals('($another_condition)', (string) $else_ifs[1]->getCondition());
+    $this->assertEquals('do_else();', (string) $if->getElse());
   }
 
   /**

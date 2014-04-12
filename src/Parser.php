@@ -448,7 +448,7 @@ class Parser {
     }
     else {
       $this->matchHidden($node);
-      $node->appendChild($this->statement());
+      $node->appendChild($this->statement(), 'then');
       while ($this->currentType === T_ELSEIF) {
         $elseIf = new ElseIfNode();
         $this->mustMatch(T_ELSEIF, $elseIf);
@@ -471,10 +471,9 @@ class Parser {
   private function innerIfInnerStatementList() {
     static $terminators = [T_ELSEIF, T_ELSE, T_ENDIF];
     $node = new StatementBlockNode();
-    $this->matchHidden($node);
     while ($this->currentType !== NULL && !in_array($this->currentType, $terminators)) {
-      $node->appendChild($this->innerStatement(), 'statements');
       $this->matchHidden($node);
+      $node->appendChild($this->innerStatement(), 'statements');
     }
     return $node;
   }

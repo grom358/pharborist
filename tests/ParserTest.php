@@ -13,7 +13,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
     // Test with a real file.
     $tree = Parser::parseFile(__DIR__ . '/files/basic.php');
     $this->assertInstanceOf('\Pharborist\Node', $tree);
-    $this->assertSame(count($tree->filter('\Pharborist\FunctionDeclarationNode')), 1);
+    $this->assertCount(1, $tree->filter('\Pharborist\FunctionDeclarationNode'));
     // Test with a non-existant file.
     $tree = Parser::parseFile('no-such-file.php');
     $this->assertFalse($tree);
@@ -167,8 +167,7 @@ abstract class MyClass extends ParentClass implements SomeInterface, AnotherInte
   var $backwardsCompatibility;
 
   /** method doc comment. */
-  public function myMethod() {
-  }
+  public function myMethod($a, $b) { perform(); }
 
   final public function noOverride() {
   }
@@ -177,6 +176,9 @@ abstract class MyClass extends ParentClass implements SomeInterface, AnotherInte
   }
 
   abstract public function mustImplement();
+
+  function noVisibility() {
+  }
 
   use A, B, C {
     B::smallTalk insteadof A;
@@ -208,16 +210,19 @@ EOF;
     $this->assertEquals('1', (string) $class_member->getInitialValue());
 
     $class_member_list = $statements[2];
+    $this->assertInstanceOf('\Pharborist\ClassMemberListNode', $class_member_list);
     $this->assertEquals('protected', (string) $class_member_list->getModifiers()->getVisibility());
     $class_member = $class_member_list->getMembers()[0];
     $this->assertEquals('$protectedProperty', (string) $class_member->getName());
 
     $class_member_list = $statements[3];
+    $this->assertInstanceOf('\Pharborist\ClassMemberListNode', $class_member_list);
     $this->assertEquals('private', (string) $class_member_list->getModifiers()->getVisibility());
     $class_member = $class_member_list->getMembers()[0];
     $this->assertEquals('$privateProperty', (string) $class_member->getName());
 
     $class_member_list = $statements[4];
+    $this->assertInstanceOf('\Pharborist\ClassMemberListNode', $class_member_list);
     $this->assertEquals('public', (string) $class_member_list->getModifiers()->getVisibility());
     $this->assertEquals('static', (string) $class_member_list->getModifiers()->getStatic());
     $class_member = $class_member_list->getMembers()[0];
@@ -229,24 +234,37 @@ EOF;
     $this->assertEquals('/** method doc comment. */', $method->getDocComment());
     $this->assertEquals('myMethod', (string) $method->getName());
     $this->assertEquals('public', (string) $method->getModifiers()->getVisibility());
+    $parameters = $method->getParameters();
+    $this->assertCount(2, $parameters);
+    $this->assertEquals('$a', (string) $parameters[0]);
+    $this->assertEquals('$b', (string) $parameters[1]);
+    $this->assertEquals('{ perform(); }', (string) $method->getBody());
 
     $method = $statements[7];
+    $this->assertInstanceOf('\Pharborist\ClassMethodNode', $method);
     $this->assertEquals('noOverride', (string) $method->getName());
     $this->assertEquals('public', (string) $method->getModifiers()->getVisibility());
     $this->assertEquals('final', (string) $method->getModifiers()->getFinal());
 
     $method = $statements[8];
+    $this->assertInstanceOf('\Pharborist\ClassMethodNode', $method);
     $this->assertEquals('classMethod', (string) $method->getName());
     $this->assertEquals('public', (string) $method->getModifiers()->getVisibility());
     $this->assertEquals('static', (string) $method->getModifiers()->getStatic());
 
     $method = $statements[9];
+    $this->assertInstanceOf('\Pharborist\ClassMethodNode', $method);
     $this->assertEquals('mustImplement', (string) $method->getName());
     $this->assertEquals('public', (string) $method->getModifiers()->getVisibility());
     $this->assertEquals('abstract', (string) $method->getModifiers()->getAbstract());
 
+    $method = $statements[10];
+    $this->assertInstanceOf('\Pharborist\ClassMethodNode', $method);
+    $this->assertEquals('noVisibility', (string) $method->getName());
+    $this->assertNull($method->getModifiers()->getVisibility());
+
     /** @var TraitUseNode $trait_use */
-    $trait_use = $statements[10];
+    $trait_use = $statements[11];
     $traits = $trait_use->getTraits();
     $this->assertInstanceOf('\Pharborist\TraitUseNode', $trait_use);
     $this->assertEquals('A', (string) $traits[0]);
@@ -346,7 +364,7 @@ EOF;
     $this->assertEquals('($condition)', (string) $if->getCondition());
     $this->assertEquals('{ then(); }', (string) $if->getThen());
     $else_ifs = $if->getElseIfList();
-    $this->assertEquals(2, count($else_ifs));
+    $this->assertCount(2, $else_ifs);
     $this->assertEquals('($other_condition)', (string) $else_ifs[0]->getCondition());
     $this->assertEquals('{ other_then(); }', (string) $else_ifs[0]->getThen());
     $this->assertEquals('($another_condition)', (string) $else_ifs[1]->getCondition());
@@ -373,7 +391,7 @@ EOF;
     $this->assertEquals('($condition)', (string) $if->getCondition());
     $this->assertEquals('then();', (string) $if->getThen());
     $else_ifs = $if->getElseIfList();
-    $this->assertEquals(2, count($else_ifs));
+    $this->assertCount(2, $else_ifs);
     $this->assertEquals('($other_condition)', (string) $else_ifs[0]->getCondition());
     $this->assertEquals('other_then();', (string) $else_ifs[0]->getThen());
     $this->assertEquals('($another_condition)', (string) $else_ifs[1]->getCondition());
@@ -640,7 +658,7 @@ EOF;
    * @return Node
    */
   public function parseStaticExpression($static_expression, $expected_type) {
-    $statement_snippet = 'const EXPR = ' . $static_expression . ';';
+    $statement_snippet = 'const EXPR = ' . $static_expression . ';' . PHP_EOL;
     /** @var ConstantDeclarationStatementNode $statement_node */
     $statement_node = $this->parseSnippet($statement_snippet, '\Pharborist\ConstantDeclarationStatementNode');
     $declaration = $statement_node->getDeclarations()[0];
@@ -665,8 +683,22 @@ EOF;
     $this->parseStaticExpression('__FUNCTION__', '\Pharborist\FunctionMagicConstantNode');
     $this->parseStaticExpression('__NAMESPACE__', '\Pharborist\NamespaceMagicConstantNode');
     $this->parseStaticExpression('__CLASS__', '\Pharborist\ClassMagicConstantNode');
-    //@todo heredoc
-    //@todo nowdoc
+
+    $snippet = '<<<EOF
+EOF';
+    $this->parseStaticExpression($snippet, '\Pharborist\HeredocNode');
+
+    $snippet = '<<<EOF
+test
+EOF';
+    $this->parseStaticExpression($snippet, '\Pharborist\HeredocNode');
+
+    //@todo test contents of heredoc
+    $snippet = '<<<\'EOF\'
+test
+EOF';
+    $this->parseStaticExpression($snippet, '\Pharborist\HeredocNode'); //@todo NowDocNode
+
     $this->parseStaticExpression('namespace\MY_CONST', '\Pharborist\NamespacePathNode'); //@todo custom node type
 
     /** @var ClassConstantLookupNode $class_constant_lookup */
@@ -988,6 +1020,21 @@ EOF;
     $this->assertEquals('$c', (string) $array_lookup->getArray());
     $this->assertEquals('0', (string) $array_lookup->getKey());
 
+    /** @var ClassConstantLookupNode $class_constant_lookup */
+    $class_constant_lookup = $this->parseExpression('MyNamespace\MyClass::MY_CONST', '\Pharborist\ClassConstantLookupNode');
+    $this->assertEquals('MyNamespace\MyClass', (string) $class_constant_lookup->getClassName());
+    $this->assertEquals('MY_CONST', (string) $class_constant_lookup->getConstantName());
+
+    $class_constant_lookup = $this->parseExpression('static::MY_CONST', '\Pharborist\ClassConstantLookupNode');
+    $this->assertEquals('static', (string) $class_constant_lookup->getClassName());
+    $this->assertEquals('MY_CONST', (string) $class_constant_lookup->getConstantName());
+
+    $class_constant_lookup = $this->parseExpression('MyClass::class', '\Pharborist\ClassNameScalarNode');
+    $this->assertEquals('MyClass', (string) $class_constant_lookup->getClassName());
+
+    $class_constant_lookup = $this->parseExpression('static::class', '\Pharborist\ClassNameScalarNode');
+    $this->assertEquals('static', (string) $class_constant_lookup->getClassName());
+
     /** @var ObjectPropertyNode $obj_property_lookup */
     $obj_property_lookup = $this->parseExpression('$o->property', '\Pharborist\ObjectPropertyNode');
     $this->assertEquals('$o', (string) $obj_property_lookup->getObject());
@@ -1065,6 +1112,10 @@ EOF;
     $this->assertEquals('$a ? $b : $c', (string) $ternary_node->getCondition());
     $this->assertEquals('$d', (string) $ternary_node->getThen());
     $this->assertEquals('$e', (string) $ternary_node->getElse());
+
+    $binary_op = $this->parseExpression('$a = &$b', '\Pharborist\AssignReferenceNode');
+    $this->assertEquals('$a', (string) $binary_op->getLeft());
+    $this->assertEquals('$b', (string) $binary_op->getRight());
 
     $this->parseExpression('$a or $b', '\Pharborist\LogicalOrNode');
     $this->parseExpression('$a xor $b', '\Pharborist\LogicalXorNode');
@@ -1260,18 +1311,18 @@ EOF;
   public function testAnonymousFunction() {
     /** @var AnonymousFunctionNode $function */
     $function = $this->parseExpression('function(){}', '\Pharborist\AnonymousFunctionNode');
-    $this->assertEquals(0, count($function->getParameters()));
+    $this->assertCount(0, $function->getParameters());
 
     $function = $this->parseExpression('static function(){}', '\Pharborist\AnonymousFunctionNode');
-    $this->assertEquals(0, count($function->getParameters()));
+    $this->assertCount(0, $function->getParameters());
 
     $function = $this->parseExpression('function($a, $b) use ($x, &$y) { }', '\Pharborist\AnonymousFunctionNode');
     $parameters = $function->getParameters();
-    $this->assertEquals(2, count($parameters));
+    $this->assertCount(2, $parameters);
     $this->assertEquals('$a', (string) $parameters[0]);
     $this->assertEquals('$b', (string) $parameters[1]);
     $lexical_vars = $function->getLexicalVariables();
-    $this->assertEquals(2, count($lexical_vars));
+    $this->assertCount(2, $lexical_vars);
     $this->assertEquals('$x', (string) $lexical_vars[0]);
     $this->assertEquals('&$y', (string) $lexical_vars[1]);
 
@@ -1281,11 +1332,11 @@ EOF;
     $this->assertInstanceOf('\Pharborist\AnonymousFunctionNode', $assign->getRight());
     $function = $assign->getRight();
     $parameters = $function->getParameters();
-    $this->assertEquals(2, count($parameters));
+    $this->assertCount(2, $parameters);
     $this->assertEquals('$a', (string) $parameters[0]);
     $this->assertEquals('$b', (string) $parameters[1]);
     $lexical_vars = $function->getLexicalVariables();
-    $this->assertEquals(2, count($lexical_vars));
+    $this->assertCount(2, $lexical_vars);
     $this->assertEquals('$x', (string) $lexical_vars[0]);
     $this->assertEquals('&$y', (string) $lexical_vars[1]);
   }

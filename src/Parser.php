@@ -2333,6 +2333,7 @@ class Parser {
       $this->mustMatch(';', $node, NULL, TRUE, TRUE);
       return $node;
     }
+    $this->matchHidden($node);
     $node->appendChild($this->innerStatementBlock(), 'body');
     return $node;
   }

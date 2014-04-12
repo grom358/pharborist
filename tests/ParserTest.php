@@ -1361,4 +1361,32 @@ EOF;
     $this->assertInstanceOf('\Pharborist\GotoStatementNode', $goto_statement);
     $this->assertEquals('loop', (string) $goto_statement->getLabel());
   }
+
+  /**
+   * Test return statement.
+   */
+  public function testReturn() {
+    $snippet = <<<'EOF'
+function test() {
+  if ($first_test) return;
+  return $done;
+}
+EOF;
+    /** @var FunctionDeclarationNode $function_declaration */
+    $function_declaration = $this->parseSnippet($snippet, '\Pharborist\FunctionDeclarationNode');
+    /** @var StatementBlockNode $stmt_block */
+    $stmt_block = $function_declaration->getBody();
+    $statements = $stmt_block->getStatements();
+    /** @var IfNode $if */
+    $if = $statements[0];
+
+    /** @var ReturnStatementNode $return_statement */
+    $return_statement = $if->getThen();
+    $this->assertInstanceOf('\Pharborist\ReturnStatementNode', $return_statement);
+    $this->assertNull($return_statement->getValue());
+
+    $return_statement = $statements[1];
+    $this->assertInstanceOf('\Pharborist\ReturnStatementNode', $return_statement);
+    $this->assertEquals('$done', $return_statement->getValue());
+  }
 }

@@ -637,6 +637,40 @@ EOF;
   }
 
   /**
+   * Test declare.
+   */
+  public function testDeclare() {
+    $snippet = 'declare(DECLARE_TEST = 1, MY_CONST = 2) { body(); }';
+    /** @var DeclareNode $declare */
+    $declare = $this->parseSnippet($snippet, '\Pharborist\DeclareNode');
+    $directives = $declare->getDirectives();
+    $directive = $directives[0];
+    $this->assertEquals('DECLARE_TEST', (string) $directive->getName());
+    $this->assertEquals('1', (string) $directive->getValue());
+    $directive = $directives[1];
+    $this->assertEquals('MY_CONST', (string) $directive->getName());
+    $this->assertEquals('2', (string) $directive->getValue());
+    $this->assertEquals('{ body(); }', (string) $declare->getBody());
+  }
+
+  /**
+   * Test declare.
+   */
+  public function testAlternativeDeclare() {
+    $snippet = 'declare(DECLARE_TEST = 1, MY_CONST = 2): body(); enddeclare;';
+    /** @var DeclareNode $declare */
+    $declare = $this->parseSnippet($snippet, '\Pharborist\DeclareNode');
+    $directives = $declare->getDirectives();
+    $directive = $directives[0];
+    $this->assertEquals('DECLARE_TEST', (string) $directive->getName());
+    $this->assertEquals('1', (string) $directive->getValue());
+    $directive = $directives[1];
+    $this->assertEquals('MY_CONST', (string) $directive->getName());
+    $this->assertEquals('2', (string) $directive->getValue());
+    $this->assertEquals('body();', (string) $declare->getBody());
+  }
+
+  /**
    * Helper function to parse an expression.
    * @param string $expression
    * @param string $expected_type
@@ -1631,5 +1665,12 @@ EOF;
     $arguments = $define->getArguments();
     $this->assertEquals("'TEST_CONST'", (string) $arguments[0]);
     $this->assertEquals("'test'", (string) $arguments[1]);
+  }
+
+  /**
+   * Test complex string
+   */
+  public function testComplexString() {
+    $this->parseExpression('"start $a {$a} ${a} $a[0] ${a[0]} {$a[0]} ${$a} $a->b end"', '\Pharborist\ComplexStringNode');
   }
 }

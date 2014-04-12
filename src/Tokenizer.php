@@ -38,6 +38,8 @@ class Tokenizer {
         return new IntegerNode($type, $text, $lineNo, $colNo);
       case T_DNUMBER:
         return new FloatNode($type, $text, $lineNo, $colNo);
+      case T_CONSTANT_ENCAPSED_STRING:
+        return new StringNode($type, $text, $lineNo, $colNo);
       case T_LINE:
         return new LineMagicConstantNode($type, $text, $lineNo, $colNo);
       case T_FILE:

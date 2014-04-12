@@ -634,6 +634,88 @@ EOF;
   }
 
   /**
+   * Helper function to parse a static expression.
+   * @param string $static_expression
+   * @param string $expected_type
+   * @return Node
+   */
+  public function parseStaticExpression($static_expression, $expected_type) {
+    $statement_snippet = 'const EXPR = ' . $static_expression . ';';
+    /** @var ConstantDeclarationStatementNode $statement_node */
+    $statement_node = $this->parseSnippet($statement_snippet, '\Pharborist\ConstantDeclarationStatementNode');
+    $declaration = $statement_node->getDeclarations()[0];
+    $expression_node = $declaration->getValue();
+    $this->assertInstanceOf($expected_type, $expression_node);
+    return $expression_node;
+  }
+
+  /**
+   * Test static expressions.
+   */
+  public function testStaticExpression() {
+    $this->parseStaticExpression('42', '\Pharborist\IntegerNode');
+    $this->parseStaticExpression('4.2', '\Pharborist\FloatNode');
+    $this->parseStaticExpression("'hello'", '\Pharborist\StringNode');
+    $this->parseStaticExpression('"hello"', '\Pharborist\StringNode');
+    $this->parseStaticExpression('__LINE__', '\Pharborist\LineMagicConstantNode');
+    $this->parseStaticExpression('__FILE__', '\Pharborist\FileMagicConstantNode');
+    $this->parseStaticExpression('__DIR__', '\Pharborist\DirMagicConstantNode');
+    $this->parseStaticExpression('__TRAIT__', '\Pharborist\TraitMagicConstantNode');
+    $this->parseStaticExpression('__METHOD__', '\Pharborist\MethodMagicConstantNode');
+    $this->parseStaticExpression('__FUNCTION__', '\Pharborist\FunctionMagicConstantNode');
+    $this->parseStaticExpression('__NAMESPACE__', '\Pharborist\NamespaceMagicConstantNode');
+    $this->parseStaticExpression('__CLASS__', '\Pharborist\ClassMagicConstantNode');
+    //@todo heredoc
+    //@todo nowdoc
+    $this->parseStaticExpression('namespace\MY_CONST', '\Pharborist\NamespacePathNode'); //@todo custom node type
+
+    /** @var ClassConstantLookupNode $class_constant_lookup */
+    $class_constant_lookup = $this->parseStaticExpression('MyNamespace\MyClass::MY_CONST', '\Pharborist\ClassConstantLookupNode');
+    $this->assertEquals('MyNamespace\MyClass', (string) $class_constant_lookup->getClassName());
+    $this->assertEquals('MY_CONST', (string) $class_constant_lookup->getConstantName());
+
+    $class_constant_lookup = $this->parseStaticExpression('static::MY_CONST', '\Pharborist\ClassConstantLookupNode');
+    $this->assertEquals('static', (string) $class_constant_lookup->getClassName());
+    $this->assertEquals('MY_CONST', (string) $class_constant_lookup->getConstantName());
+
+    $class_constant_lookup = $this->parseStaticExpression('MyClass::class', '\Pharborist\ClassNameScalarNode');
+    $this->assertEquals('MyClass', (string) $class_constant_lookup->getClassName());
+
+    $this->parseStaticExpression('1 + 2', '\Pharborist\AddNode');
+    $this->parseStaticExpression('1 - 2', '\Pharborist\SubtractNode');
+    $this->parseStaticExpression('1 * 2', '\Pharborist\MultiplyNode');
+    //$this->parseStaticExpression('1 ** 2', '\Pharborist\PowerNode');
+    $this->parseStaticExpression('1 / 2', '\Pharborist\DivideNode');
+    $this->parseStaticExpression('1 % 2', '\Pharborist\ModulusNode');
+    $this->parseStaticExpression('!2', '\Pharborist\BooleanNotNode');
+    $this->parseStaticExpression('~2', '\Pharborist\BitwiseNotNode');
+    $this->parseStaticExpression('1 | 2', '\Pharborist\BitwiseOrNode');
+    $this->parseStaticExpression('1 & 2', '\Pharborist\BitwiseAndNode');
+    $this->parseStaticExpression('1 ^ 2', '\Pharborist\BitwiseXorNode');
+    $this->parseStaticExpression('1 << 2', '\Pharborist\BitwiseShiftLeftNode');
+    $this->parseStaticExpression('1 >> 2', '\Pharborist\BitwiseShiftRightNode');
+    $this->parseStaticExpression("'a' . 'b'", '\Pharborist\ConcatNode');
+    $this->parseStaticExpression('1 or 2', '\Pharborist\LogicalOrNode');
+    $this->parseStaticExpression('1 xor 2', '\Pharborist\LogicalXorNode');
+    $this->parseStaticExpression('1 and 2', '\Pharborist\LogicalAndNode');
+    $this->parseStaticExpression('1 && 2', '\Pharborist\BooleanAndNode');
+    $this->parseStaticExpression('1 || 2', '\Pharborist\BooleanOrNode');
+    $this->parseStaticExpression('1 === 2', '\Pharborist\IdenticalNode');
+    $this->parseStaticExpression('1 !== 2', '\Pharborist\NotIdenticalNode');
+    $this->parseStaticExpression('1 == 2', '\Pharborist\EqualNode');
+    $this->parseStaticExpression('1 != 2', '\Pharborist\NotEqualNode');
+    $this->parseStaticExpression('1 < 2', '\Pharborist\LessThanNode');
+    $this->parseStaticExpression('1 <= 2', '\Pharborist\LessThanOrEqualToNode');
+    $this->parseStaticExpression('1 > 2', '\Pharborist\GreaterThanNode');
+    $this->parseStaticExpression('1 >= 2', '\Pharborist\GreaterThanOrEqualToNode');
+    $this->parseStaticExpression('+1', '\Pharborist\PlusNode');
+    $this->parseStaticExpression('-1', '\Pharborist\NegateNode');
+    $this->parseStaticExpression('1 ?: 2', '\Pharborist\ElvisNode');
+    $this->parseStaticExpression('1 ? 2 : 3', '\Pharborist\TernaryOperationNode');
+    $this->parseStaticExpression('(1)', '\Pharborist\ParenthesisNode');
+  }
+
+  /**
    * Test array.
    */
   public function testArray() {
@@ -676,13 +758,36 @@ EOF;
     $this->assertEquals('"k"', (string) $pair->getKey());
     $this->assertEquals('&$v', (string) $pair->getValue());
 
-    /** @var ConstantDeclarationStatementNode $constant_stmt */
-    $constant_stmt = $this->parseSnippet('const MY_ARRAY = array(3, 5, 8, );', '\Pharborist\ConstantDeclarationStatementNode');
-    $array = $constant_stmt->getDeclarations()[0]->getValue();
+    $array = $this->parseStaticExpression('array(3, 5, 8, )', '\Pharborist\ArrayNode');
     $elements = $array->getElements();
     $this->assertEquals('3', (string) $elements[0]);
     $this->assertEquals('5', (string) $elements[1]);
     $this->assertEquals('8', (string) $elements[2]);
+
+    $array = $this->parseStaticExpression('[3, 5, 8]', '\Pharborist\ArrayNode');
+    $elements = $array->getElements();
+    $this->assertEquals('3', (string) $elements[0]);
+    $this->assertEquals('5', (string) $elements[1]);
+    $this->assertEquals('8', (string) $elements[2]);
+
+    $array = $this->parseStaticExpression('array("a" => 1, "b" => 2)', '\Pharborist\ArrayNode');
+    $elements = $array->getElements();
+    /** @var ArrayPairNode $pair */
+    $pair = $elements[0];
+    $this->assertEquals('"a"', (string) $pair->getKey());
+    $this->assertEquals('1', (string) $pair->getValue());
+    $pair = $elements[1];
+    $this->assertEquals('"b"', (string) $pair->getKey());
+    $this->assertEquals('2', (string) $pair->getValue());
+
+    $array = $this->parseStaticExpression('["a" => 1, "b" => 2]', '\Pharborist\ArrayNode');
+    $elements = $array->getElements();
+    $pair = $elements[0];
+    $this->assertEquals('"a"', (string) $pair->getKey());
+    $this->assertEquals('1', (string) $pair->getValue());
+    $pair = $elements[1];
+    $this->assertEquals('"b"', (string) $pair->getKey());
+    $this->assertEquals('2', (string) $pair->getValue());
   }
 
   /**
@@ -1033,42 +1138,6 @@ EOF;
    */
   public function testComparison() {
     $this->parseExpression('1 <= 1 == 1', '\Pharborist\EqualNode');
-  }
-
-  /**
-   * Test static expression.
-   */
-  public function testStaticExpression() {
-    /** @var ConstantDeclarationStatementNode $const_stmt */
-    $const_stmt = $this->parseSnippet('const MY_CONST = namespace\MY_CONST;', '\Pharborist\ConstantDeclarationStatementNode');
-    $const = $const_stmt->getDeclarations()[0];
-    $this->assertEquals('MY_CONST', (string) $const->getName());
-    $this->assertEquals('namespace\MY_CONST', (string) $const->getValue());
-    $this->assertInstanceOf('\Pharborist\NamespacePathNode', $const->getValue());
-
-    $const_stmt = $this->parseSnippet('const MY_CONST = MyNamespace\MyClass::MY_CONST;', '\Pharborist\ConstantDeclarationStatementNode');
-    $const = $const_stmt->getDeclarations()[0];
-    $this->assertEquals('MY_CONST', (string) $const->getName());
-    $this->assertEquals('MyNamespace\MyClass::MY_CONST', (string) $const->getValue());
-    /** @var ClassConstantLookupNode $class_const_lookup */
-    $class_const_lookup = $const->getValue();
-    $this->assertInstanceOf('\Pharborist\ClassConstantLookupNode', $class_const_lookup);
-    $this->assertEquals('MyNamespace\MyClass', $class_const_lookup->getClassName());
-    $this->assertEquals('MY_CONST', $class_const_lookup->getConstantName());
-
-    $const_stmt = $this->parseSnippet('const MY_CONST = MyNamespace\MyClass::class;', '\Pharborist\ConstantDeclarationStatementNode');
-    $const = $const_stmt->getDeclarations()[0];
-    $this->assertEquals('MY_CONST', (string) $const->getName());
-    $this->assertEquals('MyNamespace\MyClass::class', (string) $const->getValue());
-    /** @var ClassNameScalarNode $class_scalar */
-    $class_scalar = $const->getValue();
-    $this->assertInstanceOf('\Pharborist\ClassNameScalarNode', $class_scalar);
-    $this->assertEquals('MyNamespace\MyClass', (string) $class_scalar->getClassName());
-
-    $const_stmt = $this->parseSnippet('const MY_CONST = static::MY_CONST;', '\Pharborist\ConstantDeclarationStatementNode');
-    $const = $const_stmt->getDeclarations()[0];
-    $this->assertEquals('MY_CONST', (string) $const->getName());
-    $this->assertEquals('static::MY_CONST', (string) $const->getValue());
   }
 
   /**

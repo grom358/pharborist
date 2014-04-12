@@ -1218,7 +1218,7 @@ class Parser {
         $this->mustMatch(T_ISSET, $node, 'functionReference');
         $this->mustMatch('(', $node);
         do {
-          $node->appendChild($this->expr(), 'arguments');
+          $node->appendChild($this->variable(), 'arguments');
         } while ($this->tryMatch(',', $node));
         $this->mustMatch(')', $node, NULL, TRUE);
         return $node;
@@ -1270,10 +1270,10 @@ class Parser {
           return $node;
         }
         if ($this->currentType === T_YIELD) {
-          $node->appendChild($this->_yield(), 'status');
+          $node->appendChild($this->_yield(), 'expression');
         }
         else {
-          $node->appendChild($this->expr(), 'status');
+          $node->appendChild($this->expr(), 'expression');
         }
         $this->mustMatch(')', $node);
         return $node;

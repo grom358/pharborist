@@ -1433,6 +1433,70 @@ EOF;
   public function testThrow() {
     /** @var ThrowStatementNode $throw */
     $throw = $this->parseSnippet('throw $e;', '\Pharborist\ThrowStatementNode');
-    $this->assertEquals('$e', $throw->getExpression());
+    $this->assertEquals('$e', (string) $throw->getExpression());
+  }
+
+  /**
+   * Test includes.
+   */
+  public function testIncludes() {
+    /** @var ImportNode $import */
+    $import = $this->parseExpression('include expr()', '\Pharborist\IncludeNode');
+    $this->assertEquals('expr()', (string) $import->getExpression());
+
+    $import = $this->parseExpression('include_once expr()', '\Pharborist\IncludeOnceNode');
+    $this->assertEquals('expr()', (string) $import->getExpression());
+
+    $import = $this->parseExpression('require expr()', '\Pharborist\RequireNode');
+    $this->assertEquals('expr()', (string) $import->getExpression());
+
+    $import = $this->parseExpression('require_once expr()', '\Pharborist\RequireOnceNode');
+    $this->assertEquals('expr()', (string) $import->getExpression());
+  }
+
+  /**
+   * Test isset.
+   */
+  public function testIsset() {
+    /** @var IssetNode $isset */
+    $isset = $this->parseExpression('isset($a, $b)', '\Pharborist\IssetNode');
+    $arguments = $isset->getArguments();
+    $this->assertEquals('$a', (string) $arguments[0]);
+    $this->assertEquals('$b', (string) $arguments[1]);
+  }
+
+  /**
+   * Test eval.
+   */
+  public function testEval() {
+    /** @var EvalNode $eval */
+    $eval = $this->parseExpression('eval($a)', '\Pharborist\EvalNode');
+    $arguments = $eval->getArguments();
+    $this->assertEquals('$a', (string) $arguments[0]);
+  }
+
+  /**
+   * Test empty.
+   */
+  public function testEmpty() {
+    /** @var EmptyNode $empty */
+    $empty = $this->parseExpression('empty(expr())', '\Pharborist\EmptyNode');
+    $arguments = $empty->getArguments();
+    $this->assertEquals('expr()', (string) $arguments[0]);
+  }
+
+  /**
+   * Test exit.
+   */
+  public function testExit() {
+    /** @var ExitNode $exit */
+    $exit = $this->parseExpression('exit', '\Pharborist\ExitNode');
+    $this->assertNull($exit->getExpression());
+
+    $exit = $this->parseExpression('exit()', '\Pharborist\ExitNode');
+    $this->assertNull($exit->getExpression());
+
+    $exit = $this->parseExpression('exit($status)', '\Pharborist\ExitNode');
+    $this->assertEquals('$status', (string) $exit->getExpression());
   }
 }

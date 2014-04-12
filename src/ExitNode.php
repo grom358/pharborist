@@ -6,13 +6,13 @@ namespace Pharborist;
  */
 class ExitNode extends ParentNode implements ExpressionNode {
   protected $properties = array(
-    'status' => NULL,
+    'expression' => NULL,
   );
 
   /**
-   * @return Node
+   * @return ExpressionNode
    */
-  public function getStatus() {
-    return $this->properties['status'];
+  public function getExpression() {
+    return $this->properties['expression'];
   }
 }

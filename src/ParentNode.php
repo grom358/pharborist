@@ -310,11 +310,11 @@ abstract class ParentNode extends Node {
     }
     $child = $this->head;
     while ($child) {
-      if ($child instanceof $type) {
-        $matches[] = $child;
-      }
       if ($child instanceof ParentNode) {
         $matches = array_merge($matches, $child->find($type));
+      }
+      elseif ($child instanceof $type) {
+        $matches[] = $child;
       }
       $child = $child->next;
     }

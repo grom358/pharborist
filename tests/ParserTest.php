@@ -1174,16 +1174,20 @@ EOF;
 <p>Hello, <?=$name?>. Welcome to <?=$lego . 'world'?>!</p>
 <?php
 code();
+?><h1>End of template</h1><?php more_code();
 EOF;
     $tree = Parser::parseSource($source);
-    /** @var TemplateNode $template */
-    $template = $tree->getFirst();
-    $this->assertInstanceOf('\Pharborist\TemplateNode', $template);
+    /** @var TemplateNode[] $templates */
+    $templates = $tree->find('\Pharborist\TemplateNode');
+    $template = $templates[0];
     $this->assertEquals(5, $template->getChildCount());
     /** @var EchoTagStatementNode $echo_tag */
     $echo_tag = $template->getFirst()->nextSibling();
     $this->assertInstanceOf('\Pharborist\EchoTagStatementNode', $echo_tag);
     $this->assertEquals('<?=$name?>', (string) $echo_tag);
     $expressions = $echo_tag->getExpressions();
+    $this->assertEquals('$name', (string) $expressions[0]);
+    $template = $templates[1];
+    $this->assertEquals('?><h1>End of template</h1><?php ', (string) $template);
   }
 }

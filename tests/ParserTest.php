@@ -1303,4 +1303,19 @@ EOF;
     $this->assertInstanceOf('\Pharborist\IntegerNode', $continue->getLevel());
     $this->assertEquals('2', (string) $continue->getLevel());
   }
+
+  /**
+   * Test global statement.
+   */
+  public function testGlobal() {
+    $snippet = <<<'EOF'
+global $a, $$b, ${expr()};
+EOF;
+    /** @var GlobalStatementNode $global_statement */
+    $global_statement = $this->parseSnippet($snippet, '\Pharborist\GlobalStatementNode');
+    $variables = $global_statement->getVariables();
+    $this->assertEquals('$a', (string) $variables[0]);
+    $this->assertEquals('$$b', (string) $variables[1]);
+    $this->assertEquals('${expr()}', (string) $variables[2]);
+  }
 }

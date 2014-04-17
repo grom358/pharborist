@@ -29,7 +29,7 @@ abstract class ParentNode extends Node {
    * Get the number of children.
    * @return int
    */
-  public function getChildCount() {
+  public function childCount() {
     return $this->childCount;
   }
 
@@ -37,7 +37,7 @@ abstract class ParentNode extends Node {
    * Return the first child.
    * @return Node
    */
-  public function getFirst() {
+  public function firstChild() {
     return $this->head;
   }
 
@@ -45,8 +45,25 @@ abstract class ParentNode extends Node {
    * Return the last child.
    * @return Node
    */
-  public function getLast() {
+  public function lastChild() {
     return $this->tail;
+  }
+
+  /**
+   * Get the immediate children of this node.
+   * @param callable $callback An optional callback to filter by.
+   * @return NodeCollection
+   */
+  public function children(callable $callback = NULL) {
+    $matches = array();
+    $child = $this->head;
+    while ($child) {
+      if ($callback === NULL || $callback($child)) {
+        $matches[] = $child;
+      }
+      $child = $child->next;
+    }
+    return new NodeCollection($matches);
   }
 
   /**
@@ -54,7 +71,7 @@ abstract class ParentNode extends Node {
    * @param Node $node
    * @return $this
    */
-  public function prependChild(Node $node) {
+  protected function prependChild(Node $node) {
     if ($this->head === NULL) {
       $this->childCount++;
       $node->parent = $this;
@@ -65,6 +82,32 @@ abstract class ParentNode extends Node {
     else {
       $this->insertBeforeChild($this->head, $node);
       $this->head = $node;
+    }
+    return $this;
+  }
+
+  /**
+   * Prepend children to this node.
+   * @param Node|Node[]|NodeCollection $nodes
+   * @return $this
+   * @throws \InvalidArgumentException
+   */
+  public function prepend($nodes) {
+    if ($nodes instanceof Node) {
+      $this->prependChild($nodes);
+    }
+    elseif ($nodes instanceof NodeCollection) {
+      foreach ($nodes->reverse() as $node) {
+        $this->prependChild($node);
+      }
+    }
+    elseif (is_array($nodes)) {
+      foreach (array_reverse($nodes) as $node) {
+        $this->prependChild($node);
+      }
+    }
+    else {
+      throw new \InvalidArgumentException();
     }
     return $this;
   }
@@ -118,6 +161,27 @@ abstract class ParentNode extends Node {
     foreach ($node->properties as $name => $value) {
       $this->properties[$name] = $value;
     }
+  }
+
+  /**
+   * Prepend children to this node.
+   * @param Node|Node[]|NodeCollection $nodes
+   * @return $this
+   * @throws \InvalidArgumentException
+   */
+  public function append($nodes) {
+    if ($nodes instanceof Node) {
+      $this->appendChild($nodes);
+    }
+    elseif ($nodes instanceof NodeCollection || is_array($nodes)) {
+      foreach ($nodes as $node) {
+        $this->appendChild($node);
+      }
+    }
+    else {
+      throw new \InvalidArgumentException();
+    }
+    return $this;
   }
 
   /**
@@ -202,18 +266,6 @@ abstract class ParentNode extends Node {
   }
 
   /**
-   * Remove the first child.
-   * @return Node The removed child.
-   */
-  public function removeFirst() {
-    $head = $this->head;
-    if ($head) {
-      $this->removeChild($head);
-    }
-    return $head;
-  }
-
-  /**
    * Replace a child node.
    * @param Node $child
    * @param Node $replacement
@@ -256,28 +308,10 @@ abstract class ParentNode extends Node {
   }
 
   /**
-   * Filters children to find matching nodes.
-   * @param string $type
-   *   Type of nodes to return.
-   * @return Node[] matching children
-   */
-  public function filter($type) {
-    $matches = array();
-    $child = $this->head;
-    while ($child) {
-      if ($child instanceof $type) {
-        $matches[] = $child;
-      }
-      $child = $child->next;
-    }
-    return $matches;
-  }
-
-  /**
    * Get the first (i.e. leftmost leaf) token.
    * @return TokenNode
    */
-  public function getFirstToken() {
+  public function firstToken() {
     $head = $this->head;
     while ($head instanceof ParentNode) {
       $head = $head->head;
@@ -289,7 +323,7 @@ abstract class ParentNode extends Node {
    * Get the last (i.e. rightmost leaf) token.
    * @return TokenNode
    */
-  public function getLastToken() {
+  public function lastToken() {
     $tail = $this->tail;
     while ($tail instanceof ParentNode) {
       $tail = $tail->tail;
@@ -298,32 +332,44 @@ abstract class ParentNode extends Node {
   }
 
   /**
-   * Find descendants that match given type.
-   * @param string $type
-   *   Type of nodes to return.
-   * @return Node[] matching descendants
+   * Test if the node has a descendant that matches.
+   * @param callable $callback Callback to test for match.
+   * @return NodeCollection
    */
-  public function find($type) {
-    $matches = array();
-    if ($this instanceof $type) {
-      $matches[] = $this;
-    }
+  public function has(callable $callback) {
     $child = $this->head;
     while ($child) {
-      if ($child instanceof ParentNode) {
-        $matches = array_merge($matches, $child->find($type));
+      if ($child instanceof ParentNode && $child->has($callback)) {
+        return TRUE;
       }
-      elseif ($child instanceof $type) {
-        $matches[] = $child;
+      elseif ($callback($child)) {
+        return TRUE;
       }
       $child = $child->next;
     }
-    return $matches;
+    return FALSE;
   }
 
   /**
-   * @return SourcePosition
+   * Find descendants that pass filter callback.
+   * @param callable $callback Callback to filter by.
+   * @return NodeCollection
    */
+  public function find(callable $callback) {
+    $matches = array();
+    $child = $this->head;
+    while ($child) {
+      if ($callback($child)) {
+        $matches[] = $child;
+      }
+      if ($child instanceof ParentNode) {
+        $matches = array_merge($matches, $child->find($callback)->toArray());
+      }
+      $child = $child->next;
+    }
+    return new NodeCollection($matches);
+  }
+
   public function getSourcePosition() {
     if ($this->head === NULL) {
       return $this->parent->getSourcePosition();
@@ -332,9 +378,14 @@ abstract class ParentNode extends Node {
     return $child->getSourcePosition();
   }
 
-  /**
-   * @return string
-   */
+  public function __clone() {
+    // Clone does not belong to a parent.
+    $this->parent = NULL;
+    $this->previous = NULL;
+    $this->next = NULL;
+    list($this->head, $this->properties) = unserialize(serialize(array($this->head, $this->properties)));
+  }
+
   public function __toString() {
     $str = '';
     $child = $this->head;

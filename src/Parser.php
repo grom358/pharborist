@@ -152,7 +152,7 @@ class Parser {
   public static function parseSnippet($snippet) {
     $tree = self::parseSource('<?php ' . $snippet);
     // Strip the inserted opening php tag
-    $tree->removeFirst();
+    $tree->firstChild()->remove();
     return $tree;
   }
 
@@ -1653,7 +1653,7 @@ class Parser {
         $node->appendChild($class_name, 'className');
         $node->mergeNode($colon_node);
         $node->appendChild(clone $member_name, 'memberName');
-        $member_name->replace($node);
+        $member_name->replaceWith($node);
         return $this->objectDereference($var_node);
       }
       else {
@@ -1732,7 +1732,7 @@ class Parser {
       $node->appendChild($function_reference, 'callback');
     }
     else {
-      if ($function_reference instanceof NamespacePathNode && $function_reference->getChildCount() === 1 && $function_reference == 'define') {
+      if ($function_reference instanceof NamespacePathNode && $function_reference->childCount() === 1 && $function_reference == 'define') {
         $node = new DefineNode();
       }
       else {
@@ -2369,7 +2369,7 @@ class Parser {
   private function traitAdaptation() {
     /** @var NamespacePathNode $qualified_name */
     $qualified_name = $this->namespacePath();
-    if ($qualified_name->getChildCount() === 1 && $this->currentType !== T_DOUBLE_COLON) {
+    if ($qualified_name->childCount() === 1 && $this->currentType !== T_DOUBLE_COLON) {
       return $this->traitAlias($qualified_name);
     }
     $node = new TraitMethodReferenceNode();

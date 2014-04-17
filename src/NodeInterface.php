@@ -9,66 +9,144 @@ namespace Pharborist;
  */
 interface NodeInterface {
   /**
+   * Get the source position of the node.
+   * @return SourcePosition
+   */
+  public function getSourcePosition();
+
+  /**
    * Get the parent node.
+   * @param callable $callback An optional callback to filter by.
    * @return ParentNode
    */
-  public function getParent();
+  public function parent(callable $callback = NULL);
 
   /**
    * Get the ancestors of this node.
-   * @return ParentNode[]
+   * @param callable $callback An optional callback to filter by.
+   * @return NodeCollection
    */
-  public function getAncestors();
+  public function parents(callable $callback = NULL);
 
   /**
-   * Get the ancestor of given type.
-   * @param string $type
-   * @return ParentNode
+   * Get ancestors up to the node matched by callback.
+   * @param callable $callback Callback to test for match.
+   * @param bool $inclusive TRUE to include the node matched by callback.
+   * @return NodeCollection
    */
-  public function getAncestor($type);
+  public function parentsUntil(callable $callback, $inclusive = FALSE);
 
   /**
-   * Insert a node before this node.
-   * @param Node $node Node to insert.
+   * Get the first node matched by the callback by testing this node and
+   * traversing up through its ancestors in the tree.
+   * @param callable $callback Callback to test for match.
+   * @return Node
+   */
+  public function closest(callable $callback);
+
+  /**
+   * Get the previous sibling.
+   * @param callable $callback An optional callback to filter by.
+   * @return Node
+   */
+  public function previous(callable $callback = NULL);
+
+  /**
+   * Get the previous siblings of this node.
+   * @param callable $callback An optional callback to filter by.
+   * @return NodeCollection
+   */
+  public function previousAll(callable $callback = NULL);
+
+  /**
+   * Get all the preceding siblings up to but not including the match.
+   * @param callable $callback Callback to test for match.
+   * @param bool $inclusive TRUE to include the node matched by callback.
+   * @return NodeCollection
+   */
+  public function previousUntil(callable $callback, $inclusive = FALSE);
+
+  /**
+   * Get the next immediate sibling.
+   * @param callable $callback An optional callback to filter by.
+   * @return Node
+   */
+  public function next(callable $callback = NULL);
+
+  /**
+   * Get all the following siblings.
+   * @param callable $callback An optional callback to filter by.
+   * @return NodeCollection
+   */
+  public function nextAll(callable $callback = NULL);
+
+  /**
+   * Get all the following siblings up to but not including the match.
+   * @param callable $callback Callback to test for match.
+   * @param bool $inclusive TRUE to include the node matched by callback.
+   * @return NodeCollection
+   */
+  public function nextUntil(callable $callback, $inclusive = FALSE);
+
+  /**
+   * Insert this node before targets.
+   * @param Node|Node[]|NodeCollection $targets Nodes to insert before.
    * @return $this
    */
-  public function insertBefore(Node $node);
+  public function insertBefore($targets);
 
   /**
-   * Insert a node after this node.
-   * @param Node $node Node to insert.
+   * Insert nodes before this node.
+   * @param Node|Node[]|NodeCollection $nodes Nodes to insert.
    * @return $this
    */
-  public function insertAfter(Node $node);
+  public function before($nodes);
 
   /**
-   * Remove node from its parent.
+   * Insert this node after targets.
+   * @param Node|Node[]|NodeCollection $targets Nodes to insert after.
+   * @return $this
+   */
+  public function insertAfter($targets);
+
+  /**
+   * Insert nodes after this node.
+   * @param Node|Node[]|NodeCollection $nodes Nodes to insert.
+   * @return $this
+   */
+  public function after($nodes);
+
+  /**
+   * Remove this node from its parent.
    * @return $this
    */
   public function remove();
 
   /**
-   * Replace this node in its parent.
-   * @param Node $node Replacement node.
+   * Replace this node with another node.
+   * @param Node|Node[]|NodeCollection $node Replacement node.
    * @return $this
    */
-  public function replace(Node $node);
+  public function replaceWith($node);
 
   /**
-   * Get the previous sibling.
-   * @return Node
+   * Replace nodes with this node.
+   * @param Node|Node[]|NodeCollection $targets Nodes to replace.
+   * @return $this
    */
-  public function previousSibling();
+  public function replaceAll($targets);
 
   /**
-   * Get the next sibling.
-   * @return Node
+   * Prepend this node to target.
+   * @param ParentNode|ParentNode[]|NodeCollection $targets Targets to prepend to.
+   * @return $this
    */
-  public function nextSibling();
+  public function prependTo($targets);
 
   /**
-   * Get the source position of the node.
-   * @return SourcePosition
+   * Append this node to target.
+   * @param ParentNode|ParentNode[]|NodeCollection $targets Targets to append to.
+   * @return $this
    */
-  public function getSourcePosition();
+  public function appendTo($targets);
 }

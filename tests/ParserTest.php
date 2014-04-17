@@ -13,7 +13,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
     // Test with a real file.
     $tree = Parser::parseFile(__DIR__ . '/files/basic.php');
     $this->assertInstanceOf('\Pharborist\Node', $tree);
-    $this->assertCount(1, $tree->filter('\Pharborist\FunctionDeclarationNode'));
+    $this->assertCount(1, $tree->children(Filter::isInstanceOf('\Pharborist\FunctionDeclarationNode')));
     // Test with a non-existant file.
     $tree = Parser::parseFile('no-such-file.php');
     $this->assertFalse($tree);
@@ -34,7 +34,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
    */
   public function parseSnippet($snippet, $expected_type) {
     $tree = $this->parseSnippetBlock($snippet);
-    $first_child = $tree->getFirst();
+    $first_child = $tree->firstChild();
     $this->assertInstanceOf($expected_type, $first_child);
     return $first_child;
   }
@@ -44,7 +44,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
    */
   public function testParseEmpty() {
     $tree = Parser::parseSource('');
-    $this->assertEquals(0, $tree->getChildCount());
+    $this->assertEquals(0, $tree->childCount());
   }
 
   /**
@@ -52,10 +52,10 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
    */
   public function testParseBlank() {
     $tree = Parser::parseSource("<?php\n");
-    $this->assertEquals(1, $tree->getChildCount());
-    $this->assertInstanceOf('\Pharborist\TokenNode', $tree->getFirst());
+    $this->assertEquals(1, $tree->childCount());
+    $this->assertInstanceOf('\Pharborist\TokenNode', $tree->firstChild());
     /** @var TokenNode $child */
-    $child = $tree->getFirst();
+    $child = $tree->firstChild();
     $this->assertEquals(T_OPEN_TAG, $child->getType());
   }
 
@@ -680,7 +680,7 @@ EOF;
     $statement_snippet = $expression . ';';
     /** @var ExpressionStatementNode $statement_node */
     $statement_node = $this->parseSnippet($statement_snippet, '\Pharborist\ExpressionStatementNode');
-    $expression_node = $statement_node->getFirst();
+    $expression_node = $statement_node->firstChild();
     $this->assertInstanceOf($expected_type, $expression_node);
     return $expression_node;
   }
@@ -1381,7 +1381,7 @@ EOF';
   public function testTokenIteration() {
     /** @var \Pharborist\ExpressionStatementNode $tree */
     $tree = $this->parseSnippet('1 + 2;', '\Pharborist\ExpressionStatementNode');
-    $one = $tree->getFirstToken();
+    $one = $tree->firstToken();
     $this->assertNull($one->previousToken());
     $this->assertEquals('1', $one->getText());
     $op = $one->nextToken()->nextToken();
@@ -1414,7 +1414,7 @@ EOF';
   public function testEmptyStatementBeforeDocComment() {
     $empty_statement = $this->parseSnippet('; /** function */ function test() { }', '\Pharborist\EmptyStatementNode');
     /** @var FunctionDeclarationNode $function */
-    $function = $empty_statement->nextSibling()->nextSibling();
+    $function = $empty_statement->next()->next();
     $this->assertInstanceOf('\Pharborist\FunctionDeclarationNode', $function);
     $this->assertEquals('/** function */', $function->getDocComment());
   }
@@ -1433,11 +1433,11 @@ EOF;
     $tree = Parser::parseSource($source);
     $this->assertEquals($source, (string) $tree);
     /** @var TemplateNode[] $templates */
-    $templates = $tree->find('\Pharborist\TemplateNode');
+    $templates = $tree->find(Filter::isInstanceOf('\Pharborist\TemplateNode'));
     $template = $templates[0];
-    $this->assertEquals(5, $template->getChildCount());
+    $this->assertEquals(5, $template->childCount());
     /** @var EchoTagStatementNode $echo_tag */
-    $echo_tag = $template->getFirst()->nextSibling();
+    $echo_tag = $template->firstChild()->next();
     $this->assertInstanceOf('\Pharborist\EchoTagStatementNode', $echo_tag);
     $this->assertEquals('<?=$name?>', (string) $echo_tag);
     $expressions = $echo_tag->getExpressions();
@@ -1526,11 +1526,11 @@ loop:
 EOF;
     $tree = $this->parseSnippetBlock($snippet);
     /** @var GotoLabelNode $goto_label */
-    $goto_label = $tree->getFirst();
+    $goto_label = $tree->firstChild();
     $this->assertInstanceOf('\Pharborist\GotoLabelNode', $goto_label);
     $this->assertEquals('loop', (string) $goto_label->getLabel());
     /** @var GotoStatementNode $goto_statement */
-    $goto_statement = $tree->getLast();
+    $goto_statement = $tree->lastChild();
     $this->assertInstanceOf('\Pharborist\GotoStatementNode', $goto_statement);
     $this->assertEquals('loop', (string) $goto_statement->getLabel());
   }

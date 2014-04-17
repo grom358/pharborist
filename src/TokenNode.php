@@ -87,19 +87,19 @@ class TokenNode extends Node {
    * @return TokenNode
    */
   public function previousToken() {
-    $prev_node = $this->previousSibling();
+    $prev_node = $this->previous;
     if ($prev_node === NULL) {
-      $parent = $this->getParent();
-      while ($parent !== NULL && $parent->previousSibling() === NULL) {
-        $parent = $parent->getParent();
+      $parent = $this->parent;
+      while ($parent !== NULL && $parent->previous === NULL) {
+        $parent = $parent->parent;
       }
       if ($parent === NULL) {
         return NULL;
       }
-      $prev_node = $parent->previousSibling();
+      $prev_node = $parent->previous;
     }
     if ($prev_node instanceof ParentNode) {
-      return $prev_node->getLastToken();
+      return $prev_node->lastToken();
     }
     else {
       return $prev_node;
@@ -110,19 +110,19 @@ class TokenNode extends Node {
    * @return TokenNode
    */
   public function nextToken() {
-    $next_node = $this->nextSibling();
+    $next_node = $this->next;
     if ($next_node === NULL) {
-      $parent = $this->getParent();
-      while ($parent !== NULL && $parent->nextSibling() === NULL) {
-        $parent = $parent->getParent();
+      $parent = $this->parent;
+      while ($parent !== NULL && $parent->next === NULL) {
+        $parent = $parent->parent;
       }
       if ($parent === NULL) {
         return NULL;
       }
-      $next_node = $parent->nextSibling();
+      $next_node = $parent->next;
     }
     if ($next_node instanceof ParentNode) {
-      return $next_node->getFirstToken();
+      return $next_node->firstToken();
     }
     else {
       return $next_node;

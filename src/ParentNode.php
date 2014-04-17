@@ -386,7 +386,7 @@ abstract class ParentNode extends Node {
     list($this->head, $this->properties) = unserialize(serialize(array($this->head, $this->properties)));
   }
 
-  public function __toString() {
+  public function getText() {
     $str = '';
     $child = $this->head;
     while ($child) {
@@ -394,5 +394,9 @@ abstract class ParentNode extends Node {
       $child = $child->next;
     }
     return $str;
+  }
+
+  public function __toString() {
+    return $this->getText();
   }
 }

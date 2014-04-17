@@ -15,6 +15,12 @@ interface NodeInterface {
   public function getSourcePosition();
 
   /**
+   * Convert the node into PHP source code.
+   * @return string
+   */
+  public function getText();
+
+  /**
    * Get the parent node.
    * @param callable $callback An optional callback to filter by.
    * @return ParentNode

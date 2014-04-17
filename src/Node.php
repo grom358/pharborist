@@ -301,6 +301,4 @@ abstract class Node implements NodeInterface {
     $this->previous = NULL;
     $this->next = NULL;
   }
-
-  abstract public function getSourcePosition();
 }

@@ -6,7 +6,7 @@ namespace Pharborist;
  *
  * For example, ${expr()}
  */
-class CompoundVariableNode extends ParentNode implements ExpressionNode {
+class CompoundVariableNode extends ParentNode implements VariableExpressionNode {
   protected $properties = array(
     'expression' => NULL,
   );

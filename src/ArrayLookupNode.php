@@ -6,7 +6,7 @@ namespace Pharborist;
  *
  * For example $array[0]
  */
-class ArrayLookupNode extends ParentNode implements ExpressionNode {
+class ArrayLookupNode extends ParentNode implements VariableExpressionNode {
   protected $properties = array(
     'array' => NULL,
     'key' => NULL,

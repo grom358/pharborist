@@ -4,7 +4,7 @@ namespace Pharborist;
 /**
  * A function call.
  */
-class FunctionCallNode extends CallNode implements ExpressionNode {
+class FunctionCallNode extends CallNode implements VariableExpressionNode {
   protected $properties = array(
     'namespacePath' => NULL,
     'arguments' => array(),

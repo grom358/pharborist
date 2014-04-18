@@ -6,7 +6,7 @@ namespace Pharborist;
  *
  * For example, $object->method()
  */
-class ObjectMethodCallNode extends CallNode implements ExpressionNode {
+class ObjectMethodCallNode extends CallNode implements VariableExpressionNode {
   protected $properties = array(
     'object' => NULL,
     'methodName' => NULL,

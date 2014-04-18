@@ -6,7 +6,7 @@ namespace Pharborist;
  *
  * For example, MyClass::classMethod
  */
-class ClassMethodCallNode extends CallNode implements ExpressionNode {
+class ClassMethodCallNode extends CallNode implements VariableExpressionNode {
   protected $properties = array(
     'className' => NULL,
     'methodName' => NULL,

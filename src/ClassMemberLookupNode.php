@@ -6,7 +6,7 @@ namespace Pharborist;
  *
  * For example, MyClass::$a
  */
-class ClassMemberLookupNode extends ParentNode implements ExpressionNode {
+class ClassMemberLookupNode extends ParentNode implements VariableExpressionNode {
   protected $properties = array(
     'className' => NULL,
     'memberName' => NULL,

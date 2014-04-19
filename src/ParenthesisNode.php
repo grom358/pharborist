@@ -11,7 +11,7 @@ class ParenthesisNode extends ParentNode implements ExpressionNode {
   protected $expression;
 
   /**
-   * @var ExpressionNode
+   * @return ExpressionNode
    */
   public function getExpression() {
     return $this->expression;

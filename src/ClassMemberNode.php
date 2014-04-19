@@ -13,7 +13,7 @@ class ClassMemberNode extends ParentNode {
   /**
    * @var Node
    */
-  protected $initialValue;
+  protected $value;
 
   /**
    * @return Node
@@ -25,7 +25,7 @@ class ClassMemberNode extends ParentNode {
   /**
    * @return Node
    */
-  public function getInitialValue() {
-    return $this->initialValue;
+  public function getValue() {
+    return $this->value;
   }
 }

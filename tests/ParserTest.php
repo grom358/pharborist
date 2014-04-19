@@ -120,7 +120,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('\MyNamespace\Test', (string) $parameter->getClassType());
     $parameter = $parameters[4];
     $this->assertEquals('$e', (string) $parameter->getName());
-    $this->assertEquals('1', (string) $parameter->getDefaultValue());
+    $this->assertEquals('1', (string) $parameter->getValue());
   }
 
   /**
@@ -207,7 +207,7 @@ EOF;
     $this->assertEquals('public', (string) $class_member_list->getModifiers()->getVisibility());
     $class_member = $class_member_list->getMembers()[0];
     $this->assertEquals('$publicProperty', (string) $class_member->getName());
-    $this->assertEquals('1', (string) $class_member->getInitialValue());
+    $this->assertEquals('1', (string) $class_member->getValue());
 
     $class_member_list = $statements[2];
     $this->assertInstanceOf('\Pharborist\ClassMemberListNode', $class_member_list);

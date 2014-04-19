@@ -2007,7 +2007,7 @@ class Parser {
     $this->tryMatch(T_ELLIPSIS, $node);
     $this->mustMatch(T_VARIABLE, $node, 'name', TRUE);
     if ($this->tryMatch('=', $node)) {
-      $node->appendChild($this->staticScalar(), 'defaultValue');
+      $node->appendChild($this->staticScalar(), 'value');
     }
     return $node;
   }
@@ -2339,7 +2339,7 @@ class Parser {
     $node = new ClassMemberNode();
     $this->mustMatch(T_VARIABLE, $node, 'name', TRUE);
     if ($this->tryMatch('=', $node)) {
-      $node->appendChild($this->staticScalar(), 'initialValue');
+      $node->appendChild($this->staticScalar(), 'value');
     }
     return $node;
   }

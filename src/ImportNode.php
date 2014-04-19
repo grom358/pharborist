@@ -23,7 +23,7 @@ abstract class ImportNode extends ParentNode implements ExpressionNode {
   }
 
   /**
-   * @var ExpressionNode
+   * @return ExpressionNode
    */
   public function getExpression() {
     return $this->expression;

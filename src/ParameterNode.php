@@ -23,7 +23,7 @@ class ParameterNode extends ParentNode {
   /**
    * @var ExpressionNode
    */
-  protected $defaultValue;
+  protected $value;
 
   /**
    * @return Node
@@ -47,9 +47,9 @@ class ParameterNode extends ParentNode {
   }
 
   /**
-   * @return Node
+   * @return ExpressionNode
    */
-  public function getDefaultValue() {
-    return $this->defaultValue;
+  public function getValue() {
+    return $this->value;
   }
 }

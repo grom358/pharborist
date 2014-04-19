@@ -112,13 +112,7 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
     return $this;
   }
 
-  /**
-   * Append a child to node.
-   * @param Node $node
-   * @param string $property_name
-   * @return $this
-   */
-  public function appendChild(Node $node, $property_name = NULL) {
+  protected function _appendChild(Node $node) {
     if ($this->tail === NULL) {
       $this->prependChild($node);
     }
@@ -126,6 +120,30 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
       $this->insertAfterChild($this->tail, $node);
       $this->tail = $node;
     }
+    return $this;
+  }
+
+  /**
+   * Append a child to node.
+   * @param Node $node
+   * @return $this
+   */
+  protected function appendChild(Node $node) {
+    $this->_appendChild($node);
+    return $this;
+  }
+
+  /**
+   * Add a child to node.
+   *
+   * Internal use only, used by parser when building a node.
+   *
+   * @param Node $node
+   * @param string $property_name
+   * @return $this
+   */
+  public function addChild(Node $node, $property_name = NULL) {
+    $this->_appendChild($node);
     if ($property_name !== NULL) {
       $this->{$property_name} = $node;
     }
@@ -133,12 +151,15 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
   }
 
   /**
-   * Append children to node.
+   * Add children to node.
+   *
+   * Internal use only, used by parser when building a node.
+   *
    * @param Node[] $children
    */
-  public function appendChildren(array $children) {
+  public function addChildren(array $children) {
     foreach ($children as $child) {
-      $this->appendChild($child);
+      $this->addChild($child);
     }
   }
 
@@ -150,7 +171,7 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
     $child = $node->head;
     while ($child) {
       $next = $child->next;
-      $this->appendChild($child);
+      $this->addChild($child);
       $child = $next;
     }
     foreach ($node->getProperties() as $name => $value) {

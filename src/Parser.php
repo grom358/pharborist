@@ -344,7 +344,7 @@ class Parser {
       case '{':
         return $this->innerStatementBlock();
       case ';':
-        $node = new EmptyStatementNode();
+        $node = new BlankStatementNode();
         $this->mustMatch(';', $node, NULL, TRUE, TRUE);
         return $node;
       case T_STATIC:

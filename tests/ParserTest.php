@@ -1418,7 +1418,7 @@ EOF';
    * Test doc comment after empty statement.
    */
   public function testEmptyStatementBeforeDocComment() {
-    $empty_statement = $this->parseSnippet('; /** function */ function test() { }', '\Pharborist\EmptyStatementNode');
+    $empty_statement = $this->parseSnippet('; /** function */ function test() { }', '\Pharborist\BlankStatementNode');
     /** @var FunctionDeclarationNode $function */
     $function = $empty_statement->next()->next();
     $this->assertInstanceOf('\Pharborist\FunctionDeclarationNode', $function);

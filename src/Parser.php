@@ -239,7 +239,7 @@ class Parser {
         return $this->traitDeclaration();
       case T_HALT_COMPILER:
         $node = new HaltCompilerNode();
-        $this->mustMatch(T_HALT_COMPILER, $node, 'namespacePath');
+        $this->mustMatch(T_HALT_COMPILER, $node, 'name');
         $this->mustMatch('(', $node);
         $this->mustMatch(')', $node);
         $this->mustMatch(';', $node, NULL, TRUE, TRUE);
@@ -1241,7 +1241,7 @@ class Parser {
         }
       case T_ISSET:
         $node = new IssetNode();
-        $this->mustMatch(T_ISSET, $node, 'namespacePath');
+        $this->mustMatch(T_ISSET, $node, 'name');
         $arguments = new ArgumentListNode();
         $this->mustMatch('(', $arguments);
         do {
@@ -1258,7 +1258,7 @@ class Parser {
         else {
           $node = new EvalNode();
         }
-        $this->mustMatch($this->currentType, $node, 'namespacePath');
+        $this->mustMatch($this->currentType, $node, 'name');
         $arguments = new ArgumentListNode();
         $this->mustMatch('(', $arguments);
         $arguments->appendChild($this->expr());

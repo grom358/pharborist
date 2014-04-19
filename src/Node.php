@@ -217,13 +217,16 @@ abstract class Node implements NodeInterface {
       return $this;
     }
     if ($nodes instanceof Node) {
+      $nodes->remove();
       $this->parent->replaceChild($this, $nodes);
     }
     elseif ($nodes instanceof NodeCollection || is_array($nodes)) {
       $first = TRUE;
       $insert_after = $this;
+      /** @var Node $node */
       foreach ($nodes as $node) {
         if ($first) {
+          $node->remove();
           $this->parent->replaceChild($this, $node);
           $first = FALSE;
         }

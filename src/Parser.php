@@ -2336,7 +2336,7 @@ class Parser {
     }
     $node = new ClassMemberListNode();
     $node->mergeNode($doc_comment);
-    $node->appendChild($modifiers, 'modifiers');
+    $node->mergeNode($modifiers);
     do {
       $node->appendChild($this->classMember());
     } while ($this->tryMatch(',', $node));
@@ -2366,7 +2366,7 @@ class Parser {
   private function classMethod($doc_comment, ModifiersNode $modifiers) {
     $node = new ClassMethodNode();
     $node->mergeNode($doc_comment);
-    $node->appendChild($modifiers, 'modifiers');
+    $node->mergeNode($modifiers);
     $this->mustMatch(T_FUNCTION, $node);
     $this->tryMatch('&', $node, 'reference');
     $this->mustMatch(T_STRING, $node, 'name');
@@ -2500,19 +2500,17 @@ class Parser {
     static $visibility_keyword_types = [T_PUBLIC, T_PROTECTED, T_PRIVATE];
     $node = new InterfaceMethodNode();
     $this->matchDocComment($node);
-    $modifiers = new ModifiersNode();
-    $is_static = $this->tryMatch(T_STATIC, $modifiers, 'static');
+    $is_static = $this->tryMatch(T_STATIC, $node, 'static');
     while (in_array($this->currentType, $visibility_keyword_types)) {
-      if ($modifiers->getVisibility()) {
+      if ($node->getVisibility()) {
         throw new ParserException(
           $this->iterator->getSourcePosition(),
           "can only have one visibility modifier on interface method."
         );
       }
-      $this->mustMatch($this->currentType, $modifiers, 'visibility');
+      $this->mustMatch($this->currentType, $node, 'visibility');
     }
-    !$is_static && $this->tryMatch(T_STATIC, $modifiers, 'static');
-    $node->appendChild($modifiers, 'modifiers');
+    !$is_static && $this->tryMatch(T_STATIC, $node, 'static');
     $this->mustMatch(T_FUNCTION, $node);
     $this->tryMatch('&', $node, 'reference');
     $this->mustMatch(T_STRING, $node, 'name');

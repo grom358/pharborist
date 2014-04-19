@@ -207,27 +207,27 @@ EOF;
     /** @var ClassMemberListNode $class_member_list */
     $class_member_list = $statements[1];
     $this->assertInstanceOf('\Pharborist\ClassMemberListNode', $class_member_list);
-    $this->assertEquals('public', $class_member_list->getModifiers()->getVisibility()->getText());
+    $this->assertEquals('public', $class_member_list->getVisibility()->getText());
     $class_member = $class_member_list->getMembers()[0];
     $this->assertEquals('$publicProperty', $class_member->getName()->getText());
     $this->assertEquals('1', $class_member->getValue()->getText());
 
     $class_member_list = $statements[2];
     $this->assertInstanceOf('\Pharborist\ClassMemberListNode', $class_member_list);
-    $this->assertEquals('protected', $class_member_list->getModifiers()->getVisibility()->getText());
+    $this->assertEquals('protected', $class_member_list->getVisibility()->getText());
     $class_member = $class_member_list->getMembers()[0];
     $this->assertEquals('$protectedProperty', $class_member->getName()->getText());
 
     $class_member_list = $statements[3];
     $this->assertInstanceOf('\Pharborist\ClassMemberListNode', $class_member_list);
-    $this->assertEquals('private', $class_member_list->getModifiers()->getVisibility()->getText());
+    $this->assertEquals('private', $class_member_list->getVisibility()->getText());
     $class_member = $class_member_list->getMembers()[0];
     $this->assertEquals('$privateProperty', $class_member->getName()->getText());
 
     $class_member_list = $statements[4];
     $this->assertInstanceOf('\Pharborist\ClassMemberListNode', $class_member_list);
-    $this->assertEquals('public', $class_member_list->getModifiers()->getVisibility()->getText());
-    $this->assertEquals('static', $class_member_list->getModifiers()->getStatic()->getText());
+    $this->assertEquals('public', $class_member_list->getVisibility()->getText());
+    $this->assertEquals('static', $class_member_list->getStatic()->getText());
     $class_member = $class_member_list->getMembers()[0];
     $this->assertEquals('$classProperty', $class_member->getName()->getText());
 
@@ -236,7 +236,7 @@ EOF;
     $this->assertInstanceOf('\Pharborist\ClassMethodNode', $method);
     $this->assertEquals('/** method doc comment. */', $method->getDocComment()->getText());
     $this->assertEquals('myMethod', $method->getName()->getText());
-    $this->assertEquals('public', $method->getModifiers()->getVisibility()->getText());
+    $this->assertEquals('public', $method->getVisibility()->getText());
     $parameters = $method->getParameters();
     $this->assertCount(2, $parameters);
     $this->assertEquals('$a', $parameters[0]->getText());
@@ -246,25 +246,25 @@ EOF;
     $method = $statements[7];
     $this->assertInstanceOf('\Pharborist\ClassMethodNode', $method);
     $this->assertEquals('noOverride', $method->getName()->getText());
-    $this->assertEquals('public', $method->getModifiers()->getVisibility()->getText());
-    $this->assertEquals('final', $method->getModifiers()->getFinal()->getText());
+    $this->assertEquals('public', $method->getVisibility()->getText());
+    $this->assertEquals('final', $method->getFinal()->getText());
 
     $method = $statements[8];
     $this->assertInstanceOf('\Pharborist\ClassMethodNode', $method);
     $this->assertEquals('classMethod', $method->getName()->getText());
-    $this->assertEquals('public', $method->getModifiers()->getVisibility()->getText());
-    $this->assertEquals('static', $method->getModifiers()->getStatic()->getText());
+    $this->assertEquals('public', $method->getVisibility()->getText());
+    $this->assertEquals('static', $method->getStatic()->getText());
 
     $method = $statements[9];
     $this->assertInstanceOf('\Pharborist\ClassMethodNode', $method);
     $this->assertEquals('mustImplement', $method->getName()->getText());
-    $this->assertEquals('public', $method->getModifiers()->getVisibility()->getText());
-    $this->assertEquals('abstract', $method->getModifiers()->getAbstract()->getText());
+    $this->assertEquals('public', $method->getVisibility()->getText());
+    $this->assertEquals('abstract', $method->getAbstract()->getText());
 
     $method = $statements[10];
     $this->assertInstanceOf('\Pharborist\ClassMethodNode', $method);
     $this->assertEquals('noVisibility', $method->getName()->getText());
-    $this->assertNull($method->getModifiers()->getVisibility());
+    $this->assertNull($method->getVisibility());
 
     /** @var TraitUseNode $trait_use */
     $trait_use = $statements[11];
@@ -332,7 +332,7 @@ EOF;
     /** @var InterfaceMethodNode $method */
     $method = $statements[1];
     $this->assertEquals('myMethod', $method->getName()->getText());
-    $this->assertEquals('public', $method->getModifiers()->getVisibility()->getText());
+    $this->assertEquals('public', $method->getVisibility()->getText());
   }
 
   /**

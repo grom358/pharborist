@@ -11,9 +11,14 @@ class ClassMemberListNode extends ClassStatementNode {
   protected $docComment;
 
   /**
-   * @var ModifiersNode
+   * @var TokenNode
    */
-  protected $modifiers;
+  protected $static;
+
+  /**
+   * @var TokenNode
+   */
+  protected $visibility;
 
   /**
    * @return DocCommentNode
@@ -23,10 +28,17 @@ class ClassMemberListNode extends ClassStatementNode {
   }
 
   /**
-   * @return ModifiersNode
+   * @return TokenNode
    */
-  public function getModifiers() {
-    return $this->modifiers;
+  public function getStatic() {
+    return $this->static;
+  }
+
+  /**
+   * @return TokenNode
+   */
+  public function getVisibility() {
+    return $this->visibility;
   }
 
   /**

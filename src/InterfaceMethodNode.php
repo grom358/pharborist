@@ -11,9 +11,14 @@ class InterfaceMethodNode extends StatementNode implements InterfaceStatementNod
   protected $docComment;
 
   /**
-   * @var ModifiersNode
+   * @var TokenNode
    */
-  protected $modifiers;
+  protected $static;
+
+  /**
+   * @var TokenNode
+   */
+  protected $visibility;
 
   /**
    * @var TokenNode
@@ -38,10 +43,17 @@ class InterfaceMethodNode extends StatementNode implements InterfaceStatementNod
   }
 
   /**
-   * @return ModifiersNode
+   * @return TokenNode
    */
-  public function getModifiers() {
-    return $this->modifiers;
+  public function getStatic() {
+    return $this->static;
+  }
+
+  /**
+   * @return TokenNode
+   */
+  public function getVisibility() {
+    return $this->visibility;
   }
 
   /**

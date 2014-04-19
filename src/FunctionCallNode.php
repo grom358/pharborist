@@ -8,12 +8,12 @@ class FunctionCallNode extends CallNode implements VariableExpressionNode {
   /**
    * @var NamespacePathNode
    */
-  protected $namespacePath;
+  protected $name;
 
   /**
    * @return NamespacePathNode
    */
-  public function getNamespacePath() {
-    return $this->namespacePath;
+  public function getName() {
+    return $this->name;
   }
 }

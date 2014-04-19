@@ -962,7 +962,7 @@ EOF';
 
     /** @var FunctionCallNode $function_call */
     $function_call = $this->parseVariable('a()', '\Pharborist\FunctionCallNode');
-    $this->assertEquals('a', (string) $function_call->getNamespacePath());
+    $this->assertEquals('a', (string) $function_call->getName());
 
     /** @var ClassMethodCallNode $class_method_call */
     $class_method_call = $this->parseVariable('namespace\MyClass::a()', '\Pharborist\ClassMethodCallNode');
@@ -981,7 +981,7 @@ EOF';
     $this->assertEquals('a()', (string) $array_lookup->getArray());
     $this->assertEquals('0', (string) $array_lookup->getKey());
     $function_call = $array_lookup->getArray();
-    $this->assertEquals('a', $function_call->getNamespacePath());
+    $this->assertEquals('a', $function_call->getName());
 
     $class_method_call = $this->parseVariable('$class::${$f}()', '\Pharborist\ClassMethodCallNode');
     $this->assertEquals('$class', (string) $class_method_call->getClassName());
@@ -1099,7 +1099,7 @@ EOF';
 
     /** @var FunctionCallNode $function_call */
     $function_call = $this->parseExpression('a()', '\Pharborist\FunctionCallNode');
-    $this->assertEquals('a', (string) $function_call->getNamespacePath());
+    $this->assertEquals('a', (string) $function_call->getName());
 
     /** @var ClassMethodCallNode $class_method_call */
     $class_method_call = $this->parseExpression('namespace\MyClass::a()', '\Pharborist\ClassMethodCallNode');
@@ -1118,7 +1118,7 @@ EOF';
     $this->assertEquals('a()', (string) $array_lookup->getArray());
     $this->assertEquals('0', (string) $array_lookup->getKey());
     $function_call = $array_lookup->getArray();
-    $this->assertEquals('a', $function_call->getNamespacePath());
+    $this->assertEquals('a', $function_call->getName());
 
     $class_method_call = $this->parseExpression('$class::${$f}()', '\Pharborist\ClassMethodCallNode');
     $this->assertEquals('$class', (string) $class_method_call->getClassName());
@@ -1311,7 +1311,7 @@ EOF';
   public function testFunctionCall() {
     /** @var FunctionCallNode $function_call */
     $function_call = $this->parseExpression('do_something(&$a, $b)', '\Pharborist\FunctionCallNode');
-    $this->assertEquals('do_something', (string) $function_call->getNamespacePath());
+    $this->assertEquals('do_something', (string) $function_call->getName());
     $arguments = $function_call->getArguments();
     $this->assertEquals('&$a', (string) $arguments[0]);
     $this->assertEquals('$b', (string) $arguments[1]);

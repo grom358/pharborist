@@ -1758,7 +1758,7 @@ class Parser {
       else {
         $node = new FunctionCallNode();
       }
-      $node->appendChild($function_reference, 'namespacePath');
+      $node->appendChild($function_reference, 'name');
     }
     $this->functionCallParameterList($node);
     return $this->objectDereference($this->arrayDeference($node));

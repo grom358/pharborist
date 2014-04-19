@@ -27,43 +27,43 @@ class Tokenizer {
     } else {
       $this->colNo += strlen($text);
     }
-    return $this->createToken($type, $text, $lineNo, $colNo);
+    return $this->createToken($type, $text, new SourcePosition($lineNo, $colNo));
   }
 
-  private function createToken($type, $text, $lineNo, $colNo) {
+  private function createToken($type, $text, $position) {
     switch ($type) {
       case T_VARIABLE:
-        return new VariableNode($type, $text, $lineNo, $colNo);
+        return new VariableNode($type, $text, $position);
       case T_LNUMBER:
-        return new IntegerNode($type, $text, $lineNo, $colNo);
+        return new IntegerNode($type, $text, $position);
       case T_DNUMBER:
-        return new FloatNode($type, $text, $lineNo, $colNo);
+        return new FloatNode($type, $text, $position);
       case T_CONSTANT_ENCAPSED_STRING:
-        return new StringNode($type, $text, $lineNo, $colNo);
+        return new StringNode($type, $text, $position);
       case T_LINE:
-        return new LineMagicConstantNode($type, $text, $lineNo, $colNo);
+        return new LineMagicConstantNode($type, $text, $position);
       case T_FILE:
-        return new FileMagicConstantNode($type, $text, $lineNo, $colNo);
+        return new FileMagicConstantNode($type, $text, $position);
       case T_DIR:
-        return new DirMagicConstantNode($type, $text, $lineNo, $colNo);
+        return new DirMagicConstantNode($type, $text, $position);
       case T_FUNC_C:
-        return new FunctionMagicConstantNode($type, $text, $lineNo, $colNo);
+        return new FunctionMagicConstantNode($type, $text, $position);
       case T_CLASS_C:
-        return new ClassMagicConstantNode($type, $text, $lineNo, $colNo);
+        return new ClassMagicConstantNode($type, $text, $position);
       case T_TRAIT_C:
-        return new TraitMagicConstantNode($type, $text, $lineNo, $colNo);
+        return new TraitMagicConstantNode($type, $text, $position);
       case T_METHOD_C:
-        return new MethodMagicConstantNode($type, $text, $lineNo, $colNo);
+        return new MethodMagicConstantNode($type, $text, $position);
       case T_NS_C:
-        return new NamespaceMagicConstantNode($type, $text, $lineNo, $colNo);
+        return new NamespaceMagicConstantNode($type, $text, $position);
       case T_COMMENT:
-        return new CommentNode($type, $text, $lineNo, $colNo);
+        return new CommentNode($type, $text, $position);
       case T_DOC_COMMENT:
-        return new DocCommentNode($type, $text, $lineNo, $colNo);
+        return new DocCommentNode($type, $text, $position);
       case T_WHITESPACE:
-        return new WhitespaceNode($type, $text, $lineNo, $colNo);
+        return new WhitespaceNode($type, $text, $position);
       default:
-        return new TokenNode($type, $text, $lineNo, $colNo);
+        return new TokenNode($type, $text, $position);
     }
   }
 

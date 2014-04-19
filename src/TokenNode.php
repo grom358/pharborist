@@ -27,10 +27,10 @@ class TokenNode extends Node {
    * @param int $line_num
    * @param int $col_num
    */
-  public function __construct($type, $text, $line_num, $col_num) {
+  public function __construct($type, $text, $position) {
     $this->type = $type;
     $this->text = $text;
-    $this->position = new SourcePosition($line_num, $col_num);
+    $this->position = $position;
   }
 
   /**

@@ -2486,17 +2486,19 @@ class Parser {
     static $visibility_keyword_types = [T_PUBLIC, T_PROTECTED, T_PRIVATE];
     $node = new InterfaceMethodNode();
     $this->matchDocComment($node);
-    $is_static = $this->tryMatch(T_STATIC, $node);
+    $modifiers = new ModifiersNode();
+    $is_static = $this->tryMatch(T_STATIC, $modifiers, 'static');
     while (in_array($this->currentType, $visibility_keyword_types)) {
-      if ($node->getVisibility()) {
+      if ($modifiers->getVisibility()) {
         throw new ParserException(
           $this->iterator->getSourcePosition(),
           "can only have one visibility modifier on interface method."
         );
       }
-      $this->mustMatch($this->currentType, $node, 'visibility');
+      $this->mustMatch($this->currentType, $modifiers, 'visibility');
     }
-    !$is_static && $this->tryMatch(T_STATIC, $node);
+    !$is_static && $this->tryMatch(T_STATIC, $modifiers, 'static');
+    $node->appendChild($modifiers, 'modifiers');
     $this->mustMatch(T_FUNCTION, $node);
     $this->tryMatch('&', $node, 'reference');
     $this->mustMatch(T_STRING, $node, 'name');

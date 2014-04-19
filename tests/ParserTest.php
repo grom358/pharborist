@@ -326,7 +326,7 @@ EOF;
     /** @var InterfaceMethodNode $method */
     $method = $interface_declaration->getStatements()[1];
     $this->assertEquals('myMethod', (string) $method->getName());
-    $this->assertEquals('public', (string) $method->getVisibility());
+    $this->assertEquals('public', (string) $method->getModifiers()->getVisibility());
   }
 
   /**

@@ -5,30 +5,39 @@ namespace Pharborist;
  * Namespace declaration.
  */
 class NamespaceNode extends StatementNode {
-  protected $properties = array(
-    'docComment' => NULL,
-    'name' => NULL,
-    'body' => NULL,
-  );
+  /**
+   * @var DocCommentNode
+   */
+  protected $docComment;
+
+  /**
+   * @var NamespacePathNode
+   */
+  protected $name;
+
+  /**
+   * @var StatementBlockNode
+   */
+  protected $body;
 
   /**
    * @return DocCommentNode
    */
   public function getDocComment() {
-    return $this->properties['docComment'];
+    return $this->docComment;
   }
 
   /**
-   * @return Node
+   * @return NamespacePathNode
    */
   public function getName() {
-    return $this->properties['name'];
+    return $this->name;
   }
 
   /**
-   * @return Node
+   * @return StatementBlockNode
    */
   public function getBody() {
-    return $this->properties['body'];
+    return $this->body;
   }
 }

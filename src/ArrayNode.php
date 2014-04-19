@@ -5,16 +5,15 @@ namespace Pharborist;
  * Node for php array.
  */
 class ArrayNode extends ParentNode implements ExpressionNode {
-  protected $properties = array(
-    'elements' => NULL,
-  );
+  /**
+   * @var CommaListNode
+   */
+  protected $elements;
 
   /**
-   * @return Node[]
+   * @return (ArrayPairNode|ExpressionNode)[]
    */
   public function getElements() {
-    /** @var CommaListNode $elements */
-    $elements = $this->properties['elements'];
-    return $elements->getItems();
+    return $this->elements->getItems();
   }
 }

@@ -5,22 +5,27 @@ namespace Pharborist;
  * while control structure.
  */
 class WhileNode extends StatementNode {
-  protected $properties = array(
-    'condition' => NULL,
-    'body' => NULL,
-  );
+  /**
+   * @var ExpressionNode
+   */
+  protected $condition;
+
+  /**
+   * @var Node
+   */
+  protected $body;
 
   /**
    * @return ExpressionNode
    */
   public function getCondition() {
-    return $this->properties['condition'];
+    return $this->condition;
   }
 
   /**
    * @return Node
    */
   public function getBody() {
-    return $this->properties['body'];
+    return $this->body;
   }
 }

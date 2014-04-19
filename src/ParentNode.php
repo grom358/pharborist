@@ -20,10 +20,16 @@ abstract class ParentNode extends Node {
    */
   protected $childCount;
 
-  /**
-   * @var array
-   */
-  protected $properties = array();
+  protected function getProperties() {
+    $properties = get_object_vars($this);
+    unset($properties['head']);
+    unset($properties['tail']);
+    unset($properties['childCount']);
+    unset($properties['parent']);
+    unset($properties['previous']);
+    unset($properties['next']);
+    return $properties;
+  }
 
   /**
    * Get the number of children.
@@ -144,7 +150,7 @@ abstract class ParentNode extends Node {
       $this->tail = $node;
     }
     if ($property_name !== NULL) {
-      $this->properties[$property_name] = $node;
+      $this->{$property_name} = $node;
     }
     return $this;
   }
@@ -170,8 +176,8 @@ abstract class ParentNode extends Node {
       $this->appendChild($child);
       $child = $next;
     }
-    foreach ($node->properties as $name => $value) {
-      $this->properties[$name] = $value;
+    foreach ($node->getProperties() as $name => $value) {
+      $this->{$name} = $value;
     }
   }
 
@@ -245,17 +251,9 @@ abstract class ParentNode extends Node {
    */
   protected function removeChild(Node $child) {
     $this->childCount--;
-    foreach ($this->properties as $name => $value) {
-      if (is_array($value)) {
-        foreach ($value as $k => $v) {
-          if ($child === $v) {
-            unset($this->properties[$name][$k]);
-            break 2;
-          }
-        }
-      }
-      elseif ($child === $value) {
-        $this->properties[$name] = NULL;
+    foreach ($this->getProperties() as $name => $value) {
+      if ($child === $value) {
+        $this->{$name} = NULL;
         break;
       }
     }
@@ -284,17 +282,9 @@ abstract class ParentNode extends Node {
    * @return $this
    */
   protected function replaceChild(Node $child, Node $replacement) {
-    foreach ($this->properties as $name => $value) {
-      if (is_array($value)) {
-        foreach ($value as $k => $v) {
-          if ($child === $v) {
-            $this->properties[$name][$k] = $replacement;
-            break 2;
-          }
-        }
-      }
-      elseif ($child === $value) {
-        $this->properties[$name] = $replacement;
+    foreach ($this->getProperties() as $name => $value) {
+      if ($child === $value) {
+        $this->{$name} = $replacement;
         break;
       }
     }
@@ -395,7 +385,10 @@ abstract class ParentNode extends Node {
     $this->parent = NULL;
     $this->previous = NULL;
     $this->next = NULL;
-    list($this->head, $this->properties) = unserialize(serialize(array($this->head, $this->properties)));
+    list($this->head, $properties) = unserialize(serialize(array($this->head, $this->getProperties())));
+    foreach ($properties as $name => $value) {
+      $this->{$name} = $value;
+    }
   }
 
   public function getText() {

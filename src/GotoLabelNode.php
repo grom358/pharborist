@@ -5,14 +5,15 @@ namespace Pharborist;
  * A goto label.
  */
 class GotoLabelNode extends ParentNode {
-  protected $properties = array(
-    'label' => NULL,
-  );
+  /**
+   * @var TokenNode
+   */
+  protected $label;
 
   /**
-   * @var Node
+   * @return TokenNode
    */
   public function getLabel() {
-    return $this->properties['label'];
+    return $this->label;
   }
 }

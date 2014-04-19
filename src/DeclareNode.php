@@ -5,10 +5,10 @@ namespace Pharborist;
  * A declare control structure.
  */
 class DeclareNode extends StatementNode {
-  protected $properties = array(
-    'directives' => array(),
-    'body' => NULL,
-  );
+  /**
+   * @var Node
+   */
+  protected $body;
 
   /**
    * @return DeclareDirectiveNode[]
@@ -21,6 +21,6 @@ class DeclareNode extends StatementNode {
    * @return Node
    */
   public function getBody() {
-    return $this->properties['body'];
+    return $this->body;
   }
 }

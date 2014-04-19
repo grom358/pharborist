@@ -5,21 +5,24 @@ namespace Pharborist;
  * A function call.
  */
 class FunctionCallNode extends CallNode implements VariableExpressionNode {
-  protected $properties = array(
-    'namespacePath' => NULL,
-    'arguments' => NULL,
-  );
+  /**
+   * @var NamespacePathNode
+   */
+  protected $namespacePath;
+
+  /**
+   * @var ArgumentListNode
+   */
+  protected $arguments;
 
   /**
    * @return NamespacePathNode
    */
   public function getNamespacePath() {
-    return $this->properties['namespacePath'];
+    return $this->namespacePath;
   }
 
   public function getArguments() {
-    /** @var ArgumentListNode $arguments */
-    $arguments = $this->properties['arguments'];
-    return $arguments->getArguments();
+    return $this->arguments->getArguments();
   }
 }

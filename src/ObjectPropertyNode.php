@@ -7,22 +7,27 @@ namespace Pharborist;
  * For example, $object->property
  */
 class ObjectPropertyNode extends ParentNode implements VariableExpressionNode {
-  protected $properties = array(
-    'object' => NULL,
-    'property' => NULL,
-  );
+  /**
+   * @var Node
+   */
+  protected $object;
+
+  /**
+   * @var Node
+   */
+  protected $property;
 
   /**
    * @return Node
    */
   public function getObject() {
-    return $this->properties['object'];
+    return $this->object;
   }
 
   /**
    * @return Node
    */
   public function getProperty() {
-    return $this->properties['property'];
+    return $this->property;
   }
 }

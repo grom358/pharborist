@@ -5,9 +5,10 @@ namespace Pharborist;
  * A break statement.
  */
 class BreakStatementNode extends StatementNode {
-  protected $properties = array(
-    'level' => NULL,
-  );
+  /**
+   * @var IntegerNode
+   */
+  protected $level;
 
   /**
    * An optional numeric argument which tells break how many nested enclosing
@@ -15,6 +16,6 @@ class BreakStatementNode extends StatementNode {
    * @return IntegerNode
    */
   public function getLevel() {
-    return $this->properties['level'];
+    return $this->level;
   }
 }

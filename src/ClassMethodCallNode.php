@@ -7,32 +7,39 @@ namespace Pharborist;
  * For example, MyClass::classMethod
  */
 class ClassMethodCallNode extends CallNode implements VariableExpressionNode {
-  protected $properties = array(
-    'className' => NULL,
-    'methodName' => NULL,
-    'arguments' => NULL,
-  );
+  /**
+   * @var Node
+   */
+  protected $className;
+
+  /**
+   * @var Node
+   */
+  protected $methodName;
+
+  /**
+   * @var ArgumentListNode
+   */
+  protected $arguments;
 
   /**
    * @return Node
    */
   public function getClassName() {
-    return $this->properties['className'];
+    return $this->className;
   }
 
   /**
    * @return Node
    */
   public function getMethodName() {
-    return $this->properties['methodName'];
+    return $this->methodName;
   }
 
   /**
    * @return ExpressionNode[]
    */
   public function getArguments() {
-    /** @var ArgumentListNode $arguments */
-    $arguments = $this->properties['arguments'];
-    return $arguments->getArguments();
+    return $this->arguments->getArguments();
   }
 }

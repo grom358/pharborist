@@ -5,14 +5,15 @@ namespace Pharborist;
  * A goto statement.
  */
 class GotoStatementNode extends StatementNode {
-  protected $properties = array(
-    'label' => NULL,
-  );
+  /**
+   * @var TokenNode
+   */
+  protected $label;
 
   /**
-   * @var Node
+   * @return TokenNode
    */
   public function getLabel() {
-    return $this->properties['label'];
+    return $this->label;
   }
 }

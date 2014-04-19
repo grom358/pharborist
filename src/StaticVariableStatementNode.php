@@ -7,15 +7,16 @@ namespace Pharborist;
  * For example, static $a, $b = A_SCALAR;
  */
 class StaticVariableStatementNode extends StatementNode {
-  protected $properties = array(
-    'docComment' => NULL,
-  );
+  /**
+   * @var DocCommentNode
+   */
+  protected $docComment;
 
   /**
    * @return DocCommentNode
    */
   public function getDocComment() {
-    return $this->properties['docComment'];
+    return $this->docComment;
   }
 
   /**

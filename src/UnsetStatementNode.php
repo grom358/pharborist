@@ -5,14 +5,15 @@ namespace Pharborist;
  * A unset statement.
  */
 class UnsetStatementNode extends StatementNode {
-  protected $properties = array(
-    'functionCall' => NULL,
-  );
+  /**
+   * @var UnsetNode
+   */
+  protected $functionCall;
 
   /**
    * @return UnsetNode
    */
   public function getFunctionCall() {
-    return $this->properties['functionCall'];
+    return $this->functionCall;
   }
 }

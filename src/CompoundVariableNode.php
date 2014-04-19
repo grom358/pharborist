@@ -7,14 +7,15 @@ namespace Pharborist;
  * For example, ${expr()}
  */
 class CompoundVariableNode extends ParentNode implements VariableExpressionNode {
-  protected $properties = array(
-    'expression' => NULL,
-  );
+  /**
+   * @var ExpressionNode
+   */
+  protected $expression;
 
   /**
    * @return ExpressionNode
    */
   public function getExpression() {
-    return $this->properties['expression'];
+    return $this->expression;
   }
 }

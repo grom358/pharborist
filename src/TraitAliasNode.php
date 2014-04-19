@@ -7,30 +7,39 @@ namespace Pharborist;
  * For example, B::bigTalk as talk;
  */
 class TraitAliasNode extends StatementNode {
-  protected $properties = array(
-    'traitMethodReference' => NULL,
-    'visibility' => NULL,
-    'alias' => NULL,
-  );
+  /**
+   * @var NamespacePathNode|TraitMethodReferenceNode
+   */
+  protected $traitMethodReference;
+
+  /**
+   * @var TokenNode
+   */
+  protected $visibility;
+
+  /**
+   * @var TokenNode
+   */
+  protected $alias;
 
   /**
    * @return NamespacePathNode|TraitMethodReferenceNode
    */
   public function getTraitMethodReference() {
-    return $this->properties['traitMethodReference'];
+    return $this->traitMethodReference;
   }
 
   /**
-   * @return Node
+   * @return TokenNode
    */
   public function getVisibility() {
-    return $this->properties['visibility'];
+    return $this->visibility;
   }
 
   /**
-   * @return Node
+   * @return TokenNode
    */
   public function getAlias() {
-    return $this->properties['alias'];
+    return $this->alias;
   }
 }

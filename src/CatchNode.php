@@ -5,30 +5,39 @@ namespace Pharborist;
  * A catch in a try control structure.
  */
 class CatchNode extends ParentNode {
-  protected $properties = array(
-    'exceptionType' => NULL,
-    'variable' => NULL,
-    'body' => NULL,
-  );
+  /**
+   * @var NamespacePathNode
+   */
+  protected $exceptionType;
+
+  /**
+   * @var VariableNode
+   */
+  protected $variable;
+
+  /**
+   * @var StatementBlockNode
+   */
+  protected $body;
 
   /**
    * @return NamespacePathNode
    */
   public function getExceptionType() {
-    return $this->properties['exceptionType'];
+    return $this->exceptionType;
   }
 
   /**
    * @return VariableNode
    */
   public function getVariable() {
-    return $this->properties['variable'];
+    return $this->variable;
   }
 
   /**
-   * @return Node
+   * @return StatementBlockNode
    */
   public function getBody() {
-    return $this->properties['body'];
+    return $this->body;
   }
 }

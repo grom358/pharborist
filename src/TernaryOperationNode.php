@@ -7,30 +7,39 @@ namespace Pharborist;
  * For example, $condition ? $then : $else
  */
 class TernaryOperationNode extends ParentNode implements ExpressionNode {
-  protected $properties = array(
-    'condition' => NULL,
-    'then' => NULL,
-    'else' => NULL,
-  );
+  /**
+   * @var ExpressionNode
+   */
+  protected $condition;
 
   /**
-   * @return Node
+   * @var ExpressionNode
+   */
+  protected $then;
+
+  /**
+   * @var ExpressionNode
+   */
+  protected $else;
+
+  /**
+   * @return ExpressionNode
    */
   public function getCondition() {
-    return $this->properties['condition'];
+    return $this->condition;
   }
 
   /**
-   * @return Node
+   * @return ExpressionNode
    */
   public function getThen() {
-    return $this->properties['then'];
+    return $this->then;
   }
 
   /**
-   * @return Node
+   * @return ExpressionNode
    */
   public function getElse() {
-    return $this->properties['else'];
+    return $this->else;
   }
 }

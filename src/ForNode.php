@@ -5,38 +5,51 @@ namespace Pharborist;
  * A for control structure.
  */
 class ForNode extends StatementNode {
-  protected $properties = array(
-    'initial' => NULL,
-    'condition' => NULL,
-    'step' => NULL,
-    'body' => NULL,
-  );
+  /**
+   * @var ExpressionListNode
+   */
+  protected $initial;
 
   /**
-   * @return Node
+   * @var ExpressionListNode
+   */
+  protected $condition;
+
+  /**
+   * @var ExpressionListNode
+   */
+  protected $step;
+
+  /**
+   * @var Node
+   */
+  protected $body;
+
+  /**
+   * @return ExpressionListNode
    */
   public function getInitial() {
-    return $this->properties['initial'];
+    return $this->initial;
   }
 
   /**
-   * @return Node
+   * @return ExpressionListNode
    */
   public function getCondition() {
-    return $this->properties['condition'];
+    return $this->condition;
   }
 
   /**
-   * @return Node
+   * @return ExpressionListNode
    */
   public function getStep() {
-    return $this->properties['step'];
+    return $this->step;
   }
 
   /**
    * @return Node
    */
   public function getBody() {
-    return $this->properties['body'];
+    return $this->body;
   }
 }

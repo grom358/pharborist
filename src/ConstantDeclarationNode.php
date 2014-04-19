@@ -5,22 +5,27 @@ namespace Pharborist;
  * Constant declaration.
  */
 class ConstantDeclarationNode extends ParentNode {
-  protected $properties = array(
-    'name' => NULL,
-    'value' => NULL,
-  );
+  /**
+   * @var TokenNode
+   */
+  protected $name;
 
   /**
-   * @return Node
+   * @var ExpressionNode
+   */
+  protected $value;
+
+  /**
+   * @return TokenNode
    */
   public function getName() {
-    return $this->properties['name'];
+    return $this->name;
   }
 
   /**
-   * @return Node
+   * @return ExpressionNode
    */
   public function getValue() {
-    return $this->properties['value'];
+    return $this->value;
   }
 }

@@ -7,22 +7,27 @@ namespace Pharborist;
  * For example, expr();
  */
 class ExpressionStatementNode extends StatementNode {
-  protected $properties = array(
-    'docComment' => NULL,
-    'expression' => NULL,
-  );
+  /**
+   * @var DocCommentNode
+   */
+  protected $docComment;
+
+  /**
+   * @var ExpressionNode
+   */
+  protected $expression;
 
   /**
    * @return DocCommentNode
    */
   public function getDocComment() {
-    return $this->properties['docComment'];
+    return $this->docComment;
   }
 
   /**
    * @return ExpressionNode
    */
   public function getExpression() {
-    return $this->properties['expression'];
+    return $this->expression;
   }
 }

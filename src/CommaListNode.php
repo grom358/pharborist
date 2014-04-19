@@ -5,6 +5,9 @@ namespace Pharborist;
  * Comma separated list.
  */
 class CommaListNode extends ParentNode {
+  /**
+   * @return Node[]
+   */
   public function getItems() {
     $items = [];
     $child = $this->head;

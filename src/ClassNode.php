@@ -5,64 +5,87 @@ namespace Pharborist;
  * Class declaration.
  */
 class ClassNode extends StatementNode {
-  protected $properties = array(
-    'docComment' => NULL,
-    'abstract' => NULL,
-    'final' => NULL,
-    'name' => NULL,
-    'extends' => NULL,
-  );
+  /**
+   * @var DocCommentNode
+   */
+  protected $docComment;
+
+  /**
+   * @var TokenNode
+   */
+  protected $abstract;
+
+  /**
+   * @var TokenNode
+   */
+  protected $final;
+
+  /**
+   * @var TokenNode
+   */
+  protected $name;
+
+  /**
+   * @var NamespacePathNode
+   */
+  protected $extends;
+
+  /**
+   * @var CommaListNode
+   */
+  protected $implements;
+
+  /**
+   * @var StatementBlockNode
+   */
+  protected $statements;
 
   /**
    * @return DocCommentNode
    */
   public function getDocComment() {
-    return $this->properties['docComment'];
+    return $this->docComment;
   }
 
   /**
    * @return TokenNode
    */
   public function getAbstract() {
-    return $this->properties['abstract'];
+    return $this->abstract;
   }
 
   /**
    * @return TokenNode
    */
   public function getFinal() {
-    return $this->properties['final'];
+    return $this->final;
   }
 
   /**
    * @return TokenNode
    */
   public function getName() {
-    return $this->properties['name'];
+    return $this->name;
   }
 
   /**
    * @return NamespacePathNode
    */
   public function getExtends() {
-    return $this->properties['extends'];
+    return $this->extends;
   }
 
   /**
    * @return NamespacePathNode[]
    */
   public function getImplements() {
-    /** @var CommaListNode $implements */
-    $implements = $this->properties['implements'];
-    return $implements->getItems();
+    return $this->implements->getItems();
   }
 
   /**
    * @return (ClassMemberListNode|ClassMethodNode|ConstantDeclarationNode|TraitUseNode)[]
    */
   public function getStatements() {
-    /** @var StatementBlockNode $statement_block */
-    $statement_block = $this->properties['statements'];
-    return $statement_block->getStatements();
+    return $this->statements->getStatements();
   }
 }

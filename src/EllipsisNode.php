@@ -7,14 +7,15 @@ namespace Pharborist;
  * For example, a_func($a, ...$b);
  */
 class EllipsisNode extends ParentNode {
-  protected $properties = array(
-    'expression' => NULL,
-  );
+  /**
+   * @var ExpressionNode
+   */
+  protected $expression;
 
   /**
-   * @return Node
+   * @return ExpressionNode
    */
   public function getExpression() {
-    return $this->properties['expression'];
+    return $this->expression;
   }
 }

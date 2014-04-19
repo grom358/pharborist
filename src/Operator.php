@@ -14,15 +14,16 @@ class Operator extends PartialNode {
   const ASSOC_RIGHT = 2;
   const ASSOC_NONE = 3;
 
-  protected $properties = array(
-    'operator' => NULL
-  );
+  /**
+   * @var TokenNode
+   */
+  protected $operator;
 
   /**
    * @return TokenNode
    */
   public function getOperator() {
-    return $this->properties['operator'];
+    return $this->operator;
   }
 
   /**

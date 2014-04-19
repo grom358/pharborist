@@ -5,38 +5,51 @@ namespace Pharborist;
  * Method/member modifiers.
  */
 class ModifiersNode extends ParentNode {
-  protected $properties = array(
-    'abstract' => NULL,
-    'final' => NULL,
-    'static' => NULL,
-    'visibility' => NULL,
-  );
+  /**
+   * @var TokenNode
+   */
+  protected $abstract;
 
   /**
-   * @return Node
+   * @var TokenNode
+   */
+  protected $final;
+
+  /**
+   * @var TokenNode
+   */
+  protected $static;
+
+  /**
+   * @var TokenNode
+   */
+  protected $visibility;
+
+  /**
+   * @return TokenNode
    */
   public function getAbstract() {
-    return $this->properties['abstract'];
+    return $this->abstract;
   }
 
   /**
-   * @return Node
+   * @return TokenNode
    */
   public function getFinal() {
-    return $this->properties['final'];
+    return $this->final;
   }
 
   /**
-   * @return Node
+   * @return TokenNode
    */
   public function getStatic() {
-    return $this->properties['static'];
+    return $this->static;
   }
 
   /**
-   * @return Node
+   * @return TokenNode
    */
   public function getVisibility() {
-    return $this->properties['visibility'];
+    return $this->visibility;
   }
 }

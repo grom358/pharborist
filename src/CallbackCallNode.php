@@ -7,24 +7,27 @@ namespace Pharborist;
  * For example, $callback().
  */
 class CallbackCallNode extends CallNode implements ExpressionNode {
-  protected $properties = array(
-    'callback' => NULL,
-    'arguments' => NULL,
-  );
+  /**
+   * @var Node
+   */
+  protected $callback;
+
+  /**
+   * @var ArgumentListNode
+   */
+  protected $arguments;
 
   /**
    * @return Node
    */
   public function getCallback() {
-    return $this->properties['callback'];
+    return $this->callback;
   }
 
   /**
    * @return ExpressionNode[]
    */
   public function getArguments() {
-    /** @var ArgumentListNode $arguments */
-    $arguments = $this->properties['arguments'];
-    return $arguments->getArguments();
+    return $this->arguments->getArguments();
   }
 }

@@ -5,9 +5,10 @@ namespace Pharborist;
  * A continue statement.
  */
 class ContinueStatementNode extends StatementNode {
-  protected $properties = array(
-    'level' => NULL,
-  );
+  /**
+   * @var IntegerNode
+   */
+  protected $level;
 
   /**
    * An optional numeric argument which tells continue how many
@@ -15,6 +16,6 @@ class ContinueStatementNode extends StatementNode {
    * @return IntegerNode
    */
   public function getLevel() {
-    return $this->properties['level'];
+    return $this->level;
   }
 }

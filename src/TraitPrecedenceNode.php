@@ -7,24 +7,27 @@ namespace Pharborist;
  * For example, A::bigTalk insteadof B;
  */
 class TraitPrecedenceNode extends StatementNode {
-  protected $properties = array(
-    'traitMethodReference' => NULL,
-    'traitNames' => NULL,
-  );
+  /**
+   * @var TraitMethodReferenceNode
+   */
+  protected $traitMethodReference;
+
+  /**
+   * @var CommaListNode
+   */
+  protected $traitNames;
 
   /**
    * @return TraitMethodReferenceNode
    */
   public function getTraitMethodReference() {
-    return $this->properties['traitMethodReference'];
+    return $this->traitMethodReference;
   }
 
   /**
    * @return NamespacePathNode[]
    */
   public function getTraitNames() {
-    /** @var CommaListNode $trait_names */
-    $trait_names = $this->properties['traitNames'];
-    return $trait_names->getItems();
+    return $this->traitNames->getItems();
   }
 }

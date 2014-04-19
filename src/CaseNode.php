@@ -5,22 +5,27 @@ namespace Pharborist;
  * A case statement in switch control structure.
  */
 class CaseNode extends StatementNode {
-  protected $properties = array(
-    'matchOn' => NULL,
-    'body' => NULL,
-  );
+  /**
+   * @var ExpressionNode
+   */
+  protected $matchOn;
+
+  /**
+   * @var StatementBlockNode
+   */
+  protected $body;
 
   /**
    * @return ExpressionNode
    */
   public function getMatchOn() {
-    return $this->properties['matchOn'];
+    return $this->matchOn;
   }
 
   /**
    * @return StatementBlockNode
    */
   public function getBody() {
-    return $this->properties['body'];
+    return $this->body;
   }
 }

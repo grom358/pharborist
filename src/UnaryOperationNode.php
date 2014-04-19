@@ -5,22 +5,27 @@ namespace Pharborist;
  * An unary operation.
  */
 abstract class UnaryOperationNode extends ParentNode implements ExpressionNode {
-  protected $properties = array(
-    'operator' => NULL,
-    'operand' => NULL,
-  );
+  /**
+   * @var TokenNode
+   */
+  protected $operator;
+
+  /**
+   * @var ExpressionNode
+   */
+  protected $operand;
 
   /**
    * @return TokenNode
    */
   public function getOperator() {
-    return $this->properties['operator'];
+    return $this->operator;
   }
 
   /**
    * @return ExpressionNode
    */
   public function getOperand() {
-    return $this->properties['operand'];
+    return $this->operand;
   }
 }

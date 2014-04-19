@@ -5,24 +5,28 @@ namespace Pharborist;
  * A class member list declaration.
  */
 class ClassMemberListNode extends StatementNode {
-  protected $properties = array(
-    'docComment' => NULL,
-    'modifiers' => NULL,
-    'members' => NULL,
-  );
+  /**
+   * @var DocCommentNode
+   */
+  protected $docComment;
+
+  /**
+   * @var ModifiersNode
+   */
+  protected $modifiers;
 
   /**
    * @return DocCommentNode
    */
   public function getDocComment() {
-    return $this->properties['docComment'];
+    return $this->docComment;
   }
 
   /**
    * @return ModifiersNode
    */
   public function getModifiers() {
-    return $this->properties['modifiers'];
+    return $this->modifiers;
   }
 
   /**

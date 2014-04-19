@@ -7,22 +7,27 @@ namespace Pharborist;
  * For example: MyClass::MY_CONST
  */
 class ClassConstantLookupNode extends ParentNode implements ExpressionNode {
-  protected $properties = array(
-    'className' => NULL,
-    'constantName' => NULL,
-  );
+  /**
+   * @var Node
+   */
+  protected $className;
+
+  /**
+   * @var Node
+   */
+  protected $constantName;
 
   /**
    * @return Node
    */
   public function getClassName() {
-    return $this->properties['className'];
+    return $this->className;
   }
 
   /**
    * @return Node
    */
   public function getConstantName() {
-    return $this->properties['constantName'];
+    return $this->constantName;
   }
 }

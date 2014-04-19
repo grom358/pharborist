@@ -7,22 +7,27 @@ namespace Pharborist;
  * For example $array[0]
  */
 class ArrayLookupNode extends ParentNode implements VariableExpressionNode {
-  protected $properties = array(
-    'array' => NULL,
-    'key' => NULL,
-  );
+  /**
+   * @var Node
+   */
+  protected $array;
+
+  /**
+   * @var Node
+   */
+  protected $key;
 
   /**
    * @return Node
    */
   public function getArray() {
-    return $this->properties['array'];
+    return $this->array;
   }
 
   /**
    * @return Node
    */
   public function getKey() {
-    return $this->properties['key'];
+    return $this->key;
   }
 }

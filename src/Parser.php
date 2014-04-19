@@ -1201,7 +1201,7 @@ class Parser {
         }
         else {
           $node = new ConstantNode();
-          $node->appendChild($namespace_path, 'constant');
+          $node->appendChild($namespace_path, 'constantName');
           return $node;
         }
       case T_STATIC:

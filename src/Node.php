@@ -262,9 +262,25 @@ abstract class Node implements NodeInterface {
     $tmp_parent = $this->parent;
     $tmp_previous = $this->previous;
     $tmp_next = $this->next;
+    if ($this->parent !== NULL) {
+      if ($this->parent->head === $this) {
+        $this->parent->head = $node;
+      }
+      if ($this->parent->tail === $this) {
+        $this->parent->tail = $node;
+      }
+    }
     $this->parent = $node->parent;
     $this->previous = $node->previous;
     $this->next = $node->next;
+    if ($node->parent !== NULL) {
+      if ($node->parent->head === $node) {
+        $node->parent->head = $this;
+      }
+      if ($node->parent->tail === $node) {
+        $this->parent->tail = $this;
+      }
+    }
     $node->parent = $tmp_parent;
     $node->previous = $tmp_previous;
     $node->next = $tmp_next;

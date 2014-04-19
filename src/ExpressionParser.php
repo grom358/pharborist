@@ -8,12 +8,12 @@ class ExpressionParser {
   /**
    * @var Operator[]
    */
-  private $operators = array();
+  private $operators = [];
 
   /**
    * @var Node[]
    */
-  private $operands = array();
+  private $operands = [];
 
   /**
    * @var Operator
@@ -67,8 +67,8 @@ class ExpressionParser {
     $this->nodes = $nodes;
     $this->position = 0;
     $this->length = count($nodes);
-    $this->operators = array($this->sentinel);
-    $this->operands = array();
+    $this->operators = [$this->sentinel];
+    $this->operands = [];
     $this->E();
     if ($this->next()) {
       throw new ParserException($this->next()->getSourcePosition(), "invalid expression");

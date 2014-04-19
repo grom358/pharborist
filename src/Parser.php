@@ -1075,7 +1075,7 @@ class Parser {
   private function expr($static = FALSE) {
     static $end_expression_types = [':', ';', ',', ')', ']', '}', T_AS, T_DOUBLE_ARROW, T_CLOSE_TAG];
     // Group tokens into operands & operators to pass to the expression parser
-    $expression_nodes = array();
+    $expression_nodes = [];
     while ($this->currentType !== NULL && !in_array($this->currentType, $end_expression_types)) {
       if ($op = $this->exprOperator($static)) {
         $expression_nodes[] = $op;
@@ -2129,7 +2129,7 @@ class Parser {
       $node->appendChild($name, 'name');
     }
     else {
-      $this->namespacePath = NULL;
+      $this->namespace = NULL;
     }
     if ($this->tryMatch('{', $node)) {
       $node->appendChild($this->topStatementBlock('}'), 'body');
@@ -2576,7 +2576,7 @@ class Parser {
       $token = $this->iterator->next();
     }
     while ($token && $token instanceof DocCommentNode) {
-      $this->skippedDocComment = array();
+      $this->skippedDocComment = [];
       $this->docComment = $token;
       $token = $this->iterator->next();
       while ($token && ($token->getType() === T_COMMENT || $token->getType() === T_WHITESPACE)) {
@@ -2597,7 +2597,7 @@ class Parser {
    */
   private function addSkipped(ParentNode $parent) {
     $parent->appendChildren($this->skipped);
-    $this->skipped = array();
+    $this->skipped = [];
     $this->matchDocComment($this->skipParent ?: $parent, NULL);
     $this->skipParent = NULL;
   }
@@ -2608,7 +2608,7 @@ class Parser {
    */
   private function matchHidden(ParentNode $parent) {
     $parent->appendChildren($this->skipped);
-    $this->skipped = array();
+    $this->skipped = [];
     $this->skipParent = $parent;
   }
 
@@ -2621,7 +2621,7 @@ class Parser {
     if ($this->docComment) {
       $parent->appendChild($this->docComment, $property_name);
       $parent->appendChildren($this->skippedDocComment);
-      $this->skippedDocComment = array();
+      $this->skippedDocComment = [];
       $this->docComment = NULL;
     }
     $this->skipParent = NULL;
@@ -2649,7 +2649,7 @@ class Parser {
     if (!$maybe_last) {
       if ($capture_doc_comment) {
         $parent->appendChildren($this->skipped);
-        $this->skipped = array();
+        $this->skipped = [];
       }
       else {
         $this->addSkipped($parent);
@@ -2677,7 +2677,7 @@ class Parser {
     if (!$maybe_last) {
       if ($capture_doc_comment) {
         $parent->appendChildren($this->skipped);
-        $this->skipped = array();
+        $this->skipped = [];
       }
       else {
         $this->addSkipped($parent);

@@ -70,7 +70,7 @@ class Tokenizer {
   public function getAll($source) {
     $this->colNo = 1;
     $this->lineNo = 1;
-    $tokens = array();
+    $tokens = [];
     foreach (token_get_all($source) as $rawToken) {
       $tokens[] = $this->parseToken($rawToken);
     }

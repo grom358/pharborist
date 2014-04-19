@@ -61,7 +61,7 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
   }
 
   public function children(callable $callback = NULL) {
-    $matches = array();
+    $matches = [];
     $child = $this->head;
     while ($child) {
       if ($callback === NULL || $callback($child)) {
@@ -319,7 +319,7 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
   }
 
   public function find(callable $callback) {
-    $matches = array();
+    $matches = [];
     $child = $this->head;
     while ($child) {
       if ($callback($child)) {
@@ -346,7 +346,7 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
     $this->parent = NULL;
     $this->previous = NULL;
     $this->next = NULL;
-    list($this->head, $properties) = unserialize(serialize(array($this->head, $this->getProperties())));
+    list($this->head, $properties) = unserialize(serialize([$this->head, $this->getProperties()]));
     foreach ($properties as $name => $value) {
       $this->{$name} = $value;
     }

@@ -2007,8 +2007,8 @@ class Parser {
    */
   private function parameter() {
     $node = new ParameterNode();
-    if ($type = $this->optionalClassType()) {
-      $node->appendChild($type, 'classType');
+    if ($type = $this->optionalTypeHint()) {
+      $node->appendChild($type, 'typeHint');
     }
     $this->tryMatch('&', $node, 'reference');
     $this->tryMatch(T_ELLIPSIS, $node);
@@ -2023,7 +2023,7 @@ class Parser {
    * Parse optional class type for parameter.
    * @return Node
    */
-  private function optionalClassType() {
+  private function optionalTypeHint() {
     static $array_callable_types = [T_ARRAY, T_CALLABLE];
     $node = NULL;
     if ($node = $this->tryMatchToken($array_callable_types)) {

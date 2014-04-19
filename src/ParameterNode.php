@@ -8,7 +8,7 @@ class ParameterNode extends ParentNode {
   /**
    * @var Node
    */
-  protected $classType;
+  protected $typeHint;
 
   /**
    * @var TokenNode
@@ -28,8 +28,8 @@ class ParameterNode extends ParentNode {
   /**
    * @return Node
    */
-  public function getClassType() {
-    return $this->classType;
+  public function getTypeHint() {
+    return $this->typeHint;
   }
 
   /**

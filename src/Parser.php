@@ -67,6 +67,11 @@ class Parser {
   private $currentType;
 
   /**
+   * @var NamespacePathNode
+   */
+  private $namespace;
+
+  /**
    * Constructor.
    */
   public function __construct() {
@@ -276,7 +281,8 @@ class Parser {
    */
   private function constDeclaration() {
     $node = new ConstantDeclarationNode();
-    $this->mustMatch(T_STRING, $node, 'name', TRUE);
+    $const_name = $this->mustMatch(T_STRING, $node, 'name', TRUE)->getText();
+    $node->setFullyQualifiedName($this->namespace, $const_name);
     if ($this->mustMatch('=', $node)) {
       $node->appendChild($this->staticScalar(), 'value');
     }
@@ -1970,7 +1976,8 @@ class Parser {
     $this->matchDocComment($node);
     $this->mustMatch(T_FUNCTION, $node);
     $this->tryMatch('&', $node, 'reference');
-    $this->mustMatch(T_STRING, $node, 'name');
+    $function_name = $this->mustMatch(T_STRING, $node, 'name')->getText();
+    $node->setFullyQualifiedName($this->namespace, $function_name);
     $node->appendChild($this->parameterList(), 'parameters');
     $node->appendChild($this->innerStatementBlock(), 'body');
     return $node;
@@ -2116,7 +2123,12 @@ class Parser {
     $this->matchDocComment($node);
     $this->mustMatch(T_NAMESPACE, $node);
     if ($this->currentType === T_STRING) {
-      $node->appendChild($this->namespaceName(), 'name');
+      $name = $this->namespaceName();
+      $this->namespace = $name->getPath();
+      $node->appendChild($name, 'name');
+    }
+    else {
+      $this->namespacePath = NULL;
     }
     if ($this->tryMatch('{', $node)) {
       $node->appendChild($this->topStatementBlock('}'), 'body');
@@ -2184,7 +2196,8 @@ class Parser {
     $this->matchDocComment($node);
     $this->tryMatch(T_ABSTRACT, $node, 'abstract') || $this->tryMatch(T_FINAL, $node, 'final');
     $this->mustMatch(T_CLASS, $node);
-    $this->mustMatch(T_STRING, $node, 'name');
+    $class_name = $this->mustMatch(T_STRING, $node, 'name')->getText();
+    $node->setFullyQualifiedName($this->namespace, $class_name);
     if ($this->tryMatch(T_EXTENDS, $node)) {
       $node->appendChild($this->namespacePath(), 'extends');
     }
@@ -2452,7 +2465,8 @@ class Parser {
     $node = new InterfaceNode();
     $this->matchDocComment($node);
     $this->mustMatch(T_INTERFACE, $node);
-    $this->mustMatch(T_STRING, $node, 'name');
+    $interface_name = $this->mustMatch(T_STRING, $node, 'name')->getText();
+    $node->setFullyQualifiedName($this->namespace, $interface_name);
     if ($this->tryMatch(T_EXTENDS, $node)) {
       $extends = new CommaListNode();
       do {
@@ -2515,7 +2529,8 @@ class Parser {
     $node = new TraitNode();
     $this->matchDocComment($node);
     $this->mustMatch(T_TRAIT, $node);
-    $this->mustMatch(T_STRING, $node, 'name');
+    $trait_name = $this->mustMatch(T_STRING, $node, 'name')->getText();
+    $node->setFullyQualifiedName($this->namespace, $trait_name);
     if ($this->tryMatch(T_EXTENDS, $node)) {
       $node->appendChild($this->namespacePath(), 'extends');
     }

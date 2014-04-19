@@ -5,6 +5,8 @@ namespace Pharborist;
  * Class declaration.
  */
 class ClassNode extends StatementNode {
+  use FullyQualifiedNameTrait;
+
   /**
    * @var DocCommentNode
    */

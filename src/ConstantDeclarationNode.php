@@ -5,6 +5,8 @@ namespace Pharborist;
  * Constant declaration.
  */
 class ConstantDeclarationNode extends ParentNode {
+  use FullyQualifiedNameTrait;
+
   /**
    * @var TokenNode
    */

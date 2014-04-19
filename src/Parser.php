@@ -551,6 +551,7 @@ class Parser {
    */
   private function forExpr(ForNode $parent, $terminator, $property_name, $is_last = FALSE) {
     if ($this->tryMatch($terminator, $parent)) {
+      $parent->appendChild(new ExpressionListNode(), $property_name);
       return;
     }
     $parent->appendChild($this->exprList(), $property_name);

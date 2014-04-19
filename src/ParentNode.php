@@ -280,6 +280,10 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
     return $this;
   }
 
+  /**
+   * {@inheritDoc}
+   * @return TokenNode
+   */
   public function firstToken() {
     $head = $this->head;
     while ($head instanceof ParentNode) {
@@ -288,6 +292,10 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
     return $head;
   }
 
+  /**
+   * {@inheritDoc}
+   * @return TokenNode
+   */
   public function lastToken() {
     $tail = $this->tail;
     while ($tail instanceof ParentNode) {

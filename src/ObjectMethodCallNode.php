@@ -18,11 +18,6 @@ class ObjectMethodCallNode extends CallNode implements VariableExpressionNode {
   protected $methodName;
 
   /**
-   * @var ArgumentListNode
-   */
-  protected $arguments;
-
-  /**
    * @return Node
    */
   public function getObject() {
@@ -34,9 +29,5 @@ class ObjectMethodCallNode extends CallNode implements VariableExpressionNode {
    */
   public function getMethodName() {
     return $this->methodName;
-  }
-
-  public function getArguments() {
-    return $this->arguments->getArguments();
   }
 }

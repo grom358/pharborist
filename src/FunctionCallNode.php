@@ -11,18 +11,9 @@ class FunctionCallNode extends CallNode implements VariableExpressionNode {
   protected $namespacePath;
 
   /**
-   * @var ArgumentListNode
-   */
-  protected $arguments;
-
-  /**
    * @return NamespacePathNode
    */
   public function getNamespacePath() {
     return $this->namespacePath;
-  }
-
-  public function getArguments() {
-    return $this->arguments->getArguments();
   }
 }

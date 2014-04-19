@@ -6,7 +6,14 @@ namespace Pharborist;
  */
 abstract class CallNode extends ParentNode {
   /**
+   * @var ArgumentListNode
+   */
+  protected $arguments;
+
+  /**
    * @return ExpressionNode[]
    */
-  abstract public function getArguments();
+  public function getArguments() {
+    return $this->arguments->getArguments();
+  }
 }

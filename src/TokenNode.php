@@ -24,10 +24,9 @@ class TokenNode extends Node {
    * Construct token.
    * @param int $type
    * @param string $text
-   * @param int $line_num
-   * @param int $col_num
+   * @param SourcePosition $position
    */
-  public function __construct($type, $text, $position) {
+  public function __construct($type, $text, $position = NULL) {
     $this->type = $type;
     $this->text = $text;
     $this->position = $position;

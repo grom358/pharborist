@@ -361,13 +361,13 @@ else { do_else(); }
 EOF;
     /** @var IfNode $if */
     $if = $this->parseSnippet($snippet, '\Pharborist\IfNode');
-    $this->assertEquals('($condition)', (string) $if->getCondition());
+    $this->assertEquals('$condition', (string) $if->getCondition());
     $this->assertEquals('{ then(); }', (string) $if->getThen());
     $else_ifs = $if->getElseIfs();
     $this->assertCount(2, $else_ifs);
-    $this->assertEquals('($other_condition)', (string) $else_ifs[0]->getCondition());
+    $this->assertEquals('$other_condition', (string) $else_ifs[0]->getCondition());
     $this->assertEquals('{ other_then(); }', (string) $else_ifs[0]->getThen());
-    $this->assertEquals('($another_condition)', (string) $else_ifs[1]->getCondition());
+    $this->assertEquals('$another_condition', (string) $else_ifs[1]->getCondition());
     $this->assertEquals('{ do_else(); }', (string) $if->getElse());
   }
 
@@ -388,13 +388,13 @@ endif;
 EOF;
     /** @var IfNode $if */
     $if = $this->parseSnippet($snippet, '\Pharborist\IfNode');
-    $this->assertEquals('($condition)', (string) $if->getCondition());
+    $this->assertEquals('$condition', (string) $if->getCondition());
     $this->assertEquals('then();', (string) $if->getThen());
     $else_ifs = $if->getElseIfs();
     $this->assertCount(2, $else_ifs);
-    $this->assertEquals('($other_condition)', (string) $else_ifs[0]->getCondition());
+    $this->assertEquals('$other_condition', (string) $else_ifs[0]->getCondition());
     $this->assertEquals('other_then();', (string) $else_ifs[0]->getThen());
-    $this->assertEquals('($another_condition)', (string) $else_ifs[1]->getCondition());
+    $this->assertEquals('$another_condition', (string) $else_ifs[1]->getCondition());
     $this->assertEquals('do_else();', (string) $if->getElse());
   }
 
@@ -464,7 +464,7 @@ while ($cond)
 EOF;
     /** @var WhileNode $while */
     $while = $this->parseSnippet($snippet, '\Pharborist\WhileNode');
-    $this->assertEquals('($cond)', (string) $while->getCondition());
+    $this->assertEquals('$cond', (string) $while->getCondition());
     $this->assertEquals('body();', (string) $while->getBody());
   }
 
@@ -479,7 +479,7 @@ endwhile;
 EOF;
     /** @var WhileNode $while */
     $while = $this->parseSnippet($snippet, '\Pharborist\WhileNode');
-    $this->assertEquals('($cond)', (string) $while->getCondition());
+    $this->assertEquals('$cond', (string) $while->getCondition());
     $this->assertEquals('body();', (string) $while->getBody());
   }
 
@@ -495,7 +495,7 @@ EOF;
     /** @var DoWhileNode $do_while */
     $do_while = $this->parseSnippet($snippet, '\Pharborist\DoWhileNode');
     $this->assertEquals('body();', (string) $do_while->getBody());
-    $this->assertEquals('($cond)', (string) $do_while->getCondition());
+    $this->assertEquals('$cond', (string) $do_while->getCondition());
   }
 
   /**
@@ -564,7 +564,7 @@ switch ($cond) {
 EOF;
     /** @var SwitchNode $switch */
     $switch = $this->parseSnippet($snippet, '\Pharborist\SwitchNode');
-    $this->assertEquals('($cond)', (string) $switch->getSwitchOn());
+    $this->assertEquals('$cond', (string) $switch->getSwitchOn());
     $cases = $switch->getCases();
     $case = $cases[0];
     $this->assertEquals("'a'", (string) $case->getMatchOn());
@@ -597,7 +597,7 @@ endswitch;
 EOF;
     /** @var SwitchNode $switch */
     $switch = $this->parseSnippet($snippet, '\Pharborist\SwitchNode');
-    $this->assertEquals('($cond)', (string) $switch->getSwitchOn());
+    $this->assertEquals('$cond', (string) $switch->getSwitchOn());
     $cases = $switch->getCases();
     $case = $cases[0];
     $this->assertEquals("'a'", (string) $case->getMatchOn());

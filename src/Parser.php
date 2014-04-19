@@ -421,19 +421,35 @@ class Parser {
   }
 
   /**
+   * Parse condition.
+   * @param ParentNode $node
+   * @apram string $property_name
+   */
+  private function condition(ParentNode $node, $property_name) {
+    $this->mustMatch('(', $node);
+    if ($this->currentType === T_YIELD) {
+      $node->appendChild($this->_yield(), $property_name);
+    }
+    else {
+      $node->appendChild($this->expr(), $property_name);
+    }
+    $this->mustMatch(')', $node);
+  }
+
+  /**
    * Parse if control structure.
    * @return IfNode
    */
   private function _if() {
     $node = new IfNode();
     $this->mustMatch(T_IF, $node);
-    $node->appendChild($this->parenExpr(), 'condition');
+    $this->condition($node, 'condition');
     if ($this->tryMatch(':', $node, NULL, FALSE, TRUE)) {
       $node->appendChild($this->innerIfInnerStatementList(), 'then');
       while ($this->currentType === T_ELSEIF) {
         $elseIf = new ElseIfNode();
         $this->mustMatch(T_ELSEIF, $elseIf);
-        $elseIf->appendChild($this->parenExpr(), 'condition');
+        $this->condition($elseIf, 'condition');
         $this->mustMatch(':', $elseIf, NULL, FALSE, TRUE);
         $elseIf->appendChild($this->innerIfInnerStatementList(), 'then');
         $node->appendChild($elseIf, 'elseIfList');
@@ -452,7 +468,7 @@ class Parser {
       while ($this->currentType === T_ELSEIF) {
         $elseIf = new ElseIfNode();
         $this->mustMatch(T_ELSEIF, $elseIf);
-        $elseIf->appendChild($this->parenExpr(), 'condition');
+        $this->condition($elseIf, 'condition');
         $this->matchHidden($elseIf);
         $elseIf->appendChild($this->statement(), 'then');
         $node->appendChild($elseIf, 'elseIfList');
@@ -485,7 +501,7 @@ class Parser {
   private function _while() {
     $node = new WhileNode();
     $this->mustMatch(T_WHILE, $node);
-    $node->appendChild($this->parenExpr(), 'condition');
+    $this->condition($node, 'condition');
     if ($this->tryMatch(':', $node, NULL, FALSE, TRUE)) {
       $node->appendChild($this->innerStatementListNode(T_ENDWHILE), 'body');
       $this->mustMatch(T_ENDWHILE, $node);
@@ -508,7 +524,7 @@ class Parser {
     $this->mustMatch(T_DO, $node, NULL, FALSE, TRUE);
     $node->appendChild($this->statement(), 'body');
     $this->mustMatch(T_WHILE, $node);
-    $node->appendChild($this->parenExpr(), 'condition');
+    $this->condition($node, 'condition');
     $this->mustMatch(';', $node, NULL, TRUE, TRUE);
     return $node;
   }
@@ -559,7 +575,7 @@ class Parser {
   private function _switch() {
     $node = new SwitchNode();
     $this->mustMatch(T_SWITCH, $node);
-    $node->appendChild($this->parenExpr(), 'switchOn');
+    $this->condition($node, 'switchOn');
     if ($this->tryMatch(':', $node)) {
       $this->tryMatch(';', $node);
       $statement_block = new StatementBlockNode();
@@ -772,7 +788,7 @@ class Parser {
   private function _unset() {
     $statement_node = new UnsetStatementNode();
     $node = new UnsetNode();
-    $this->mustMatch(T_UNSET, $node, 'namespacePath');
+    $this->mustMatch(T_UNSET, $node, 'name');
     $arguments = new ArgumentListNode();
     $this->mustMatch('(', $arguments);
     do {

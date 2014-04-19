@@ -164,10 +164,21 @@ abstract class Node implements NodeInterface {
   }
 
   public function before($nodes) {
-    foreach ($nodes as $node) {
-      $node->remove();
-      $this->parent->insertBeforeChild($this, $node);
+    if ($nodes instanceof Node) {
+      $nodes->remove();
+      $this->parent->insertBeforeChild($this, $nodes);
     }
+    elseif ($nodes instanceof NodeCollection || is_array($nodes)) {
+      /** @var Node $node */
+      foreach ($nodes as $node) {
+        $node->remove();
+        $this->parent->insertBeforeChild($this, $node);
+      }
+    }
+    else {
+      throw new \InvalidArgumentException();
+    }
+    return $this;
   }
 
   public function insertAfter($targets) {

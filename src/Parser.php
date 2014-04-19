@@ -411,10 +411,10 @@ class Parser {
     $node = new ParenthesisNode();
     $this->mustMatch('(', $node);
     if ($this->currentType === T_YIELD) {
-      $node->appendChild($this->_yield());
+      $node->appendChild($this->_yield(), 'expression');
     }
     else {
-      $node->appendChild($this->expr());
+      $node->appendChild($this->expr(), 'expression');
     }
     $this->mustMatch(')', $node, NULL, TRUE, TRUE);
     return $node;

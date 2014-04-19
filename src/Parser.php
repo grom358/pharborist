@@ -206,11 +206,11 @@ class Parser {
   private function topStatementList(StatementBlockNode $node, $terminator = '') {
     $this->matchHidden($node);
     while ($this->currentType !== NULL && $this->currentType !== $terminator) {
-      $node->appendChild($this->topStatement(), 'statements');
+      $node->appendChild($this->topStatement());
       $this->matchHidden($node);
     }
     $this->matchHidden($node);
-    $this->matchDocComment($node);
+    $this->matchDocComment($node, NULL);
   }
 
   /**
@@ -269,7 +269,7 @@ class Parser {
     $this->matchDocComment($node);
     $this->mustMatch(T_CONST, $node);
     do {
-      $node->appendChild($this->constDeclaration(), 'declarations');
+      $node->appendChild($this->constDeclaration());
     } while ($this->tryMatch(',', $node));
     $this->mustMatch(';', $node, NULL, TRUE, TRUE);
     return $node;
@@ -378,7 +378,7 @@ class Parser {
     $this->matchDocComment($node);
     $this->mustMatch(T_STATIC, $node);
     do {
-      $node->appendChild($this->staticVariable(), 'variables');
+      $node->appendChild($this->staticVariable());
     } while ($this->tryMatch(',', $node));
     $this->mustMatch(';', $node, NULL, TRUE, TRUE);
     return $node;
@@ -441,7 +441,7 @@ class Parser {
         $this->condition($elseIf, 'condition');
         $this->mustMatch(':', $elseIf, NULL, FALSE, TRUE);
         $elseIf->appendChild($this->innerIfInnerStatementList(), 'then');
-        $node->appendChild($elseIf, 'elseIfList');
+        $node->appendChild($elseIf);
       }
       if ($this->tryMatch(T_ELSE, $node)) {
         $this->mustMatch(':', $node, NULL, FALSE, TRUE);
@@ -460,7 +460,7 @@ class Parser {
         $this->condition($elseIf, 'condition');
         $this->matchHidden($elseIf);
         $elseIf->appendChild($this->statement(), 'then');
-        $node->appendChild($elseIf, 'elseIfList');
+        $node->appendChild($elseIf);
       }
       if ($this->tryMatch(T_ELSE, $node, NULL, FALSE, TRUE)) {
         $node->appendChild($this->statement(), 'else');
@@ -478,7 +478,7 @@ class Parser {
     $node = new StatementBlockNode();
     while ($this->currentType !== NULL && !in_array($this->currentType, $terminators)) {
       $this->matchHidden($node);
-      $node->appendChild($this->innerStatement(), 'statements');
+      $node->appendChild($this->innerStatement());
     }
     return $node;
   }
@@ -638,7 +638,7 @@ class Parser {
     $node = new StatementBlockNode();
     while ($this->currentType !== NULL && $this->currentType !== $terminator && !in_array($this->currentType, $terminators)) {
       $this->matchHidden($node);
-      $node->appendChild($this->innerStatement(), 'statements');
+      $node->appendChild($this->innerStatement());
     }
     return $node;
   }
@@ -847,7 +847,7 @@ class Parser {
    */
   private function _list() {
     $node = new ListNode();
-    $this->mustMatch(T_LIST, $node, 'functionReference');
+    $this->mustMatch(T_LIST, $node, 'name');
     $arguments = new ArgumentListNode();
     $this->mustMatch('(', $arguments);
     do {
@@ -891,7 +891,7 @@ class Parser {
         if ($this->tryMatch('=', $declare_directive)) {
           $declare_directive->appendChild($this->staticScalar(), 'value');
         }
-        $node->appendChild($declare_directive, 'directives');
+        $node->appendChild($declare_directive);
       } while ($this->tryMatch(',', $node));
       $this->mustMatch(')', $node, NULL, FALSE, TRUE);
     }
@@ -962,7 +962,7 @@ class Parser {
   private function exprList() {
     $node = new ExpressionListNode();
     do {
-      $node->appendChild($this->expr(), 'expressions');
+      $node->appendChild($this->expr());
     } while ($this->tryMatch(',', $node));
     return $node;
   }
@@ -2043,7 +2043,7 @@ class Parser {
   private function innerStatementList(StatementBlockNode $parent, $terminator) {
     while ($this->currentType !== NULL && $this->currentType !== $terminator) {
       $this->matchHidden($parent);
-      $parent->appendChild($this->innerStatement(), 'statements');
+      $parent->appendChild($this->innerStatement());
     }
   }
 
@@ -2338,7 +2338,7 @@ class Parser {
     $node->mergeNode($doc_comment);
     $node->appendChild($modifiers, 'modifiers');
     do {
-      $node->appendChild($this->classMember(), 'members');
+      $node->appendChild($this->classMember());
     } while ($this->tryMatch(',', $node));
     $this->mustMatch(';', $node, NULL, TRUE, TRUE);
     return $node;

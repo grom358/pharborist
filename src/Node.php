@@ -258,6 +258,19 @@ abstract class Node implements NodeInterface {
     return $this;
   }
 
+  public function swapWith(Node $node) {
+    $tmp_parent = $this->parent;
+    $tmp_previous = $this->previous;
+    $tmp_next = $this->next;
+    $this->parent = $node->parent;
+    $this->previous = $node->previous;
+    $this->next = $node->next;
+    $node->parent = $tmp_parent;
+    $node->previous = $tmp_previous;
+    $node->next = $tmp_next;
+    return $this;
+  }
+
   public function prependTo($targets) {
     $this->remove();
     if ($targets instanceof ParentNode) {

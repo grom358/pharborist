@@ -136,6 +136,13 @@ interface NodeInterface {
   public function replaceWith($node);
 
   /**
+   * Swap this node with another.
+   * @param Node $node Node to swap with.
+   * @return $this
+   */
+  public function swapWith(Node $node);
+
+  /**
    * Replace nodes with this node.
    * @param Node|Node[]|NodeCollection $targets Nodes to replace.
    * @return $this

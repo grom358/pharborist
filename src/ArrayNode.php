@@ -6,13 +6,15 @@ namespace Pharborist;
  */
 class ArrayNode extends ParentNode implements ExpressionNode {
   protected $properties = array(
-    'elements' => array(),
+    'elements' => NULL,
   );
 
   /**
    * @return Node[]
    */
   public function getElements() {
-    return $this->properties['elements'];
+    /** @var CommaListNode $elements */
+    $elements = $this->properties['elements'];
+    return $elements->getItems();
   }
 }

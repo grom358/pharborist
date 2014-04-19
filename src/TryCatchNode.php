@@ -7,7 +7,6 @@ namespace Pharborist;
 class TryCatchNode extends StatementNode {
   protected $properties = array(
     'try' => NULL,
-    'catches' => array(),
     'finally' => NULL,
   );
 
@@ -22,7 +21,7 @@ class TryCatchNode extends StatementNode {
    * @return CatchNode[]
    */
   public function getCatches() {
-    return $this->properties['catches'];
+    return $this->childrenByInstance('\Pharborist\CatchNode');
   }
 
   /**

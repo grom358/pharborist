@@ -4,21 +4,21 @@ namespace Pharborist;
 /**
  * A case statement in switch control structure.
  */
-class CaseNode extends ParentNode {
+class CaseNode extends StatementNode {
   protected $properties = array(
     'matchOn' => NULL,
     'body' => NULL,
   );
 
   /**
-   * @return Node
+   * @return ExpressionNode
    */
   public function getMatchOn() {
     return $this->properties['matchOn'];
   }
 
   /**
-   * @return Node
+   * @return StatementBlockNode
    */
   public function getBody() {
     return $this->properties['body'];

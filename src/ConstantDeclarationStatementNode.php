@@ -7,7 +7,6 @@ namespace Pharborist;
 class ConstantDeclarationStatementNode extends StatementNode {
   protected $properties = array(
     'docComment' => NULL,
-    'declarations' => array(),
   );
 
   /**
@@ -21,6 +20,6 @@ class ConstantDeclarationStatementNode extends StatementNode {
    * @return ConstantDeclarationNode[]
    */
   public function getDeclarations() {
-    return $this->properties['declarations'];
+    return $this->childrenByInstance('\Pharborist\ConstantDeclarationNode');
   }
 }

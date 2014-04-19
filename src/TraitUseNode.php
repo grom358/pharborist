@@ -4,23 +4,27 @@ namespace Pharborist;
 /**
  * A trait use declaration.
  */
-class TraitUseNode extends ParentNode {
+class TraitUseNode extends StatementNode {
   protected $properties = array(
-    'traits' => array(),
-    'adaptations' => array(),
+    'traits' => NULL,
+    'adaptations' => NULL,
   );
 
   /**
    * @return NamespacePathNode[]
    */
   public function getTraits() {
-    return $this->properties['traits'];
+    /** @var CommaListNode $traits */
+    $traits = $this->properties['traits'];
+    return $traits->getItems();
   }
 
   /**
    * @return (TraitPrecedenceNode|TraitAliasNode)[]
    */
   public function getAdaptations() {
-    return $this->properties['adaptations'];
+    /** @var StatementBlockNode $statement_block */
+    $statement_block = $this->properties['adaptations'];
+    return $statement_block->getStatements();
   }
 }

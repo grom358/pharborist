@@ -7,8 +7,8 @@ namespace Pharborist;
 class AnonymousFunctionNode extends ParentNode implements ExpressionNode {
   protected $properties = array(
     'reference' => NULL,
-    'parameters' => array(),
-    'lexicalVariables' => array(),
+    'parameters' => NULL,
+    'lexicalVariables' => NULL,
     'body' => NULL,
   );
 
@@ -23,14 +23,18 @@ class AnonymousFunctionNode extends ParentNode implements ExpressionNode {
    * @return ParameterNode[]
    */
   public function getParameters() {
-    return $this->properties['parameters'];
+    /** @var ParameterListNode $parameters */
+    $parameters = $this->properties['parameters'];
+    return $parameters->getParameters();
   }
 
   /**
    * @return (VariableNode|ReferenceVariableNode)[]
    */
   public function getLexicalVariables() {
-    return $this->properties['lexicalVariables'];
+    /** @var CommaListNode $var_list */
+    $var_list = $this->properties['lexicalVariables'];
+    return $var_list->getItems();
   }
 
   /**

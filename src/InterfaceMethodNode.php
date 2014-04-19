@@ -4,13 +4,13 @@ namespace Pharborist;
 /**
  * An interface method.
  */
-class InterfaceMethodNode extends ParentNode {
+class InterfaceMethodNode extends StatementNode {
   protected $properties = array(
     'docComment' => NULL,
     'visibility' => NULL,
     'reference' => NULL,
     'name' => NULL,
-    'parameters' => array(),
+    'parameters' => NULL,
   );
 
   /**
@@ -45,6 +45,8 @@ class InterfaceMethodNode extends ParentNode {
    * @return ParameterNode[]
    */
   public function getParameters() {
-    return $this->properties['parameters'];
+    /** @var ParameterListNode $parameters */
+    $parameters = $this->properties['parameters'];
+    return $parameters->getParameters();
   }
 }

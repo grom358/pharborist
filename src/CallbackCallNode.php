@@ -9,7 +9,7 @@ namespace Pharborist;
 class CallbackCallNode extends CallNode implements ExpressionNode {
   protected $properties = array(
     'callback' => NULL,
-    'arguments' => array(),
+    'arguments' => NULL,
   );
 
   /**
@@ -19,7 +19,12 @@ class CallbackCallNode extends CallNode implements ExpressionNode {
     return $this->properties['callback'];
   }
 
+  /**
+   * @return ExpressionNode[]
+   */
   public function getArguments() {
-    return $this->properties['arguments'];
+    /** @var ArgumentListNode $arguments */
+    $arguments = $this->properties['arguments'];
+    return $arguments->getArguments();
   }
 }

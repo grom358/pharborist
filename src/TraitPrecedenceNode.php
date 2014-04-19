@@ -6,10 +6,10 @@ namespace Pharborist;
  *
  * For example, A::bigTalk insteadof B;
  */
-class TraitPrecedenceNode extends ParentNode {
+class TraitPrecedenceNode extends StatementNode {
   protected $properties = array(
     'traitMethodReference' => NULL,
-    'traitNames' => array(),
+    'traitNames' => NULL,
   );
 
   /**
@@ -23,6 +23,8 @@ class TraitPrecedenceNode extends ParentNode {
    * @return NamespacePathNode[]
    */
   public function getTraitNames() {
-    return $this->properties['traitNames'];
+    /** @var CommaListNode $trait_names */
+    $trait_names = $this->properties['traitNames'];
+    return $trait_names->getItems();
   }
 }

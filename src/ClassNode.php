@@ -11,8 +11,6 @@ class ClassNode extends StatementNode {
     'final' => NULL,
     'name' => NULL,
     'extends' => NULL,
-    'implements' => array(),
-    'statements' => array(),
   );
 
   /**
@@ -54,13 +52,17 @@ class ClassNode extends StatementNode {
    * @return NamespacePathNode[]
    */
   public function getImplements() {
-    return $this->properties['implements'];
+    /** @var CommaListNode $implements */
+    $implements = $this->properties['implements'];
+    return $implements->getItems();
   }
 
   /**
    * @return (ClassMemberListNode|ClassMethodNode|ConstantDeclarationNode|TraitUseNode)[]
    */
   public function getStatements() {
-    return $this->properties['statements'];
+    /** @var StatementBlockNode $statement_block */
+    $statement_block = $this->properties['statements'];
+    return $statement_block->getStatements();
   }
 }

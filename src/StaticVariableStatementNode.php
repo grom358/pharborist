@@ -9,7 +9,6 @@ namespace Pharborist;
 class StaticVariableStatementNode extends StatementNode {
   protected $properties = array(
     'docComment' => NULL,
-    'variables' => array(),
   );
 
   /**
@@ -23,6 +22,6 @@ class StaticVariableStatementNode extends StatementNode {
    * @return StaticVariableNode[]
    */
   public function getVariables() {
-    return $this->properties['variables'];
+    return $this->childrenByInstance('\Pharborist\StaticVariableNode');
   }
 }

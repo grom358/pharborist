@@ -8,8 +8,8 @@ class InterfaceNode extends StatementNode {
   protected $properties = array(
     'docComment' => NULL,
     'name' => NULL,
-    'extends' => array(),
-    'statements' => array(),
+    'extends' => NULL,
+    'statements' => NULL,
   );
 
   /**
@@ -30,13 +30,17 @@ class InterfaceNode extends StatementNode {
    * @return NamespacePathNode[]
    */
   public function getExtends() {
-    return $this->properties['extends'];
+    /** @var CommaListNode $extends */
+    $extends = $this->properties['extends'];
+    return $extends->getItems();
   }
 
   /**
    * @return (InterfaceMethodNode|ConstantDeclarationNode)[]
    */
   public function getStatements() {
-    return $this->properties['statements'];
+    /** @var StatementBlockNode $statement_block */
+    $statement_block = $this->properties['statements'];
+    return $statement_block->getStatements();
   }
 }

@@ -4,13 +4,13 @@ namespace Pharborist;
 /**
  * A class method.
  */
-class ClassMethodNode extends ParentNode {
+class ClassMethodNode extends StatementNode {
   protected $properties = array(
     'docComment' => NULL,
     'modifiers' => NULL,
     'reference' => NULL,
     'name' => NULL,
-    'parameters' => array(),
+    'parameters' => NULL,
     'body' => NULL,
   );
 
@@ -46,11 +46,13 @@ class ClassMethodNode extends ParentNode {
    * @return ParameterNode[]
    */
   public function getParameters() {
-    return $this->properties['parameters'];
+    /** @var ParameterListNode $parameters */
+    $parameters = $this->properties['parameters'];
+    return $parameters->getParameters();
   }
 
   /**
-   * @return Node
+   * @return StatementBlockNode
    */
   public function getBody() {
     return $this->properties['body'];

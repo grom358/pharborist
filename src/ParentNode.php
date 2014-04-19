@@ -50,6 +50,23 @@ abstract class ParentNode extends Node {
   }
 
   /**
+   * Get children that are instance of class.
+   * @param string $class_name
+   * @return Node[]
+   */
+  protected function childrenByInstance($class_name) {
+    $matches = [];
+    $child = $this->head;
+    while ($child) {
+      if ($child instanceof $class_name) {
+        $matches[] = $child;
+      }
+      $child = $child->next;
+    }
+    return $matches;
+  }
+
+  /**
    * Get the immediate children of this node.
    * @param callable $callback An optional callback to filter by.
    * @return NodeCollection
@@ -127,12 +144,7 @@ abstract class ParentNode extends Node {
       $this->tail = $node;
     }
     if ($property_name !== NULL) {
-      if (array_key_exists($property_name, $this->properties) && is_array($this->properties[$property_name])) {
-        $this->properties[$property_name][] = $node;
-      }
-      else {
-        $this->properties[$property_name] = $node;
-      }
+      $this->properties[$property_name] = $node;
     }
     return $this;
   }

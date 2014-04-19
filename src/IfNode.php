@@ -8,7 +8,6 @@ class IfNode extends StatementNode {
   protected $properties = array(
     'condition' => NULL,
     'then' => NULL,
-    'elseIfList' => array(),
     'else' => NULL,
   );
 
@@ -30,7 +29,7 @@ class IfNode extends StatementNode {
    * @return ElseIfNode[]
    */
   public function getElseIfList() {
-    return $this->properties['elseIfList'];
+    return $this->childrenByInstance('\Pharborist\ElseIfNode');
   }
 
   /**

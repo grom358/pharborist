@@ -10,7 +10,7 @@ class ClassMethodCallNode extends CallNode implements VariableExpressionNode {
   protected $properties = array(
     'className' => NULL,
     'methodName' => NULL,
-    'arguments' => array(),
+    'arguments' => NULL,
   );
 
   /**
@@ -27,7 +27,12 @@ class ClassMethodCallNode extends CallNode implements VariableExpressionNode {
     return $this->properties['methodName'];
   }
 
+  /**
+   * @return ExpressionNode[]
+   */
   public function getArguments() {
-    return $this->properties['arguments'];
+    /** @var ArgumentListNode $arguments */
+    $arguments = $this->properties['arguments'];
+    return $arguments->getArguments();
   }
 }

@@ -9,7 +9,7 @@ namespace Pharborist;
 class NewNode extends ParentNode implements ExpressionNode {
   protected $properties = array(
     'className' => NULL,
-    'arguments' => array(),
+    'arguments' => NULL,
   );
 
   /**
@@ -20,9 +20,11 @@ class NewNode extends ParentNode implements ExpressionNode {
   }
 
   /**
-   * @return Node[]
+   * @return ExpressionNode[]
    */
   public function getArguments() {
-    return $this->properties['arguments'];
+    /** @var ArgumentListNode $arguments */
+    $arguments = $this->properties['arguments'];
+    return $arguments->getArguments();
   }
 }

@@ -21,6 +21,8 @@ class SwitchNode extends StatementNode {
    * @return CaseNode[]
    */
   public function getCases() {
-    return $this->properties['cases'];
+    /** @var StatementBlockNode $cases */
+    $cases = $this->properties['cases'];
+    return $cases->getStatements();
   }
 }

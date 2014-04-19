@@ -9,7 +9,7 @@ class FunctionDeclarationNode extends StatementNode {
     'docComment' => NULL,
     'reference' => NULL,
     'name' => NULL,
-    'parameters' => array(),
+    'parameters' => NULL,
     'body' => NULL,
   );
 
@@ -38,7 +38,9 @@ class FunctionDeclarationNode extends StatementNode {
    * @return ParameterNode[]
    */
   public function getParameters() {
-    return $this->properties['parameters'];
+    /** @var ParameterListNode $parameters */
+    $parameters = $this->properties['parameters'];
+    return $parameters->getParameters();
   }
 
   /**

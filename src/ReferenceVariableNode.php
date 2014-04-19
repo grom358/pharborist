@@ -6,7 +6,7 @@ namespace Pharborist;
  *
  * For example, &$a
  */
-class ReferenceVariableNode extends ParentNode {
+class ReferenceVariableNode extends ParentNode implements ExpressionNode {
   protected $properties = array(
     'variable' => NULL,
   );

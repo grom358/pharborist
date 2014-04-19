@@ -14,7 +14,7 @@ class DeclareNode extends StatementNode {
    * @return DeclareDirectiveNode[]
    */
   public function getDirectives() {
-    return $this->properties['directives'];
+    return $this->childrenByInstance('\Pharborist\DeclareDirectiveNode');
   }
 
   /**

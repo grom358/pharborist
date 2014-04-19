@@ -6,7 +6,7 @@ namespace Pharborist;
  *
  * For example, B::bigTalk as talk;
  */
-class TraitAliasNode extends ParentNode {
+class TraitAliasNode extends StatementNode {
   protected $properties = array(
     'traitMethodReference' => NULL,
     'visibility' => NULL,

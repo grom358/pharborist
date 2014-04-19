@@ -7,7 +7,7 @@ namespace Pharborist;
 class FunctionCallNode extends CallNode implements VariableExpressionNode {
   protected $properties = array(
     'namespacePath' => NULL,
-    'arguments' => array(),
+    'arguments' => NULL,
   );
 
   /**
@@ -18,6 +18,8 @@ class FunctionCallNode extends CallNode implements VariableExpressionNode {
   }
 
   public function getArguments() {
-    return $this->properties['arguments'];
+    /** @var ArgumentListNode $arguments */
+    $arguments = $this->properties['arguments'];
+    return $arguments->getArguments();
   }
 }

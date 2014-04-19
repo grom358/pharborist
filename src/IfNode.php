@@ -37,7 +37,7 @@ class IfNode extends StatementNode {
   /**
    * @return ElseIfNode[]
    */
-  public function getElseIfList() {
+  public function getElseIfs() {
     return $this->childrenByInstance('\Pharborist\ElseIfNode');
   }
 

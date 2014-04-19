@@ -4,7 +4,7 @@ namespace Pharborist;
 /**
  * A trait use declaration.
  */
-class TraitUseNode extends StatementNode {
+class TraitUseNode extends ClassStatementNode {
   /**
    * @var CommaListNode
    */
@@ -23,7 +23,7 @@ class TraitUseNode extends StatementNode {
   }
 
   /**
-   * @return (TraitPrecedenceNode|TraitAliasNode)[]
+   * @return TraitAdaptationStatementNode[]
    */
   public function getAdaptations() {
     return $this->adaptations->getStatements();

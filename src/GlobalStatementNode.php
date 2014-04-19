@@ -8,7 +8,7 @@ namespace Pharborist;
  */
 class GlobalStatementNode extends StatementNode {
   /**
-   * @return (VariableNode|VariableVariableNode|CompoundVariableNode)[]
+   * @return VariableExpressionNode[]
    */
   public function getVariables() {
     return $this->childrenByInstance('\Pharborist\VariableExpressionNode');

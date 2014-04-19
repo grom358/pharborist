@@ -6,7 +6,7 @@ namespace Pharborist;
  *
  * For example, &$a
  */
-class ReferenceVariableNode extends ParentNode implements ExpressionNode {
+class ReferenceVariableNode extends ParentNode implements ExpressionNode, LexicalVariableNode {
   /**
    * @var VariableNode
    */

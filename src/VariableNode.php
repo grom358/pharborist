@@ -6,6 +6,6 @@ namespace Pharborist;
  *
  * For example, $a
  */
-class VariableNode extends TokenNode implements VariableExpressionNode {
+class VariableNode extends TokenNode implements VariableExpressionNode, LexicalVariableNode {
 
 }

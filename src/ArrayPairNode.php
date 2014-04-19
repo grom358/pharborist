@@ -4,7 +4,7 @@ namespace Pharborist;
 /**
  * A key/value pair element in php array.
  */
-class ArrayPairNode extends ParentNode {
+class ArrayPairNode extends ParentNode implements ArrayElementNode {
   /**
    * @var Node
    */

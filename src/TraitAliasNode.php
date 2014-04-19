@@ -6,7 +6,7 @@ namespace Pharborist;
  *
  * For example, B::bigTalk as talk;
  */
-class TraitAliasNode extends StatementNode {
+class TraitAliasNode extends TraitAdaptationStatementNode {
   /**
    * @var NamespacePathNode|TraitMethodReferenceNode
    */

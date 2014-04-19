@@ -4,7 +4,7 @@ namespace Pharborist;
 /**
  * Constant declaration statement.
  */
-class ConstantDeclarationStatementNode extends StatementNode {
+class ConstantDeclarationStatementNode extends ClassStatementNode implements InterfaceStatementNode {
   /**
    * @var DocCommentNode
    */

@@ -4,7 +4,7 @@ namespace Pharborist;
 /**
  * An interface method.
  */
-class InterfaceMethodNode extends StatementNode {
+class InterfaceMethodNode extends StatementNode implements InterfaceStatementNode {
   /**
    * @var DocCommentNode
    */

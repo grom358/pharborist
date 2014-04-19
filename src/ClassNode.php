@@ -83,7 +83,7 @@ class ClassNode extends StatementNode {
   }
 
   /**
-   * @return (ClassMemberListNode|ClassMethodNode|ConstantDeclarationNode|TraitUseNode)[]
+   * @return ClassStatementNode[]
    */
   public function getStatements() {
     return $this->statements->getStatements();

@@ -40,7 +40,7 @@ class AnonymousFunctionNode extends ParentNode implements ExpressionNode {
   }
 
   /**
-   * @return (VariableNode|ReferenceVariableNode)[]
+   * @return LexicalVariableNode[]
    */
   public function getLexicalVariables() {
     return $this->lexicalVariables->getItems();

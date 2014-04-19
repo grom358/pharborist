@@ -4,7 +4,7 @@ namespace Pharborist;
 /**
  * A node that has children.
  */
-abstract class ParentNode extends Node {
+abstract class ParentNode extends Node implements ParentNodeInterface {
   /**
    * @var Node
    */
@@ -31,26 +31,14 @@ abstract class ParentNode extends Node {
     return $properties;
   }
 
-  /**
-   * Get the number of children.
-   * @return int
-   */
   public function childCount() {
     return $this->childCount;
   }
 
-  /**
-   * Return the first child.
-   * @return Node
-   */
   public function firstChild() {
     return $this->head;
   }
 
-  /**
-   * Return the last child.
-   * @return Node
-   */
   public function lastChild() {
     return $this->tail;
   }
@@ -72,11 +60,6 @@ abstract class ParentNode extends Node {
     return $matches;
   }
 
-  /**
-   * Get the immediate children of this node.
-   * @param callable $callback An optional callback to filter by.
-   * @return NodeCollection
-   */
   public function children(callable $callback = NULL) {
     $matches = array();
     $child = $this->head;
@@ -109,12 +92,6 @@ abstract class ParentNode extends Node {
     return $this;
   }
 
-  /**
-   * Prepend children to this node.
-   * @param Node|Node[]|NodeCollection $nodes
-   * @return $this
-   * @throws \InvalidArgumentException
-   */
   public function prepend($nodes) {
     if ($nodes instanceof Node) {
       $this->prependChild($nodes);
@@ -181,12 +158,6 @@ abstract class ParentNode extends Node {
     }
   }
 
-  /**
-   * Prepend children to this node.
-   * @param Node|Node[]|NodeCollection $nodes
-   * @return $this
-   * @throws \InvalidArgumentException
-   */
   public function append($nodes) {
     if ($nodes instanceof Node) {
       $this->appendChild($nodes);
@@ -309,10 +280,6 @@ abstract class ParentNode extends Node {
     return $this;
   }
 
-  /**
-   * Get the first (i.e. leftmost leaf) token.
-   * @return TokenNode
-   */
   public function firstToken() {
     $head = $this->head;
     while ($head instanceof ParentNode) {
@@ -321,10 +288,6 @@ abstract class ParentNode extends Node {
     return $head;
   }
 
-  /**
-   * Get the last (i.e. rightmost leaf) token.
-   * @return TokenNode
-   */
   public function lastToken() {
     $tail = $this->tail;
     while ($tail instanceof ParentNode) {
@@ -333,11 +296,6 @@ abstract class ParentNode extends Node {
     return $tail;
   }
 
-  /**
-   * Test if the node has a descendant that matches.
-   * @param callable $callback Callback to test for match.
-   * @return NodeCollection
-   */
   public function has(callable $callback) {
     $child = $this->head;
     while ($child) {
@@ -352,11 +310,6 @@ abstract class ParentNode extends Node {
     return FALSE;
   }
 
-  /**
-   * Find descendants that pass filter callback.
-   * @param callable $callback Callback to filter by.
-   * @return NodeCollection
-   */
   public function find(callable $callback) {
     $matches = array();
     $child = $this->head;

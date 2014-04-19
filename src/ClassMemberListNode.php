@@ -4,7 +4,7 @@ namespace Pharborist;
 /**
  * A class member list declaration.
  */
-class ClassMemberListNode extends StatementNode {
+class ClassMemberListNode extends ClassStatementNode {
   /**
    * @var DocCommentNode
    */

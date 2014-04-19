@@ -11,7 +11,7 @@ class ArrayNode extends ParentNode implements ExpressionNode {
   protected $elements;
 
   /**
-   * @return (ArrayPairNode|ExpressionNode)[]
+   * @return ArrayElementNode[]
    */
   public function getElements() {
     return $this->elements->getItems();

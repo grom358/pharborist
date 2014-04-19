@@ -4,7 +4,7 @@ namespace Pharborist;
 /**
  * A class method.
  */
-class ClassMethodNode extends StatementNode {
+class ClassMethodNode extends ClassStatementNode {
   /**
    * @var DocCommentNode
    */

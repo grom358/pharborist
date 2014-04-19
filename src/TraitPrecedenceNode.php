@@ -6,7 +6,7 @@ namespace Pharborist;
  *
  * For example, A::bigTalk insteadof B;
  */
-class TraitPrecedenceNode extends StatementNode {
+class TraitPrecedenceNode extends TraitAdaptationStatementNode {
   /**
    * @var TraitMethodReferenceNode
    */

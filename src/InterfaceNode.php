@@ -47,7 +47,7 @@ class InterfaceNode extends StatementNode {
   }
 
   /**
-   * @return (InterfaceMethodNode|ConstantDeclarationNode)[]
+   * @return InterfaceStatementNode[]
    */
   public function getStatements() {
     return $this->statements->getStatements();

@@ -404,26 +404,9 @@ class Parser {
   }
 
   /**
-   * Parse parenthesis expression.
-   * @return Node
-   */
-  private function parenExpr() {
-    $node = new ParenthesisNode();
-    $this->mustMatch('(', $node);
-    if ($this->currentType === T_YIELD) {
-      $node->appendChild($this->_yield(), 'expression');
-    }
-    else {
-      $node->appendChild($this->expr(), 'expression');
-    }
-    $this->mustMatch(')', $node, NULL, TRUE, TRUE);
-    return $node;
-  }
-
-  /**
    * Parse condition.
    * @param ParentNode $node
-   * @apram string $property_name
+   * @param string $property_name
    */
   private function condition(ParentNode $node, $property_name) {
     $this->mustMatch('(', $node);

@@ -16,7 +16,7 @@ class ConstantNode extends ParentNode implements ExpressionNode {
   /**
    * @return NamespacePathNode
    */
-  public function getConstant() {
+  public function getConstantName() {
     return $this->constantName;
   }
 }

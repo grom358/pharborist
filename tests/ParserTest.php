@@ -739,7 +739,9 @@ test
 EOF';
     $this->parseStaticExpression($snippet, '\Pharborist\HeredocNode'); //@todo NowDocNode
 
-    $this->parseStaticExpression('namespace\MY_CONST', '\Pharborist\NamespacePathNode'); //@todo custom node type
+    /** @var ConstantNode $const */
+    $const = $this->parseStaticExpression('namespace\MY_CONST', '\Pharborist\ConstantNode');
+    $this->assertEquals('namespace\MY_CONST', $const->getConstantName()->getText());
 
     /** @var ClassConstantLookupNode $class_constant_lookup */
     $class_constant_lookup = $this->parseStaticExpression('MyNamespace\MyClass::MY_CONST', '\Pharborist\ClassConstantLookupNode');

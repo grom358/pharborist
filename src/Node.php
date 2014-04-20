@@ -49,7 +49,7 @@ abstract class Node implements NodeInterface {
         if ($inclusive) {
           $parents[] = $parent;
         }
-        return new NodeCollection($parents);
+        break;
       }
       $parents[] = $parent;
       $parent = $parent->parent;
@@ -321,7 +321,7 @@ abstract class Node implements NodeInterface {
   public function appendTo($targets) {
     $this->remove();
     if ($targets instanceof ParentNode) {
-      $targets->prependChild($this);
+      $targets->appendChild($this);
     }
     elseif ($targets instanceof NodeCollection || is_array($targets)) {
       $first = TRUE;

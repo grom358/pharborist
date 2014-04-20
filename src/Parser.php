@@ -1036,7 +1036,9 @@ class Parser {
         }
       }
       else {
-        return $namespace_path;
+        $node = new ConstantNode();
+        $node->addChild($namespace_path, 'constantName');
+        return $node;
       }
     }
     elseif ($this->currentType === T_STATIC) {

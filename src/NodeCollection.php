@@ -12,8 +12,23 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
    */
   protected $nodes;
 
-  public function __construct($nodes) {
-    $this->nodes = $nodes;
+  /**
+   * Sort nodes and remove duplicates
+   * @param Node[] $nodes
+   * @return Node[]
+   */
+  protected static function sortUnique($nodes) {
+    $sort = [];
+    foreach ($nodes as $node) {
+      $key = $node->sortKey();
+      $sort[$key] = $node;
+    }
+    ksort($sort);
+    return array_values($sort);
+  }
+
+  public function __construct($nodes, $sort = TRUE) {
+    $this->nodes = $sort ? static::sortUnique($nodes) : $nodes;
   }
 
   public function getIterator() {
@@ -42,10 +57,10 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
 
   /**
    * Get collection in reverse order
-   * @return NodeCollection
+   * @return Node[]
    */
   public function reverse() {
-    return new NodeCollection(array_reverse($this->nodes));
+    return array_reverse($this->nodes);
   }
 
   /**
@@ -55,7 +70,7 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
    * @return NodeCollection
    */
   public function slice($start_index, $end_index = NULL) {
-    $length = $end_index ? $end_index - $start_index : NULL;
+    $length = $end_index ? $end_index - $start_index + 1 : NULL;
     return new NodeCollection(array_slice($this->nodes, $start_index, $length));
   }
 
@@ -85,7 +100,7 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
     $matches = [];
     foreach ($this->nodes as $node) {
       if ($match = $node->parent($callback)) {
-        $matches[] = $node;
+        $matches[] = $match;
       }
     }
     return new NodeCollection($matches);
@@ -148,7 +163,7 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
     $matches = [];
     foreach ($this->nodes as $node) {
       if ($match = $node->previous($callback)) {
-        $matches[] = $node;
+        $matches[] = $match;
       }
     }
     return new NodeCollection($matches);
@@ -194,7 +209,7 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
     $matches = [];
     foreach ($this->nodes as $node) {
       if ($match = $node->next($callback)) {
-        $matches[] = $node;
+        $matches[] = $match;
       }
     }
     return new NodeCollection($matches);
@@ -257,7 +272,7 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
         $matches[] = $node;
       }
     }
-    return new NodeCollection($matches);
+    return new NodeCollection($matches, FALSE);
   }
 
   /**
@@ -272,7 +287,7 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
         $matches[] = $node;
       }
     }
-    return new NodeCollection($matches);
+    return new NodeCollection($matches, FALSE);
   }
 
   /**
@@ -288,7 +303,7 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
         $matches[] = $node;
       }
     }
-    return new NodeCollection($matches);
+    return new NodeCollection($matches, FALSE);
   }
 
   /**
@@ -297,8 +312,8 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
    * @return $this
    */
   public function insertBefore($targets) {
-    foreach ($targets as $target) {
-      $target->before($this->nodes);
+    foreach ($this->nodes as $node) {
+      $node->insertBefore($targets);
     }
     return $this;
   }
@@ -321,8 +336,8 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
    * @return $this
    */
   public function insertAfter($targets) {
-    foreach ($targets as $target) {
-      $target->after($this->nodes);
+    foreach ($this->nodes as $node) {
+      $node->insertAfter($targets);
     }
     return $this;
   }
@@ -357,20 +372,36 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
    * @return $this
    */
   public function replaceWith($nodes) {
+    $first = TRUE;
     foreach ($this->nodes as $node) {
+      if (!$first) {
+        if (is_array($nodes)) {
+          $nodes = new NodeCollection($nodes, FALSE);
+        }
+        $nodes = clone $nodes;
+      }
       $node->replaceWith($nodes);
+      $first = FALSE;
     }
     return $this;
   }
 
   /**
    * Replace each target node with the set of matched nodes.
-   * @param $targets
+   * @param Node|Node[]|NodeCollection $targets Targets to replace.
    * @return $this
    */
   public function replaceAll($targets) {
-    foreach ($this->nodes as $node) {
-      $node->replaceAll($targets);
+    if ($targets instanceof Node) {
+      $targets->replaceWith($this->nodes);
+    }
+    elseif ($targets instanceof NodeCollection || is_array($targets)) {
+      $first = TRUE;
+      /** @var Node $target */
+      foreach ($targets as $target) {
+        $target->replaceWith($first ? $this->nodes : clone $this);
+        $first = FALSE;
+      }
     }
     return $this;
   }
@@ -394,6 +425,15 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
     else {
       throw new \InvalidArgumentException();
     }
+    $this->nodes = static::sortUnique($this->nodes);
     return $this;
+  }
+
+  public function __clone() {
+    $copy = [];
+    foreach ($this->nodes as $node) {
+      $copy[] = clone $node;
+    }
+    $this->nodes = $copy;
   }
 }

@@ -30,7 +30,7 @@ class ParentNodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('3', $parent->firstChild()->getText());
     $this->assertEquals('4', $parent->firstChild()->next()->getText());
     $this->assertEquals('last', $parent->firstChild()->next()->next()->getText());
-    $parent->prepend(new NodeCollection([$this->createNode('1'), $this->createNode('2')]));
+    $parent->prepend(new NodeCollection([$this->createNode('1'), $this->createNode('2')], FALSE));
     $this->assertEquals('1', $parent->firstChild()->getText());
     $this->assertEquals('2', $parent->firstChild()->next()->getText());
     $this->assertEquals('3', $parent->firstChild()->next()->next()->getText());

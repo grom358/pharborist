@@ -38,7 +38,7 @@ abstract class Node implements NodeInterface {
       }
       $parent = $parent->parent;
     }
-    return new NodeCollection($parents);
+    return new NodeCollection(array_reverse($parents), FALSE);
   }
 
   public function parentsUntil(callable $callback, $inclusive = FALSE) {
@@ -54,7 +54,7 @@ abstract class Node implements NodeInterface {
       $parents[] = $parent;
       $parent = $parent->parent;
     }
-    return new NodeCollection($parents);
+    return new NodeCollection(array_reverse($parents), FALSE);
   }
 
   public function closest(callable $callback) {
@@ -89,7 +89,7 @@ abstract class Node implements NodeInterface {
       }
       $previous = $previous->previous;
     }
-    return new NodeCollection(array_reverse($matches));
+    return new NodeCollection(array_reverse($matches), FALSE);
   }
 
   public function previousUntil(callable $callback, $inclusive = FALSE) {
@@ -105,7 +105,7 @@ abstract class Node implements NodeInterface {
       $matches[] = $previous;
       $previous = $previous->previous;
     }
-    return new NodeCollection(array_reverse($matches));
+    return new NodeCollection(array_reverse($matches), FALSE);
   }
 
   public function next(callable $callback = NULL) {
@@ -376,6 +376,34 @@ abstract class Node implements NodeInterface {
       throw new \InvalidArgumentException();
     }
     return $this;
+  }
+
+  /**
+   * Get a unique key for sorting this node.
+   *
+   * Used to sort nodes into tree order. That is top to bottom and then left
+   * to right.
+   *
+   * @return string
+   */
+  public function sortKey() {
+    if ($this instanceof TopNode) {
+      return spl_object_hash($this);
+    }
+    if ($this->parent) {
+      $path = $this->parent->sortKey() . '/';
+    }
+    else {
+      $path = '~/';
+    }
+    $position = 0;
+    $previous = $this->previous;
+    while ($previous) {
+      $position++;
+      $previous = $previous->previous;
+    }
+    $path .= $position;
+    return $path;
   }
 
   public function __clone() {

@@ -2164,8 +2164,27 @@ class Parser {
       $this->mustMatch('}', $node);
     }
     else {
-      $this->mustMatch(';', $node, NULL, TRUE, TRUE);
+      $this->mustMatch(';', $node, NULL, FALSE, TRUE);
+      $node->addChild($this->namespaceBlock(), 'body');
     }
+    return $node;
+  }
+
+  /**
+   * Parse a list of top level namespace statements.
+   * @return StatementBlockNode
+   */
+  private function namespaceBlock() {
+    $node = new StatementBlockNode();
+    $this->matchHidden($node);
+    while ($this->currentType !== NULL) {
+      if ($this->currentType === T_NAMESPACE && !$this->isLookAhead(T_NS_SEPARATOR)) {
+        break;
+      }
+      $node->addChild($this->topStatement());
+      $this->matchHidden($node);
+    }
+    $this->matchHidden($node);
     return $node;
   }
 

@@ -64,8 +64,9 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
    */
   public function testNamespace() {
     /** @var NamespaceNode $namespace_node */
-    $namespace_node = $this->parseSnippet('namespace MyNamespace\Test ;', '\Pharborist\NamespaceNode');
+    $namespace_node = $this->parseSnippet('namespace MyNamespace\Test ; body();', '\Pharborist\NamespaceNode');
     $this->assertEquals('MyNamespace\Test', $namespace_node->getName()->getText());
+    $this->assertEquals('body();', $namespace_node->getBody()->getText());
 
     // Test with body
     /** @var NamespaceNode $namespace_node */

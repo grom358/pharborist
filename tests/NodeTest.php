@@ -74,6 +74,11 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
       return $node === $grandparent;
     };
     $this->assertSame($grandparent, $node->closest($is_grandparent));
+
+    $false = function() {
+      return FALSE;
+    };
+    $this->assertNull($node->closest($false));
   }
 
   public function testSiblings() {
@@ -125,6 +130,14 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('beforeNode', $targets[1]->previous()->getText());
   }
 
+  /**
+   * @expectedException \InvalidArgumentException
+   */
+  public function testInvalidInsertBefore() {
+    $node = $this->createNode('test');
+    $node->insertBefore(NULL);
+  }
+
   public function testBefore() {
     $parent = $this->createParentNode();
     $node = $this->createNode('pivot');
@@ -139,6 +152,14 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
     $before_node->before($nodes);
     $this->assertEquals('second', $before_node->previous()->getText());
     $this->assertEquals('first', $before_node->previous()->previous()->getText());
+  }
+
+  /**
+   * @expectedException \InvalidArgumentException
+   */
+  public function testInvalidBefore() {
+    $node = $this->createNode('test');
+    $node->before(NULL);
   }
 
   public function testInsertAfter() {
@@ -158,6 +179,14 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('afterNode', $targets[1]->next()->getText());
   }
 
+  /**
+   * @expectedException \InvalidArgumentException
+   */
+  public function testInvalidInsertAfter() {
+    $node = $this->createNode('test');
+    $node->insertAfter(NULL);
+  }
+
   public function testAfter() {
     $parent = $this->createParentNode();
     $node = $this->createNode('pivot');
@@ -172,6 +201,14 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
     $after_node->after($nodes);
     $this->assertEquals('first', $after_node->next()->getText());
     $this->assertEquals('second', $after_node->next()->next()->getText());
+  }
+
+  /**
+   * @expectedException \InvalidArgumentException
+   */
+  public function testInvalidAfter() {
+    $node = $this->createNode('test');
+    $node->after(NULL);
   }
 
   public function testPrependTo() {
@@ -195,6 +232,14 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('head', $targets[1]->firstChild()->getText());
   }
 
+  /**
+   * @expectedException \InvalidArgumentException
+   */
+  public function testInvalidPrependTo() {
+    $node = $this->createNode('test');
+    $node->prependTo(NULL);
+  }
+
   public function testAppendTo() {
     $parent = $this->createParentNode();
     $node = $this->createNode('first');
@@ -216,6 +261,41 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('tail', $targets[1]->firstChild()->getText());
   }
 
+  /**
+   * @expectedException \InvalidArgumentException
+   */
+  public function testInvalidAppendTo() {
+    $node = $this->createNode('test');
+    $node->appendTo(NULL);
+  }
+
+  public function testRemove() {
+    $node = $this->createNode('test');
+    $parent = $this->createParentNode();
+    $node->appendTo($parent);
+    $this->assertSame($parent, $node->parent());
+    $node->remove();
+    $this->assertNull($node->parent());
+
+    $parent->append($this->createNode('pivot'));
+    $node->prependTo($parent);
+    $this->assertEquals('test', $parent->firstChild()->getText());
+    $node->remove();
+    $this->assertEquals('pivot', $parent->firstChild()->getText());
+    $node->appendTo($parent);
+    $this->assertEquals('test', $parent->lastChild()->getText());
+    $node->remove();
+    $this->assertEquals('pivot', $parent->firstChild()->getText());
+    $node->appendTo($parent);
+    $parent->append($this->createNode('last'));
+    $this->assertEquals('pivot', $parent->firstChild()->getText());
+    $this->assertSame($node, $parent->firstChild()->next());
+    $this->assertEquals('last', $parent->lastChild()->getText());
+    $node->remove();
+    $this->assertEquals('pivot', $parent->firstChild()->getText());
+    $this->assertSame('last', $parent->firstChild()->next()->getText());
+  }
+
   public function testReplaceWith() {
     $original = $this->createNode('original');
     $replacement = $this->createNode('replacement');
@@ -234,6 +314,15 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
     $replacement->replaceWith($replacements);
     $this->assertEquals('first', $parent->firstChild()->getText());
     $this->assertEquals('second', $parent->lastChild()->getText());
+  }
+
+  /**
+   * @expectedException \InvalidArgumentException
+   */
+  public function testInvalidReplaceWith() {
+    $node = $this->createNode('test');
+    $node->appendTo($this->createParentNode());
+    $node->replaceWith(NULL);
   }
 
   public function testReplaceAll() {
@@ -264,6 +353,14 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertSame($replacement, $parents[0]->firstChild());
     $this->assertNotSame($replacement, $parents[1]->firstChild());
     $this->assertEquals('replacement', $parents[1]->firstChild()->getText());
+  }
+
+  /**
+   * @expectedException \InvalidArgumentException
+   */
+  public function testInvalidReplaceAll() {
+    $node = $this->createNode('test');
+    $node->replaceAll(NULL);
   }
 
   public function testSwapWith() {

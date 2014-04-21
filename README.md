@@ -4,9 +4,6 @@ pharborist
 A PHP library to query and transform PHP source code via tree operations.
 
 # Roadmap
-The aim is to have an API to query and transform PHP source code with the same ease as using jQuery to modify HTML. An immediate short term goal is to use the library to replace deprecated calls in Drupal 8 core in the March 20-23 disruptive patch window. For example, https://drupal.org/node/2089331
-
-The following features are also planned:
 * Tests with 100% code coverage
 * Integration with a third party library (suggestions welcomed) for extracting PHPDoc comments
 * API to ease querying and transforming of the syntax tree
@@ -19,28 +16,26 @@ Below is an example of how the API might look once its more developed:
 // Add use declaration if it does not already exist. Use UtilityString alias if conflict
 $alias = $tree->ensureUseDeclaration('Drupal\Component\Utility\String', 'UtilityString');
 // Find all calls to check_plain and rename them to use String::checkPlain
-$tree->getCallsToFunction('check_plain')->renameTo($alias . '::checkPlain');
+$function_calls = $tree->find(Filter::functionCall('check_plain'));
+foreach ($function_calls as $call) {
+  $class_method_call = NodeFactory::createClassMethodCall($alias, 'check_plain', $call->getArgumentList());
+  $call->replaceWith($class_method_call);
+}
 ```
 
 # Usage
 ```php
 require_once 'vendor/autoload.php';
 
-use Pharborist\Tokenizer;
-use Pharborist\TokenIterator;
 use Pharborist\Parser;
+use Pharborist\NamespaceNode;
 
 $tree = Parser::parseFile($filename);
 
 // check there only one namespace declaration
-$namespace_count = 0;
-foreach ($tree->children as $top_level_statement) {
-  if ($top_level_statement instanceof NamespaceNode) {
-    $namespace_count++;
-    if ($namespace_count > 1) {
-      die('More then one namespace at line ' . $top_level_statement->getSourcePosition());
-    }
-  }
+$namespaces = $tree->children(Filter::byInstance(NamespaceNode::class));
+if ($namespace->count() > 1) {
+  die('More then one namespace at line ' . $top_level_statement->getSourcePosition());
 }
 ```
 [![Build Status](https://travis-ci.org/grom358/pharborist.png?branch=master)](https://travis-ci.org/grom358/pharborist)

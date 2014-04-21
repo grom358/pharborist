@@ -13,10 +13,22 @@ class NameNode extends ParentNode {
   protected $basePath;
 
   /**
+   * @var string
+   */
+  protected $alias;
+
+  /**
    * @param string $base
    */
   public function setBase($base) {
     $this->basePath = $base;
+  }
+
+  /**
+   * @param string $alias
+   */
+  public function setAlias($alias) {
+    $this->alias = $alias;
   }
 
   /**
@@ -93,10 +105,16 @@ class NameNode extends ParentNode {
   }
 
   public function getAbsolutePath() {
-    $path = '\\' . ($this->basePath ? $this->basePath . '\\' : '');
     $parts = $this->getParts();
-    if ($parts[0]->getType() === T_NAMESPACE) {
+    if ($this->alias) {
+      $path = $this->alias . '\\';
       unset($parts[0]);
+    }
+    else {
+      $path = '\\' . ($this->basePath ? $this->basePath . '\\' : '');
+      if ($parts[0]->getType() === T_NAMESPACE) {
+        unset($parts[0]);
+      }
     }
     $path .= implode('\\', $parts);
     return $path;

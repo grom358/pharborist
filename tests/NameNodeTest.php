@@ -69,4 +69,23 @@ EOF;
     $this->assertEquals('Top\Sub\test', $name->getText());
     $this->assertEquals('\Top\Sub\test', $name->getAbsolutePath());
   }
+
+  public function testAlias() {
+    $snippet = <<<'EOF'
+namespace Top\Sub {
+  use A\B as C;
+  C\test();
+}
+EOF;
+    $tree = Parser::parseSnippet($snippet);
+    /** @var NamespaceNode $namespace */
+    $namespace = $tree->lastChild();
+    /** @var ExpressionStatementNode $statement */
+    $statement = $namespace->getBody()->getStatements()[1];
+    /** @var FunctionCallNode $function_call */
+    $function_call = $statement->getExpression();
+    $name = $function_call->getName();
+    $this->assertEquals('C\test', $name->getText());
+    $this->assertEquals('\A\B\test', $name->getAbsolutePath());
+  }
 }

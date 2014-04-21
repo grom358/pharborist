@@ -72,6 +72,11 @@ class Parser {
   private $baseName;
 
   /**
+   * @var array
+   */
+  private $aliases;
+
+  /**
    * Constructor.
    */
   public function __construct() {
@@ -101,6 +106,7 @@ class Parser {
    */
   public function buildTree(TokenIterator $iterator) {
     $this->baseName = NULL;
+    $this->aliases = [];
     $this->iterator = $iterator;
     $this->current = $this->iterator->current();
     $this->currentType = $this->current ? $this->current->getType() : NULL;
@@ -2110,13 +2116,18 @@ class Parser {
   private function name() {
     $node = new NameNode();
     $node->setBase($this->baseName);
+    $test_alias = TRUE;
     if ($this->tryMatch(T_NAMESPACE, $node)) {
       $this->mustMatch(T_NS_SEPARATOR, $node);
+      $test_alias = FALSE;
     }
-    else {
-      $this->tryMatch(T_NS_SEPARATOR, $node);
+    elseif ($this->tryMatch(T_NS_SEPARATOR, $node)) {
+      $test_alias = FALSE;
     }
-    $this->mustMatch(T_STRING, $node, NULL, TRUE);
+    $alias = $this->mustMatch(T_STRING, $node, NULL, TRUE)->getText();
+    if ($test_alias && array_key_exists($alias, $this->aliases)) {
+      $node->setAlias($this->aliases[$alias]);
+    }
     while ($this->tryMatch(T_NS_SEPARATOR, $node)) {
       $this->mustMatch(T_STRING, $node, NULL, TRUE);
     }
@@ -2128,6 +2139,8 @@ class Parser {
    * @return NamespaceNode
    */
   private function _namespace() {
+    $this->baseName = NULL;
+    $this->aliases = [];
     $node = new NamespaceNode();
     $this->matchDocComment($node);
     $this->mustMatch(T_NAMESPACE, $node);
@@ -2136,13 +2149,9 @@ class Parser {
       $this->baseName = $name->getPath();
       $node->addChild($name, 'name');
     }
-    else {
-      $this->baseName = NULL;
-    }
     if ($this->tryMatch('{', $node)) {
       $node->addChild($this->topStatementBlock('}'), 'body');
       $this->mustMatch('}', $node);
-      $this->baseName = NULL;
     }
     else {
       $this->mustMatch(';', $node, NULL, TRUE, TRUE);
@@ -2191,8 +2200,10 @@ class Parser {
       $this->mustMatch(T_STRING, $node, NULL, TRUE);
     }
     $declaration->addChild($node, 'name');
+    $full_name = $node->getAbsolutePath();
     if ($this->tryMatch(T_AS, $declaration)) {
-      $this->mustMatch(T_STRING, $declaration, 'alias', TRUE);
+      $alias = $this->mustMatch(T_STRING, $declaration, 'alias', TRUE)->getText();
+      $this->aliases[$alias] = $full_name;
     }
     return $declaration;
   }

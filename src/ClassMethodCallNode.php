@@ -8,7 +8,7 @@ namespace Pharborist;
  */
 class ClassMethodCallNode extends CallNode implements VariableExpressionNode {
   /**
-   * @var Node
+   * @var NameNode|Node
    */
   protected $className;
 
@@ -18,7 +18,7 @@ class ClassMethodCallNode extends CallNode implements VariableExpressionNode {
   protected $methodName;
 
   /**
-   * @return Node
+   * @return NameNode|Node
    */
   public function getClassName() {
     return $this->className;

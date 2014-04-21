@@ -105,13 +105,19 @@ class NameNode extends ParentNode {
   }
 
   public function getAbsolutePath() {
-    $parts = $this->getParts();
+    /** @var TokenNode[] $parts */
+    $info = $this->getPathInfo();
+    $absolute = $info['absolute'];
+    $parts = $info['parts'];
     if ($this->alias) {
-      $path = $this->alias . '\\';
+      $path = $this->alias;
       unset($parts[0]);
+      if (!empty($parts)) {
+        $path .= '\\';
+      }
     }
     else {
-      $path = '\\' . ($this->basePath ? $this->basePath . '\\' : '');
+      $path = '\\' . (!$absolute && $this->basePath ? $this->basePath . '\\' : '');
       if ($parts[0]->getType() === T_NAMESPACE) {
         unset($parts[0]);
       }

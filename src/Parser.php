@@ -74,7 +74,7 @@ class Parser {
   /**
    * @var array
    */
-  private $aliases;
+  private $imports;
 
   /**
    * Constructor.
@@ -106,7 +106,7 @@ class Parser {
    */
   public function buildTree(TokenIterator $iterator) {
     $this->baseName = NULL;
-    $this->aliases = [];
+    $this->imports = [];
     $this->iterator = $iterator;
     $this->current = $this->iterator->current();
     $this->currentType = $this->current ? $this->current->getType() : NULL;
@@ -1211,6 +1211,7 @@ class Parser {
       case T_NAMESPACE:
         $namespace_path = $this->name();
         if ($this->currentType === T_DOUBLE_COLON) {
+          $this->resolve($namespace_path);
           return $this->exprClass($namespace_path);
         }
         elseif ($this->currentType === '(') {
@@ -1386,6 +1387,7 @@ class Parser {
       case T_NS_SEPARATOR:
       case T_NAMESPACE:
         $namespace_path = $this->name();
+        $this->resolve($namespace_path);
         if ($this->currentType === T_DOUBLE_COLON) {
           $node = $this->staticMember($namespace_path);
           return $this->dynamicClassNameReference($node);
@@ -1718,6 +1720,7 @@ class Parser {
           return $this->functionCall($namespace_path);
         }
         elseif ($this->currentType === T_DOUBLE_COLON) {
+          $this->resolve($namespace_path);
           return $this->varClass($namespace_path);
         }
         break;
@@ -2116,22 +2119,29 @@ class Parser {
   private function name() {
     $node = new NameNode();
     $node->setBase($this->baseName);
-    $test_alias = TRUE;
     if ($this->tryMatch(T_NAMESPACE, $node)) {
       $this->mustMatch(T_NS_SEPARATOR, $node);
-      $test_alias = FALSE;
     }
     elseif ($this->tryMatch(T_NS_SEPARATOR, $node)) {
-      $test_alias = FALSE;
+      // Absolute path
     }
-    $alias = $this->mustMatch(T_STRING, $node, NULL, TRUE)->getText();
-    if ($test_alias && array_key_exists($alias, $this->aliases)) {
-      $node->setAlias($this->aliases[$alias]);
-    }
+    $this->mustMatch(T_STRING, $node, NULL, TRUE);
     while ($this->tryMatch(T_NS_SEPARATOR, $node)) {
       $this->mustMatch(T_STRING, $node, NULL, TRUE);
     }
     return $node;
+  }
+
+  private function resolve(NameNode $name) {
+    $info = $name->getPathInfo();
+    if (!$info['absolute'] && !$info['relative']) {
+      /** @var TokenNode $first */
+      $first = $info['parts'][0];
+      $first_text = $first->getText();
+      if (array_key_exists($first_text, $this->imports)) {
+        $name->setAlias($this->imports[$first_text]);
+      }
+    }
   }
 
   /**
@@ -2140,7 +2150,7 @@ class Parser {
    */
   private function _namespace() {
     $this->baseName = NULL;
-    $this->aliases = [];
+    $this->imports = [];
     $node = new NamespaceNode();
     $this->matchDocComment($node);
     $this->mustMatch(T_NAMESPACE, $node);
@@ -2195,16 +2205,16 @@ class Parser {
     $declaration = new UseDeclarationNode();
     $node = new NameNode();
     $this->tryMatch(T_NS_SEPARATOR, $node);
-    $this->mustMatch(T_STRING, $node, NULL, TRUE);
+    $alias = $this->mustMatch(T_STRING, $node, NULL, TRUE)->getText();
     while ($this->tryMatch(T_NS_SEPARATOR, $node)) {
-      $this->mustMatch(T_STRING, $node, NULL, TRUE);
+      $alias = $this->mustMatch(T_STRING, $node, NULL, TRUE)->getText();
     }
     $declaration->addChild($node, 'name');
     $full_name = $node->getAbsolutePath();
     if ($this->tryMatch(T_AS, $declaration)) {
       $alias = $this->mustMatch(T_STRING, $declaration, 'alias', TRUE)->getText();
-      $this->aliases[$alias] = $full_name;
     }
+    $this->imports[$alias] = $full_name;
     return $declaration;
   }
 

@@ -173,4 +173,120 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('first', $after_node->next()->getText());
     $this->assertEquals('second', $after_node->next()->next()->getText());
   }
+
+  public function testPrependTo() {
+    $parent = $this->createParentNode();
+    $node = $this->createNode('second');
+    $node->prependTo($parent);
+    $this->assertSame($parent, $node->parent());
+    $this->assertSame($node, $node->parent()->firstChild());
+    $node = $this->createNode('first');
+    $node->prependTo($parent);
+    $this->assertSame($parent, $node->parent());
+    $this->assertSame($node, $node->parent()->firstChild());
+    $this->assertEquals('second', $node->next()->getText());
+
+    /** @var ParentNode[] $targets */
+    $targets = [$this->createParentNode(), $this->createParentNode()];
+    $node = $this->createNode('head');
+    $node->prependTo($targets);
+    $this->assertSame($node, $targets[0]->firstChild());
+    $this->assertNotSame($node, $targets[1]->firstChild());
+    $this->assertEquals('head', $targets[1]->firstChild()->getText());
+  }
+
+  public function testAppendTo() {
+    $parent = $this->createParentNode();
+    $node = $this->createNode('first');
+    $node->appendTo($parent);
+    $this->assertSame($parent, $node->parent());
+    $this->assertSame($node, $node->parent()->firstChild());
+    $node = $this->createNode('second');
+    $node->appendTo($parent);
+    $this->assertSame($parent, $node->parent());
+    $this->assertSame($node, $node->parent()->lastChild());
+    $this->assertEquals('first', $node->previous()->getText());
+
+    /** @var ParentNode[] $targets */
+    $targets = [$this->createParentNode(), $this->createParentNode()];
+    $node = $this->createNode('tail');
+    $node->appendTo($targets);
+    $this->assertSame($node, $targets[0]->firstChild());
+    $this->assertNotSame($node, $targets[1]->firstChild());
+    $this->assertEquals('tail', $targets[1]->firstChild()->getText());
+  }
+
+  public function testReplaceWith() {
+    $original = $this->createNode('original');
+    $replacement = $this->createNode('replacement');
+    $original->replaceWith($replacement);
+    $this->assertEquals('original', $original->getText());
+
+    $parent = $this->createParentNode();
+    $original->appendTo($parent);
+    $this->assertSame($original, $parent->firstChild());
+    $this->assertEquals('original', $parent->firstChild()->getText());
+    $original->replaceWith($replacement);
+    $this->assertSame($replacement, $parent->firstChild());
+    $this->assertEquals('replacement', $parent->firstChild()->getText());
+
+    $replacements = [$this->createNode('first'), $this->createNode('second')];
+    $replacement->replaceWith($replacements);
+    $this->assertEquals('first', $parent->firstChild()->getText());
+    $this->assertEquals('second', $parent->lastChild()->getText());
+  }
+
+  public function testReplaceAll() {
+    $original = $this->createNode('original');
+    $replacement = $this->createNode('replacement');
+    $replacement->replaceAll($original);
+    $this->assertEquals('original', $original->getText());
+
+    $parent = $this->createParentNode();
+    $original->appendTo($parent);
+    $this->assertSame($original, $parent->firstChild());
+    $this->assertEquals('original', $parent->firstChild()->getText());
+    $replacement->replaceAll($original);
+    $this->assertSame($replacement, $parent->firstChild());
+    $this->assertEquals('replacement', $parent->firstChild()->getText());
+
+    /** @var ParentNode[] $parents */
+    $parents = [$this->createParentNode(), $this->createParentNode()];
+    /** @var Node[] $targets */
+    $targets = [];
+    foreach ($parents as $parent) {
+      $node = $this->createNode('original');
+      $node->appendTo($parent);
+      $targets[] = $node;
+    }
+    $replacement = $this->createNode('replacement');
+    $replacement->replaceAll($targets);
+    $this->assertSame($replacement, $parents[0]->firstChild());
+    $this->assertNotSame($replacement, $parents[1]->firstChild());
+    $this->assertEquals('replacement', $parents[1]->firstChild()->getText());
+  }
+
+  public function testSwapWith() {
+    $parent = $this->createParentNode();
+    $first = $this->createNode('first');
+    $second = $this->createNode('second');
+    $first->appendTo($parent);
+    $second->appendTo($parent);
+    $first->swapWith($second);
+    $this->assertSame($first, $parent->lastChild());
+    $this->assertSame($second, $parent->firstChild());
+
+    $first->swapWith($second);
+    $this->assertSame($first, $parent->firstChild());
+    $this->assertSame($second, $parent->lastChild());
+
+    $another_parent = $this->createParentNode();
+    $third = $this->createNode('third');
+    $third->appendTo($another_parent);
+    $first->swapWith($third);
+    $this->assertSame($another_parent, $first->parent());
+    $this->assertSame($parent, $third->parent());
+    $this->assertSame($third, $second->previous());
+    $this->assertSame($second, $third->next());
+  }
 }

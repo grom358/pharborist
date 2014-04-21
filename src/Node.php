@@ -233,16 +233,17 @@ abstract class Node implements NodeInterface {
     }
     elseif ($nodes instanceof NodeCollection || is_array($nodes)) {
       $first = TRUE;
-      $insert_after = $this;
+      $insert_after = NULL;
       /** @var Node $node */
       foreach ($nodes as $node) {
+        $node->remove();
         if ($first) {
-          $node->remove();
           $this->parent->replaceChild($this, $node);
+          $insert_after = $node;
           $first = FALSE;
         }
         else {
-          $insert_after->parent->insertAfter($insert_after, $node);
+          $insert_after->parent->insertAfterChild($insert_after, $node);
           $insert_after = $node;
         }
       }
@@ -256,11 +257,17 @@ abstract class Node implements NodeInterface {
   public function replaceAll($targets) {
     $this->remove();
     if ($targets instanceof Node) {
-      $targets->parent->replaceChild($targets, $this);
+      if ($targets->parent) {
+        $targets->parent->replaceChild($targets, $this);
+      }
     }
     elseif ($targets instanceof NodeCollection || is_array($targets)) {
+      $first = TRUE;
       foreach ($targets as $target) {
-        $target->parent->replaceChild($target, clone $this);
+        if ($target->parent) {
+          $target->parent->replaceChild($target, $first ? $this : clone $this);
+        }
+        $first = FALSE;
       }
     }
     else {
@@ -269,32 +276,65 @@ abstract class Node implements NodeInterface {
     return $this;
   }
 
-  public function swapWith(Node $node) {
-    $tmp_parent = $this->parent;
-    $tmp_previous = $this->previous;
-    $tmp_next = $this->next;
-    if ($this->parent !== NULL) {
+  public function swapWith(Node $replacement) {
+    $parent = $this->parent;
+    if ($this->next === $replacement) {
+      // Nodes are adjacent
+      $previous = $this->previous;
+      $next = $this;
+      $replacement_previous = $replacement;
+      $replacement_next = $replacement->next;
+    }
+    elseif ($replacement === $this->previous) {
+      // Nodes are adjacent
+      $previous = $this;
+      $next = $this->next;
+      $replacement_previous = $replacement->previous;
+      $replacement_next = $replacement;
+    }
+    else {
+      $previous = $this->previous;
+      $next = $this->next;
+      $replacement_previous = $replacement->previous;
+      $replacement_next = $replacement->next;
+    }
+    $replacement_head = $replacement_tail = FALSE;
+    if ($replacement->parent) {
+      $replacement_head = $replacement->parent->head === $replacement;
+      $replacement_tail = $replacement->parent->tail === $replacement;
+    }
+    if ($this->parent) {
       if ($this->parent->head === $this) {
-        $this->parent->head = $node;
+        $this->parent->head = $replacement;
       }
       if ($this->parent->tail === $this) {
-        $this->parent->tail = $node;
+        $this->parent->tail = $replacement;
       }
     }
-    $this->parent = $node->parent;
-    $this->previous = $node->previous;
-    $this->next = $node->next;
-    if ($node->parent !== NULL) {
-      if ($node->parent->head === $node) {
-        $node->parent->head = $this;
-      }
-      if ($node->parent->tail === $node) {
-        $this->parent->tail = $this;
-      }
+    $this->parent = $replacement->parent;
+    $this->previous = $replacement_previous;
+    if ($this->previous) {
+      $this->previous->next = $this;
     }
-    $node->parent = $tmp_parent;
-    $node->previous = $tmp_previous;
-    $node->next = $tmp_next;
+    $this->next = $replacement_next;
+    if ($this->next) {
+      $this->next->previous = $this;
+    }
+    if ($replacement_head) {
+      $replacement->parent->head = $this;
+    }
+    if ($replacement_tail) {
+      $replacement->parent->tail = $this;
+    }
+    $replacement->parent = $parent;
+    $replacement->previous = $previous;
+    if ($replacement->previous) {
+      $replacement->previous->next = $replacement;
+    }
+    $replacement->next = $next;
+    if ($replacement->next) {
+      $replacement->next->previous = $replacement;
+    }
     return $this;
   }
 

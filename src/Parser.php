@@ -100,6 +100,7 @@ class Parser {
    * @return TopNode Root node of the tree
    */
   public function buildTree(TokenIterator $iterator) {
+    $this->baseName = NULL;
     $this->iterator = $iterator;
     $this->current = $this->iterator->current();
     $this->currentType = $this->current ? $this->current->getType() : NULL;
@@ -2108,6 +2109,7 @@ class Parser {
    */
   private function name() {
     $node = new NameNode();
+    $node->setBase($this->baseName);
     if ($this->tryMatch(T_NAMESPACE, $node)) {
       $this->mustMatch(T_NS_SEPARATOR, $node);
     }
@@ -2140,6 +2142,7 @@ class Parser {
     if ($this->tryMatch('{', $node)) {
       $node->addChild($this->topStatementBlock('}'), 'body');
       $this->mustMatch('}', $node);
+      $this->baseName = NULL;
     }
     else {
       $this->mustMatch(';', $node, NULL, TRUE, TRUE);

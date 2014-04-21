@@ -66,7 +66,7 @@ class NameNode extends ParentNode {
     $child = $this->head;
     while ($child) {
       $type = $child->getType();
-      if ($type === T_NAMESPACE || $type === T_NS_SEPARATOR || $type === T_STRING) {
+      if ($type === T_NAMESPACE || $type === T_STRING) {
         $parts[] = $child;
       }
       $child = $child->next;
@@ -95,7 +95,7 @@ class NameNode extends ParentNode {
   public function getAbsolutePath() {
     $path = '\\' . ($this->basePath ? $this->basePath . '\\' : '');
     $parts = $this->getParts();
-    if ($parts[0] === T_NAMESPACE) {
+    if ($parts[0]->getType() === T_NAMESPACE) {
       unset($parts[0]);
     }
     $path .= implode('\\', $parts);

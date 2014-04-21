@@ -6,7 +6,7 @@ namespace Pharborist;
  */
 class CatchNode extends ParentNode {
   /**
-   * @var NamespacePathNode
+   * @var NameNode
    */
   protected $exceptionType;
 
@@ -21,7 +21,7 @@ class CatchNode extends ParentNode {
   protected $body;
 
   /**
-   * @return NamespacePathNode
+   * @return NameNode
    */
   public function getExceptionType() {
     return $this->exceptionType;

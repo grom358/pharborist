@@ -67,7 +67,7 @@ class Parser {
   private $currentType;
 
   /**
-   * @var NamespacePathNode
+   * @var NameNode
    */
   private $namespace;
 
@@ -918,7 +918,7 @@ class Parser {
     $catch_node = new CatchNode();
     while ($this->tryMatch(T_CATCH, $catch_node)) {
       $this->mustMatch('(', $catch_node);
-      $catch_node->addChild($this->namespacePath(), 'exceptionType');
+      $catch_node->addChild($this->name(), 'exceptionType');
       $this->mustMatch(T_VARIABLE, $catch_node, 'variable');
       $this->mustMatch(')', $catch_node, NULL, FALSE, TRUE);
       $catch_node->addChild($this->innerStatementBlock(), 'body');
@@ -1023,7 +1023,7 @@ class Parser {
       return $node;
     }
     elseif (in_array($this->currentType, self::$namespacePathTypes)) {
-      $namespace_path = $this->namespacePath();
+      $namespace_path = $this->name();
       if ($this->currentType === T_DOUBLE_COLON) {
         $colon_node = new PartialNode();
         $this->mustMatch(T_DOUBLE_COLON, $colon_node);
@@ -1200,7 +1200,7 @@ class Parser {
       case T_STRING:
       case T_NS_SEPARATOR:
       case T_NAMESPACE:
-        $namespace_path = $this->namespacePath();
+        $namespace_path = $this->name();
         if ($this->currentType === T_DOUBLE_COLON) {
           return $this->exprClass($namespace_path);
         }
@@ -1376,7 +1376,7 @@ class Parser {
       case T_STRING:
       case T_NS_SEPARATOR:
       case T_NAMESPACE:
-        $namespace_path = $this->namespacePath();
+        $namespace_path = $this->name();
         if ($this->currentType === T_DOUBLE_COLON) {
           $node = $this->staticMember($namespace_path);
           return $this->dynamicClassNameReference($node);
@@ -1704,7 +1704,7 @@ class Parser {
       case T_STRING:
       case T_NS_SEPARATOR:
       case T_NAMESPACE:
-        $namespace_path = $this->namespacePath();
+        $namespace_path = $this->name();
         if ($this->currentType === '(') {
           return $this->functionCall($namespace_path);
         }
@@ -1760,7 +1760,7 @@ class Parser {
       $node->addChild($function_reference, 'callback');
     }
     else {
-      if ($function_reference instanceof NamespacePathNode && $function_reference->childCount() === 1 && $function_reference == 'define') {
+      if ($function_reference instanceof NameNode && $function_reference->childCount() === 1 && $function_reference == 'define') {
         $node = new DefineNode();
       }
       else {
@@ -2032,7 +2032,7 @@ class Parser {
       return $node;
     }
     elseif (in_array($this->currentType, self::$namespacePathTypes)) {
-      return $this->namespacePath();
+      return $this->name();
     }
     return NULL;
   }
@@ -2100,10 +2100,10 @@ class Parser {
 
   /**
    * Parse a namespace path.
-   * @return NamespacePathNode
+   * @return NameNode
    */
-  private function namespacePath() {
-    $node = new NamespacePathNode();
+  private function name() {
+    $node = new NameNode();
     if ($this->tryMatch(T_NAMESPACE, $node)) {
       $this->mustMatch(T_NS_SEPARATOR, $node);
     }
@@ -2145,10 +2145,10 @@ class Parser {
 
   /**
    * Parse a namespace name.
-   * @return NamespacePathNode
+   * @return NameNode
    */
   private function namespaceName() {
-    $node = new NamespacePathNode();
+    $node = new NameNode();
     $this->mustMatch(T_STRING, $node, NULL, TRUE);
     while ($this->tryMatch(T_NS_SEPARATOR, $node)) {
       $this->mustMatch(T_STRING, $node, NULL, TRUE);
@@ -2177,13 +2177,13 @@ class Parser {
    */
   private function useDeclaration() {
     $declaration = new UseDeclarationNode();
-    $node = new NamespacePathNode();
+    $node = new NameNode();
     $this->tryMatch(T_NS_SEPARATOR, $node);
     $this->mustMatch(T_STRING, $node, NULL, TRUE);
     while ($this->tryMatch(T_NS_SEPARATOR, $node)) {
       $this->mustMatch(T_STRING, $node, NULL, TRUE);
     }
-    $declaration->addChild($node, 'namespacePath');
+    $declaration->addChild($node, 'name');
     if ($this->tryMatch(T_AS, $declaration)) {
       $this->mustMatch(T_STRING, $declaration, 'alias', TRUE);
     }
@@ -2202,12 +2202,12 @@ class Parser {
     $class_name = $this->mustMatch(T_STRING, $node, 'name')->getText();
     $node->setFullyQualifiedName($this->namespace, $class_name);
     if ($this->tryMatch(T_EXTENDS, $node)) {
-      $node->addChild($this->namespacePath(), 'extends');
+      $node->addChild($this->name(), 'extends');
     }
     if ($this->tryMatch(T_IMPLEMENTS, $node)) {
       $implements = new CommaListNode();
       do {
-        $implements->addChild($this->namespacePath());
+        $implements->addChild($this->name());
       } while ($this->tryMatch(',', $implements));
       $node->addChild($implements, 'implements');
     }
@@ -2392,7 +2392,7 @@ class Parser {
     // trait_list
     $traits = new CommaListNode();
     do {
-      $traits->addChild($this->namespacePath());
+      $traits->addChild($this->name());
     } while ($this->tryMatch(',', $traits));
     $node->addChild($traits, 'traits');
     // trait_adaptations
@@ -2415,8 +2415,8 @@ class Parser {
    * @return Node
    */
   private function traitAdaptation() {
-    /** @var NamespacePathNode $qualified_name */
-    $qualified_name = $this->namespacePath();
+    /** @var NameNode $qualified_name */
+    $qualified_name = $this->name();
     if ($qualified_name->childCount() === 1 && $this->currentType !== T_DOUBLE_COLON) {
       return $this->traitAlias($qualified_name);
     }
@@ -2433,7 +2433,7 @@ class Parser {
     $this->mustMatch(T_INSTEADOF, $node);
     $trait_names = new CommaListNode();
     do {
-      $trait_names->addChild($this->namespacePath());
+      $trait_names->addChild($this->name());
     } while ($this->tryMatch(',', $trait_names));
     $node->addChild($trait_names, 'traitNames');
     $this->mustMatch(';', $node, NULL, TRUE);
@@ -2442,7 +2442,7 @@ class Parser {
 
   /**
    * Parse a trait alias.
-   * @param TraitMethodReferenceNode|NamespacePathNode $trait_method_reference
+   * @param TraitMethodReferenceNode|NameNode $trait_method_reference
    * @return TraitAliasNode
    */
   private function traitAlias($trait_method_reference) {
@@ -2473,7 +2473,7 @@ class Parser {
     if ($this->tryMatch(T_EXTENDS, $node)) {
       $extends = new CommaListNode();
       do {
-        $extends->addChild($this->namespacePath());
+        $extends->addChild($this->name());
       } while ($this->tryMatch(',', $extends));
       $node->addChild($extends, 'extends');
     }
@@ -2533,12 +2533,12 @@ class Parser {
     $trait_name = $this->mustMatch(T_STRING, $node, 'name')->getText();
     $node->setFullyQualifiedName($this->namespace, $trait_name);
     if ($this->tryMatch(T_EXTENDS, $node)) {
-      $node->addChild($this->namespacePath(), 'extends');
+      $node->addChild($this->name(), 'extends');
     }
     if ($this->tryMatch(T_IMPLEMENTS, $node)) {
       $implements = new CommaListNode();
       do {
-        $implements->addChild($this->namespacePath());
+        $implements->addChild($this->name());
       } while ($this->tryMatch(',', $implements));
       $node->addChild($implements, 'implements');
     }

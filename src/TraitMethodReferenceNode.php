@@ -6,7 +6,7 @@ namespace Pharborist;
  */
 class TraitMethodReferenceNode extends ParentNode {
   /**
-   * @var NamespacePathNode
+   * @var NameNode
    */
   protected $traitName;
 
@@ -16,7 +16,7 @@ class TraitMethodReferenceNode extends ParentNode {
   protected $methodReference;
 
   /**
-   * @return NamespacePathNode
+   * @return NameNode
    */
   public function getTraitName() {
     return $this->traitName;

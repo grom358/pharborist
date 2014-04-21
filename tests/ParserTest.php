@@ -90,7 +90,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
       '\Pharborist\UseDeclarationStatementNode'
     );
     $use_declaration = $use_declaration_statement->getDeclarations()[0];
-    $this->assertEquals('MyNamespace\MyClass', $use_declaration->getNamespacePath()->getText());
+    $this->assertEquals('MyNamespace\MyClass', $use_declaration->getName()->getText());
     $this->assertEquals('MyAlias', $use_declaration->getAlias()->getText());
     $this->assertEquals('MyNamespace\MyClass as MyAlias', $use_declaration->getText());
   }

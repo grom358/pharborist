@@ -28,7 +28,7 @@ class TraitNode extends StatementNode {
   protected $name;
 
   /**
-   * @var NamespacePathNode
+   * @var NameNode
    */
   protected $extends;
 
@@ -57,14 +57,14 @@ class TraitNode extends StatementNode {
   }
 
   /**
-   * @return NamespacePathNode
+   * @return NameNode
    */
   public function getExtends() {
     return $this->extends;
   }
 
   /**
-   * @return NamespacePathNode[]
+   * @return NameNode[]
    */
   public function getImplements() {
     return $this->implements->getItems();

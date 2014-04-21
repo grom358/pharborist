@@ -6,7 +6,7 @@ namespace Pharborist;
  *
  * For example, MyNamespace\MyClass
  */
-class NamespacePathNode extends ParentNode {
+class NameNode extends ParentNode {
   /**
    * Get the namespace path.
    * @return string

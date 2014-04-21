@@ -8,7 +8,7 @@ namespace Pharborist;
  */
 class NewNode extends ParentNode implements ExpressionNode {
   /**
-   * @var NamespacePathNode
+   * @var NameNode
    */
   protected $className;
 
@@ -18,7 +18,7 @@ class NewNode extends ParentNode implements ExpressionNode {
   protected $arguments;
 
   /**
-   * @return NamespacePathNode
+   * @return NameNode
    */
   public function getClassName() {
     return $this->className;

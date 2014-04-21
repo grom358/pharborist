@@ -16,7 +16,7 @@ class TraitUseNode extends ClassStatementNode {
   protected $adaptations;
 
   /**
-   * @return NamespacePathNode[]
+   * @return NameNode[]
    */
   public function getTraits() {
     return $this->traits->getItems();

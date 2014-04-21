@@ -9,12 +9,12 @@ namespace Pharborist;
  */
 class ConstantNode extends ParentNode implements ExpressionNode {
   /**
-   * @var NamespacePathNode
+   * @var NameNode
    */
   protected $constantName;
 
   /**
-   * @return NamespacePathNode
+   * @return NameNode
    */
   public function getConstantName() {
     return $this->constantName;

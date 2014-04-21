@@ -25,7 +25,7 @@ class TraitPrecedenceNode extends TraitAdaptationStatementNode {
   }
 
   /**
-   * @return NamespacePathNode[]
+   * @return NameNode[]
    */
   public function getTraitNames() {
     return $this->traitNames->getItems();

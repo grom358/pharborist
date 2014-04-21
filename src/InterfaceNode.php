@@ -42,7 +42,7 @@ class InterfaceNode extends StatementNode {
   }
 
   /**
-   * @return NamespacePathNode[]
+   * @return NameNode[]
    */
   public function getExtends() {
     return $this->extends->getItems();

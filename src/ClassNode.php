@@ -28,7 +28,7 @@ class ClassNode extends StatementNode {
   protected $name;
 
   /**
-   * @var NamespacePathNode
+   * @var NameNode
    */
   protected $extends;
 
@@ -71,14 +71,14 @@ class ClassNode extends StatementNode {
   }
 
   /**
-   * @return NamespacePathNode
+   * @return NameNode
    */
   public function getExtends() {
     return $this->extends;
   }
 
   /**
-   * @return NamespacePathNode[]
+   * @return NameNode[]
    */
   public function getImplements() {
     return $this->implements->getItems();

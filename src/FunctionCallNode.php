@@ -6,12 +6,12 @@ namespace Pharborist;
  */
 class FunctionCallNode extends CallNode implements VariableExpressionNode {
   /**
-   * @var NamespacePathNode
+   * @var NameNode
    */
   protected $name;
 
   /**
-   * @return NamespacePathNode
+   * @return NameNode
    */
   public function getName() {
     return $this->name;

@@ -6,9 +6,9 @@ namespace Pharborist;
  */
 class UseDeclarationNode extends ParentNode {
   /**
-   * @var NamespacePathNode
+   * @var NameNode
    */
-  protected $namespacePath;
+  protected $name;
 
   /**
    * @var TokenNode
@@ -16,10 +16,10 @@ class UseDeclarationNode extends ParentNode {
   protected $alias;
 
   /**
-   * @return NamespacePathNode
+   * @return NameNode
    */
-  public function getNamespacePath() {
-    return $this->namespacePath;
+  public function getName() {
+    return $this->name;
   }
 
   /**

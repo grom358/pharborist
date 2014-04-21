@@ -8,7 +8,7 @@ namespace Pharborist;
  */
 class TraitAliasNode extends TraitAdaptationStatementNode {
   /**
-   * @var NamespacePathNode|TraitMethodReferenceNode
+   * @var NameNode|TraitMethodReferenceNode
    */
   protected $traitMethodReference;
 
@@ -23,7 +23,7 @@ class TraitAliasNode extends TraitAdaptationStatementNode {
   protected $alias;
 
   /**
-   * @return NamespacePathNode|TraitMethodReferenceNode
+   * @return NameNode|TraitMethodReferenceNode
    */
   public function getTraitMethodReference() {
     return $this->traitMethodReference;

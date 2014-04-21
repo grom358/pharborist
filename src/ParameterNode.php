@@ -34,7 +34,7 @@ class ParameterNode extends ParentNode {
         $this->reference = $node;
       }
     }
-    elseif ($node instanceof NamespacePathNode) {
+    elseif ($node instanceof NameNode) {
       $this->typeHint = $node;
     }
   }

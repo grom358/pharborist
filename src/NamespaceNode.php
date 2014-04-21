@@ -11,7 +11,7 @@ class NamespaceNode extends StatementNode {
   protected $docComment;
 
   /**
-   * @var NamespacePathNode
+   * @var NameNode
    */
   protected $name;
 
@@ -28,7 +28,7 @@ class NamespaceNode extends StatementNode {
   }
 
   /**
-   * @return NamespacePathNode
+   * @return NameNode
    */
   public function getName() {
     return $this->name;

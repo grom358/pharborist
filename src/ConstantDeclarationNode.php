@@ -5,8 +5,6 @@ namespace Pharborist;
  * Constant declaration.
  */
 class ConstantDeclarationNode extends ParentNode {
-  use FullyQualifiedNameTrait;
-
   /**
    * @var TokenNode
    */
@@ -18,7 +16,7 @@ class ConstantDeclarationNode extends ParentNode {
   protected $value;
 
   /**
-   * @return TokenNode
+   * @return NameNode
    */
   public function getName() {
     return $this->name;

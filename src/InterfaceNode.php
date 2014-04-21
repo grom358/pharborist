@@ -5,8 +5,6 @@ namespace Pharborist;
  * An interface declaration.
  */
 class InterfaceNode extends StatementNode {
-  use FullyQualifiedNameTrait;
-
   /**
    * @var DocCommentNode
    */

@@ -272,7 +272,7 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
   public function testRemove() {
     $node = $this->createNode('test');
     $parent = $this->createParentNode();
-    $node->appendTo($parent);
+    $parent->addChild($node, 'test');
     $this->assertSame($parent, $node->parent());
     $node->remove();
     $this->assertNull($node->parent());
@@ -314,6 +314,14 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
     $replacement->replaceWith($replacements);
     $this->assertEquals('first', $parent->firstChild()->getText());
     $this->assertEquals('second', $parent->lastChild()->getText());
+
+    $parent = $this->createParentNode();
+    $this->createNode('first')->appendTo($parent);
+    $second = $this->createNode('second');
+    $second->appendTo($parent);
+    $this->createNode('third')->appendTo($parent);
+    $second->replaceWith($this->createNode('replacement'));
+    $this->assertEquals('replacement', $parent->firstChild()->next()->getText());
   }
 
   /**

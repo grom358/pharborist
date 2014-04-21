@@ -13,7 +13,7 @@ trait FunctionTrait {
   protected $reference;
 
   /**
-   * @var TokenNode
+   * @var NameNode
    */
   protected $name;
 
@@ -42,7 +42,7 @@ trait FunctionTrait {
   }
 
   /**
-   * @return TokenNode
+   * @return NameNode
    */
   public function getName() {
     return $this->name;

@@ -64,7 +64,8 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
    */
   public function testNamespace() {
     /** @var NamespaceNode $namespace_node */
-    $namespace_node = $this->parseSnippet('namespace MyNamespace\Test ; body();', '\Pharborist\NamespaceNode');
+    $namespace_node = $this->parseSnippet('/** test */ namespace MyNamespace\Test ; body();', '\Pharborist\NamespaceNode');
+    $this->assertEquals('/** test */', $namespace_node->getDocComment()->getText());
     $this->assertEquals('MyNamespace\Test', $namespace_node->getName()->getText());
     $this->assertEquals('body();', $namespace_node->getBody()->getText());
 
@@ -102,9 +103,10 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
   public function testFunctionDeclaration() {
     /** @var FunctionDeclarationNode $function_declaration */
     $function_declaration = $this->parseSnippet(
-      'function my_func(array $a, callable $b, namespace\Test $c, \MyNamespace\Test $d, $e = 1) { }',
+      'function my_func(array $a, callable $b, namespace\Test $c, \MyNamespace\Test $d, $e = 1, &$f) { }',
       '\Pharborist\FunctionDeclarationNode'
     );
+    $this->assertNull($function_declaration->getReference());
     $this->assertEquals('my_func', $function_declaration->getName()->getText());
     $parameters = $function_declaration->getParameters();
     $parameter = $parameters[0];
@@ -122,6 +124,11 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
     $parameter = $parameters[4];
     $this->assertEquals('$e', $parameter->getName()->getText());
     $this->assertEquals('1', $parameter->getValue()->getText());
+    $parameter = $parameters[5];
+    $this->assertEquals('&$f', $parameter->getText());
+
+    $function_declaration->getName()->before(new TokenNode('&', '&'));
+    $this->assertEquals('&', $function_declaration->getReference()->getText());
   }
 
   /**
@@ -163,6 +170,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
 abstract class MyClass extends ParentClass implements SomeInterface, AnotherInterface {
   /** const doc comment */
   const MY_CONST = 1;
+  /** property doc comment */
   public $publicProperty = 1;
   protected $protectedProperty;
   private $privateProperty;
@@ -187,6 +195,7 @@ abstract class MyClass extends ParentClass implements SomeInterface, AnotherInte
     B::smallTalk insteadof A;
     A::bigTalk insteadof B, C;
     B::bigTalk as talk;
+    sayHello as protected;
   }
 }
 EOF;
@@ -194,6 +203,8 @@ EOF;
     $class_declaration = $this->parseSnippet($snippet, '\Pharborist\ClassNode');
     $this->assertEquals('/** Class doc comment. */', $class_declaration->getDocComment()->getText());
     $this->assertEquals('MyClass', $class_declaration->getName()->getText());
+    $this->assertNull($class_declaration->getFinal());
+    $this->assertEquals('abstract', $class_declaration->getAbstract()->getText());
     $this->assertEquals('ParentClass', $class_declaration->getExtends()->getText());
     $implements = $class_declaration->getImplements();
     $this->assertEquals('SomeInterface', $implements[0]->getText());
@@ -208,6 +219,7 @@ EOF;
     /** @var ClassMemberListNode $class_member_list */
     $class_member_list = $statements[1];
     $this->assertInstanceOf('\Pharborist\ClassMemberListNode', $class_member_list);
+    $this->assertEquals('/** property doc comment */', $class_member_list->getDocComment());
     $this->assertEquals('public', $class_member_list->getVisibility()->getText());
     $class_member = $class_member_list->getMembers()[0];
     $this->assertEquals('$publicProperty', $class_member->getName()->getText());
@@ -236,6 +248,7 @@ EOF;
     $method = $statements[6];
     $this->assertInstanceOf('\Pharborist\ClassMethodNode', $method);
     $this->assertEquals('/** method doc comment. */', $method->getDocComment()->getText());
+    $this->assertNull($method->getReference());
     $this->assertEquals('myMethod', $method->getName()->getText());
     $this->assertEquals('public', $method->getVisibility()->getText());
     $parameters = $method->getParameters();
@@ -243,6 +256,9 @@ EOF;
     $this->assertEquals('$a', $parameters[0]->getText());
     $this->assertEquals('$b', $parameters[1]->getText());
     $this->assertEquals('{ perform(); }', $method->getBody()->getText());
+
+    $method->getName()->next()->before(new TokenNode('&', '&'));
+    $this->assertEquals('&', $method->getReference()->getText());
 
     $method = $statements[7];
     $this->assertInstanceOf('\Pharborist\ClassMethodNode', $method);
@@ -303,6 +319,12 @@ EOF;
     $this->assertEquals('B', $trait_alias->getTraitMethodReference()->getTraitName()->getText());
     $this->assertEquals('bigTalk', $trait_alias->getTraitMethodReference()->getMethodReference()->getText());
     $this->assertEquals('talk', $trait_alias->getAlias()->getText());
+
+    $trait_alias = $adaptations[3];
+    $this->assertInstanceOf('\Pharborist\TraitAliasNode', $trait_alias);
+    $this->assertInstanceOf('\Pharborist\NameNode', $trait_alias->getTraitMethodReference());
+    $this->assertEquals('sayHello', $trait_alias->getTraitMethodReference()->getText());
+    $this->assertEquals('protected', $trait_alias->getVisibility()->getText());
   }
 
   /**
@@ -310,13 +332,16 @@ EOF;
    */
   public function testInterfaceDeclaration() {
     $snippet = <<<'EOF'
+/** interface */
 interface MyInterface extends SomeInterface, AnotherInterface {
   const MY_CONST = 1;
-  public function myMethod();
+  /** interface method */
+  public function myMethod($a, $b);
 }
 EOF;
     /** @var InterfaceNode $interface_declaration */
     $interface_declaration = $this->parseSnippet($snippet, '\Pharborist\InterfaceNode');
+    $this->assertEquals('/** interface */', $interface_declaration->getDocComment()->getText());
     $this->assertEquals('MyInterface', $interface_declaration->getName()->getText());
     $extends = $interface_declaration->getExtends();
     $this->assertEquals('SomeInterface', $extends[0]->getText());
@@ -332,8 +357,25 @@ EOF;
 
     /** @var InterfaceMethodNode $method */
     $method = $statements[1];
+    $this->assertEquals('/** interface method */', $method->getDocComment()->getText());
+    $this->assertNull($method->getReference());
     $this->assertEquals('myMethod', $method->getName()->getText());
     $this->assertEquals('public', $method->getVisibility()->getText());
+    $this->assertNull($method->getStatic());
+    $parameters = $method->getParameters();
+    $this->assertCount(2, $parameters);
+    $this->assertEquals('$a', $parameters[0]->getText());
+    $this->assertEquals('$b', $parameters[1]->getText());
+
+    $method->getName()->before(new TokenNode('&', '&'));
+    $this->assertEquals('&', $method->getReference()->getText());
+
+    $method->getName()->before([
+      new TokenNode(T_WHITESPACE, ' '),
+      new TokenNode(T_STATIC, 'static'),
+      new TokenNode(T_WHITESPACE, ' ')
+    ]);
+    $this->assertEquals('static', $method->getStatic()->getText());
   }
 
   /**
@@ -341,6 +383,7 @@ EOF;
    */
   public function testTraitDeclaration() {
     $snippet = <<<'EOF'
+/** trait doc comment */
 trait MyTrait extends ParentClass implements SomeInterface, AnotherInterface {
   // trait statements are covered by testClassDeclaration
   const MY_CONST = 1;
@@ -348,11 +391,18 @@ trait MyTrait extends ParentClass implements SomeInterface, AnotherInterface {
 EOF;
     /** @var TraitNode $trait_declaration */
     $trait_declaration = $this->parseSnippet($snippet, '\Pharborist\TraitNode');
+    $this->assertEquals('/** trait doc comment */', $trait_declaration->getDocComment()->getText());
     $this->assertEquals('MyTrait', $trait_declaration->getName()->getText());
     $this->assertEquals('ParentClass', $trait_declaration->getExtends()->getText());
     $implements = $trait_declaration->getImplements();
     $this->assertEquals('SomeInterface', $implements[0]->getText());
     $this->assertEquals('AnotherInterface', $implements[1]->getText());
+
+    $statements = $trait_declaration->getStatements();
+    /** @var ConstantDeclarationStatementNode $const_stmt */
+    $const_stmt = $statements[0];
+    $const = $const_stmt->getDeclarations()[0];
+    $this->assertEquals('MY_CONST', $const->getName()->getText());
   }
 
   /**
@@ -417,7 +467,11 @@ EOF;
     $foreach = $this->parseSnippet($snippet, '\Pharborist\ForeachNode');
     $this->assertEquals('$array', $foreach->getOnEach()->getText());
     $this->assertEquals('$k', $foreach->getKey()->getText());
-    $this->assertEquals('&$v', $foreach->getValue()->getText());
+    /** @var ReferenceVariableNode $value */
+    $value = $foreach->getValue();
+    $this->assertInstanceOf('\Pharborist\ReferenceVariableNode', $value);
+    $this->assertEquals('&$v', $value->getText());
+    $this->assertEquals('$v', $value->getVariable()->getText());
     $this->assertEquals('body();', $foreach->getBody()->getText());
 
     $snippet = <<<'EOF'
@@ -787,10 +841,15 @@ EOF';
     $this->parseStaticExpression('1 > 2', '\Pharborist\GreaterThanNode');
     $this->parseStaticExpression('1 >= 2', '\Pharborist\GreaterThanOrEqualToNode');
     $this->parseStaticExpression('+1', '\Pharborist\PlusNode');
-    $this->parseStaticExpression('-1', '\Pharborist\NegateNode');
+    /** @var UnaryOperationNode $unary */
+    $unary = $this->parseStaticExpression('-1', '\Pharborist\NegateNode');
+    $this->assertEquals('-', $unary->getOperator());
+    $this->assertEquals('1', $unary->getOperand());
     $this->parseStaticExpression('1 ?: 2', '\Pharborist\ElvisNode');
     $this->parseStaticExpression('1 ? 2 : 3', '\Pharborist\TernaryOperationNode');
-    $this->parseStaticExpression('(1)', '\Pharborist\ParenthesisNode');
+    /** @var ParenthesisNode $paren */
+    $paren = $this->parseStaticExpression('(1)', '\Pharborist\ParenthesisNode');
+    $this->assertEquals('1', $paren->getExpression()->getText());
   }
 
   /**
@@ -961,8 +1020,12 @@ EOF';
     $this->assertEquals('$a', $var_var->getVariable()->getText());
 
     /** @var CallbackCallNode $callback_call */
-    $callback_call = $this->parseVariable('$a()', '\Pharborist\CallbackCallNode');
+    $callback_call = $this->parseVariable('$a($x, $y)', '\Pharborist\CallbackCallNode');
     $this->assertEquals('$a', $callback_call->getCallback()->getText());
+    $arguments = $callback_call->getArguments();
+    $this->assertCount(2, $arguments);
+    $this->assertEquals('$x', $arguments[0]->getText());
+    $this->assertEquals('$y', $arguments[1]->getText());
 
     /** @var ObjectMethodCallNode $obj_method_call */
     $obj_method_call = $this->parseVariable('$o->$a()', '\Pharborist\ObjectMethodCallNode');
@@ -1331,7 +1394,8 @@ EOF';
    */
   public function testStaticVariableList() {
     /** @var StaticVariableStatementNode $static_var_stmt */
-    $static_var_stmt = $this->parseSnippet('static $a, $b = 1;', '\Pharborist\StaticVariableStatementNode');
+    $static_var_stmt = $this->parseSnippet('/** static vars */ static $a, $b = 1;', '\Pharborist\StaticVariableStatementNode');
+    $this->assertEquals('/** static vars */', $static_var_stmt->getDocComment()->getText());
     $static_vars = $static_var_stmt->getVariables();
     $this->assertEquals('$a', $static_vars[0]->getText());
     $this->assertEquals('$b', $static_vars[1]->getName()->getText());
@@ -1353,8 +1417,19 @@ EOF';
    */
   public function testAnonymousFunction() {
     /** @var AnonymousFunctionNode $function */
-    $function = $this->parseExpression('function(){}', '\Pharborist\AnonymousFunctionNode');
+    $function = $this->parseExpression('function(){ body(); }', '\Pharborist\AnonymousFunctionNode');
+    $this->assertNull($function->getReference());
     $this->assertCount(0, $function->getParameters());
+    $this->assertEquals('{ body(); }', $function->getBody()->getText());
+
+    $function->getParameterList()->before(new TokenNode('&', '&'));
+    $this->assertEquals('&', $function->getReference()->getText());
+
+
+    $function = $this->parseExpression('function &(){ body(); }', '\Pharborist\AnonymousFunctionNode');
+    $this->assertCount(0, $function->getParameters());
+    $this->assertEquals('&', $function->getReference()->getText());
+    $this->assertEquals('{ body(); }', $function->getBody()->getText());
 
     $function = $this->parseExpression('static function(){}', '\Pharborist\AnonymousFunctionNode');
     $this->assertCount(0, $function->getParameters());

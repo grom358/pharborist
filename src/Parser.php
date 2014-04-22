@@ -1027,7 +1027,7 @@ class Parser {
     elseif ($this->currentType === '(') {
       $node = new ParenthesisNode();
       $this->mustMatch('(', $node);
-      $node->addChild($this->staticScalar());
+      $node->addChild($this->staticScalar(), 'expression');
       $this->mustMatch(')', $node, NULL, TRUE);
       return $node;
     }
@@ -1176,7 +1176,7 @@ class Parser {
         $node = new ParenthesisNode();
         $this->mustMatch('(', $node);
         if ($this->currentType === T_NEW) {
-          $node->addChild($this->newExpr());
+          $node->addChild($this->newExpr(), 'expression');
           $this->mustMatch(')', $node, NULL, TRUE);
           $node = $this->objectDereference($this->arrayDeference($node));
         }
@@ -1283,7 +1283,6 @@ class Parser {
         else {
           $node = new RequireOnceNode();
         }
-        $this->matchDocComment($node);
         $this->mustMatch($this->currentType, $node);
         $node->addChild($this->expr(), 'expression');
         return $node;

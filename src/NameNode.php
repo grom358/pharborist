@@ -40,10 +40,13 @@ class NameNode extends ParentNode {
     $first = $this->firstChild();
     $absolute = $first->getType() === T_NS_SEPARATOR;
     $relative = $first->getType() === T_NAMESPACE;
+    $parts = $this->getParts();
     return [
       'absolute' => $absolute,
       'relative' => $relative,
-      'parts' => $this->getParts(),
+      'qualified' => !$absolute && count($parts) > 1,
+      'unqualified' => !$absolute && count($parts) === 1,
+      'parts' => $parts,
     ];
   }
 
@@ -67,6 +70,28 @@ class NameNode extends ParentNode {
     /** @var TokenNode $first */
     $first = $this->firstChild();
     return $first->getType() === T_NAMESPACE;
+  }
+
+  /**
+   * Return TRUE if the name is a qualified name.
+   * Eg. MyNamespace\MyClass
+   * @return bool
+   */
+  public function isUnqualified() {
+    $absolute = $this->isAbsolute();
+    $parts = $this->getParts();
+    return !$absolute && count($parts) === 1;
+  }
+
+  /**
+   * Return TRUE if the name is a qualified name.
+   * Eg. MyNamespace\MyClass
+   * @return bool
+   */
+  public function isQualified() {
+    $absolute = $this->isAbsolute();
+    $parts = $this->getParts();
+    return !$absolute && count($parts) > 1;
   }
 
   /**

@@ -1798,7 +1798,11 @@ EOF;
  * Line two
  */
 EOF;
-    $comment = $this->parseSnippet($snippet, '\Pharborist\DocCommentNode');
+    $tree = $this->parseSnippetBlock($snippet);
+    $comments = $tree->children(Filter::isComment());
+    $this->assertCount(1, $comments);
+    $comment = $comments[0];
+    $this->assertInstanceOf('\Pharborist\DocCommentNode', $comment);
     $this->assertEquals("Line one\nLine two", $comment->getCommentText());
   }
 
@@ -1813,12 +1817,17 @@ EOF;
 
 // Line four
 EOF;
+    $tree = $this->parseSnippetBlock($snippet);
+    $comments = $tree->children(Filter::isComment(FALSE));
+
     /** @var LineCommentBlockNode $comment_block */
-    $comment_block = $this->parseSnippet($snippet, '\Pharborist\LineCommentBlockNode');
+    $comment_block = $comments[0];
+    $this->assertInstanceOf('\Pharborist\LineCommentBlockNode', $comment_block);
     $this->assertEquals("Line one\nLine two\nLine three", $comment_block->getCommentText());
 
     /** @var CommentNode $comment */
-    $comment = $comment_block->parent()->lastChild();
+    $comment = $comments[1];
+    $this->assertInstanceOf('\Pharborist\CommentNode', $comment);
     $this->assertEquals("Line four", $comment->getCommentText());
   }
 }

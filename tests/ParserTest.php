@@ -104,7 +104,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
   public function testFunctionDeclaration() {
     /** @var FunctionDeclarationNode $function_declaration */
     $function_declaration = $this->parseSnippet(
-      'function my_func(array $a, callable $b, namespace\Test $c, \MyNamespace\Test $d, $e = 1, &$f) { }',
+      'function my_func(array $a, callable $b, namespace\Test $c, \MyNamespace\Test $d, $e = 1, &$f, $g) { }',
       '\Pharborist\FunctionDeclarationNode'
     );
     $this->assertNull($function_declaration->getReference());
@@ -127,6 +127,13 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('1', $parameter->getValue()->getText());
     $parameter = $parameters[5];
     $this->assertEquals('&$f', $parameter->getText());
+    $this->assertEquals('&', $parameter->getReference()->getText());
+    $parameter = $parameters[6];
+    $this->assertEquals('$g', $parameter->getText());
+    $this->assertNull($parameter->getReference());
+
+    $parameter->getName()->before(new TokenNode('&', '&'));
+    $this->assertEquals('&', $parameter->getReference()->getText());
 
     $function_declaration->getName()->before(new TokenNode('&', '&'));
     $this->assertEquals('&', $function_declaration->getReference()->getText());
@@ -570,8 +577,11 @@ for ($i = 0; $i < 10; ++$i)
 EOF;
     /** @var ForNode $for */
     $for = $this->parseSnippet($snippet, '\Pharborist\ForNode');
+    $this->assertCount(1, $for->getInitial()->getExpressions());
     $this->assertEquals('$i = 0', $for->getInitial()->getText());
+    $this->assertCount(1, $for->getCondition()->getExpressions());
     $this->assertEquals('$i < 10', $for->getCondition()->getText());
+    $this->assertCount(1, $for->getStep()->getExpressions());
     $this->assertEquals('++$i', $for->getStep()->getText());
     $this->assertEquals('body();', $for->getBody()->getText());
   }

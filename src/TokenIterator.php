@@ -87,6 +87,11 @@ class TokenIterator {
     $token = $this->current();
     if ($token === NULL) {
       $token = $this->tokens[$this->length - 1];
+      $source_position = $token->getSourcePosition();
+      $line_no = $source_position->getLineNumber();
+      $col_no = $source_position->getColumnNumber();
+      $length = strlen($token->getText());
+      return new SourcePosition($line_no, $col_no + $length);
     }
     return $token->getSourcePosition();
   }

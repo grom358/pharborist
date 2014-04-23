@@ -9,6 +9,17 @@ class StatementBlockNode extends ParentNode {
    * @return StatementNode[]
    */
   public function getStatements() {
-    return $this->childrenByInstance('\Pharborist\StatementNode');
+    $matches = [];
+    $child = $this->head;
+    while ($child) {
+      if ($child instanceof StatementNode) {
+        $matches[] = $child;
+      }
+      elseif ($child instanceof StatementBlockNode) {
+        $matches = array_merge($matches, $child->getStatements());
+      }
+      $child = $child->next;
+    }
+    return $matches;
   }
 }

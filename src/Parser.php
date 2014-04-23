@@ -238,7 +238,7 @@ class Parser {
   private function topStatement() {
     switch ($this->currentType) {
       case T_USE:
-        return $this->_use();
+        return $this->useBlock();
       case T_CONST:
         return $this->_const();
       case T_ABSTRACT:
@@ -2196,6 +2196,19 @@ class Parser {
     $this->mustMatch(T_STRING, $node, NULL, TRUE);
     while ($this->tryMatch(T_NS_SEPARATOR, $node)) {
       $this->mustMatch(T_STRING, $node, NULL, TRUE);
+    }
+    return $node;
+  }
+
+  /**
+   * Parse a block of use declaration statements.
+   * @return UseDeclarationBlockNode
+   */
+  private function useBlock() {
+    $node = new UseDeclarationBlockNode();
+    while ($this->currentType === T_USE) {
+      $node->addChild($this->_use());
+      $this->matchHidden($node);
     }
     return $node;
   }

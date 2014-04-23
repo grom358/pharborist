@@ -86,11 +86,12 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
    * Test parsing use declarations.
    */
   public function testUseDeclaration() {
-    /** @var UseDeclarationStatementNode $use_declaration_statement */
-    $use_declaration_statement = $this->parseSnippet(
+    /** @var UseDeclarationBlockNode $use_block */
+    $use_block = $this->parseSnippet(
       'use MyNamespace\MyClass as MyAlias ;',
-      '\Pharborist\UseDeclarationStatementNode'
+      '\Pharborist\UseDeclarationBlockNode'
     );
+    $use_declaration_statement = $use_block->getDeclarationStatements()[0];
     $use_declaration = $use_declaration_statement->getDeclarations()[0];
     $this->assertEquals('MyNamespace\MyClass', $use_declaration->getName()->getText());
     $this->assertEquals('MyAlias', $use_declaration->getAlias()->getText());

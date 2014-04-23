@@ -1753,15 +1753,52 @@ EOF;
   }
 
   /**
-   * Test complex string
+   * Test complex string.
    */
   public function testComplexString() {
     $this->parseExpression('"start $a {$a} ${a} $a[0] ${a[0]} {$a[0]} ${$a} $a->b end"', '\Pharborist\ComplexStringNode');
   }
 
+  /**
+   * Test whitespace parsing.
+   */
   public function testWhitespace() {
     /** @var WhitespaceNode $ws */
     $ws = $this->parseSnippet("\n\n", '\Pharborist\WhitespaceNode');
     $this->assertEquals(2, $ws->getNewlineCount());
+  }
+
+  /**
+   * Test comment parsing.
+   */
+  public function testComment() {
+    /** @var CommentNode $comment */
+    $comment = $this->parseSnippet('// test', '\Pharborist\CommentNode');
+    $this->assertEquals('test', $comment->getCommentText());
+
+    $comment = $this->parseSnippet('# test', '\Pharborist\CommentNode');
+    $this->assertEquals('test', $comment->getCommentText());
+
+    $comment = $this->parseSnippet('/* test */', '\Pharborist\CommentNode');
+    $this->assertEquals('test', $comment->getCommentText());
+  }
+
+  /**
+   * Test doc comment parsing.
+   */
+  public function testDocComment() {
+    /** @var DocCommentNode $comment */
+    $comment = $this->parseSnippet('/** @var string $test */', '\Pharborist\DocCommentNode');
+    $this->assertEquals('@var string $test', $comment->getCommentText());
+
+    $snippet = <<<'EOF'
+/**
+ * Line one
+
+ * Line two
+ */
+EOF;
+    $comment = $this->parseSnippet($snippet, '\Pharborist\DocCommentNode');
+    $this->assertEquals("Line one\nLine two", $comment->getCommentText());
   }
 }

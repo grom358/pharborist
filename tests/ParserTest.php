@@ -1801,4 +1801,24 @@ EOF;
     $comment = $this->parseSnippet($snippet, '\Pharborist\DocCommentNode');
     $this->assertEquals("Line one\nLine two", $comment->getCommentText());
   }
+
+  /**
+   * Test block comment.
+   */
+  public function testBlockComment() {
+    $snippet = <<<'EOF'
+// Line one
+  // Line two
+// Line three
+
+// Line four
+EOF;
+    /** @var LineCommentBlockNode $comment_block */
+    $comment_block = $this->parseSnippet($snippet, '\Pharborist\LineCommentBlockNode');
+    $this->assertEquals("Line one\nLine two\nLine three", $comment_block->getCommentText());
+
+    /** @var CommentNode $comment */
+    $comment = $comment_block->parent()->lastChild();
+    $this->assertEquals("Line four", $comment->getCommentText());
+  }
 }

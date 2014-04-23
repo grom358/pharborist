@@ -2656,12 +2656,51 @@ class Parser {
     }
   }
 
+  private function getSkipNodes($skipped) {
+    $nodes = [];
+    for ($i = 0, $n = count($skipped); $i < $n; $i++) {
+      $token = $skipped[$i];
+      if ($token instanceof CommentNode && $token->isLineComment()) {
+        $comment = $token;
+        $end = $i;
+        for ($j = $i + 1; $j < $n; $j++) {
+          $token = $skipped[$j];
+          if ($token instanceof WhitespaceNode && $token->getNewlineCount() === 0) {
+            $j++;
+            $token = $j < $n ? $skipped[$j] : NULL;
+          }
+          if ($token instanceof CommentNode && $token->getCommentType() === $comment->getCommentType()) {
+            $end = $j;
+          }
+          else {
+            break;
+          }
+        }
+        if ($end > $i) {
+          $comment_block = new LineCommentBlockNode();
+          for ($i = 0; $i <= $end; $i++) {
+            $comment_block->addChild($skipped[$i]);
+          }
+          $i = $end;
+          $nodes[] = $comment_block;
+        }
+        else {
+          $nodes[] = $comment;
+        }
+      }
+      else {
+        $nodes[] = $token;
+      }
+    }
+    return $nodes;
+  }
+
   /**
    * Add any previously skipped tokens to $parent.
    * @param ParentNode $parent
    */
   private function addSkipped(ParentNode $parent) {
-    $parent->addChildren($this->skipped);
+    $parent->addChildren($this->getSkipNodes($this->skipped));
     $this->skipped = [];
     $this->matchDocComment($this->skipParent ?: $parent, NULL);
     $this->skipParent = NULL;
@@ -2672,7 +2711,7 @@ class Parser {
    * @param ParentNode $parent
    */
   private function matchHidden(ParentNode $parent) {
-    $parent->addChildren($this->skipped);
+    $parent->addChildren($this->getSkipNodes($this->skipped));
     $this->skipped = [];
     $this->skipParent = $parent;
   }
@@ -2685,7 +2724,7 @@ class Parser {
   private function matchDocComment(ParentNode $parent, $property_name = 'docComment') {
     if ($this->docComment) {
       $parent->addChild($this->docComment, $property_name);
-      $parent->addChildren($this->skippedDocComment);
+      $parent->addChildren($this->getSkipNodes($this->skippedDocComment));
       $this->skippedDocComment = [];
       $this->docComment = NULL;
     }

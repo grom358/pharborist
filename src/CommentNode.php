@@ -50,6 +50,13 @@ class CommentNode extends HiddenNode {
   }
 
   /**
+   * @return bool
+   */
+  public function isLineComment() {
+    return $this->commentType === self::SINGLE || $this->commentType === self::HASH;
+  }
+
+  /**
    * @return string
    */
   public function getCommentText() {

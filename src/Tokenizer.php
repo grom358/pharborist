@@ -18,19 +18,19 @@ class Tokenizer {
     }
     $lineNo = $this->lineNo;
     $colNo = $this->colNo;
-    $line_count = substr_count($text, "\n");
-    if ($line_count > 0) {
-      $this->lineNo += $line_count;
+    $newline_count = substr_count($text, "\n");
+    if ($newline_count > 0) {
+      $this->lineNo += $newline_count;
       $lines = explode("\n", $text);
       $last_line = end($lines);
       $this->colNo = strlen($last_line) + 1;
     } else {
       $this->colNo += strlen($text);
     }
-    return $this->createToken($type, $text, new SourcePosition($lineNo, $colNo));
+    return $this->createToken($type, $text, new SourcePosition($lineNo, $colNo), $newline_count);
   }
 
-  private function createToken($type, $text, $position) {
+  private function createToken($type, $text, $position, $newline_count) {
     switch ($type) {
       case T_VARIABLE:
         return new VariableNode($type, $text, $position);
@@ -61,7 +61,7 @@ class Tokenizer {
       case T_DOC_COMMENT:
         return new DocCommentNode($type, $text, $position);
       case T_WHITESPACE:
-        return new WhitespaceNode($type, $text, $position);
+        return new WhitespaceNode($type, $text, $position, $newline_count);
       default:
         return new TokenNode($type, $text, $position);
     }

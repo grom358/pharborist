@@ -1758,4 +1758,10 @@ EOF;
   public function testComplexString() {
     $this->parseExpression('"start $a {$a} ${a} $a[0] ${a[0]} {$a[0]} ${$a} $a->b end"', '\Pharborist\ComplexStringNode');
   }
+
+  public function testWhitespace() {
+    /** @var WhitespaceNode $ws */
+    $ws = $this->parseSnippet("\n\n", '\Pharborist\WhitespaceNode');
+    $this->assertEquals(2, $ws->getNewlineCount());
+  }
 }

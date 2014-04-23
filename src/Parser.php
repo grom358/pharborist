@@ -110,7 +110,7 @@ class Parser {
     $this->iterator = $iterator;
     $this->current = $this->iterator->current();
     $this->currentType = $this->current ? $this->current->getType() : NULL;
-    $top = new StatementBlockNode();
+    $top = new TopNode();
     $this->top = $top;
     if ($this->currentType && $this->currentType !== T_OPEN_TAG) {
       $node = new TemplateNode();
@@ -2678,8 +2678,8 @@ class Parser {
         }
         if ($end > $i) {
           $comment_block = new LineCommentBlockNode();
-          for ($i = 0; $i <= $end; $i++) {
-            $comment_block->addChild($skipped[$i]);
+          for ($j = $i; $j <= $end; $j++) {
+            $comment_block->addChild($skipped[$j]);
           }
           $i = $end;
           $nodes[] = $comment_block;

@@ -372,7 +372,7 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
     $str = '';
     $child = $this->head;
     while ($child) {
-      $str .= (string) $child;
+      $str .= $child->getText();
       $child = $child->next;
     }
     return $str;

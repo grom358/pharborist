@@ -1797,10 +1797,12 @@ EOF;
 
  * Line two
  */
+some_func(); // func call
+             // comment
 EOF;
     $tree = $this->parseSnippetBlock($snippet);
-    $comments = $tree->children(Filter::isComment());
-    $this->assertCount(1, $comments);
+    $comments = $tree->find(Filter::isComment());
+    $this->assertCount(2, $comments);
     $comment = $comments[0];
     $this->assertInstanceOf('\Pharborist\DocCommentNode', $comment);
     $this->assertEquals("Line one\nLine two", $comment->getCommentText());
@@ -1811,6 +1813,8 @@ EOF;
    */
   public function testBlockComment() {
     $snippet = <<<'EOF'
+/** ignore */
+
 // Line one
   // Line two
 // Line three

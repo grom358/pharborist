@@ -35,7 +35,7 @@ $tree = Parser::parseFile($filename);
 // check there only one namespace declaration
 $namespaces = $tree->children(Filter::byInstance(NamespaceNode::class));
 if ($namespace->count() > 1) {
-  die('More then one namespace at line ' . $top_level_statement->getSourcePosition());
+  die('More then one namespace at line ' . $namespaces[1]->getSourcePosition());
 }
 ```
 [![Build Status](https://travis-ci.org/grom358/pharborist.png?branch=master)](https://travis-ci.org/grom358/pharborist)

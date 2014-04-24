@@ -84,7 +84,7 @@ class CommentNode extends HiddenNode {
               else {
                 $first = FALSE;
               }
-              $comment .= trim(substr($line, 1));
+              $comment .= substr($line, 2);
             }
           }
           return $comment;

@@ -33,7 +33,7 @@ use Pharborist\NamespaceNode;
 $tree = Parser::parseFile($filename);
 
 // check there only one namespace declaration
-$namespaces = $tree->children(Filter::byInstance(NamespaceNode::class));
+$namespaces = $tree->children(Filter::isInstanceOf(NamespaceNode::class));
 if ($namespace->count() > 1) {
   die('More then one namespace at line ' . $namespaces[1]->getSourcePosition());
 }

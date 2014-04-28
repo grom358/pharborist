@@ -13,7 +13,7 @@ class ClassConstantLookupNode extends ParentNode implements ExpressionNode {
   protected $className;
 
   /**
-   * @var Node
+   * @var TokenNode
    */
   protected $constantName;
 
@@ -25,7 +25,7 @@ class ClassConstantLookupNode extends ParentNode implements ExpressionNode {
   }
 
   /**
-   * @return Node
+   * @return TokenNode
    */
   public function getConstantName() {
     return $this->constantName;

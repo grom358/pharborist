@@ -307,6 +307,28 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
   }
 
   /**
+   * Reduce the set of matched nodes to the first in the set.
+   */
+  public function first() {
+    $matches = [];
+    if (!empty($this->nodes)) {
+      $matches[] = $this->nodes[0];
+    }
+    return new NodeCollection($matches, FALSE);
+  }
+
+  /**
+   * Reduce the set of matched nodes to the last in the set.
+   */
+  public function last() {
+    $matches = [];
+    if (!empty($this->nodes)) {
+      $matches[] = $this->nodes[count($this->nodes) - 1];
+    }
+    return new NodeCollection($matches, FALSE);
+  }
+
+  /**
    * Insert every node in the set of matched nodes before the targets.
    * @param Node|Node[]|NodeCollection $targets Nodes to insert before.
    * @return $this

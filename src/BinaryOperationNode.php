@@ -23,8 +23,16 @@ abstract class BinaryOperationNode extends ParentNode implements ExpressionNode 
   /**
    * @return ExpressionNode
    */
-  public function getLeft() {
+  public function getLeftOperand() {
     return $this->left;
+  }
+
+  /**
+   * @return $this
+   */
+  public function setLeftOperand(ExpressionNode $expr) {
+    $this->left = $expr;
+    return $this;
   }
 
   /**
@@ -33,11 +41,34 @@ abstract class BinaryOperationNode extends ParentNode implements ExpressionNode 
   public function getOperator() {
     return $this->operator;
   }
+  
+  /**
+   * @return $this
+   */
+  public function setOperator(Node $operator) {
+    $this->operator = $operator;
+    return $this;
+  }
 
   /**
    * @return ExpressionNode
    */
-  public function getRight() {
+  public function getRightOperand() {
     return $this->right;
+  }
+  
+  /**
+   * @return $this
+   */
+  public function setRightOperand(ExpressionNode $expr) {
+    $this->right = $expr;
+    return $this;
+  }
+
+  /**
+   * @return string
+   */
+  public function __toString() {
+    return $this->getLeftOperand() . ' ' . $this->getOperator() . ' ' . $this->getRightOperand();
   }
 }

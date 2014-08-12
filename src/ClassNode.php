@@ -1,6 +1,8 @@
 <?php
 namespace Pharborist;
 
+use \SplBool as Boolean;
+
 /**
  * Class declaration.
  */
@@ -53,12 +55,28 @@ class ClassNode extends StatementNode {
   public function getAbstract() {
     return $this->abstract;
   }
+  
+  /**
+   * @return $this
+   */
+  public function setAbstract(Boolean $status) {
+    $this->abstract = ($status ? new TokenNode(T_ABSTRACT, 'abstract') : NULL);
+    return $this;
+  }
 
   /**
    * @return TokenNode
    */
   public function getFinal() {
     return $this->final;
+  }
+  
+  /**
+   * @return $this
+   */
+  public function setFinal(Boolean $status) {
+    $this->final = ($status ? new TokenNode(T_FINAL, 'final') : NULL);
+    return $this;
   }
 
   /**
@@ -73,6 +91,17 @@ class ClassNode extends StatementNode {
    */
   public function getExtends() {
     return $this->extends;
+  }
+  
+  /**
+   * @todo
+   *  Throw an exception if $parent and $this->name have identical values.
+   *
+   * @return $this
+   */
+  public function setExtends(NameNode $parent = NULL) {
+    $this->extends = $parent;
+    return $this;
   }
 
   /**

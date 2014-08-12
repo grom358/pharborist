@@ -69,6 +69,6 @@ abstract class BinaryOperationNode extends ParentNode implements ExpressionNode 
    * @return string
    */
   public function __toString() {
-    return $this->getLeft() . ' ' . $this->getOperator() . ' ' . $this->getRight();
+    return $this->getLeftOperand() . ' ' . $this->getOperator() . ' ' . $this->getRightOperand();
   }
 }

@@ -1,7 +1,7 @@
 <?php
 namespace Pharborist;
 
-abstract class Renderer {
+abstract class Renderer implements RendererInterface {
   public function render(NodeInterface $node) {
     $method = 'render' . get_class($node);
 

@@ -70,7 +70,13 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
    * @return NodeCollection
    */
   public function slice($start_index, $end_index = NULL) {
-    $length = $end_index ? $end_index - $start_index + 1 : NULL;
+    if ($start_index < 0) {
+      $start_index = count($this->nodes) + $start_index;
+    }
+    if ($end_index < 0) {
+      $end_index = count($this->nodes) + $end_index;
+    }
+    $length = $end_index !== NULL ? $end_index - $start_index + 1 : NULL;
     return new NodeCollection(array_slice($this->nodes, $start_index, $length));
   }
 

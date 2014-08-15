@@ -83,6 +83,13 @@ class ClassNode extends StatementNode {
   }
 
   /**
+   * @return StatementBlockNode
+   */
+  public function getBody() {
+    return $this->statements;
+  }
+
+  /**
    * @return ClassStatementNode[]
    */
   public function getStatements() {

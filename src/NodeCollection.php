@@ -352,8 +352,8 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
    * @return $this
    */
   public function before($nodes) {
-    foreach ($this->nodes as $node) {
-      $node->before($nodes);
+    foreach ($this->nodes as $i => $node) {
+      $node->before($i === 0 ? $nodes : clone $nodes);
     }
     return $this;
   }
@@ -376,8 +376,8 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
    * @return $this
    */
   public function after($nodes) {
-    foreach ($this->nodes as $node) {
-      $node->after($nodes);
+    foreach ($this->nodes as $i => $node) {
+      $node->after($i === 0 ? $nodes : clone $nodes);
     }
     return $this;
   }

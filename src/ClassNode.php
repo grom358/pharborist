@@ -21,7 +21,7 @@ class ClassNode extends StatementNode {
   protected $final;
 
   /**
-   * @var TokenNode
+   * @var NameNode
    */
   protected $name;
 
@@ -62,10 +62,24 @@ class ClassNode extends StatementNode {
   }
 
   /**
-   * @return TokenNode
+   * @return NameNode
    */
   public function getName() {
     return $this->name;
+  }
+
+  /**
+   * Set the name of the declared class.
+   *
+   * @param string $name
+   *   New name of class.
+   * @return $this
+   */
+  public function setName($name) {
+    /** @var TokenNode $class_name */
+    $class_name = $this->name->firstChild();
+    $class_name->setText($name);
+    return $this;
   }
 
   /**

@@ -22,4 +22,18 @@ class StatementBlockNode extends ParentNode {
     }
     return $matches;
   }
+
+  /**
+   * Add indent to each statement.
+   *
+   * @param string $whitespace
+   *   Additional whitespace to add.
+   */
+  public function addIndent($whitespace) {
+    /** @var WhitespaceNode $wsNode */
+    foreach ($this->children(Filter::isInstanceOf('\Pharborist\WhitespaceNode'))->slice(0, -1) as $wsNode) {
+      $text = $wsNode->getText();
+      $wsNode->setText($text . $whitespace);
+    }
+  }
 }

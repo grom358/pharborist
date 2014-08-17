@@ -67,6 +67,19 @@ class ParameterNode extends ParentNode {
   }
 
   /**
+   * @return $this
+   */
+  public function setTypeHint($type_hint) {
+    if ($type_hint instanceof Node) {
+      $this->getTypeHint()->replaceWith($type_hint);
+    }
+    else {
+      return $this->setTypeHint(new TokenNode(T_STRING, $type_hint, $this->getTypeHint()->getSourcePosition()));
+    }
+    return $this;
+  }
+
+  /**
    * @return TokenNode
    */
   public function getReference() {

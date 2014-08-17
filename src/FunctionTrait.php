@@ -68,4 +68,16 @@ trait FunctionTrait {
   public function getBody() {
     return $this->body;
   }
+
+  /**
+   * @return $this
+   */
+  public function addParameter(ParameterNode $parameter) {
+    $this->parameters
+      ->append(new TokenNode(',', ','))
+      ->append(new TokenNode(T_WHITESPACE, ' '))
+      ->append($parameter);
+
+    return $this;
+  }
 }

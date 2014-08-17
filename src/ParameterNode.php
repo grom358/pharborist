@@ -16,7 +16,7 @@ class ParameterNode extends ParentNode {
   protected $reference;
 
   /**
-   * @var TokenNode
+   * @var VariableNode
    */
   protected $name;
 
@@ -25,6 +25,22 @@ class ParameterNode extends ParentNode {
    */
   protected $value;
 
+  /**
+   * Create a parameter node.
+   *
+   * @param string $parameter_name
+   *   Parameter name, eg. $parm
+   * @return ParameterNode
+   */
+  public static function create($parameter_name) {
+    $parameter_node = new ParameterNode();
+    $parameter_node->append(new VariableNode(T_VARIABLE, $parameter_name));
+    return $parameter_node;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   protected function childInserted(Node $node) {
     if ($node instanceof TokenNode) {
       if ($node->getType() === T_ARRAY || $node->getType() === T_CALLABLE) {
@@ -103,7 +119,7 @@ class ParameterNode extends ParentNode {
   }
 
   /**
-   * @return TokenNode
+   * @return VariableNode
    */
   public function getName() {
     return $this->name;

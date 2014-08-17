@@ -49,6 +49,13 @@ trait FunctionTrait {
   }
 
   /**
+   * @return ParameterListNode
+   */
+  public function getParameterList() {
+    return $this->parameters;
+  }
+
+  /**
    * @return ParameterNode[]
    */
   public function getParameters() {

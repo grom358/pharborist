@@ -63,6 +63,45 @@ trait FunctionTrait {
   }
 
   /**
+   * @param ParameterNode $parameter
+   * @return $this
+   */
+  public function prependParameter(ParameterNode $parameter) {
+    $parameters = $this->getParameters();
+    if (empty($parameters)) {
+      $this->parameters->firstChild()->after($parameter);
+    }
+    else {
+      $this->parameters->firstChild()->after([
+        $parameter,
+        new TokenNode(',', ','),
+        new TokenNode(T_WHITESPACE, ' '),
+      ]);
+    }
+    return $this;
+  }
+
+  /**
+   * @param ParameterNode $parameter
+   * @return $this
+   */
+  public function appendParameter(ParameterNode $parameter) {
+    $parameters = $this->getParameters();
+    if (empty($parameters)) {
+      $this->parameters->firstChild()->after($parameter);
+    }
+    else {
+      $last_parameter = $parameters[count($parameters) - 1];
+      $last_parameter->after([
+        new TokenNode(',', ','),
+        new TokenNode(T_WHITESPACE, ' '),
+        $parameter
+      ]);
+    }
+    return $this;
+  }
+
+  /**
    * @return StatementBlockNode
    */
   public function getBody() {

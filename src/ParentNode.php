@@ -73,6 +73,14 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
   }
 
   /**
+   * Called when a child has been inserted into the node.
+   * @param Node $node
+   */
+  protected function childInserted(Node $node) {
+    // Do nothing by default.
+  }
+
+  /**
    * Prepend a child to node.
    * @param Node $node
    * @return $this
@@ -84,6 +92,7 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
       $node->previous = NULL;
       $node->next = NULL;
       $this->head = $this->tail = $node;
+      $this->childInserted($node);
     }
     else {
       $this->insertBeforeChild($this->head, $node);
@@ -207,6 +216,7 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
     $node->previous = $child->previous;
     $node->next = $child;
     $child->previous = $node;
+    $this->childInserted($node);
     return $this;
   }
 
@@ -228,6 +238,7 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
     $node->previous = $child;
     $node->next = $child->next;
     $child->next = $node;
+    $this->childInserted($node);
     return $this;
   }
 

@@ -25,7 +25,7 @@ class ParameterNode extends ParentNode {
    */
   protected $value;
 
-  protected function insertChild(Node $node) {
+  protected function childInserted(Node $node) {
     if ($node instanceof TokenNode) {
       if ($node->getType() === T_ARRAY || $node->getType() === T_CALLABLE) {
         $this->typeHint = $node;
@@ -46,26 +46,6 @@ class ParameterNode extends ParentNode {
     elseif ($node instanceof ExpressionNode) {
       $this->value = $node;
     }
-  }
-
-  protected function insertBeforeChild(Node $child, Node $node) {
-    parent::insertBeforeChild($child, $node);
-    $this->insertChild($node);
-  }
-
-  protected function insertAfterChild(Node $child, Node $node) {
-    parent::insertAfterChild($child, $node);
-    $this->insertChild($node);
-  }
-
-  protected function prependChild(Node $node) {
-    parent::prependChild($node);
-    $this->insertChild($node);
-  }
-
-  protected function appendChild(Node $node) {
-    parent::appendChild($node);
-    $this->insertChild($node);
   }
 
   /**

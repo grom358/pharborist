@@ -77,7 +77,7 @@ class InterfaceMethodNode extends StatementNode implements InterfaceStatementNod
     return $this->parameters->getParameters();
   }
 
-  protected function insertChild(Node $node) {
+  protected function childInserted(Node $node) {
     static $visibilityTypes = [T_PUBLIC, T_PROTECTED, T_PRIVATE];
     if ($node instanceof TokenNode) {
       if ($node->getType() === '&') {
@@ -90,25 +90,5 @@ class InterfaceMethodNode extends StatementNode implements InterfaceStatementNod
         $this->static = $node;
       }
     }
-  }
-
-  protected function insertBeforeChild(Node $child, Node $node) {
-    parent::insertBeforeChild($child, $node);
-    $this->insertChild($node);
-  }
-
-  protected function insertAfterChild(Node $child, Node $node) {
-    parent::insertAfterChild($child, $node);
-    $this->insertChild($node);
-  }
-
-  protected function prependChild(Node $node) {
-    parent::prependChild($node);
-    $this->insertChild($node);
-  }
-
-  public function appendChild(Node $node) {
-    parent::appendChild($node);
-    $this->insertChild($node);
   }
 }

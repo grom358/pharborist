@@ -47,8 +47,8 @@ class ClassMethodNode extends ClassStatementNode {
   public static function fromFunction(FunctionDeclarationNode $function_node) {
     $method = static::create($function_node->getName()->getText());
     $function_node = clone $function_node;
-    $method->getParameterList()->replaceWith(clone $function_node->getParameterList());
-    $body = clone $function_node->getBody();
+    $method->getParameterList()->replaceWith($function_node->getParameterList());
+    $body = $function_node->getBody();
     $body->addIndent(Settings::get('formatter.indent'));
     $method->getBody()->replaceWith($body);
     return $method;

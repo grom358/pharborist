@@ -70,10 +70,10 @@ class ClassNode extends StatementNode {
   public function setAbstract($is_abstract) {
     if ($is_abstract) {
       if (!isset($this->abstract)) {
-        $this->abstract = new TokenNode(T_ABSTRACT, 'abstract');
+        $this->abstract = Token::_abstract();
         $this->prepend([
           $this->abstract,
-          new TokenNode(T_WHITESPACE, ' '),
+          Token::space(),
         ]);
         $this->setFinal(FALSE);
       }
@@ -103,10 +103,10 @@ class ClassNode extends StatementNode {
   public function setFinal($is_final) {
     if ($is_final) {
       if (!isset($this->final)) {
-        $this->final = new TokenNode(T_FINAL, 'final');
+        $this->final = Token::_final();
         $this->prepend([
           $this->final,
-          new TokenNode(T_WHITESPACE, ' '),
+          Token::space(),
         ]);
         $this->setAbstract(FALSE);
       }
@@ -176,9 +176,9 @@ class ClassNode extends StatementNode {
       }
       else {
         $this->name->after([
-          new TokenNode(T_WHITESPACE, ' '),
-          new TokenNode(T_EXTENDS, 'extends'),
-          new TokenNode(T_WHITESPACE, ' '),
+          Token::space(),
+          Token::_extends(),
+          Token::space(),
           $extends
         ]);
       }
@@ -244,9 +244,9 @@ class ClassNode extends StatementNode {
       else {
         $after = isset($this->extends) ? $this->extends : $this->name;
         $after->after([
-          new TokenNode(T_WHITESPACE, ' '),
-          new TokenNode(T_IMPLEMENTS, 'implements'),
-          new TokenNode(T_WHITESPACE, ' '),
+          Token::space(),
+          Token::_implements(),
+          Token::space(),
           $implements
         ]);
       }
@@ -284,14 +284,14 @@ class ClassNode extends StatementNode {
     $properties = $this->statements->children(Filter::isInstanceOf('\Pharborist\ClassMemberListNode'));
     if ($properties->count() === 0) {
       $this->statements->prepend([
-        new TokenNode(T_WHITESPACE, $nl . $indent),
+        WhitespaceNode::create($nl . $indent),
         $property,
-        new TokenNode(T_WHITESPACE, $nl),
+        WhitespaceNode::create($nl),
       ]);
     }
     else {
       $properties->last()->after([
-        new TokenNode(T_WHITESPACE, $nl . $nl . $indent),
+        WhitespaceNode::create($nl . $nl . $indent),
         $property
       ]);
     }
@@ -311,9 +311,9 @@ class ClassNode extends StatementNode {
     $nl = Settings::get('formatter.nl');
     $indent = Settings::get('formatter.indent');
     $this->statements->append([
-      new TokenNode(T_WHITESPACE, $nl . $indent),
+      WhitespaceNode::create($nl . $indent),
       $method,
-      new TokenNode(T_WHITESPACE, $nl),
+      WhitespaceNode::create($nl),
     ]);
     return $this;
   }

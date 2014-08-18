@@ -22,6 +22,10 @@ class WhitespaceNode extends HiddenNode {
     $this->newlineCount = $newline_count;
   }
 
+  public static function create($whitespace) {
+    return new WhitespaceNode(T_WHITESPACE, $whitespace);
+  }
+
   /**
    * @return int
    */

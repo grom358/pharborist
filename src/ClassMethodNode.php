@@ -68,15 +68,15 @@ class ClassMethodNode extends ClassStatementNode {
   public function setAbstract($is_abstract) {
     if ($is_abstract) {
       if (!isset($this->abstract)) {
-        $this->abstract = new TokenNode(T_ABSTRACT, 'abstract');
+        $this->abstract = Token::_abstract();
         $this->prepend([
           $this->abstract,
-          new TokenNode(T_WHITESPACE, ' '),
+          Token::space(),
         ]);
         $this->setFinal(FALSE);
         // Remove method body since abstract method doesn't have one.
         $this->getBody()->previous(Filter::isInstanceOf('\Pharborist\WhitespaceNode'))->remove();
-        $this->getBody()->replaceWith(new TokenNode(';', ';'));
+        $this->getBody()->replaceWith(Token::semiComma());
         $this->body = NULL;
       }
     }
@@ -89,11 +89,11 @@ class ClassMethodNode extends ClassStatementNode {
         // Add empty body.
         $body = new StatementBlockNode();
         $body->append([
-          new TokenNode('{', '{'),
-          new TokenNode('}', '}'),
+          Token::openBrace(),
+          Token::closeBrace(),
         ]);
         $this->lastChild()->replaceWith($body);
-        $this->lastChild()->before(new TokenNode(T_WHITESPACE, ' '));
+        $this->lastChild()->before(Token::space());
         $this->body = $body;
       }
     }
@@ -114,10 +114,10 @@ class ClassMethodNode extends ClassStatementNode {
   public function setFinal($is_final) {
     if ($is_final) {
       if (!isset($this->final)) {
-        $this->final = new TokenNode(T_FINAL, 'final');
+        $this->final = Token::_final();
         $this->prepend([
           $this->final,
-          new TokenNode(T_WHITESPACE, ' '),
+          Token::space(),
         ]);
         $this->setAbstract(FALSE);
       }
@@ -150,8 +150,8 @@ class ClassMethodNode extends ClassStatementNode {
         // Insert before T_FUNCTION.
         $function_token = $this->name->previous()->previous();
         $function_token->before([
-          new TokenNode(T_STATIC, 'static'),
-          new TokenNode(T_WHITESPACE, ' '),
+          Token::_static(),
+          Token::space(),
         ]);
       }
     }
@@ -191,7 +191,7 @@ class ClassMethodNode extends ClassStatementNode {
       else {
         $this->prepend([
           $visibility,
-          new TokenNode(T_WHITESPACE, ' '),
+          Token::space(),
         ]);
       }
     }

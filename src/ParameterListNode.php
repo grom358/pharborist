@@ -23,8 +23,8 @@ class ParameterListNode extends ParentNode {
     else {
       $this->firstChild()->after([
         $parameter,
-        new TokenNode(',', ','),
-        new TokenNode(T_WHITESPACE, ' '),
+        Token::comma(),
+        Token::space(),
       ]);
     }
     return $this;
@@ -44,8 +44,8 @@ class ParameterListNode extends ParentNode {
     else {
       $last_parameter = $parameters[count($parameters) - 1];
       $last_parameter->after([
-        new TokenNode(',', ','),
-        new TokenNode(T_WHITESPACE, ' '),
+        Token::comma(),
+        Token::space(),
         $parameter,
       ]);
     }
@@ -76,8 +76,8 @@ class ParameterListNode extends ParentNode {
       }
       $parameters[$index]->before([
         $parameter,
-        new TokenNode(',', ','),
-        new TokenNode(T_WHITESPACE, ' '),
+        Token::comma(),
+        Token::space(),
       ]);
     }
     return $this;

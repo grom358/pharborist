@@ -79,7 +79,7 @@ class ParameterNode extends ParentNode {
     if (is_string($type_hint)) {
       $type = $type_hint;
       $type_hint = new NameNode();
-      $type_hint->append(new TokenNode(T_STRING, $type));
+      $type_hint->append(Token::string($type));
     }
     if (isset($this->typeHint)) {
       $this->typeHint->replaceWith($type_hint);
@@ -87,7 +87,7 @@ class ParameterNode extends ParentNode {
     else {
       $this->prepend([
         $type_hint,
-        new TokenNode(T_WHITESPACE, ' '),
+        Token::space(),
       ]);
     }
     return $this;
@@ -107,7 +107,7 @@ class ParameterNode extends ParentNode {
   public function setReference($is_reference) {
     if ($is_reference) {
       if (!isset($this->reference)) {
-        $this->name->before(new TokenNode('&', '&'));
+        $this->name->before(Token::reference());
       }
     }
     else {
@@ -158,9 +158,9 @@ class ParameterNode extends ParentNode {
       }
       else {
         $this->append([
-          new TokenNode(T_WHITESPACE, ' '),
-          new TokenNode('=', '='),
-          new TokenNode(T_WHITESPACE, ' '),
+          Token::space(),
+          Token::assign(),
+          Token::space(),
           $node,
         ]);
       }

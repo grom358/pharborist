@@ -26,7 +26,7 @@ class NameNode extends ParentNode {
   public static function create($name) {
     // @TODO Handle qualified namespace path.
     $name_node = new NameNode();
-    $name_node->append(new TokenNode(T_STRING, $name));
+    $name_node->append(Token::string($name));
     return $name_node;
   }
 

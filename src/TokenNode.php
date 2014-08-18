@@ -63,7 +63,7 @@ class TokenNode extends Node {
    * @return string
    */
   public function getTypeName() {
-    return self::getTypeName($this->type);
+    return self::typeName($this->type);
   }
 
   /**

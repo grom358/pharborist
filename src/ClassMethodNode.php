@@ -62,10 +62,75 @@ class ClassMethodNode extends ClassStatementNode {
   }
 
   /**
+   * @param boolean $is_abstract
+   * @return $this
+   */
+  public function setAbstract($is_abstract) {
+    if ($is_abstract) {
+      if (!isset($this->abstract)) {
+        $this->abstract = new TokenNode(T_ABSTRACT, 'abstract');
+        $this->prepend([
+          $this->abstract,
+          new TokenNode(T_WHITESPACE, ' '),
+        ]);
+        $this->setFinal(FALSE);
+        // Remove method body since abstract method doesn't have one.
+        $this->getBody()->previous(Filter::isInstanceOf('\Pharborist\WhitespaceNode'))->remove();
+        $this->getBody()->replaceWith(new TokenNode(';', ';'));
+        $this->body = NULL;
+      }
+    }
+    else {
+      if (isset($this->abstract)) {
+        // Remove whitespace.
+        $this->abstract->next()->remove();
+        // Remove abstract.
+        $this->abstract->remove();
+        // Add empty body.
+        $body = new StatementBlockNode();
+        $body->append([
+          new TokenNode('{', '{'),
+          new TokenNode('}', '}'),
+        ]);
+        $this->lastChild()->replaceWith($body);
+        $this->lastChild()->before(new TokenNode(T_WHITESPACE, ' '));
+        $this->body = $body;
+      }
+    }
+    return $this;
+  }
+
+  /**
    * @return TokenNode
    */
   public function getFinal() {
     return $this->final;
+  }
+
+  /**
+   * @param boolean $is_final
+   * @return $this
+   */
+  public function setFinal($is_final) {
+    if ($is_final) {
+      if (!isset($this->final)) {
+        $this->final = new TokenNode(T_FINAL, 'final');
+        $this->prepend([
+          $this->final,
+          new TokenNode(T_WHITESPACE, ' '),
+        ]);
+        $this->setAbstract(FALSE);
+      }
+    }
+    else {
+      if (isset($this->final)) {
+        // Remove whitespace.
+        $this->final->next()->remove();
+        // Remove final.
+        $this->final->remove();
+      }
+    }
+    return $this;
   }
 
   /**
@@ -76,10 +141,60 @@ class ClassMethodNode extends ClassStatementNode {
   }
 
   /**
+   * @param boolean $is_static
+   * @return $this
+   */
+  public function setStatic($is_static) {
+    if ($is_static) {
+      if (!isset($this->static)) {
+        // Insert before T_FUNCTION.
+        $function_token = $this->name->previous()->previous();
+        $function_token->before([
+          new TokenNode(T_STATIC, 'static'),
+          new TokenNode(T_WHITESPACE, ' '),
+        ]);
+      }
+    }
+    else {
+      if (isset($this->static)) {
+        // Remove whitespace after static keyword.
+        $this->static->next()->remove();
+        // Remove static keyword.
+        $this->static->remove();
+      }
+    }
+    return $this;
+  }
+
+  /**
    * @return TokenNode
    */
   public function getVisibility() {
     return $this->visibility;
+  }
+
+  /**
+   * @param TokenNode $visibility
+   * @return $this
+   */
+  public function setVisibility($visibility) {
+    if ($visibility === NULL) {
+      // Remove whitespace after visibility keyword.
+      $this->visibility->next()->remove();
+      // Remove visibility keyword.
+      $this->visibility->remove();
+    }
+    else {
+      if (isset($this->visibility)) {
+        $this->visibility->replaceWith($visibility);
+      }
+      else {
+        $this->prepend([
+          $visibility,
+          new TokenNode(T_WHITESPACE, ' '),
+        ]);
+      }
+    }
   }
 
   protected function childInserted(Node $node) {

@@ -107,4 +107,33 @@ class ParentNodeTest extends \PHPUnit_Framework_TestCase {
     $parent->append($token);
     $this->assertSame($token, $grandparent->lastToken());
   }
+
+  public function testClone() {
+    $parent = $this->createParentNode();
+    $one = $this->createNode('one');
+    $two = $this->createNode('two');
+    $three = $this->createNode('three');
+    $parent->append([$one, $two, $three]);
+    $copy = clone $parent;
+    // Test our copy equals original.
+    $this->assertEquals('one', $copy->firstChild()->getText());
+    $this->assertSame($copy, $copy->firstChild()->parent());
+    $this->assertEquals('two', $copy->firstChild()->next()->getText());
+    $this->assertEquals($copy, $copy->firstChild()->next()->parent());
+    $this->assertEquals('three', $copy->firstChild()->next()->next()->getText());
+    $this->assertEquals($copy, $copy->firstChild()->next()->next()->parent());
+    $this->assertNull($copy->firstChild()->next()->next()->next());
+    $this->assertEquals('three', $copy->lastChild()->getText());
+    $this->assertEquals($copy, $copy->lastChild()->parent());
+    $this->assertEquals('two', $copy->lastChild()->previous()->getText());
+    $this->assertEquals($copy, $copy->lastChild()->previous()->parent());
+    $this->assertEquals('one', $copy->lastChild()->previous()->previous()->getText());
+    $this->assertEquals($copy, $copy->lastChild()->previous()->previous()->parent());
+    $this->assertNull($copy->lastChild()->previous()->previous()->previous());
+    // Test clone was a deep copy.
+    $this->assertNotSame($parent, $copy);
+    $this->assertNotSame($one, $copy->firstChild());
+    $this->assertNotSame($two, $copy->firstChild()->next());
+    $this->assertNotSame($three, $copy->lastChild());
+  }
 }

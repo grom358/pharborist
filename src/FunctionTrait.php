@@ -67,17 +67,7 @@ trait FunctionTrait {
    * @return $this
    */
   public function prependParameter(ParameterNode $parameter) {
-    $parameters = $this->getParameters();
-    if (empty($parameters)) {
-      $this->parameters->firstChild()->after($parameter);
-    }
-    else {
-      $this->parameters->firstChild()->after([
-        $parameter,
-        new TokenNode(',', ','),
-        new TokenNode(T_WHITESPACE, ' '),
-      ]);
-    }
+    $this->parameters->prependParameter($parameter);
     return $this;
   }
 
@@ -86,18 +76,21 @@ trait FunctionTrait {
    * @return $this
    */
   public function appendParameter(ParameterNode $parameter) {
-    $parameters = $this->getParameters();
-    if (empty($parameters)) {
-      $this->parameters->firstChild()->after($parameter);
-    }
-    else {
-      $last_parameter = $parameters[count($parameters) - 1];
-      $last_parameter->after([
-        new TokenNode(',', ','),
-        new TokenNode(T_WHITESPACE, ' '),
-        $parameter
-      ]);
-    }
+    $this->parameters->appendParameter($parameter);
+    return $this;
+  }
+
+  /**
+   * Insert parameter before parameter at index.
+   *
+   * @param ParameterNode $parameter
+   * @param int $index
+   * @throws \OutOfBoundsException
+   *   Index out of bounds.
+   * @return $this
+   */
+  public function insertParameter(ParameterNode $parameter, $index) {
+    $this->parameters->insertParameter($parameter, $index);
     return $this;
   }
 

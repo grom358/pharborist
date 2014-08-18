@@ -28,6 +28,11 @@ interface ParentNodeInterface extends NodeInterface {
   public function children(callable $callback = NULL);
 
   /**
+   * Remove all child nodes.
+   */
+  public function clear();
+
+  /**
    * Prepend nodes to this node.
    * @param Node|Node[]|NodeCollection $nodes
    * @return $this

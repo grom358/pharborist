@@ -72,6 +72,10 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
     return new NodeCollection($matches);
   }
 
+  public function clear() {
+    $this->head = $this->tail = NULL;
+  }
+
   /**
    * Called when a child has been inserted into the node.
    * @param Node $node

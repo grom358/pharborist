@@ -159,6 +159,35 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
   }
 
   /**
+   * Get the immediate children of each node in the set of matched nodes.
+   * @param callable $callback An optional callback to filter by.
+   * @return NodeCollection
+   */
+  public function children(callable $callback = NULL) {
+    $matches = [];
+    foreach ($this->nodes as $node) {
+      if ($node instanceof ParentNode) {
+        $matches = array_merge($matches, $node->children($callback)->nodes);
+      }
+    }
+    return new NodeCollection($matches);
+  }
+
+  /**
+   * Remove all child nodes of the set of matched elements.
+   *
+   * @return $this
+   */
+  public function clear() {
+    foreach ($this->nodes as $node) {
+      if ($node instanceof ParentNode) {
+        $node->clear();
+      }
+    }
+    return $this;
+  }
+
+  /**
    * Get the immediately preceding sibling of each node in the set of matched
    * nodes. If a callback is provided, it retrieves the next sibling only if
    * the callback returns TRUE.

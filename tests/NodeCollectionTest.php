@@ -483,7 +483,19 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
     }
     $collection = new NodeCollection($nodes, FALSE);
     $slice = $collection->slice(2, 4);
+    $this->assertCount(2, $slice);
+
+    $slice = $collection->slice(1, -1);
     $this->assertCount(3, $slice);
+
+    $slice = $collection->slice(1, -2);
+    $this->assertCount(2, $slice);
+
+    $slice = $collection->slice(-2, -1);
+    $this->assertCount(1, $slice);
+
+    $slice = $collection->slice(-3, -1);
+    $this->assertCount(2, $slice);
   }
 
   public function testMap() {

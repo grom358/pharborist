@@ -279,8 +279,8 @@ class ClassNode extends StatementNode {
     if (is_string($property)) {
       $property = ClassMemberListNode::create($property);
     }
-    $nl = Settings::get('formatter.nl', "\n");
-    $indent = Settings::get('formatter.indent', '  ');
+    $nl = Settings::get('formatter.nl');
+    $indent = Settings::get('formatter.indent');
     $properties = $this->statements->children(Filter::isInstanceOf('\Pharborist\ClassMemberListNode'));
     if ($properties->count() === 0) {
       $this->statements->prepend([
@@ -308,8 +308,8 @@ class ClassNode extends StatementNode {
     if (is_string($method)) {
       $method = ClassMethodNode::create($method);
     }
-    $nl = Settings::get('formatter.nl', "\n");
-    $indent = Settings::get('formatter.indent', '  ');
+    $nl = Settings::get('formatter.nl');
+    $indent = Settings::get('formatter.indent');
     $this->statements->append([
       new TokenNode(T_WHITESPACE, $nl . $indent),
       $method,

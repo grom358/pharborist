@@ -17,3 +17,6 @@ class Settings {
     return self::$settings[$key] = $value;
   }
 }
+
+Settings::set('formatter.nl', "\n");
+Settings::set('formatter.indent', '  ');

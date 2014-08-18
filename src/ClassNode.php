@@ -62,6 +62,22 @@ class ClassNode extends StatementNode {
   public function getAbstract() {
     return $this->abstract;
   }
+  
+  /**
+   * @return $this
+   */
+  public function setAbstract($is_abstract) {
+    if ($is_abstract) {
+      $this->abstract = new TokenNode(T_ABSTRACT, 'abstract');
+      // @todo: Add a space after abstract?
+      // Abstract classes are meant to be extended, so they're never final.
+      $this->setFinal(FALSE);
+    }
+    else {
+      $this->abstract = NULL;
+    }
+    return $this;
+  }
 
   /**
    * @param boolean $is_abstract
@@ -94,6 +110,22 @@ class ClassNode extends StatementNode {
    */
   public function getFinal() {
     return $this->final;
+  }
+  
+  /**
+   * @return $this
+   */
+  public function setFinal($is_final) {
+    if ($is_final) {
+      $this->final = new TokenNode(T_FINAL, 'final');
+      // @todo: Add a space after final?
+      // Final classes cannot be extended, so they're never abstract.
+      $this->setAbstract(FALSE);
+    }
+    else {
+      $this->final = NULL;
+    }
+    return $this;
   }
 
   /**

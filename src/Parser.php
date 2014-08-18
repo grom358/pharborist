@@ -2006,7 +2006,7 @@ class Parser {
   private function parameterList() {
     $node = new ParameterListNode();
     $this->mustMatch('(', $node);
-    if ($this->tryMatch(')', $node)) {
+    if ($this->tryMatch(')', $node, NULL, TRUE)) {
       return $node;
     }
     do {

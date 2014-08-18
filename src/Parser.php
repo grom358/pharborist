@@ -1995,6 +1995,7 @@ class Parser {
     $this->mustMatch(T_STRING, $name_node, NULL, TRUE);
     $node->addChild($name_node, 'name');
     $node->addChild($this->parameterList(), 'parameters');
+    $this->matchHidden($node);
     $node->addChild($this->innerStatementBlock(), 'body');
     return $node;
   }

@@ -31,7 +31,7 @@ class StatementBlockNode extends ParentNode {
    */
   public function addIndent($whitespace) {
     /** @var WhitespaceNode $wsNode */
-    foreach ($this->children(Filter::isInstanceOf('\Pharborist\WhitespaceNode'))->slice(0, -1) as $wsNode) {
+    foreach ($this->children(Filter::isInstanceOf('\Pharborist\WhitespaceNode')) as $wsNode) {
       $text = $wsNode->getText();
       $wsNode->setText($text . $whitespace);
     }

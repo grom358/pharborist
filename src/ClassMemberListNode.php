@@ -21,6 +21,18 @@ class ClassMemberListNode extends ClassStatementNode {
   protected $visibility;
 
   /**
+   * @param string $property
+   *   Property with visibility modifier.
+   * @return ClassMemberListNode
+   */
+  public static function create($property) {
+    /** @var ClassNode $class_node */
+    $class_node = Parser::parseSnippet("class Property {{$property};}")->firstChild();
+    $property = $class_node->getBody()->firstChild()->remove();
+    return $property;
+  }
+
+  /**
    * @return DocCommentNode
    */
   public function getDocComment() {

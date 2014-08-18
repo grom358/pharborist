@@ -28,6 +28,17 @@ class ClassMethodNode extends ClassStatementNode {
   protected $visibility;
 
   /**
+   * @param string $method_name
+   * @return ClassMethodNode
+   */
+  public static function create($method_name) {
+    /** @var ClassNode $class_node */
+    $class_node = Parser::parseSnippet("class Property {public function {$method_name}() {}}")->firstChild();
+    $method_node = $class_node->getBody()->firstChild()->remove();
+    return $method_node;
+  }
+
+  /**
    * @return TokenNode
    */
   public function getAbstract() {

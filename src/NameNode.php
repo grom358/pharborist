@@ -18,6 +18,19 @@ class NameNode extends ParentNode {
   protected $alias;
 
   /**
+   * Create namespace path.
+   *
+   * @param string $name
+   * @return NameNode
+   */
+  public static function create($name) {
+    // @TODO Handle qualified namespace path.
+    $name_node = new NameNode();
+    $name_node->append(new TokenNode(T_STRING, $name));
+    return $name_node;
+  }
+
+  /**
    * @param string $base
    */
   public function setBase($base) {

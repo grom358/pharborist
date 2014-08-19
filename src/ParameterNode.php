@@ -79,7 +79,7 @@ class ParameterNode extends ParentNode {
     if (is_string($type_hint)) {
       $type = $type_hint;
       $type_hint = new NameNode();
-      $type_hint->append(Token::string($type));
+      $type_hint->append(Token::identifier($type));
     }
     if (isset($this->typeHint)) {
       $this->typeHint->replaceWith($type_hint);

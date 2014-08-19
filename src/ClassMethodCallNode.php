@@ -30,7 +30,7 @@ class ClassMethodCallNode extends CallNode implements VariableExpressionNode {
    */
   public function setClassName($class_name) {
     if (is_string($class_name)) {
-      $class_name = Token::string($class_name);
+      $class_name = Token::identifier($class_name);
     }
     $this->className->replaceWith($class_name);
     $this->className = $class_name;
@@ -50,7 +50,7 @@ class ClassMethodCallNode extends CallNode implements VariableExpressionNode {
    */
   public function setMethodName($method_name) {
     if (is_string($method_name)) {
-      $method_name = Token::string($method_name);
+      $method_name = Token::identifier($method_name);
     }
     $this->methodName->replaceWith($method_name);
     $this->methodName = $method_name;

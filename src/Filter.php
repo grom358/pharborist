@@ -6,6 +6,40 @@ namespace Pharborist;
  */
 class Filter {
   /**
+   * Callback returns true if any of the callbacks pass.
+   *
+   * @param callable[] $filters
+   * @return callable
+   */
+  public static function any($filters) {
+    return function ($node) use ($filters) {
+      foreach ($filters as $filter) {
+        if ($filter($node)) {
+          return TRUE;
+        }
+      }
+      return FALSE;
+    };
+  }
+
+  /**
+   * Callback returns true if all of the callbacks pass.
+   *
+   * @param callable[] $filters
+   * @return callable
+   */
+  public static function all($filters) {
+    return function ($node) use ($filters) {
+      foreach ($filters as $filter) {
+        if (!$filter($node)) {
+          return FALSE;
+        }
+      }
+      return TRUE;
+    };
+  }
+
+  /**
    * @param string $class_name
    * @return callable
    */

@@ -6,6 +6,6 @@ namespace Pharborist;
  *
  * For example, MyClass::{$dynamic_name}
  */
-class DynamicNameNode extends ParentNode {
+class NameExpressionNode extends ParentNode {
 
 }

@@ -1904,10 +1904,10 @@ class Parser {
 
   /**
    * Parse braces expression.
-   * @return DynamicNameNode
+   * @return NameExpressionNode
    */
   private function bracesExpr() {
-    $node = new DynamicNameNode();
+    $node = new NameExpressionNode();
     $this->mustMatch('{', $node);
     $node->addChild($this->expr());
     $this->mustMatch('}', $node, NULL, TRUE);

@@ -156,10 +156,10 @@ class Parser {
   }
 
   /**
-   * Parse a snippet of PHP and return the parsed tree.
+   * Parse a snippet of PHP and return the node of first element.
    * @param string $snippet PHP snippet without the opening PHP tag
-   * @return TopNode
-   *   The top-level node of the parsed tree
+   * @return Node
+   *   The first node in the snippet.
    */
   public static function parseSnippet($snippet) {
     $tree = self::parseSource('<?php ' . $snippet);

@@ -82,4 +82,14 @@ class ParameterListNode extends ParentNode {
     }
     return $this;
   }
+
+  /**
+   * Clear all parameters.
+   *
+   * @return $this
+   */
+  public function clearParameters() {
+    $this->children()->slice(1, -1)->remove();
+    return $this;
+  }
 }

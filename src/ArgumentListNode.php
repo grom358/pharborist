@@ -82,4 +82,13 @@ class ArgumentListNode extends ParentNode {
     }
     return $this;
   }
+
+  /**
+   * Remove all arguments.
+   *
+   * @return $this
+   */
+  public function clearArguments() {
+    $this->children()->slice(1, -1)->remove();
+  }
 }

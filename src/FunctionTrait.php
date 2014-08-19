@@ -163,6 +163,16 @@ trait FunctionTrait {
   }
 
   /**
+   * Remove all parameters.
+   *
+   * @return $this
+   */
+  public function clearParameters() {
+    $this->parameters->clearParameters();
+    return $this;
+  }
+
+  /**
    * @return StatementBlockNode
    */
   public function getBody() {

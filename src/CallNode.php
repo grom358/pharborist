@@ -55,4 +55,14 @@ abstract class CallNode extends ParentNode {
     $this->arguments->insertArgument($argument, $index);
     return $this;
   }
+
+  /**
+   * Remove all arguments.
+   *
+   * @return $this
+   */
+  public function clearArguments() {
+    $this->arguments->clearArguments();
+    return $this;
+  }
 }

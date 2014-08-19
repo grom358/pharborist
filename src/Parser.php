@@ -558,7 +558,7 @@ class Parser {
    */
   private function forExpr(ForNode $parent, $terminator, $property_name, $is_last = FALSE) {
     if ($this->tryMatch($terminator, $parent)) {
-      $parent->addChild(new ExpressionListNode(), $property_name);
+      $parent->addChild(new CommaListNode(), $property_name);
       return;
     }
     $parent->addChild($this->exprList(), $property_name);
@@ -786,13 +786,13 @@ class Parser {
     $statement_node = new UnsetStatementNode();
     $node = new UnsetNode();
     $this->mustMatch(T_UNSET, $node, 'name');
-    $arguments = new ArgumentListNode();
-    $this->mustMatch('(', $arguments);
+    $arguments = new CommaListNode();
+    $this->mustMatch('(', $node);
+    $node->addChild($arguments, 'arguments');
     do {
       $arguments->addChild($this->variable());
     } while ($this->tryMatch(',', $arguments));
-    $this->mustMatch(')', $arguments);
-    $node->addChild($arguments, 'arguments');
+    $this->mustMatch(')', $node, NULL, FALSE);
     $statement_node->addChild($node, 'functionCall');
     $this->mustMatch(';', $statement_node, NULL, TRUE, TRUE);
     return $statement_node;
@@ -855,8 +855,9 @@ class Parser {
   private function _list() {
     $node = new ListNode();
     $this->mustMatch(T_LIST, $node, 'name');
-    $arguments = new ArgumentListNode();
-    $this->mustMatch('(', $arguments);
+    $arguments = new CommaListNode();
+    $this->mustMatch('(', $node);
+    $node->addChild($arguments, 'arguments');
     do {
       if ($this->currentType === ')') {
         break;
@@ -865,8 +866,7 @@ class Parser {
         $arguments->addChild($this->listElement());
       }
     } while ($this->tryMatch(',', $arguments));
-    $this->mustMatch(')', $arguments, NULL, TRUE);
-    $node->addChild($arguments, 'arguments');
+    $this->mustMatch(')', $node, NULL, TRUE);
     return $node;
   }
 
@@ -964,10 +964,10 @@ class Parser {
 
   /**
    * Parse a list of expressions.
-   * @return ExpressionListNode
+   * @return CommaListNode
    */
   private function exprList() {
-    $node = new ExpressionListNode();
+    $node = new CommaListNode();
     do {
       $node->addChild($this->expr());
     } while ($this->tryMatch(',', $node));
@@ -1242,13 +1242,13 @@ class Parser {
       case T_ISSET:
         $node = new IssetNode();
         $this->mustMatch(T_ISSET, $node, 'name');
-        $arguments = new ArgumentListNode();
-        $this->mustMatch('(', $arguments);
+        $arguments = new CommaListNode();
+        $this->mustMatch('(', $node);
+        $node->addChild($arguments, 'arguments');
         do {
           $arguments->addChild($this->variable());
         } while ($this->tryMatch(',', $arguments));
-        $this->mustMatch(')', $arguments, NULL, TRUE);
-        $node->addChild($arguments, 'arguments');
+        $this->mustMatch(')', $node, NULL, TRUE);
         return $node;
       case T_EMPTY:
       case T_EVAL:
@@ -1259,11 +1259,11 @@ class Parser {
           $node = new EvalNode();
         }
         $this->mustMatch($this->currentType, $node, 'name');
-        $arguments = new ArgumentListNode();
-        $this->mustMatch('(', $arguments);
-        $arguments->addChild($this->expr());
-        $this->mustMatch(')', $arguments, NULL, TRUE);
+        $arguments = new CommaListNode();
+        $this->mustMatch('(', $node);
         $node->addChild($arguments, 'arguments');
+        $arguments->addChild($this->expr());
+        $this->mustMatch(')', $node, NULL, TRUE);
         return $node;
       case T_INCLUDE:
       case T_REQUIRE:
@@ -1338,7 +1338,7 @@ class Parser {
     }
     $this->mustMatch(T_FUNCTION, $node);
     $this->tryMatch('&', $node, 'reference');
-    $node->addChild($this->parameterList(), 'parameters');
+    $this->parameterList($node);
     if ($this->tryMatch(T_USE, $node)) {
       $this->mustMatch('(', $node);
       $lexical_vars_node = new CommaListNode();
@@ -1929,10 +1929,10 @@ class Parser {
    * @param NewNode|FunctionCallNode|ClassMethodCallNode|ObjectMethodCallNode $node
    */
   private function functionCallParameterList($node) {
-    $arguments = new ArgumentListNode();
-    $this->mustMatch('(', $arguments);
-    if ($this->tryMatch(')', $arguments, NULL, TRUE)) {
-      $node->addChild($arguments, 'arguments');
+    $arguments = new CommaListNode();
+    $this->mustMatch('(', $node);
+    $node->addChild($arguments, 'arguments');
+    if ($this->tryMatch(')', $node, NULL, TRUE)) {
       return;
     }
     if ($this->currentType === T_YIELD) {
@@ -1942,8 +1942,7 @@ class Parser {
         $arguments->addChild($this->functionCallParameter());
       } while ($this->tryMatch(',', $arguments));
     }
-    $this->mustMatch(')', $arguments, NULL, TRUE);
-    $node->addChild($arguments, 'arguments');
+    $this->mustMatch(')', $node, NULL, TRUE);
   }
 
   /**
@@ -1992,7 +1991,7 @@ class Parser {
     $name_node->setBase($this->baseName);
     $this->mustMatch(T_STRING, $name_node, NULL, TRUE);
     $node->addChild($name_node, 'name');
-    $node->addChild($this->parameterList(), 'parameters');
+    $this->parameterList($node);
     $this->matchHidden($node);
     $node->addChild($this->innerStatementBlock(), 'body');
     return $node;
@@ -2000,19 +1999,19 @@ class Parser {
 
   /**
    * Parse parameter list.
-   * @return ParameterListNode
+   * @param Node $parent
    */
-  private function parameterList() {
-    $node = new ParameterListNode();
-    $this->mustMatch('(', $node);
-    if ($this->tryMatch(')', $node, NULL, TRUE)) {
-      return $node;
+  private function parameterList(ParentNode $parent) {
+    $node = new CommaListNode();
+    $this->mustMatch('(', $parent);
+    $parent->addChild($node, 'parameters');
+    if ($this->tryMatch(')', $parent, NULL, TRUE)) {
+      return;
     }
     do {
       $node->addChild($this->parameter());
     } while ($this->tryMatch(',', $node));
-    $this->mustMatch(')', $node, NULL, TRUE);
-    return $node;
+    $this->mustMatch(')', $parent, NULL, TRUE);
   }
 
   /**
@@ -2432,7 +2431,7 @@ class Parser {
     $this->mustMatch(T_FUNCTION, $node);
     $this->tryMatch('&', $node, 'reference');
     $this->mustMatch(T_STRING, $node, 'name');
-    $node->addChild($this->parameterList(), 'parameters');
+    $this->parameterList($node);
     if ($modifiers->getAbstract()) {
       $this->mustMatch(';', $node, NULL, TRUE, TRUE);
       return $node;
@@ -2578,7 +2577,7 @@ class Parser {
     $this->mustMatch(T_FUNCTION, $node);
     $this->tryMatch('&', $node, 'reference');
     $this->mustMatch(T_STRING, $node, 'name');
-    $node->addChild($this->parameterList(), 'parameters');
+    $this->parameterList($node);
     $this->mustMatch(';', $node, NULL, TRUE, TRUE);
     return $node;
   }

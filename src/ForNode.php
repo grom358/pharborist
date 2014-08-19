@@ -6,17 +6,17 @@ namespace Pharborist;
  */
 class ForNode extends StatementNode {
   /**
-   * @var ExpressionListNode
+   * @var CommaListNode
    */
   protected $initial;
 
   /**
-   * @var ExpressionListNode
+   * @var CommaListNode
    */
   protected $condition;
 
   /**
-   * @var ExpressionListNode
+   * @var CommaListNode
    */
   protected $step;
 
@@ -26,21 +26,21 @@ class ForNode extends StatementNode {
   protected $body;
 
   /**
-   * @return ExpressionListNode
+   * @return CommaListNode
    */
   public function getInitial() {
     return $this->initial;
   }
 
   /**
-   * @return ExpressionListNode
+   * @return CommaListNode
    */
   public function getCondition() {
     return $this->condition;
   }
 
   /**
-   * @return ExpressionListNode
+   * @return CommaListNode
    */
   public function getStep() {
     return $this->step;

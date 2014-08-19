@@ -13,11 +13,6 @@ class CallbackCallNode extends CallNode implements ExpressionNode {
   protected $callback;
 
   /**
-   * @var ArgumentListNode
-   */
-  protected $arguments;
-
-  /**
    * @return Node
    */
   public function getCallback() {

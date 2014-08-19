@@ -7,27 +7,17 @@ namespace Pharborist;
  * For example, new MyClass()
  */
 class NewNode extends ParentNode implements ExpressionNode {
+  use ArgumentTrait;
+
   /**
    * @var NameNode
    */
   protected $className;
 
   /**
-   * @var ArgumentListNode
-   */
-  protected $arguments;
-
-  /**
    * @return NameNode
    */
   public function getClassName() {
     return $this->className;
-  }
-
-  /**
-   * @return ExpressionNode[]
-   */
-  public function getArguments() {
-    return $this->arguments->getArguments();
   }
 }

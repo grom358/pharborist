@@ -5,7 +5,7 @@ namespace Pharborist;
  * Function/method parameters
  */
 class ParameterListNode extends ParentNode {
-  public function getParameters() {
+  public function asArray() {
     return $this->childrenByInstance('\Pharborist\ParameterNode');
   }
 
@@ -16,7 +16,7 @@ class ParameterListNode extends ParentNode {
    * @return $this
    */
   public function prependParameter(ParameterNode $parameter) {
-    $parameters = $this->getParameters();
+    $parameters = $this->asArray();
     if (empty($parameters)) {
       $this->firstChild()->after($parameter);
     }
@@ -37,7 +37,7 @@ class ParameterListNode extends ParentNode {
    * @return $this
    */
   public function appendParameter(ParameterNode $parameter) {
-    $parameters = $this->getParameters();
+    $parameters = $this->asArray();
     if (empty($parameters)) {
       $this->firstChild()->after($parameter);
     }
@@ -62,7 +62,7 @@ class ParameterListNode extends ParentNode {
    * @return $this
    */
   public function insertParameter(ParameterNode $parameter, $index) {
-    $parameters = $this->getParameters();
+    $parameters = $this->asArray();
     if (empty($parameters)) {
       if ($index > 0) {
         throw new \OutOfBoundsException('index out of bounds');

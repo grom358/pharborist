@@ -5,6 +5,8 @@ namespace Pharborist;
  * An interface method.
  */
 class InterfaceMethodNode extends StatementNode implements InterfaceStatementNode {
+  use ParameterTrait;
+
   /**
    * @var DocCommentNode
    */
@@ -29,11 +31,6 @@ class InterfaceMethodNode extends StatementNode implements InterfaceStatementNod
    * @var TokenNode
    */
   protected $name;
-
-  /**
-   * @var ParameterListNode
-   */
-  protected $parameters;
 
   /**
    * @return DocCommentNode
@@ -68,13 +65,6 @@ class InterfaceMethodNode extends StatementNode implements InterfaceStatementNod
    */
   public function getName() {
     return $this->name;
-  }
-
-  /**
-   * @return ParameterNode[]
-   */
-  public function getParameters() {
-    return $this->parameters->getParameters();
   }
 
   protected function childInserted(Node $node) {

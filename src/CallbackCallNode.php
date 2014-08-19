@@ -23,11 +23,4 @@ class CallbackCallNode extends CallNode implements ExpressionNode {
   public function getCallback() {
     return $this->callback;
   }
-
-  /**
-   * @return ExpressionNode[]
-   */
-  public function getArguments() {
-    return $this->arguments->getArguments();
-  }
 }

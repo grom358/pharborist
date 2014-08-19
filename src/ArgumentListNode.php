@@ -5,7 +5,7 @@ namespace Pharborist;
  * List of function/method call arguments.
  */
 class ArgumentListNode extends ParentNode {
-  public function getArguments() {
+  public function asArray() {
     return $this->childrenByInstance('\Pharborist\ExpressionNode');
   }
 
@@ -16,7 +16,7 @@ class ArgumentListNode extends ParentNode {
    * @return $this
    */
   public function prependArgument(ExpressionNode $argument) {
-    $arguments = $this->getArguments();
+    $arguments = $this->asArray();
     if (empty($arguments)) {
       $this->firstChild()->after($argument);
     }
@@ -37,7 +37,7 @@ class ArgumentListNode extends ParentNode {
    * @return $this
    */
   public function appendArgument(ExpressionNode $argument) {
-    $arguments = $this->getArguments();
+    $arguments = $this->asArray();
     if (empty($arguments)) {
       $this->firstChild()->after($argument);
     }
@@ -62,7 +62,7 @@ class ArgumentListNode extends ParentNode {
    * @return $this
    */
   public function insertArgument(ExpressionNode $argument, $index) {
-    $arguments = $this->getArguments();
+    $arguments = $this->asArray();
     if (empty($arguments)) {
       if ($index > 0) {
         throw new \OutOfBoundsException('index out of bounds');

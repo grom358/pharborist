@@ -5,15 +5,12 @@ namespace Pharborist;
  * An anonymous function.
  */
 class AnonymousFunctionNode extends ParentNode implements ExpressionNode {
+  use ParameterTrait;
+
   /**
    * @var TokenNode
    */
   protected $reference;
-
-  /**
-   * @var ParameterListNode
-   */
-  protected $parameters;
 
   /**
    * @var CommaListNode
@@ -30,20 +27,6 @@ class AnonymousFunctionNode extends ParentNode implements ExpressionNode {
    */
   public function getReference() {
     return $this->reference;
-  }
-
-  /**
-   * @return ParameterListNode
-   */
-  public function getParameterList() {
-    return $this->parameters;
-  }
-
-  /**
-   * @return ParameterNode[]
-   */
-  public function getParameters() {
-    return $this->parameters->getParameters();
   }
 
   /**

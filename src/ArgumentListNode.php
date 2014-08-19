@@ -5,6 +5,9 @@ namespace Pharborist;
  * List of function/method call arguments.
  */
 class ArgumentListNode extends ParentNode {
+  /**
+   * @return ExpressionNode[]
+   */
   public function asArray() {
     return $this->childrenByInstance('\Pharborist\ExpressionNode');
   }

@@ -5,6 +5,9 @@ namespace Pharborist;
  * Function/method parameters
  */
 class ParameterListNode extends ParentNode {
+  /**
+   * @return ParameterNode[]
+   */
   public function asArray() {
     return $this->childrenByInstance('\Pharborist\ParameterNode');
   }

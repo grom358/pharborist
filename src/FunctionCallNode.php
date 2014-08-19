@@ -16,4 +16,17 @@ class FunctionCallNode extends CallNode implements VariableExpressionNode {
   public function getName() {
     return $this->name;
   }
+
+  /**
+   * @param string|NameNode $name
+   * @return $this
+   */
+  public function setName($name) {
+    if (is_string($name)) {
+      $name = NameNode::create($name);
+    }
+    $this->name->replaceWith($name);
+    $this->name = $name;
+    return $this;
+  }
 }

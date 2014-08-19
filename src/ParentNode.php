@@ -407,14 +407,16 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
   }
 
   /**
-   * Convert to array.
+   * Convert tree into array.
+   *
+   * Useful for viewing the tree structure.
    */
-  public function toArray() {
+  public function getTree() {
     $children = array();
     $child = $this->head;
     while ($child) {
       if ($child instanceof ParentNode) {
-        $children[] = $child->toArray();
+        $children[] = $child->getTree();
       }
       else {
         /** @var TokenNode $child */

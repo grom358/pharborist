@@ -20,12 +20,11 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
   }
 
   /**
-   * Helper function to parse a snippet block.
+   * Helper function to parse source.
    */
-  public function parseSnippetBlock($snippet) {
-    $tree = Parser::parseSnippet($snippet);
-    $source = $tree->getText();
-    $this->assertEquals($snippet, $source);
+  public function parseSource($source) {
+    $tree = Parser::parseSource($source);
+    $this->assertEquals($source, $tree->getText());
     return $tree;
   }
 
@@ -33,10 +32,10 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
    * Helper function to parse a snippet.
    */
   public function parseSnippet($snippet, $expected_type) {
-    $tree = $this->parseSnippetBlock($snippet);
-    $first_child = $tree->firstChild();
-    $this->assertInstanceOf($expected_type, $first_child);
-    return $first_child;
+    $tree = $this->parseSource('<?php '. $snippet);
+    $node = $tree->firstChild()->next();
+    $this->assertInstanceOf($expected_type, $node);
+    return $node;
   }
 
   /**
@@ -1475,9 +1474,10 @@ EOF';
    */
   public function testTokenIteration() {
     /** @var \Pharborist\ExpressionStatementNode $tree */
-    $tree = $this->parseSnippet('1 + 2;', '\Pharborist\ExpressionStatementNode');
-    $one = $tree->firstToken();
-    $this->assertNull($one->previousToken());
+    $tree = $this->parseSource('<?php 1 + 2;');
+    $openTag = $tree->firstToken();
+    $this->assertNull($openTag->previousToken());
+    $one = $openTag->nextToken();
     $this->assertEquals('1', $one->getText());
     $op = $one->nextToken()->nextToken();
     $this->assertEquals('+', $op->getText());
@@ -1615,13 +1615,14 @@ EOF;
    * Test goto.
    */
   public function testGoto() {
-    $snippet = <<<'EOF'
+    $source = <<<'EOF'
+<?php
 loop:
   goto loop;
 EOF;
-    $tree = $this->parseSnippetBlock($snippet);
+    $tree = $this->parseSource($source);
     /** @var GotoLabelNode $goto_label */
-    $goto_label = $tree->firstChild();
+    $goto_label = $tree->firstChild()->next();
     $this->assertInstanceOf('\Pharborist\GotoLabelNode', $goto_label);
     $this->assertEquals('loop', $goto_label->getLabel()->getText());
     /** @var GotoStatementNode $goto_statement */
@@ -1801,7 +1802,8 @@ EOF;
     $comment = $this->parseSnippet('/** @var string $test */', '\Pharborist\DocCommentNode');
     $this->assertEquals('@var string $test', $comment->getCommentText());
 
-    $snippet = <<<'EOF'
+    $source = <<<'EOF'
+<?php
 /**
  * Line one
 
@@ -1810,7 +1812,7 @@ EOF;
 some_func(); // func call
              // comment
 EOF;
-    $tree = $this->parseSnippetBlock($snippet);
+    $tree = $this->parseSource($source);
     $comments = $tree->find(Filter::isComment());
     $this->assertCount(2, $comments);
     $comment = $comments[0];
@@ -1822,7 +1824,8 @@ EOF;
    * Test block comment.
    */
   public function testBlockComment() {
-    $snippet = <<<'EOF'
+    $source = <<<'EOF'
+<?php
 /** ignore */
 
 // Line one
@@ -1831,7 +1834,7 @@ EOF;
 
 // Line four
 EOF;
-    $tree = $this->parseSnippetBlock($snippet);
+    $tree = $this->parseSource($source);
     $comments = $tree->children(Filter::isComment(FALSE));
 
     /** @var LineCommentBlockNode $comment_block */

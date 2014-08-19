@@ -163,9 +163,7 @@ class Parser {
    */
   public static function parseSnippet($snippet) {
     $tree = self::parseSource('<?php ' . $snippet);
-    // Strip the inserted opening php tag
-    $tree->firstChild()->remove();
-    return $tree;
+    return $tree->firstChild()->next();
   }
 
   /**

@@ -15,9 +15,8 @@ namespace Top\Sub {
   D::foo();
 }
 EOF;
-    $tree = Parser::parseSnippet($snippet);
     /** @var NamespaceNode $namespace */
-    $namespace = $tree->lastChild();
+    $namespace = Parser::parseSnippet($snippet);
 
     /** @var StatementNode[] $statements */
     $statements = $namespace->getBody()->getStatements();
@@ -86,9 +85,8 @@ namespace Top\Sub {
   new F\G();
 }
 EOF;
-    $tree = Parser::parseSnippet($snippet);
     /** @var NamespaceNode $namespace */
-    $namespace = $tree->lastChild();
+    $namespace = Parser::parseSnippet($snippet);
 
     /** @var StatementNode[] $statements */
     $statements = $namespace->getBody()->getStatements();
@@ -139,9 +137,8 @@ namespace Top\Sub {
   \A\B::foo();
 }
 EOF;
-    $tree = Parser::parseSnippet($snippet);
     /** @var NamespaceNode $namespace */
-    $namespace = $tree->lastChild();
+    $namespace = Parser::parseSnippet($snippet);
 
     /** @var StatementNode[] $statements */
     $statements = $namespace->getBody()->getStatements();
@@ -206,9 +203,8 @@ namespace Top\Sub {
   new namespace\Level\MyClass();
 }
 EOF;
-    $tree = Parser::parseSnippet($snippet);
     /** @var NamespaceNode $namespace */
-    $namespace = $tree->lastChild();
+    $namespace = Parser::parseSnippet($snippet);
 
     /** @var StatementNode[] $statements */
     $statements = $namespace->getBody()->getStatements();

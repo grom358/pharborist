@@ -25,4 +25,77 @@ class CommaListNode extends ParentNode {
     }
     return $items;
   }
+
+  /**
+   * Prepend item.
+   *
+   * @param Node $item
+   * @return $this
+   */
+  public function prependItem(Node $item) {
+    $items = $this->getItems();
+    if (empty($items)) {
+      $this->append($item);
+    }
+    else {
+      $this->prepend([
+        $item,
+        Token::comma(),
+        Token::space(),
+      ]);
+    }
+    return $this;
+  }
+
+  /**
+   * Append item.
+   *
+   * @param Node $item
+   * @return $this
+   */
+  public function appendItem(Node $item) {
+    $items = $this->getItems();
+    if (empty($items)) {
+      $this->append($item);
+    }
+    else {
+      $this->append([
+        Token::comma(),
+        Token::space(),
+        $item,
+      ]);
+    }
+    return $this;
+  }
+
+  /**
+   * Insert item before index.
+   *
+   * @param Node $item
+   * @param int $index
+   * @throws \OutOfBoundsException
+   *   Index out of bounds.
+   * @return $this
+   */
+  public function insertItem(Node $item, $index) {
+    $items = $this->getItems();
+    if (empty($items)) {
+      if ($index > 0) {
+        throw new \OutOfBoundsException('index out of bounds');
+      }
+      $this->append($item);
+    }
+    else {
+      $max_index = count($items) - 1;
+      if ($index < 0 || $index > $max_index) {
+        throw new \OutOfBoundsException('index out of bounds');
+      }
+      $items[$index]->before([
+        $item,
+        Token::comma(),
+        Token::space(),
+      ]);
+    }
+    return $this;
+  }
 }

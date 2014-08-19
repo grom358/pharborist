@@ -6,12 +6,12 @@ namespace Pharborist;
  */
 trait ArgumentTrait {
   /**
-   * @var ArgumentListNode
+   * @var CommaListNode
    */
   protected $arguments;
 
   /**
-   * @return ArgumentListNode
+   * @return CommaListNode
    */
   public function getArgumentList() {
     return $this->arguments;
@@ -21,7 +21,7 @@ trait ArgumentTrait {
    * @return ExpressionNode[]
    */
   public function getArguments() {
-    return $this->arguments->asArray();
+    return $this->arguments->getItems();
   }
 
   /**
@@ -29,7 +29,7 @@ trait ArgumentTrait {
    * @return $this
    */
   public function appendArgument(ExpressionNode $argument) {
-    $this->arguments->appendArgument($argument);
+    $this->arguments->appendItem($argument);
     return $this;
   }
 
@@ -38,7 +38,7 @@ trait ArgumentTrait {
    * @return $this
    */
   public function prependArgument(ExpressionNode $argument) {
-    $this->arguments->prependArgument($argument);
+    $this->arguments->prependItem($argument);
     return $this;
   }
 
@@ -52,7 +52,7 @@ trait ArgumentTrait {
    * @return $this
    */
   public function insertArgument(ExpressionNode $argument, $index) {
-    $this->arguments->insertArgument($argument, $index);
+    $this->arguments->insertItem($argument, $index);
     return $this;
   }
 
@@ -62,7 +62,7 @@ trait ArgumentTrait {
    * @return $this
    */
   public function clearArguments() {
-    $this->arguments->clearArguments();
+    $this->arguments->clear();
     return $this;
   }
 }

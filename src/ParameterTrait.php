@@ -6,12 +6,12 @@ namespace Pharborist;
  */
 trait ParameterTrait {
   /**
-   * @var ParameterListNode
+   * @var CommaListNode
    */
   protected $parameters;
 
   /**
-   * @return ParameterListNode
+   * @return CommaListNode
    */
   public function getParameterList() {
     return $this->parameters;
@@ -21,7 +21,7 @@ trait ParameterTrait {
    * @return ParameterNode[]
    */
   public function getParameters() {
-    return $this->parameters->asArray();
+    return $this->parameters->getItems();
   }
 
   /**
@@ -29,7 +29,7 @@ trait ParameterTrait {
    * @return $this
    */
   public function prependParameter(ParameterNode $parameter) {
-    $this->parameters->prependParameter($parameter);
+    $this->parameters->prependItem($parameter);
     return $this;
   }
 
@@ -38,7 +38,7 @@ trait ParameterTrait {
    * @return $this
    */
   public function appendParameter(ParameterNode $parameter) {
-    $this->parameters->appendParameter($parameter);
+    $this->parameters->appendItem($parameter);
     return $this;
   }
 
@@ -52,7 +52,7 @@ trait ParameterTrait {
    * @return $this
    */
   public function insertParameter(ParameterNode $parameter, $index) {
-    $this->parameters->insertParameter($parameter, $index);
+    $this->parameters->insertItem($parameter, $index);
     return $this;
   }
 
@@ -62,7 +62,7 @@ trait ParameterTrait {
    * @return $this
    */
   public function clearParameters() {
-    $this->parameters->clearParameters();
+    $this->parameters->clear();
     return $this;
   }
 }

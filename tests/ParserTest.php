@@ -577,11 +577,11 @@ for ($i = 0; $i < 10; ++$i)
 EOF;
     /** @var ForNode $for */
     $for = $this->parseSnippet($snippet, '\Pharborist\ForNode');
-    $this->assertCount(1, $for->getInitial()->getExpressions());
+    $this->assertCount(1, $for->getInitial()->getItems());
     $this->assertEquals('$i = 0', $for->getInitial()->getText());
-    $this->assertCount(1, $for->getCondition()->getExpressions());
+    $this->assertCount(1, $for->getCondition()->getItems());
     $this->assertEquals('$i < 10', $for->getCondition()->getText());
-    $this->assertCount(1, $for->getStep()->getExpressions());
+    $this->assertCount(1, $for->getStep()->getItems());
     $this->assertEquals('++$i', $for->getStep()->getText());
     $this->assertEquals('body();', $for->getBody()->getText());
   }

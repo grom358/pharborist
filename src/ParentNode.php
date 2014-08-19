@@ -31,6 +31,10 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
     return $properties;
   }
 
+  public function isEmpty() {
+    return $this->childCount === 0;
+  }
+
   public function childCount() {
     return $this->childCount;
   }

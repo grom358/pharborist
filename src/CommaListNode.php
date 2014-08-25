@@ -80,7 +80,7 @@ class CommaListNode extends ParentNode {
   public function insertItem(Node $item, $index) {
     $items = $this->getItems();
     if (empty($items)) {
-      if ($index > 0) {
+      if ($index !== 0) {
         throw new \OutOfBoundsException('index out of bounds');
       }
       $this->append($item);
@@ -96,6 +96,68 @@ class CommaListNode extends ParentNode {
         Token::space(),
       ]);
     }
+    return $this;
+  }
+
+  /**
+   * Remove item.
+   *
+   * @param int|Node $item
+   *   The index of item or item to remove.
+   * @throws \OutOfBoundsException
+   *   Index out of bounds.
+   * @throws \InvalidArgumentException
+   *   Item does not exist in list.
+   * @return $this
+   */
+  public function removeItem($item) {
+    if (is_int($item)) {
+      $index = $item;
+      if ($index < 0) {
+        throw new \OutOfBoundsException('index out of bounds');
+      }
+      $items = $this->getItems();
+      if ($index >= count($items)) {
+        throw new \OutOfBoundsException('index out of bounds');
+      }
+      $item = $items[$index];
+      $is_last = $index === count($items) - 1;
+    }
+    else {
+      $items = $this->getItems();
+      if ($item->parent() !== $this) {
+        throw new \InvalidArgumentException('invalid item');
+      }
+      $last_index = count($items) - 1;
+      $last_item = $items[$last_index];
+      $is_last = $last_item === $item;
+    }
+    if (count($items) === 1) {
+      // No separators to remove.
+    }
+    elseif ($is_last) {
+      $item->previousUntil(function ($node) {
+        if ($node instanceof HiddenNode) {
+          return FALSE;
+        }
+        if ($node instanceof TokenNode && $node->getType() === ',') {
+          return FALSE;
+        }
+        return TRUE;
+      })->remove();
+    }
+    else {
+      $item->nextUntil(function ($node) {
+        if ($node instanceof HiddenNode) {
+          return FALSE;
+        }
+        if ($node instanceof TokenNode && $node->getType() === ',') {
+          return FALSE;
+        }
+        return TRUE;
+      })->remove();
+    }
+    $item->remove();
     return $this;
   }
 

@@ -45,7 +45,7 @@ class ClassNode extends StatementNode {
    * @return ClassNode
    */
   public static function create($class_name) {
-    $class_node = Parser::parseSnippet("class $class_name {}")->firstChild();
+    $class_node = Parser::parseSnippet("class $class_name {}")->remove();
     return $class_node;
   }
 

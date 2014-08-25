@@ -27,7 +27,7 @@ class ClassMemberListNode extends ClassStatementNode {
    */
   public static function create($property) {
     /** @var ClassNode $class_node */
-    $class_node = Parser::parseSnippet("class Property {{$property};}")->firstChild();
+    $class_node = Parser::parseSnippet("class Property {{$property};}");
     $property = $class_node->getBody()->firstChild()->remove();
     return $property;
   }

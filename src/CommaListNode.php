@@ -100,12 +100,12 @@ class CommaListNode extends ParentNode {
   }
 
   /**
-   * Pop the item off end of the list.
+   * Pop an item off end of the list.
    *
    * @return Node
-   *   The popped item. NULL if item list is empty.
+   *   The removed item. NULL if item list is empty.
    */
-  public function popItem() {
+  public function pop() {
     $items = $this->getItems();
     if (empty($items)) {
       return NULL;
@@ -117,6 +117,36 @@ class CommaListNode extends ParentNode {
     }
     $pop_item = $items[count($items) - 1];
     $pop_item->previousUntil(function ($node) {
+      if ($node instanceof HiddenNode) {
+        return FALSE;
+      }
+      if ($node instanceof TokenNode && $node->getType() === ',') {
+        return FALSE;
+      }
+      return TRUE;
+    })->remove();
+    $pop_item->remove();
+    return $pop_item;
+  }
+
+  /**
+   * Shift an item off start of the list.
+   *
+   * @return Node
+   *   The removed item. NULL if item list is empty.
+   */
+  public function shift() {
+    $items = $this->getItems();
+    if (empty($items)) {
+      return NULL;
+    }
+    if (count($items) === 1) {
+      $pop_item = $items[0];
+      $pop_item->remove();
+      return $pop_item;
+    }
+    $pop_item = $items[0];
+    $pop_item->nextUntil(function ($node) {
       if ($node instanceof HiddenNode) {
         return FALSE;
       }

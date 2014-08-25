@@ -1217,9 +1217,9 @@ EOF';
 
     /** @var BinaryOperationNode $binary_op */
     $binary_op = $this->parseExpression('$a = $b++', '\Pharborist\AssignNode');
-    $this->assertEquals('$a', $binary_op->getLeft()->getText());
+    $this->assertEquals('$a', $binary_op->getLeftOperand()->getText());
     $this->assertEquals('=', $binary_op->getOperator()->getText());
-    $this->assertEquals('$b++', $binary_op->getRight()->getText());
+    $this->assertEquals('$b++', $binary_op->getRightOperand()->getText());
 
     $this->parseExpression('$a = $b ?: $c', '\Pharborist\AssignNode');
 
@@ -1230,8 +1230,8 @@ EOF';
     $this->assertEquals('$e', $ternary_node->getElse()->getText());
 
     $binary_op = $this->parseExpression('$a = &$b', '\Pharborist\AssignReferenceNode');
-    $this->assertEquals('$a', $binary_op->getLeft()->getText());
-    $this->assertEquals('$b', $binary_op->getRight()->getText());
+    $this->assertEquals('$a', $binary_op->getLeftOperand()->getText());
+    $this->assertEquals('$b', $binary_op->getRightOperand()->getText());
 
     $this->parseExpression('$a or $b', '\Pharborist\LogicalOrNode');
     $this->parseExpression('$a xor $b', '\Pharborist\LogicalXorNode');
@@ -1456,9 +1456,9 @@ EOF';
 
     /** @var AssignNode $assign */
     $assign = $this->parseExpression('$f = function($a, $b) use ($x, &$y) { }', '\Pharborist\AssignNode');
-    $this->assertEquals('$f', $assign->getLeft()->getText());
-    $this->assertInstanceOf('\Pharborist\AnonymousFunctionNode', $assign->getRight());
-    $function = $assign->getRight();
+    $this->assertEquals('$f', $assign->getLeftOperand()->getText());
+    $this->assertInstanceOf('\Pharborist\AnonymousFunctionNode', $assign->getRightOperand());
+    $function = $assign->getRightOperand();
     $parameters = $function->getParameters();
     $this->assertCount(2, $parameters);
     $this->assertEquals('$a', $parameters[0]->getText());
@@ -1650,7 +1650,7 @@ EOF;
     /** @var AssignNode $assign */
     $assign = $this->parseExpression('list($a, $b, list($c1, $c2)) = [1, 2, [3.1, 3.2]]', '\Pharborist\AssignNode');
     /** @var ListNode $list */
-    $list = $assign->getLeft();
+    $list = $assign->getLeftOperand();
     $this->assertInstanceOf('\Pharborist\ListNode', $list);
     $arguments = $list->getArguments();
     $this->assertCount(3, $arguments);
@@ -1665,7 +1665,7 @@ EOF;
 
     $assign = $this->parseExpression('list() = [1, 2]', '\Pharborist\AssignNode');
     /** @var ListNode $list */
-    $list = $assign->getLeft();
+    $list = $assign->getLeftOperand();
     $this->assertInstanceOf('\Pharborist\ListNode', $list);
     $arguments = $list->getArguments();
     $this->assertCount(0, $arguments);

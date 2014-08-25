@@ -28,4 +28,13 @@ abstract class UnaryOperationNode extends ParentNode implements ExpressionNode {
   public function getOperand() {
     return $this->operand;
   }
+
+  /**
+   * @param ExpressionNode $operand
+   * @return $this
+   */
+  public function setOperand(ExpressionNode $operand) {
+    $this->operand->replaceWith($operand);
+    return $this;
+  }
 }

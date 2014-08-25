@@ -499,6 +499,17 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
     return $this;
   }
 
+  /**
+   * Apply callback on each element in the node collection.
+   *
+   * @param callable $callback Callback to apply on each element.
+   * @return $this
+   */
+  public function each(callable $callback) {
+    array_walk($this->nodes, $callback);
+    return $this;
+  }
+
   public function __clone() {
     $copy = [];
     foreach ($this->nodes as $node) {

@@ -1162,13 +1162,13 @@ class Parser {
         $this->mustMatch(T_ARRAY, $node);
         $this->mustMatch('(', $node);
         $this->arrayPairList($node, ')');
-        $this->mustMatch(')', $node);
+        $this->mustMatch(')', $node, NULL, TRUE);
         return $this->arrayDeference($node);
       case '[':
         $node = new ArrayNode();
         $this->mustMatch('[', $node);
         $this->arrayPairList($node, ']');
-        $this->mustMatch(']', $node);
+        $this->mustMatch(']', $node, NULL, TRUE);
         return $this->arrayDeference($node);
       case '(':
         $node = new ParenthesisNode();

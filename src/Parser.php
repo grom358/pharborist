@@ -199,6 +199,7 @@ class Parser {
     do {
       $node->addChild($this->expr());
     } while ($this->tryMatch(',', $node));
+    $this->tryMatch(';', $node);
     $this->mustMatch(T_CLOSE_TAG, $node, NULL, TRUE);
     return $node;
   }

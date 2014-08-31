@@ -25,6 +25,15 @@ trait ParameterTrait {
   }
 
   /**
+   * @return string[]
+   */
+  public function getParameterNames() {
+    return array_map(function(ParameterNode $parameter) {
+      return substr($parameter->getName(), 1);
+    }, $this->getParameters());
+  }
+
+  /**
    * @param ParameterNode $parameter
    * @return $this
    */

@@ -1,6 +1,10 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Operator\BinaryOperationNode;
+use Pharborist\Operator\TernaryOperationNode;
+use Pharborist\Operator\UnaryOperationNode;
+
 /**
  * Tests Phaborist\Parser.
  */
@@ -823,40 +827,40 @@ EOF';
     $class_constant_lookup = $this->parseStaticExpression('static::class', '\Pharborist\ClassNameScalarNode');
     $this->assertEquals('static', $class_constant_lookup->getClassName()->getText());
 
-    $this->parseStaticExpression('1 + 2', '\Pharborist\AddNode');
-    $this->parseStaticExpression('1 - 2', '\Pharborist\SubtractNode');
-    $this->parseStaticExpression('1 * 2', '\Pharborist\MultiplyNode');
-    //$this->parseStaticExpression('1 ** 2', '\Pharborist\PowerNode');
-    $this->parseStaticExpression('1 / 2', '\Pharborist\DivideNode');
-    $this->parseStaticExpression('1 % 2', '\Pharborist\ModulusNode');
-    $this->parseStaticExpression('!2', '\Pharborist\BooleanNotNode');
-    $this->parseStaticExpression('~2', '\Pharborist\BitwiseNotNode');
-    $this->parseStaticExpression('1 | 2', '\Pharborist\BitwiseOrNode');
-    $this->parseStaticExpression('1 & 2', '\Pharborist\BitwiseAndNode');
-    $this->parseStaticExpression('1 ^ 2', '\Pharborist\BitwiseXorNode');
-    $this->parseStaticExpression('1 << 2', '\Pharborist\BitwiseShiftLeftNode');
-    $this->parseStaticExpression('1 >> 2', '\Pharborist\BitwiseShiftRightNode');
-    $this->parseStaticExpression("'a' . 'b'", '\Pharborist\ConcatNode');
-    $this->parseStaticExpression('1 or 2', '\Pharborist\LogicalOrNode');
-    $this->parseStaticExpression('1 xor 2', '\Pharborist\LogicalXorNode');
-    $this->parseStaticExpression('1 and 2', '\Pharborist\LogicalAndNode');
-    $this->parseStaticExpression('1 && 2', '\Pharborist\BooleanAndNode');
-    $this->parseStaticExpression('1 || 2', '\Pharborist\BooleanOrNode');
-    $this->parseStaticExpression('1 === 2', '\Pharborist\IdenticalNode');
-    $this->parseStaticExpression('1 !== 2', '\Pharborist\NotIdenticalNode');
-    $this->parseStaticExpression('1 == 2', '\Pharborist\EqualNode');
-    $this->parseStaticExpression('1 != 2', '\Pharborist\NotEqualNode');
-    $this->parseStaticExpression('1 < 2', '\Pharborist\LessThanNode');
-    $this->parseStaticExpression('1 <= 2', '\Pharborist\LessThanOrEqualToNode');
-    $this->parseStaticExpression('1 > 2', '\Pharborist\GreaterThanNode');
-    $this->parseStaticExpression('1 >= 2', '\Pharborist\GreaterThanOrEqualToNode');
-    $this->parseStaticExpression('+1', '\Pharborist\PlusNode');
+    $this->parseStaticExpression('1 + 2', '\Pharborist\Operator\AddNode');
+    $this->parseStaticExpression('1 - 2', '\Pharborist\Operator\SubtractNode');
+    $this->parseStaticExpression('1 * 2', '\Pharborist\Operator\MultiplyNode');
+    //$this->parseStaticExpression('1 ** 2', '\Pharborist\Operator\PowerNode');
+    $this->parseStaticExpression('1 / 2', '\Pharborist\Operator\DivideNode');
+    $this->parseStaticExpression('1 % 2', '\Pharborist\Operator\ModulusNode');
+    $this->parseStaticExpression('!2', '\Pharborist\Operator\BooleanNotNode');
+    $this->parseStaticExpression('~2', '\Pharborist\Operator\BitwiseNotNode');
+    $this->parseStaticExpression('1 | 2', '\Pharborist\Operator\BitwiseOrNode');
+    $this->parseStaticExpression('1 & 2', '\Pharborist\Operator\BitwiseAndNode');
+    $this->parseStaticExpression('1 ^ 2', '\Pharborist\Operator\BitwiseXorNode');
+    $this->parseStaticExpression('1 << 2', '\Pharborist\Operator\BitwiseShiftLeftNode');
+    $this->parseStaticExpression('1 >> 2', '\Pharborist\Operator\BitwiseShiftRightNode');
+    $this->parseStaticExpression("'a' . 'b'", '\Pharborist\Operator\ConcatNode');
+    $this->parseStaticExpression('1 or 2', '\Pharborist\Operator\LogicalOrNode');
+    $this->parseStaticExpression('1 xor 2', '\Pharborist\Operator\LogicalXorNode');
+    $this->parseStaticExpression('1 and 2', '\Pharborist\Operator\LogicalAndNode');
+    $this->parseStaticExpression('1 && 2', '\Pharborist\Operator\BooleanAndNode');
+    $this->parseStaticExpression('1 || 2', '\Pharborist\Operator\BooleanOrNode');
+    $this->parseStaticExpression('1 === 2', '\Pharborist\Operator\IdenticalNode');
+    $this->parseStaticExpression('1 !== 2', '\Pharborist\Operator\NotIdenticalNode');
+    $this->parseStaticExpression('1 == 2', '\Pharborist\Operator\EqualNode');
+    $this->parseStaticExpression('1 != 2', '\Pharborist\Operator\NotEqualNode');
+    $this->parseStaticExpression('1 < 2', '\Pharborist\Operator\LessThanNode');
+    $this->parseStaticExpression('1 <= 2', '\Pharborist\Operator\LessThanOrEqualToNode');
+    $this->parseStaticExpression('1 > 2', '\Pharborist\Operator\GreaterThanNode');
+    $this->parseStaticExpression('1 >= 2', '\Pharborist\Operator\GreaterThanOrEqualToNode');
+    $this->parseStaticExpression('+1', '\Pharborist\Operator\PlusNode');
     /** @var UnaryOperationNode $unary */
-    $unary = $this->parseStaticExpression('-1', '\Pharborist\NegateNode');
+    $unary = $this->parseStaticExpression('-1', '\Pharborist\Operator\NegateNode');
     $this->assertEquals('-', $unary->getOperator());
     $this->assertEquals('1', $unary->getOperand());
-    $this->parseStaticExpression('1 ?: 2', '\Pharborist\ElvisNode');
-    $this->parseStaticExpression('1 ? 2 : 3', '\Pharborist\TernaryOperationNode');
+    $this->parseStaticExpression('1 ?: 2', '\Pharborist\Operator\ElvisNode');
+    $this->parseStaticExpression('1 ? 2 : 3', '\Pharborist\Operator\TernaryOperationNode');
     /** @var ParenthesisNode $paren */
     $paren = $this->parseStaticExpression('(1)', '\Pharborist\ParenthesisNode');
     $this->assertEquals('1', $paren->getExpression()->getText());
@@ -1216,76 +1220,76 @@ EOF';
     $this->assertEquals('$f', $compound_var->getExpression()->getText());
 
     /** @var BinaryOperationNode $binary_op */
-    $binary_op = $this->parseExpression('$a = $b++', '\Pharborist\AssignNode');
+    $binary_op = $this->parseExpression('$a = $b++', '\Pharborist\Operator\AssignNode');
     $this->assertEquals('$a', $binary_op->getLeftOperand()->getText());
     $this->assertEquals('=', $binary_op->getOperator()->getText());
     $this->assertEquals('$b++', $binary_op->getRightOperand()->getText());
 
-    $this->parseExpression('$a = $b ?: $c', '\Pharborist\AssignNode');
+    $this->parseExpression('$a = $b ?: $c', '\Pharborist\Operator\AssignNode');
 
     /** @var TernaryOperationNode $ternary_node */
-    $ternary_node = $this->parseExpression('$a ? $b : $c ? $d : $e', '\Pharborist\TernaryOperationNode');
+    $ternary_node = $this->parseExpression('$a ? $b : $c ? $d : $e', '\Pharborist\Operator\TernaryOperationNode');
     $this->assertEquals('$a ? $b : $c', $ternary_node->getCondition()->getText());
     $this->assertEquals('$d', $ternary_node->getThen()->getText());
     $this->assertEquals('$e', $ternary_node->getElse()->getText());
 
-    $binary_op = $this->parseExpression('$a = &$b', '\Pharborist\AssignReferenceNode');
+    $binary_op = $this->parseExpression('$a = &$b', '\Pharborist\Operator\AssignReferenceNode');
     $this->assertEquals('$a', $binary_op->getLeftOperand()->getText());
     $this->assertEquals('$b', $binary_op->getRightOperand()->getText());
 
-    $this->parseExpression('$a or $b', '\Pharborist\LogicalOrNode');
-    $this->parseExpression('$a xor $b', '\Pharborist\LogicalXorNode');
-    $this->parseExpression('$a and $b', '\Pharborist\LogicalAndNode');
-    $this->parseExpression('$a = $b', '\Pharborist\AssignNode');
-    $this->parseExpression('$a += $b', '\Pharborist\AddAssignNode');
-    $this->parseExpression('$a .= $b', '\Pharborist\ConcatAssignNode');
-    $this->parseExpression('$a /= $b', '\Pharborist\DivideAssignNode');
-    $this->parseExpression('$a -= $b', '\Pharborist\SubtractAssignNode');
-    $this->parseExpression('$a %= $b', '\Pharborist\ModulusAssignNode');
-    $this->parseExpression('$a *= $b', '\Pharborist\MultiplyAssignNode');
-    $this->parseExpression('$a &= $b', '\Pharborist\BitwiseAndAssignNode');
-    $this->parseExpression('$a <<= $b', '\Pharborist\BitwiseShiftLeftAssignNode');
-    $this->parseExpression('$a >>= $b', '\Pharborist\BitwiseShiftRightAssignNode');
-    $this->parseExpression('$a ^= $b', '\Pharborist\BitwiseXorAssignNode');
-    $this->parseExpression('$a || $b', '\Pharborist\BooleanOrNode');
-    $this->parseExpression('$a && $b', '\Pharborist\BooleanAndNode');
-    $this->parseExpression('$a | $b', '\Pharborist\BitwiseOrNode');
-    $this->parseExpression('$a & $b', '\Pharborist\BitwiseAndNode');
-    $this->parseExpression('$a ^ $b', '\Pharborist\BitwiseXorNode');
-    $this->parseExpression('$a == $b', '\Pharborist\EqualNode');
-    $this->parseExpression('$a === $b', '\Pharborist\IdenticalNode');
-    $this->parseExpression('$a != $b', '\Pharborist\NotEqualNode');
-    $this->parseExpression('$a !== $b', '\Pharborist\NotIdenticalNode');
-    $this->parseExpression('$a < $b', '\Pharborist\LessThanNode');
-    $this->parseExpression('$a <= $b', '\Pharborist\LessThanOrEqualToNode');
-    $this->parseExpression('$a >= $b', '\Pharborist\GreaterThanOrEqualToNode');
-    $this->parseExpression('$a > $b', '\Pharborist\GreaterThanNode');
-    $this->parseExpression('$a << $b', '\Pharborist\BitwiseShiftLeftNode');
-    $this->parseExpression('$a >> $b', '\Pharborist\BitwiseShiftRightNode');
-    $this->parseExpression('$a + $b', '\Pharborist\AddNode');
-    $this->parseExpression('$a - $b', '\Pharborist\SubtractNode');
-    $this->parseExpression('$a / $b', '\Pharborist\DivideNode');
-    $this->parseExpression('$a * $b', '\Pharborist\MultiplyNode');
-    $this->parseExpression('$a % $b', '\Pharborist\ModulusNode');
-    $this->parseExpression('!$a', '\Pharborist\BooleanNotNode');
-    $this->parseExpression('$a instanceof $b', '\Pharborist\InstanceOfNode');
-    $this->parseExpression('@func()', '\Pharborist\SuppressWarningNode');
-    $this->parseExpression('~$a', '\Pharborist\BitwiseNotNode');
-    $this->parseExpression('clone $a', '\Pharborist\CloneNode');
-    $this->parseExpression('print $a', '\Pharborist\PrintNode');
-    $this->parseExpression('(array) $a', '\Pharborist\ArrayCastNode');
-    $this->parseExpression('(object) $a', '\Pharborist\ObjectCastNode');
-    $this->parseExpression('(bool) $a', '\Pharborist\BooleanCastNode');
-    $this->parseExpression('(int) $a', '\Pharborist\IntegerCastNode');
-    $this->parseExpression('(float) $a', '\Pharborist\FloatCastNode');
-    $this->parseExpression('(unset) $a', '\Pharborist\UnsetCastNode');
-    $this->parseExpression('(string) $a', '\Pharborist\StringCastNode');
-    $this->parseExpression('--$a', '\Pharborist\PreDecrementNode');
-    $this->parseExpression('++$a', '\Pharborist\PreIncrementNode');
-    $this->parseExpression('$a--', '\Pharborist\PostDecrementNode');
-    $this->parseExpression('$a++', '\Pharborist\PostIncrementNode');
-    $this->parseExpression('+$a', '\Pharborist\PlusNode');
-    $this->parseExpression('-$a', '\Pharborist\NegateNode');
+    $this->parseExpression('$a or $b', '\Pharborist\Operator\LogicalOrNode');
+    $this->parseExpression('$a xor $b', '\Pharborist\Operator\LogicalXorNode');
+    $this->parseExpression('$a and $b', '\Pharborist\Operator\LogicalAndNode');
+    $this->parseExpression('$a = $b', '\Pharborist\Operator\AssignNode');
+    $this->parseExpression('$a += $b', '\Pharborist\Operator\AddAssignNode');
+    $this->parseExpression('$a .= $b', '\Pharborist\Operator\ConcatAssignNode');
+    $this->parseExpression('$a /= $b', '\Pharborist\Operator\DivideAssignNode');
+    $this->parseExpression('$a -= $b', '\Pharborist\Operator\SubtractAssignNode');
+    $this->parseExpression('$a %= $b', '\Pharborist\Operator\ModulusAssignNode');
+    $this->parseExpression('$a *= $b', '\Pharborist\Operator\MultiplyAssignNode');
+    $this->parseExpression('$a &= $b', '\Pharborist\Operator\BitwiseAndAssignNode');
+    $this->parseExpression('$a <<= $b', '\Pharborist\Operator\BitwiseShiftLeftAssignNode');
+    $this->parseExpression('$a >>= $b', '\Pharborist\Operator\BitwiseShiftRightAssignNode');
+    $this->parseExpression('$a ^= $b', '\Pharborist\Operator\BitwiseXorAssignNode');
+    $this->parseExpression('$a || $b', '\Pharborist\Operator\BooleanOrNode');
+    $this->parseExpression('$a && $b', '\Pharborist\Operator\BooleanAndNode');
+    $this->parseExpression('$a | $b', '\Pharborist\Operator\BitwiseOrNode');
+    $this->parseExpression('$a & $b', '\Pharborist\Operator\BitwiseAndNode');
+    $this->parseExpression('$a ^ $b', '\Pharborist\Operator\BitwiseXorNode');
+    $this->parseExpression('$a == $b', '\Pharborist\Operator\EqualNode');
+    $this->parseExpression('$a === $b', '\Pharborist\Operator\IdenticalNode');
+    $this->parseExpression('$a != $b', '\Pharborist\Operator\NotEqualNode');
+    $this->parseExpression('$a !== $b', '\Pharborist\Operator\NotIdenticalNode');
+    $this->parseExpression('$a < $b', '\Pharborist\Operator\LessThanNode');
+    $this->parseExpression('$a <= $b', '\Pharborist\Operator\LessThanOrEqualToNode');
+    $this->parseExpression('$a >= $b', '\Pharborist\Operator\GreaterThanOrEqualToNode');
+    $this->parseExpression('$a > $b', '\Pharborist\Operator\GreaterThanNode');
+    $this->parseExpression('$a << $b', '\Pharborist\Operator\BitwiseShiftLeftNode');
+    $this->parseExpression('$a >> $b', '\Pharborist\Operator\BitwiseShiftRightNode');
+    $this->parseExpression('$a + $b', '\Pharborist\Operator\AddNode');
+    $this->parseExpression('$a - $b', '\Pharborist\Operator\SubtractNode');
+    $this->parseExpression('$a / $b', '\Pharborist\Operator\DivideNode');
+    $this->parseExpression('$a * $b', '\Pharborist\Operator\MultiplyNode');
+    $this->parseExpression('$a % $b', '\Pharborist\Operator\ModulusNode');
+    $this->parseExpression('!$a', '\Pharborist\Operator\BooleanNotNode');
+    $this->parseExpression('$a instanceof $b', '\Pharborist\Operator\InstanceOfNode');
+    $this->parseExpression('@func()', '\Pharborist\Operator\SuppressWarningNode');
+    $this->parseExpression('~$a', '\Pharborist\Operator\BitwiseNotNode');
+    $this->parseExpression('clone $a', '\Pharborist\Operator\CloneNode');
+    $this->parseExpression('print $a', '\Pharborist\Operator\PrintNode');
+    $this->parseExpression('(array) $a', '\Pharborist\Operator\ArrayCastNode');
+    $this->parseExpression('(object) $a', '\Pharborist\Operator\ObjectCastNode');
+    $this->parseExpression('(bool) $a', '\Pharborist\Operator\BooleanCastNode');
+    $this->parseExpression('(int) $a', '\Pharborist\Operator\IntegerCastNode');
+    $this->parseExpression('(float) $a', '\Pharborist\Operator\FloatCastNode');
+    $this->parseExpression('(unset) $a', '\Pharborist\Operator\UnsetCastNode');
+    $this->parseExpression('(string) $a', '\Pharborist\Operator\StringCastNode');
+    $this->parseExpression('--$a', '\Pharborist\Operator\PreDecrementNode');
+    $this->parseExpression('++$a', '\Pharborist\Operator\PreIncrementNode');
+    $this->parseExpression('$a--', '\Pharborist\Operator\PostDecrementNode');
+    $this->parseExpression('$a++', '\Pharborist\Operator\PostIncrementNode');
+    $this->parseExpression('+$a', '\Pharborist\Operator\PlusNode');
+    $this->parseExpression('-$a', '\Pharborist\Operator\NegateNode');
   }
 
   /**
@@ -1370,21 +1374,21 @@ EOF';
    * @expectedExceptionMessage Non-associative operators of equal precedence can not be next to each other!
    */
   public function testInvalidComparison() {
-    $this->parseExpression('1 <= 1 == 2 >= 2 == 2', '\Pharborist\EqualNode');
+    $this->parseExpression('1 <= 1 == 2 >= 2 == 2', '\Pharborist\Operator\EqualNode');
   }
 
   /**
    * Test operator precedence.
    */
   public function testPrecedence() {
-    $this->parseExpression('4 + 2 * 3', '\Pharborist\AddNode');
+    $this->parseExpression('4 + 2 * 3', '\Pharborist\Operator\AddNode');
   }
 
   /**
    * Test valid comparison expression of different precedence.
    */
   public function testComparison() {
-    $this->parseExpression('1 <= 1 == 1', '\Pharborist\EqualNode');
+    $this->parseExpression('1 <= 1 == 1', '\Pharborist\Operator\EqualNode');
   }
 
   /**
@@ -1454,8 +1458,8 @@ EOF';
     $this->assertEquals('$x', $lexical_vars[0]->getText());
     $this->assertEquals('&$y', $lexical_vars[1]->getText());
 
-    /** @var AssignNode $assign */
-    $assign = $this->parseExpression('$f = function($a, $b) use ($x, &$y) { }', '\Pharborist\AssignNode');
+    /** @var \Pharborist\Operator\AssignNode $assign */
+    $assign = $this->parseExpression('$f = function($a, $b) use ($x, &$y) { }', '\Pharborist\Operator\AssignNode');
     $this->assertEquals('$f', $assign->getLeftOperand()->getText());
     $this->assertInstanceOf('\Pharborist\AnonymousFunctionNode', $assign->getRightOperand());
     $function = $assign->getRightOperand();
@@ -1647,8 +1651,8 @@ EOF;
    * Test list.
    */
   public function testList() {
-    /** @var AssignNode $assign */
-    $assign = $this->parseExpression('list($a, $b, list($c1, $c2)) = [1, 2, [3.1, 3.2]]', '\Pharborist\AssignNode');
+    /** @var \Pharborist\Operator\AssignNode $assign */
+    $assign = $this->parseExpression('list($a, $b, list($c1, $c2)) = [1, 2, [3.1, 3.2]]', '\Pharborist\Operator\AssignNode');
     /** @var ListNode $list */
     $list = $assign->getLeftOperand();
     $this->assertInstanceOf('\Pharborist\ListNode', $list);
@@ -1663,7 +1667,7 @@ EOF;
     $this->assertEquals('$c1', $arguments[0]->getText());
     $this->assertEquals('$c2', $arguments[1]->getText());
 
-    $assign = $this->parseExpression('list() = [1, 2]', '\Pharborist\AssignNode');
+    $assign = $this->parseExpression('list() = [1, 2]', '\Pharborist\Operator\AssignNode');
     /** @var ListNode $list */
     $list = $assign->getLeftOperand();
     $this->assertInstanceOf('\Pharborist\ListNode', $list);

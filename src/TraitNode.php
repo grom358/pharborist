@@ -5,10 +5,7 @@ namespace Pharborist;
  * A trait declaration.
  */
 class TraitNode extends StatementNode {
-  /**
-   * @var DocCommentNode
-   */
-  protected $docComment;
+  use DocCommentTrait;
 
   /**
    * @var TokenNode
@@ -39,13 +36,6 @@ class TraitNode extends StatementNode {
    * @var StatementBlockNode
    */
   protected $statements;
-
-  /**
-   * @return DocCommentNode
-   */
-  public function getDocComment() {
-    return $this->docComment;
-  }
 
   /**
    * @return TokenNode

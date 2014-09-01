@@ -5,10 +5,7 @@ namespace Pharborist;
  * An interface declaration.
  */
 class InterfaceNode extends StatementNode {
-  /**
-   * @var DocCommentNode
-   */
-  protected $docComment;
+  use DocCommentTrait;
 
   /**
    * @var TokenNode
@@ -24,13 +21,6 @@ class InterfaceNode extends StatementNode {
    * @var StatementBlockNode
    */
   protected $statements;
-
-  /**
-   * @return DocCommentNode
-   */
-  public function getDocComment() {
-    return $this->docComment;
-  }
 
   /**
    * @return TokenNode

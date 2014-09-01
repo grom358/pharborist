@@ -5,10 +5,7 @@ namespace Pharborist;
  * Namespace declaration.
  */
 class NamespaceNode extends StatementNode {
-  /**
-   * @var DocCommentNode
-   */
-  protected $docComment;
+  use DocCommentTrait;
 
   /**
    * @var NameNode
@@ -19,13 +16,6 @@ class NamespaceNode extends StatementNode {
    * @var StatementBlockNode
    */
   protected $body;
-
-  /**
-   * @return DocCommentNode
-   */
-  public function getDocComment() {
-    return $this->docComment;
-  }
 
   /**
    * @return NameNode

@@ -5,10 +5,7 @@ namespace Pharborist;
  * A class member list declaration.
  */
 class ClassMemberListNode extends ClassStatementNode {
-  /**
-   * @var DocCommentNode
-   */
-  protected $docComment;
+  use DocCommentTrait;
 
   /**
    * @var TokenNode
@@ -30,13 +27,6 @@ class ClassMemberListNode extends ClassStatementNode {
     $class_node = Parser::parseSnippet("class Property {{$property};}");
     $property = $class_node->getBody()->firstChild()->remove();
     return $property;
-  }
-
-  /**
-   * @return DocCommentNode
-   */
-  public function getDocComment() {
-    return $this->docComment;
   }
 
   /**

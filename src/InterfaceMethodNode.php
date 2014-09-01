@@ -6,11 +6,7 @@ namespace Pharborist;
  */
 class InterfaceMethodNode extends StatementNode implements InterfaceStatementNode {
   use ParameterTrait;
-
-  /**
-   * @var DocCommentNode
-   */
-  protected $docComment;
+  use DocCommentTrait;
 
   /**
    * @var TokenNode
@@ -31,13 +27,6 @@ class InterfaceMethodNode extends StatementNode implements InterfaceStatementNod
    * @var TokenNode
    */
   protected $name;
-
-  /**
-   * @return DocCommentNode
-   */
-  public function getDocComment() {
-    return $this->docComment;
-  }
 
   /**
    * @return TokenNode

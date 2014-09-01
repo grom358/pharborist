@@ -3,11 +3,7 @@ namespace Pharborist;
 
 trait FunctionTrait {
   use ParameterTrait;
-
-  /**
-   * @var DocCommentNode
-   */
-  protected $docComment;
+  use DocCommentTrait;
 
   /**
    * @var TokenNode
@@ -23,50 +19,6 @@ trait FunctionTrait {
    * @var StatementBlockNode
    */
   protected $body;
-
-  /**
-   * @return DocCommentNode
-   */
-  public function getDocComment() {
-    return $this->docComment;
-  }
-
-  /**
-   * Get the indent proceeding this node.
-   *
-   * @return string
-   */
-  protected function getIndent() {
-    /** @var ParentNode $this */
-    $whitespace_token = $this->firstToken()->previousToken();
-    if ($whitespace_token->getType() !== T_WHITESPACE) {
-      return '';
-    }
-    $lines = explode("\n", $whitespace_token->getText());
-    $last_line = end($lines);
-    return $last_line;
-  }
-
-  /**
-   * @param DocCommentNode $comment
-   * @return $this
-   */
-  public function setDocComment(DocCommentNode $comment) {
-    if (isset($this->docComment)) {
-      $this->docComment->replaceWith($comment);
-    }
-    else {
-      $indent = $this->getIndent();
-      $comment->setIndent($indent);
-      $nl = Settings::get('formatter.nl');
-      /** @var ParentNode $this */
-      $this->firstChild()->before([
-        $comment,
-        WhitespaceNode::create($nl . $indent),
-      ]);
-    }
-    return $this;
-  }
 
   /**
    * @return TokenNode

@@ -5,17 +5,7 @@ namespace Pharborist;
  * Constant declaration statement.
  */
 class ConstantDeclarationStatementNode extends ClassStatementNode implements InterfaceStatementNode {
-  /**
-   * @var DocCommentNode
-   */
-  protected $docComment;
-
-  /**
-   * @return DocCommentNode
-   */
-  public function getDocComment() {
-    return $this->docComment;
-  }
+  use DocCommentTrait;
 
   /**
    * @return ConstantDeclarationNode[]

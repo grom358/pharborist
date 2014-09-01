@@ -5,10 +5,7 @@ namespace Pharborist;
  * Class declaration.
  */
 class ClassNode extends StatementNode {
-  /**
-   * @var DocCommentNode
-   */
-  protected $docComment;
+  use DocCommentTrait;
 
   /**
    * @var TokenNode
@@ -47,13 +44,6 @@ class ClassNode extends StatementNode {
   public static function create($class_name) {
     $class_node = Parser::parseSnippet("class $class_name {}")->remove();
     return $class_node;
-  }
-
-  /**
-   * @return DocCommentNode
-   */
-  public function getDocComment() {
-    return $this->docComment;
   }
 
   /**

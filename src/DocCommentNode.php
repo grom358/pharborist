@@ -6,6 +6,24 @@ namespace Pharborist;
  */
 class DocCommentNode extends CommentNode {
   /**
+   * Create PHPDoc comment.
+   *
+   * @param string $comment
+   *   Comment without asterisks but formatted into lines.
+   * @return DocCommentNode
+   */
+  public static function create($comment) {
+    $comment = trim($comment);
+    $lines = array_map('trim', explode("\n", $comment));
+    $text = "/**\n";
+    foreach ($lines as $i => $line) {
+      $text .= ' * ' . $line . "\n";
+    }
+    $text .= ' */';
+    return new DocCommentNode(T_DOC_COMMENT, $text);
+  }
+
+  /**
    * Set indent for document comment.
    *
    * @param string $indent

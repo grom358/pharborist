@@ -76,7 +76,7 @@ class ClassMethodNode extends ClassStatementNode {
         $this->setFinal(FALSE);
         // Remove method body since abstract method doesn't have one.
         $this->getBody()->previous(Filter::isInstanceOf('\Pharborist\WhitespaceNode'))->remove();
-        $this->getBody()->replaceWith(Token::semiComma());
+        $this->getBody()->replaceWith(Token::semiColon());
         $this->body = NULL;
       }
     }

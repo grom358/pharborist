@@ -253,7 +253,7 @@ class Parser {
         $this->mustMatch(T_HALT_COMPILER, $node, 'name');
         $this->mustMatch('(', $node);
         $this->mustMatch(')', $node);
-        $this->mustMatch(';', $node, NULL, TRUE, TRUE);
+        $this->endStatement($node);
         return $node;
       default:
         if ($this->currentType === T_FUNCTION && $this->isLookAhead(T_STRING, '&')) {
@@ -264,6 +264,17 @@ class Parser {
         }
         return $this->statement();
     }
+  }
+
+  private function endStatement(Node $node) {
+    if ($this->currentType === T_CLOSE_TAG) {
+      // http://php.net/manual/en/language.basic-syntax.instruction-separation.php
+      // The closing tag of a block of PHP code automatically implies a
+      // semicolon; you do not need to have a semicolon terminating the last
+      // line of a PHP block.
+      return;
+    }
+    $this->mustMatch(';', $node, NULL, TRUE, TRUE);
   }
 
   /**
@@ -277,7 +288,7 @@ class Parser {
     do {
       $node->addChild($this->constDeclaration());
     } while ($this->tryMatch(',', $node));
-    $this->mustMatch(';', $node, NULL, TRUE, TRUE);
+    $this->endStatement($node);
     return $node;
   }
 
@@ -331,7 +342,7 @@ class Parser {
       case T_YIELD:
         $node = new YieldStatementNode();
         $node->addChild($this->_yield());
-        $this->mustMatch(';', $node, NULL, TRUE, TRUE);
+        $this->endStatement($node);
         return $node;
       case T_GLOBAL:
         return $this->_global();
@@ -353,7 +364,7 @@ class Parser {
         return $this->innerStatementBlock();
       case ';':
         $node = new BlankStatementNode();
-        $this->mustMatch(';', $node, NULL, TRUE, TRUE);
+        $this->endStatement($node);
         return $node;
       case T_STATIC:
         if ($this->isLookAhead(T_VARIABLE)) {
@@ -388,7 +399,7 @@ class Parser {
     do {
       $node->addChild($this->staticVariable());
     } while ($this->tryMatch(',', $node));
-    $this->mustMatch(';', $node, NULL, TRUE, TRUE);
+    $this->endStatement($node);
     return $node;
   }
 
@@ -413,7 +424,7 @@ class Parser {
     $node = new ExpressionStatementNode();
     $this->matchDocComment($node);
     $node->addChild($this->expr(), 'expression');
-    $this->mustMatch(';', $node, NULL, TRUE, TRUE);
+    $this->endStatement($node);
     return $node;
   }
 
@@ -456,7 +467,7 @@ class Parser {
         $node->addChild($this->innerStatementListNode(T_ENDIF), 'else');
       }
       $this->mustMatch(T_ENDIF, $node);
-      $this->mustMatch(';', $node, NULL, TRUE, TRUE);
+      $this->endStatement($node);
       return $node;
     }
     else {
@@ -502,7 +513,7 @@ class Parser {
     if ($this->tryMatch(':', $node, NULL, FALSE, TRUE)) {
       $node->addChild($this->innerStatementListNode(T_ENDWHILE), 'body');
       $this->mustMatch(T_ENDWHILE, $node);
-      $this->mustMatch(';', $node, NULL, TRUE, TRUE);
+      $this->endStatement($node);
       return $node;
     }
     else {
@@ -522,7 +533,7 @@ class Parser {
     $node->addChild($this->statement(), 'body');
     $this->mustMatch(T_WHILE, $node);
     $this->condition($node, 'condition');
-    $this->mustMatch(';', $node, NULL, TRUE, TRUE);
+    $this->endStatement($node);
     return $node;
   }
 
@@ -540,7 +551,7 @@ class Parser {
     if ($this->tryMatch(':', $node, NULL, FALSE, TRUE)) {
       $node->addChild($this->innerStatementListNode(T_ENDFOR), 'body');
       $this->mustMatch(T_ENDFOR, $node);
-      $this->mustMatch(';', $node, NULL, TRUE, TRUE);
+      $this->endStatement($node);
       return $node;
     }
     else {
@@ -582,7 +593,7 @@ class Parser {
       }
       $node->addChild($statement_block, 'cases');
       $this->mustMatch(T_ENDSWITCH, $node);
-      $this->mustMatch(';', $node, NULL, TRUE);
+      $this->endStatement($node);
       return $node;
     }
     else {
@@ -662,7 +673,7 @@ class Parser {
       return $node;
     }
     $this->parseLevel($node);
-    $this->mustMatch(';', $node, NULL, TRUE, TRUE);
+    $this->endStatement($node);
     return $node;
   }
 
@@ -677,7 +688,7 @@ class Parser {
       return $node;
     }
     $this->parseLevel($node);
-    $this->mustMatch(';', $node, NULL, TRUE, TRUE);
+    $this->endStatement($node);
     return $node;
   }
 
@@ -706,7 +717,7 @@ class Parser {
       return $node;
     }
     $node->addChild($this->expr(), 'expression');
-    $this->mustMatch(';', $node, NULL, TRUE, TRUE);
+    $this->endStatement($node);
     return $node;
   }
 
@@ -738,7 +749,7 @@ class Parser {
     do {
       $node->addChild($this->globalVar());
     } while ($this->tryMatch(',', $node));
-    $this->mustMatch(';', $node, NULL, TRUE, TRUE);
+    $this->endStatement($node);
     return $node;
   }
 
@@ -775,7 +786,7 @@ class Parser {
     do {
       $node->addChild($this->expr());
     } while ($this->tryMatch(',', $node));
-    $this->mustMatch(';', $node, NULL, TRUE, TRUE);
+    $this->endStatement($node);
     return $node;
   }
 
@@ -795,7 +806,7 @@ class Parser {
     } while ($this->tryMatch(',', $arguments));
     $this->mustMatch(')', $node, NULL, FALSE);
     $statement_node->addChild($node, 'functionCall');
-    $this->mustMatch(';', $statement_node, NULL, TRUE, TRUE);
+    $this->endStatement($statement_node);
     return $statement_node;
   }
 
@@ -822,7 +833,7 @@ class Parser {
     if ($this->tryMatch(':', $node, NULL, FALSE, TRUE)) {
       $node->addChild($this->innerStatementListNode(T_ENDFOREACH), 'body');
       $this->mustMatch(T_ENDFOREACH, $node);
-      $this->mustMatch(';', $node, NULL, TRUE, TRUE);
+      $this->endStatement($node);
       return $node;
     }
     else {
@@ -906,7 +917,7 @@ class Parser {
     if ($this->tryMatch(':', $node, NULL, FALSE, TRUE)) {
       $node->addChild($this->innerStatementListNode(T_ENDDECLARE), 'body');
       $this->mustMatch(T_ENDDECLARE, $node);
-      $this->mustMatch(';', $node, NULL, TRUE, TRUE);
+      $this->endStatement($node);
       return $node;
     }
     else {
@@ -947,7 +958,7 @@ class Parser {
     $node = new ThrowStatementNode();
     $this->mustMatch(T_THROW, $node);
     $node->addChild($this->expr(), 'expression');
-    $this->mustMatch(';', $node, NULL, TRUE, TRUE);
+    $this->endStatement($node);
     return $node;
   }
 
@@ -959,7 +970,7 @@ class Parser {
     $node = new GotoStatementNode();
     $this->mustMatch(T_GOTO, $node);
     $this->mustMatch(T_STRING, $node, 'label');
-    $this->mustMatch(';', $node, NULL, TRUE, TRUE);
+    $this->endStatement($node);
     return $node;
   }
 
@@ -2162,7 +2173,8 @@ class Parser {
       $this->mustMatch('}', $node);
     }
     else {
-      $this->mustMatch(';', $node, NULL, FALSE, TRUE);
+      $this->endStatement($node);
+      $this->matchHidden($node);
       $node->addChild($this->namespaceBlock(), 'body');
     }
     return $node;
@@ -2223,7 +2235,7 @@ class Parser {
     do {
       $node->addChild($this->useDeclaration());
     } while ($this->tryMatch(',', $node));
-    $this->mustMatch(';', $node, NULL, TRUE, TRUE);
+    $this->endStatement($node);
     return $node;
   }
 
@@ -2402,7 +2414,7 @@ class Parser {
     do {
       $node->addChild($this->classMember());
     } while ($this->tryMatch(',', $node));
-    $this->mustMatch(';', $node, NULL, TRUE, TRUE);
+    $this->endStatement($node);
     return $node;
   }
 
@@ -2434,7 +2446,7 @@ class Parser {
     $this->mustMatch(T_STRING, $node, 'name');
     $this->parameterList($node);
     if ($modifiers->getAbstract()) {
-      $this->mustMatch(';', $node, NULL, TRUE, TRUE);
+      $this->endStatement($node);
       return $node;
     }
     $this->matchHidden($node);
@@ -2466,7 +2478,7 @@ class Parser {
       $this->mustMatch('}', $node, NULL, TRUE, TRUE);
       return $node;
     }
-    $this->mustMatch(';', $node, NULL, TRUE, TRUE);
+    $this->endStatement($node);
     return $node;
   }
 
@@ -2496,7 +2508,7 @@ class Parser {
       $trait_names->addChild($this->name());
     } while ($this->tryMatch(',', $trait_names));
     $node->addChild($trait_names, 'traitNames');
-    $this->mustMatch(';', $node, NULL, TRUE);
+    $this->endStatement($node);
     return $node;
   }
 
@@ -2512,11 +2524,11 @@ class Parser {
     if ($trait_modifier = $this->tryMatchToken(self::$visibilityTypes)) {
       $node->addChild($trait_modifier, 'visibility');
       $this->tryMatch(T_STRING, $node, 'alias');
-      $this->mustMatch(';', $node, NULL, TRUE);
+      $this->endStatement($node);
       return $node;
     }
     $this->mustMatch(T_STRING, $node, 'alias');
-    $this->mustMatch(';', $node, NULL, TRUE);
+    $this->endStatement($node);
     return $node;
   }
 
@@ -2579,7 +2591,7 @@ class Parser {
     $this->tryMatch('&', $node, 'reference');
     $this->mustMatch(T_STRING, $node, 'name');
     $this->parameterList($node);
-    $this->mustMatch(';', $node, NULL, TRUE, TRUE);
+    $this->endStatement($node);
     return $node;
   }
 

@@ -1847,4 +1847,16 @@ EOF;
     $this->assertInstanceOf('\Pharborist\CommentNode', $comment);
     $this->assertEquals("Line four", $comment->getCommentText());
   }
+
+  /**
+   * Test implicit semicolon.
+   */
+  public function testImplicitSemicolon() {
+    $source = <<<'EOF'
+<?php
+echo 'hello' ?>
+EOF;
+    $tree = $this->parseSource($source);
+    $this->assertInstanceOf('\Pharborist\EchoStatementNode', $tree->firstChild()->next());
+  }
 }

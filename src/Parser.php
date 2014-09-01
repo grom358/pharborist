@@ -669,7 +669,7 @@ class Parser {
   private function _break() {
     $node = new BreakStatementNode();
     $this->mustMatch(T_BREAK, $node);
-    if ($this->tryMatch(';', $node, NULL, TRUE, TRUE)) {
+    if ($this->tryMatch(';', $node, NULL, TRUE, TRUE) || $this->currentType === T_CLOSE_TAG) {
       return $node;
     }
     $this->parseLevel($node);
@@ -684,7 +684,7 @@ class Parser {
   private function _continue() {
     $node = new ContinueStatementNode();
     $this->mustMatch(T_CONTINUE, $node);
-    if ($this->tryMatch(';', $node, NULL, TRUE, TRUE)) {
+    if ($this->tryMatch(';', $node, NULL, TRUE, TRUE) || $this->currentType === T_CLOSE_TAG) {
       return $node;
     }
     $this->parseLevel($node);
@@ -713,7 +713,7 @@ class Parser {
   private function _return() {
     $node = new ReturnStatementNode();
     $this->mustMatch(T_RETURN, $node);
-    if ($this->tryMatch(';', $node, NULL, TRUE, TRUE)) {
+    if ($this->tryMatch(';', $node, NULL, TRUE, TRUE) || $this->currentType === T_CLOSE_TAG) {
       return $node;
     }
     $node->addChild($this->expr(), 'expression');

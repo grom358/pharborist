@@ -7,16 +7,12 @@ namespace Pharborist;
 class InterfaceMethodNode extends StatementNode implements InterfaceStatementNode {
   use ParameterTrait;
   use DocCommentTrait;
+  use VisibilityTrait;
 
   /**
    * @var TokenNode
    */
   protected $static;
-
-  /**
-   * @var TokenNode
-   */
-  protected $visibility;
 
   /**
    * @var TokenNode
@@ -33,13 +29,6 @@ class InterfaceMethodNode extends StatementNode implements InterfaceStatementNod
    */
   public function getStatic() {
     return $this->static;
-  }
-
-  /**
-   * @return TokenNode
-   */
-  public function getVisibility() {
-    return $this->visibility;
   }
 
   /**

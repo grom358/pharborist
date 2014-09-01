@@ -6,6 +6,7 @@ namespace Pharborist;
  */
 class ClassMethodNode extends ClassStatementNode {
   use FunctionTrait;
+  use VisibilityTrait;
 
   /**
    * @var TokenNode
@@ -21,11 +22,6 @@ class ClassMethodNode extends ClassStatementNode {
    * @var TokenNode
    */
   protected $static;
-
-  /**
-   * @var TokenNode
-   */
-  protected $visibility;
 
   /**
    * @param string $method_name
@@ -164,37 +160,6 @@ class ClassMethodNode extends ClassStatementNode {
       }
     }
     return $this;
-  }
-
-  /**
-   * @return TokenNode
-   */
-  public function getVisibility() {
-    return $this->visibility;
-  }
-
-  /**
-   * @param TokenNode $visibility
-   * @return $this
-   */
-  public function setVisibility($visibility) {
-    if ($visibility === NULL) {
-      // Remove whitespace after visibility keyword.
-      $this->visibility->next()->remove();
-      // Remove visibility keyword.
-      $this->visibility->remove();
-    }
-    else {
-      if (isset($this->visibility)) {
-        $this->visibility->replaceWith($visibility);
-      }
-      else {
-        $this->prepend([
-          $visibility,
-          Token::space(),
-        ]);
-      }
-    }
   }
 
   protected function childInserted(Node $node) {

@@ -6,6 +6,7 @@ namespace Pharborist;
  */
 class ClassMemberListNode extends ClassStatementNode {
   use DocCommentTrait;
+  use VisibilityTrait;
 
   /**
    * @var TokenNode
@@ -13,18 +14,13 @@ class ClassMemberListNode extends ClassStatementNode {
   protected $static;
 
   /**
-   * @var TokenNode
-   */
-  protected $visibility;
-
-  /**
    * @param string $property
-   *   Property with visibility modifier.
+   *   Property name.
    * @return ClassMemberListNode
    */
   public static function create($property) {
     /** @var ClassNode $class_node */
-    $class_node = Parser::parseSnippet("class Property {{$property};}");
+    $class_node = Parser::parseSnippet("class Property {private \${$property};}");
     $property = $class_node->getBody()->firstChild()->remove();
     return $property;
   }
@@ -34,13 +30,6 @@ class ClassMemberListNode extends ClassStatementNode {
    */
   public function getStatic() {
     return $this->static;
-  }
-
-  /**
-   * @return TokenNode
-   */
-  public function getVisibility() {
-    return $this->visibility;
   }
 
   /**

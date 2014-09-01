@@ -16,4 +16,14 @@ class ArrayNode extends ParentNode implements ExpressionNode {
   public function getElements() {
     return $this->elements->getItems();
   }
+
+  /**
+   * Tests if the array contains another array.
+   *
+   * @return boolean
+   */
+  public function isMultidimensional() {
+    $inner_arrays = $this->elements->children(Filter::isInstanceOf('Pharborist\ArrayNode'));
+    return (boolean) sizeof($inner_arrays);
+  }
 }

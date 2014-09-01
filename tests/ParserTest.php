@@ -1767,7 +1767,7 @@ EOF;
    * Test complex string.
    */
   public function testComplexString() {
-    $this->parseExpression('"start $a {$a} ${a} $a[0] ${a[0]} {$a[0]} ${$a} $a->b end"', '\Pharborist\ComplexStringNode');
+    $this->parseExpression('"start $a {$a} ${a} $a[0] ${a[0]} {$a[0]} ${$a} $a->b end"', '\Pharborist\InterpolatedStringNode');
   }
 
   /**

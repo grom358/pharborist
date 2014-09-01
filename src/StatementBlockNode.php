@@ -31,9 +31,23 @@ class StatementBlockNode extends ParentNode {
    */
   public function addIndent($whitespace) {
     /** @var WhitespaceNode $wsNode */
-    foreach ($this->children(Filter::isInstanceOf('\Pharborist\WhitespaceNode')) as $wsNode) {
+    foreach ($this->children(Filter::isInstanceOf('\Pharborist\WhitespaceNode'))->slice(0, -1) as $wsNode) {
       $text = $wsNode->getText();
       $wsNode->setText($text . $whitespace);
+    }
+  }
+
+  /**
+   * Set indent on each statement.
+   *
+   * @param string $whitespace
+   *   Whitespace for indent.
+   */
+  public function setIndent($whitespace) {
+    /** @var WhitespaceNode $wsNode */
+    foreach ($this->children(Filter::isInstanceOf('\Pharborist\WhitespaceNode'))->slice(0, -1) as $wsNode) {
+      $text = str_repeat(Settings::get('formatter.nl'), $wsNode->getNewlineCount()) . $whitespace;
+      $wsNode->setText($text);
     }
   }
 }

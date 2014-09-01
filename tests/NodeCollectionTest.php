@@ -249,6 +249,33 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
     $this->assertSame($second, $matches[1]);
   }
 
+  public function testSiblings() {
+    $top = new TopNode();
+    $parent_one = $this->createParentNode();
+    $parent_one->appendTo($top);
+    $one = $this->createNode();
+    $one->appendTo($parent_one);
+    $two = $this->createNode();
+    $two->appendTo($parent_one);
+    $three = $this->createNode();
+    $three->appendTo($parent_one);
+    $parent_two = $this->createParentNode();
+    $parent_two->appendTo($top);
+    $first = $this->createNode();
+    $first->appendTo($parent_two);
+    $second = $this->createNode();
+    $second->appendTo($parent_two);
+    $third = $this->createNode();
+    $third->appendTo($parent_two);
+    $collection = new NodeCollection([$two, $second], FALSE);
+    $matches = $collection->siblings();
+    $this->assertCount(4, $matches);
+    $this->assertSame($one, $matches[0]);
+    $this->assertSame($three, $matches[1]);
+    $this->assertSame($first, $matches[2]);
+    $this->assertSame($third, $matches[3]);
+  }
+
   public function testFind() {
     $top = new TopNode();
     $parent_one = $this->createParentNode();

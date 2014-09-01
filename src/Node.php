@@ -145,6 +145,13 @@ abstract class Node implements NodeInterface {
     return new NodeCollection($matches);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function siblings(callable $callback = NULL) {
+    return $this->previousAll($callback)->add($this->nextAll($callback));
+  }
+
   public function insertBefore($targets) {
     $this->remove();
     if ($targets instanceof Node) {

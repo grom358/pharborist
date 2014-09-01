@@ -95,6 +95,13 @@ interface NodeInterface {
   public function nextUntil(callable $callback, $inclusive = FALSE);
 
   /**
+   * Get the siblings.
+   * @param callable $callback An optional callback to filter by.
+   * @return NodeCollection
+   */
+  public function siblings(callable $callback = NULL);
+
+  /**
    * Insert this node before targets.
    * @param Node|Node[]|NodeCollection $targets Nodes to insert before.
    * @return $this

@@ -293,6 +293,20 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
   }
 
   /**
+   * Get the siblings of each node in the set of matched nodes,
+   * optionally filtered by a callback.
+   * @param callable $callback An optional callback to filter by.
+   * @return NodeCollection
+   */
+  public function siblings(callable $callback = NULL) {
+    $matches = [];
+    foreach ($this->nodes as $node) {
+      $matches = array_merge($matches, $node->siblings($callback)->nodes);
+    }
+    return new NodeCollection($matches);
+  }
+
+  /**
    * Get the descendants of each node in the current set of matched nodes,
    * filtered by callback.
    * @param callable $callback Callback to filter by.

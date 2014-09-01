@@ -413,6 +413,19 @@ abstract class Node implements NodeInterface {
     return $path;
   }
 
+  /**
+   * Returns the code block containing this node. The code block could be a
+   * control structure (if statement, for loop, case statement, etc.), a
+   * function, a class definition, or the whole syntax tree.
+   *
+   * @return StatementBlockNode|TopNode|NULL
+   */
+  public function getLogicalBlock() {
+    return $this->closest(function(Node $node) {
+      return $node instanceof StatementBlockNode || $node instanceof TopNode;
+    });
+  }
+
   public function __clone() {
     // Clone does not belong to any parent.
     $this->parent = NULL;

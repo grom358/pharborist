@@ -16,11 +16,6 @@ trait FunctionTrait {
   protected $name;
 
   /**
-   * @var StatementBlockNode
-   */
-  protected $body;
-
-  /**
    * @return TokenNode
    */
   public function getReference() {
@@ -63,12 +58,5 @@ trait FunctionTrait {
     $this->name->replaceWith($name);
     $this->name = $name;
     return $this;
-  }
-
-  /**
-   * @return StatementBlockNode
-   */
-  public function getBody() {
-    return $this->body;
   }
 }

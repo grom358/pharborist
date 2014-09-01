@@ -5,8 +5,7 @@ namespace Pharborist;
  * A class method.
  */
 class ClassMethodNode extends ClassStatementNode {
-  use FunctionTrait;
-  use VisibilityTrait;
+  use MethodTrait;
 
   /**
    * @var TokenNode
@@ -19,9 +18,9 @@ class ClassMethodNode extends ClassStatementNode {
   protected $final;
 
   /**
-   * @var TokenNode
+   * @var StatementBlockNode
    */
-  protected $static;
+  protected $body;
 
   /**
    * @param string $method_name
@@ -130,36 +129,10 @@ class ClassMethodNode extends ClassStatementNode {
   }
 
   /**
-   * @return TokenNode
+   * @return StatementBlockNode
    */
-  public function getStatic() {
-    return $this->static;
-  }
-
-  /**
-   * @param boolean $is_static
-   * @return $this
-   */
-  public function setStatic($is_static) {
-    if ($is_static) {
-      if (!isset($this->static)) {
-        // Insert before T_FUNCTION.
-        $function_token = $this->name->previous()->previous();
-        $function_token->before([
-          Token::_static(),
-          Token::space(),
-        ]);
-      }
-    }
-    else {
-      if (isset($this->static)) {
-        // Remove whitespace after static keyword.
-        $this->static->next()->remove();
-        // Remove static keyword.
-        $this->static->remove();
-      }
-    }
-    return $this;
+  public function getBody() {
+    return $this->body;
   }
 
   protected function childInserted(Node $node) {

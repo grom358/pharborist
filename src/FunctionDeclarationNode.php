@@ -8,6 +8,11 @@ class FunctionDeclarationNode extends StatementNode {
   use FunctionTrait;
 
   /**
+   * @var StatementBlockNode
+   */
+  protected $body;
+
+  /**
    * Set the name of the declared function.
    *
    * @param string $name
@@ -19,6 +24,13 @@ class FunctionDeclarationNode extends StatementNode {
     $function_name = $this->getName()->firstChild();
     $function_name->setText($name);
     return $this;
+  }
+
+  /**
+   * @return StatementBlockNode
+   */
+  public function getBody() {
+    return $this->body;
   }
 
   protected function childInserted(Node $node) {

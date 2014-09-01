@@ -31,26 +31,44 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
     $this->nodes = $sort ? static::sortUnique($nodes) : $nodes;
   }
 
+  /**
+   * Implements \IteratorAggregate::getIterator().
+   */
   public function getIterator() {
     return new \ArrayIterator($this->nodes);
   }
 
+  /**
+   * Implements \Countable::count().
+   */
   public function count() {
     return count($this->nodes);
   }
 
+  /**
+   * Implements \ArrayAccess::offsetExists().
+   */
   public function offsetExists($offset) {
     return isset($this->nodes[$offset]);
   }
 
+  /**
+   * Implements \ArrayAccess::offsetGet().
+   */
   public function offsetGet($offset) {
     return $this->nodes[$offset];
   }
 
+  /**
+   * Implements \ArrayAccess::offsetSet().
+   */
   public function offsetSet($offset, $value) {
     throw new \BadMethodCallException('NodeCollection offsetSet not supported');
   }
 
+  /**
+   * Implements \ArrayAccess::offsetUnset().
+   */
   public function offsetUnset($offset) {
     throw new \BadMethodCallException('NodeCollection offsetUnset not supported');
   }
@@ -104,8 +122,12 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
   }
 
   /**
-   * Apply callback to each node in the matched set.
-   * @param callable $callback Callback to apply.
+   * Creates a new collection by applying a callback to each node in the matched
+   * set, like jQuery's .map().
+   *
+   * @param callable $callback
+   *  The callback to apply, receiving the current node in the set.
+   *
    * @return NodeCollection
    */
   public function map(callable $callback) {
@@ -113,6 +135,9 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
   }
 
   /**
+   * Returns the raw array of nodes, like jQuery's get() called with no
+   * arguments.
+   *
    * @return Node[]
    */
   public function toArray() {

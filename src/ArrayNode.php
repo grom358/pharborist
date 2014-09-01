@@ -11,6 +11,13 @@ class ArrayNode extends ParentNode implements ExpressionNode {
   protected $elements;
 
   /**
+   * @return CommaListNode
+   */
+  public function getElementList() {
+    return $this->elements;
+  }
+
+  /**
    * @return ArrayElementNode[]
    */
   public function getElements() {

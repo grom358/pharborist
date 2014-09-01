@@ -55,6 +55,16 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
     throw new \BadMethodCallException('NodeCollection offsetUnset not supported');
   }
 
+  
+  /**
+   * Returns if the collection is empty.
+   *
+   * @return boolean
+   */
+  public function isEmpty() {
+    return $this->count() == 0;
+  }
+
   /**
    * Get collection in reverse order
    * @return Node[]

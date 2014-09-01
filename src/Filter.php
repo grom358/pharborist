@@ -44,8 +44,15 @@ class Filter {
    * @return callable
    */
   public static function isInstanceOf($class_name) {
-    return function ($node) use ($class_name) {
-      return $node instanceof $class_name;
+    $classes = func_get_args();
+
+    return function ($node) use ($classes) {
+      foreach ($classes as $class) {
+        if ($node instanceof $class) {
+          return TRUE;
+        }
+      }
+      return FALSE;
     };
   }
 

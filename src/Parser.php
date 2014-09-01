@@ -1211,7 +1211,7 @@ class Parser {
           return $node;
         }
       case '"':
-        $node = new ComplexStringNode();
+        $node = new InterpolatedStringNode();
         $this->mustMatch('"', $node);
         $this->encapsList($node, '"');
         $this->mustMatch('"', $node);
@@ -1534,7 +1534,7 @@ class Parser {
 
   /**
    * Parse an encaps list.
-   * @param ComplexStringNode|HeredocNode|BacktickNode $node Interpolated string.
+   * @param InterpolatedStringNode|HeredocNode|BacktickNode $node Interpolated string.
    * @param int|string $terminator Token type that terminates the encaps list
    * @param bool $encaps_whitespace_allowed
    */

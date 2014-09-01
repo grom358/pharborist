@@ -6,6 +6,6 @@ namespace Pharborist;
  *
  * For example, "Hello $name, welcome to php."
  */
-class ComplexStringNode extends ParentNode implements ExpressionNode {
+class InterpolatedStringNode extends ParentNode implements ExpressionNode {
 
 }

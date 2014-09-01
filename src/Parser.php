@@ -2011,7 +2011,7 @@ class Parser {
 
   /**
    * Parse parameter list.
-   * @param Node $parent
+   * @param ParentNode $parent
    */
   private function parameterList(ParentNode $parent) {
     $node = new CommaListNode();

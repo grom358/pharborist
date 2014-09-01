@@ -24,6 +24,6 @@ class ArrayNode extends ParentNode implements ExpressionNode {
    */
   public function isMultidimensional() {
     $inner_arrays = $this->elements->children(Filter::isInstanceOf('Pharborist\ArrayNode'));
-    return (boolean) sizeof($inner_arrays);
+    return (boolean) count($inner_arrays);
   }
 }

@@ -119,6 +119,20 @@ class ParameterNode extends ParentNode {
   }
 
   /**
+   * @return bool
+   */
+  public function isOptional() {
+    return is_null($this->value);
+  }
+
+  /**
+   * @return bool
+   */
+  public function isRequired() {
+    return isset($this->value);
+  }
+
+  /**
    * @return string
    *  The parameter name, without the leading $.
    */

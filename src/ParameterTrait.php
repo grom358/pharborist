@@ -74,7 +74,69 @@ trait ParameterTrait {
     $this->parameters->clear();
     return $this;
   }
-  
+
+  /**
+   * Gets a parameter by name or index.
+   *
+   * @param mixed $key
+   *  The parameter's name (without leading $) or position in the
+   *  parameter list.
+   *
+   * @return ParameterNode
+   *
+   * @throws \InvalidArgumentException if the key is not a string or integer.
+   */
+  public function getParameter($key) {
+    if (is_string($key)) {
+      return $this->getParameterByName($key);
+    }
+    elseif (is_integer($key)) {
+      return $this->getParameterAtIndex($key);
+    }
+    else {
+      throw new \InvalidArgumentException("Illegal parameter index {$key}.");
+    }
+  }
+
+  /**
+   * Gets a parameter by its position in the parameter list.
+   *
+   * @param integer $index
+   *
+   * @return ParameterNode
+   *
+   * @throws \OutOfBoundsException if the index doesn't exist.
+   */
+  public function getParameterAtIndex($index) {
+    $parameters = $this->getParameters();
+    if (0 > $index || $index >= count($parameters)) {
+      throw new \OutOfBoundsException("Invalid parameter index {$index}.");
+    }
+    else {
+      return $parameters[$index];
+    }
+  }
+
+  /**
+   * Gets a parameter by its name.
+   *
+   * @param string $name
+   *  The parameter name without leading $.
+   *
+   * @return ParameterNode
+   *
+   * @throws \UnexpectedValueException if the named parameter doesn't exist.
+   */
+  public function getParameterByName($name) {
+    foreach ($this->getParameters() as $parameter) {
+      // @todo Change this when #66 is merged
+      if ($parameter->getName()->__toString() == '$' . $name) {
+        return $parameter;
+      }
+    }
+    throw new \UnexpectedValueException("Parameter {$name} does not exist.");
+  }
+
   /**
    * @return boolean
    */

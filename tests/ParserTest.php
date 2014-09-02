@@ -830,7 +830,6 @@ EOF';
     $this->parseStaticExpression('1 + 2', '\Pharborist\Operator\AddNode');
     $this->parseStaticExpression('1 - 2', '\Pharborist\Operator\SubtractNode');
     $this->parseStaticExpression('1 * 2', '\Pharborist\Operator\MultiplyNode');
-    //$this->parseStaticExpression('1 ** 2', '\Pharborist\Operator\PowerNode');
     $this->parseStaticExpression('1 / 2', '\Pharborist\Operator\DivideNode');
     $this->parseStaticExpression('1 % 2', '\Pharborist\Operator\ModulusNode');
     $this->parseStaticExpression('!2', '\Pharborist\Operator\BooleanNotNode');
@@ -1862,5 +1861,29 @@ echo 'hello' ?>
 EOF;
     $tree = $this->parseSource($source);
     $this->assertInstanceOf('\Pharborist\EchoStatementNode', $tree->firstChild()->next());
+  }
+
+  /**
+   * @requires PHP 5.5
+   */
+  public function testFinally() {
+    $snippet = <<<'EOF'
+try { try_body(); }
+finally { finally_body(); }
+EOF;
+    /** @var TryCatchNode $try_catch */
+    $try_catch = $this->parseSnippet($snippet, '\Pharborist\TryCatchNode');
+    $this->assertEquals('{ try_body(); }', $try_catch->getTry()->getText());
+    $this->assertNotNull($try_catch->getFinally());
+    $this->assertEquals('{ finally_body(); }', $try_catch->getFinally()->getText());
+  }
+
+  /**
+   * @requires PHP 5.6
+   */
+  public function testPower() {
+    $this->parseStaticExpression('1 ** 2', '\Pharborist\Operator\PowerNode');
+    $this->parseExpression('1 ** 2', '\Pharborist\Operator\PowerNode');
+    $this->parseExpression('1 **= 2', '\Pharborist\Operator\PowerAssignNode');
   }
 }

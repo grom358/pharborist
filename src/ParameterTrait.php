@@ -74,4 +74,35 @@ trait ParameterTrait {
     $this->parameters->clear();
     return $this;
   }
+  
+  /**
+   * @return boolean
+   */
+  public function hasRequiredParameters() {
+    return ($this->getRequiredParameters()->count() > 0);
+  }
+  
+  /**
+   * @return NodeCollection
+   */
+  public function getRequiredParameters() {
+    return $this->parameters
+      ->children(Filter::isInstanceOf('Pharborist\ParameterNode'))
+      ->filter(function(ParameterNode $parameter) {
+        $value = $parameter->getValue();
+        return !isset($value);
+      });
+  }
+  
+  /**
+   * @return NodeCollection
+   */
+  public function getOptionalParameters() {
+    return $this->parameters
+      ->children(Filter::isInstanceOf('Pharborist\ParameterNode'))
+      ->filter(function(ParameterNode $parameter) {
+        $value = $parameter->getValue();
+        return isset($value);
+      });
+  }
 }

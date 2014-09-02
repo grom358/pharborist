@@ -119,18 +119,21 @@ class ParameterNode extends ParentNode {
   }
 
   /**
-   * @return VariableNode
+   * @return string
+   *  The parameter name, without the leading $.
    */
   public function getName() {
-    return $this->name;
+    return ltrim($this->name->__toString(), '$');
   }
 
   /**
    * @param string $name
+   *  The name of the parameter, without the leading $.
+   *
    * @return $this
    */
   public function setName($name) {
-    $this->name->setText($name);
+    $this->name->setText('$' . $name);
     return $this;
   }
 

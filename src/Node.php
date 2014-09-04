@@ -430,7 +430,7 @@ abstract class Node implements NodeInterface {
       return (boolean) $test($this);
     }
     elseif (is_string($test)) {
-      return $this instanceof $test;
+      return $this->is(Filter::isInstanceOf($test));
     }
     else {
       throw new \InvalidArgumentException();

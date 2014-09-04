@@ -414,6 +414,62 @@ abstract class Node implements NodeInterface {
   }
 
   /**
+   * Tests this node against a condition.
+   *
+   * @param callable|string $test
+   *  Either a callback function to test the node against, or a class name
+   *  (wrapper around instanceof). Eventually this will accept a callable
+   *  or a filter query (issue #61).
+   *
+   * @return boolean
+   *
+   * @throws \InvalidArgumentException
+   */
+  public function is($test) {
+    if (is_callable($test)) {
+      return (boolean) $test($this);
+    }
+    elseif (is_string($test)) {
+      return $this instanceof $test;
+    }
+    else {
+      throw new \InvalidArgumentException();
+    }
+  }
+
+  /**
+   * Tests if this node matches any the tests in the array.
+   *
+   * @param string|callable[] $tests
+   *
+   * @return boolean
+   */
+  public function isAnyOf(array $tests) {
+    foreach ($tests as $test) {
+      if ($this->is($test)) {
+        return TRUE;
+      }
+    }
+    return FALSE;
+  }
+
+  /**
+   * Tests if this node matches all of the tests in the array.
+   *
+   * @param string|callable[] $tests
+   *
+   * @return boolean
+   */
+  public function isAllOf(array $tests) {
+    foreach ($tests as $test) {
+      if (! $this->is($test)) {
+        return FALSE;
+      }
+    }
+    return TRUE;
+  }
+
+  /**
    * Returns the code block containing this node. The code block could be a
    * control structure (if statement, for loop, case statement, etc.), a
    * function, a class definition, or the whole syntax tree.

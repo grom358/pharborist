@@ -133,11 +133,18 @@ class ParameterNode extends ParentNode {
   }
 
   /**
+   * @return VariableNode
+   */
+  public function getVariable() {
+    return $this->name;
+  }
+
+  /**
    * @return string
    *  The parameter name, without the leading $.
    */
   public function getName() {
-    return ltrim($this->name, '$');
+    return ltrim($this->getVariable(), '$');
   }
 
   /**

@@ -65,6 +65,15 @@ class ParameterNode extends ParentNode {
   }
 
   /**
+   * Returns the function which defines this parameter.
+   *
+   * @return FunctionDeclarationNode|ClassMethodNode|NULL
+   */
+  public function getFunction() {
+    return $this->closest(Filter::isInstanceOf('Pharborist\FunctionDeclarationNode', 'Pharborist\ClassMethodNode'));
+  }
+
+  /**
    * @return Node
    */
   public function getTypeHint() {

@@ -27,6 +27,36 @@ class CommaListNode extends ParentNode {
   }
 
   /**
+   * @param int $index
+   * @throws \OutOfBoundsException
+   *   Index is out of bounds.
+   * @return Node
+   */
+  public function getItem($index) {
+    if ($index < 0) {
+      throw new \OutOfBoundsException('Index is out of bounds');
+    }
+    $i = 0;
+    $child = $this->head;
+    while ($child) {
+      if ($child instanceof HiddenNode) {
+        // ignore hidden nodes
+      }
+      elseif ($child instanceof TokenNode && $child->getType() === ',') {
+        // ignore comma
+      }
+      else {
+        if ($i === $index) {
+          return $child;
+        }
+        $i++;
+      }
+      $child = $child->next;
+    }
+    throw new \OutOfBoundsException('Index is out of bounds');
+  }
+
+  /**
    * Prepend item.
    *
    * @param Node $item

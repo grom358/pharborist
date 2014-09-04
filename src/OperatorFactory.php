@@ -70,7 +70,7 @@ class OperatorFactory {
     T_UNSET_CAST  => [Operator::ASSOC_RIGHT, 18, FALSE, NULL, '\Pharborist\Operator\UnsetCastNode'],
     '@' => [Operator::ASSOC_RIGHT, 18, FALSE, NULL, '\Pharborist\Operator\SuppressWarningNode'],
     '~' => [Operator::ASSOC_RIGHT, 18, TRUE, NULL, '\Pharborist\Operator\BitwiseNotNode'],
-    T_POW => [Operator::ASSOC_RIGHT, 19, TRUE, '\Pharborist\Operator\PowerNode'],
+    T_POW => [Operator::ASSOC_RIGHT, 19, TRUE, '\Pharborist\Operator\PowerNode', NULL],
     T_CLONE => [Operator::ASSOC_RIGHT, 20, FALSE, NULL, '\Pharborist\Operator\CloneNode'],
     T_PRINT => [Operator::ASSOC_RIGHT, 21, FALSE, NULL, '\Pharborist\Operator\PrintNode'],
   ];

@@ -74,7 +74,60 @@ trait ParameterTrait {
     $this->parameters->clear();
     return $this;
   }
-  
+
+  /**
+   * Gets a parameter by name or index.
+   *
+   * @param mixed $key
+   *  The parameter's name (without leading $) or position in the
+   *  parameter list.
+   *
+   * @return ParameterNode
+   *
+   * @throws \InvalidArgumentException if the key is not a string or integer.
+   */
+  public function getParameter($key) {
+    if (is_string($key)) {
+      return $this->getParameterByName($key);
+    }
+    elseif (is_integer($key)) {
+      return $this->getParameterAtIndex($key);
+    }
+    else {
+      throw new \InvalidArgumentException("Illegal parameter index {$key}.");
+    }
+  }
+
+  /**
+   * Gets a parameter by its position in the parameter list.
+   *
+   * @param integer $index
+   *
+   * @return ParameterNode
+   */
+  public function getParameterAtIndex($index) {
+    return $this->getParameterList()->getItem($index);
+  }
+
+  /**
+   * Gets a parameter by its name.
+   *
+   * @param string $name
+   *  The parameter name without leading $.
+   *
+   * @return ParameterNode
+   *
+   * @throws \UnexpectedValueException if the named parameter doesn't exist.
+   */
+  public function getParameterByName($name) {
+    foreach ($this->getParameters() as $parameter) {
+      if ($parameter->getName() === $name) {
+        return $parameter;
+      }
+    }
+    throw new \UnexpectedValueException("Parameter {$name} does not exist.");
+  }
+
   /**
    * @return boolean
    */

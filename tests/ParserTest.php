@@ -113,29 +113,43 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
     $this->assertNull($function_declaration->getReference());
     $this->assertEquals('my_func', $function_declaration->getName()->getText());
     $parameters = $function_declaration->getParameters();
+
     $parameter = $parameters[0];
-    $this->assertEquals('$a', $parameter->getName()->getText());
+    $this->assertEquals('a', $parameter->getName());
+    $this->assertEquals('$a', $parameter->getVariable()->getText());
     $this->assertEquals('array', $parameter->getTypeHint()->getText());
+
     $parameter = $parameters[1];
-    $this->assertEquals('$b', $parameter->getName()->getText());
+    $this->assertEquals('b', $parameter->getName());
+    $this->assertEquals('$b', $parameter->getVariable()->getText());
     $this->assertEquals('callable', $parameter->getTypeHint()->getText());
+
     $parameter = $parameters[2];
-    $this->assertEquals('$c', $parameter->getName()->getText());
+    $this->assertEquals('c', $parameter->getName());
+    $this->assertEquals('$c', $parameter->getVariable()->getText());
     $this->assertEquals('namespace\Test', $parameter->getTypeHint()->getText());
+
     $parameter = $parameters[3];
-    $this->assertEquals('$d', $parameter->getName());
+    $this->assertEquals('d', $parameter->getName());
+    $this->assertEquals('$d', $parameter->getVariable()->getText());
     $this->assertEquals('\MyNamespace\Test', $parameter->getTypeHint()->getText());
+
     $parameter = $parameters[4];
-    $this->assertEquals('$e', $parameter->getName()->getText());
+    $this->assertEquals('e', $parameter->getName());
+    $this->assertEquals('$e', $parameter->getVariable()->getText());
     $this->assertEquals('1', $parameter->getValue()->getText());
+
     $parameter = $parameters[5];
-    $this->assertEquals('&$f', $parameter->getText());
+    $this->assertEquals('f', $parameter->getName());
+    $this->assertEquals('$f', $parameter->getVariable()->getText());
     $this->assertEquals('&', $parameter->getReference()->getText());
+
     $parameter = $parameters[6];
-    $this->assertEquals('$g', $parameter->getText());
+    $this->assertEquals('g', $parameter->getName());
+    $this->assertEquals('$g', $parameter->getVariable()->getText());
     $this->assertNull($parameter->getReference());
 
-    $parameter->getName()->before(new TokenNode('&', '&'));
+    $parameter->getVariable()->before(new TokenNode('&', '&'));
     $this->assertEquals('&', $parameter->getReference()->getText());
 
     $function_declaration->getName()->before(new TokenNode('&', '&'));

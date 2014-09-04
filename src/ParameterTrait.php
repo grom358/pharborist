@@ -99,25 +99,6 @@ trait ParameterTrait {
   }
 
   /**
-   * Gets a parameter by its position in the parameter list.
-   *
-   * @param integer $index
-   *
-   * @return ParameterNode
-   *
-   * @throws \OutOfBoundsException if the index doesn't exist.
-   */
-  public function getParameterAtIndex($index) {
-    $parameters = $this->getParameters();
-    if (0 > $index || $index >= count($parameters)) {
-      throw new \OutOfBoundsException("Invalid parameter index {$index}.");
-    }
-    else {
-      return $parameters[$index];
-    }
-  }
-
-  /**
    * Gets a parameter by its name.
    *
    * @param string $name
@@ -130,7 +111,7 @@ trait ParameterTrait {
   public function getParameterByName($name) {
     foreach ($this->getParameters() as $parameter) {
       // @todo Change this when #66 is merged
-      if ($parameter->getName()->__toString() == '$' . $name) {
+      if ($parameter->getName() === '$' . $name) {
         return $parameter;
       }
     }

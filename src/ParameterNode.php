@@ -122,7 +122,7 @@ class ParameterNode extends ParentNode {
    * @return bool
    */
   public function isOptional() {
-    return is_null($this->value);
+    return isset($this->value);
   }
 
   /**
@@ -137,7 +137,7 @@ class ParameterNode extends ParentNode {
    *  The parameter name, without the leading $.
    */
   public function getName() {
-    return ltrim($this->name->__toString(), '$');
+    return ltrim($this->name, '$');
   }
 
   /**

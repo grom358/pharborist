@@ -32,6 +32,10 @@ class CommaListNodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('$a', $items[0]->getText());
     $this->assertEquals('$b', $items[1]->getText());
     $this->assertEquals('$c', $items[2]->getText());
+
+    $this->assertEquals('$a', $list->getItem(0)->getText());
+    $this->assertEquals('$b', $list->getItem(1)->getText());
+    $this->assertEquals('$c', $list->getItem(2)->getText());
   }
 
   public function testPrepend() {

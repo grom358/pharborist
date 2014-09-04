@@ -99,6 +99,17 @@ trait ParameterTrait {
   }
 
   /**
+   * Gets a parameter by its position in the parameter list.
+   *
+   * @param integer $index
+   *
+   * @return ParameterNode
+   */
+  public function getParameterAtIndex($index) {
+    return $this->getParameterList()->getItem($index);
+  }
+
+  /**
    * Gets a parameter by its name.
    *
    * @param string $name

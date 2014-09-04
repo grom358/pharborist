@@ -121,8 +121,7 @@ trait ParameterTrait {
    */
   public function getParameterByName($name) {
     foreach ($this->getParameters() as $parameter) {
-      // @todo Change this when #66 is merged
-      if ($parameter->getName() === '$' . $name) {
+      if ($parameter->getName() === $name) {
         return $parameter;
       }
     }

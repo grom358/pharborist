@@ -129,7 +129,7 @@ class ParameterNode extends ParentNode {
    * @return bool
    */
   public function isRequired() {
-    return isset($this->value);
+    return !isset($this->value);
   }
 
   /**

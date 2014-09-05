@@ -160,8 +160,8 @@ class ParameterNode extends ParentNode {
    * @param string $name
    *  The name of the parameter, without the leading $.
    * @param boolean $rewrite
-   *  If TRUE, the function which defines the parameter will also rename every
-   *  reference to the parameter in the body of the function.
+   *  If TRUE, every reference to the parameter in the function body will be changed
+   *  to reflect the new name.
    *
    * @return $this
    */

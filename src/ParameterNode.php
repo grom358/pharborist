@@ -159,11 +159,29 @@ class ParameterNode extends ParentNode {
   /**
    * @param string $name
    *  The name of the parameter, without the leading $.
+   * @param boolean $rewrite
+   *  If TRUE, the function which defines the parameter will also rename every
+   *  reference to the parameter in the body of the function.
    *
    * @return $this
    */
-  public function setName($name) {
+  public function setName($name, $rewrite = FALSE) {
+    $original_name = $this->getName();
+
     $this->name->setText('$' . $name);
+
+    if ($rewrite) {
+      $this
+        ->getFunction()
+        ->find(Filter::isInstanceOf('Pharborist\VariableNode'))
+        ->filter(function(VariableNode $node) use ($original_name) {
+          return $variable->getText() === '$' . $original_name;
+        })
+        ->each(function(VariableNode $node) use ($name) {
+          $node->replaceWith(Token::variable('$' . $name));
+        });
+    }
+
     return $this;
   }
 

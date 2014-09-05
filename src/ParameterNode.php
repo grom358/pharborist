@@ -175,7 +175,7 @@ class ParameterNode extends ParentNode {
         ->getFunction()
         ->find(Filter::isInstanceOf('Pharborist\VariableNode'))
         ->filter(function(VariableNode $node) use ($original_name) {
-          return $variable->getText() === '$' . $original_name;
+          return $node->getText() === '$' . $original_name;
         })
         ->each(function(VariableNode $node) use ($name) {
           $node->replaceWith(Token::variable('$' . $name));

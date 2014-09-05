@@ -158,7 +158,7 @@ class ParameterNode extends ParentNode {
 
   /**
    * @param string $name
-   *  The name of the parameter, without the leading $.
+   *  The name of the parameter, with or without the leading $.
    * @param boolean $rewrite
    *  If TRUE, every reference to the parameter in the function body will be changed
    *  to reflect the new name.
@@ -168,7 +168,7 @@ class ParameterNode extends ParentNode {
   public function setName($name, $rewrite = FALSE) {
     $original_name = $this->getName();
 
-    $this->name->setText('$' . $name);
+    $this->name->setText('$' . ltrim($name, '$'));
 
     if ($rewrite) {
       $this

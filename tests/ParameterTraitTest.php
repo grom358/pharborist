@@ -23,4 +23,11 @@ class ParameterTraitTest extends \PHPUnit_Framework_TestCase {
     $this->assertTrue($function->hasRequiredParameter('a', 'stdClass'));
     $this->assertFalse($function->hasOptionalParameter('a', 'stdClass'));
   }
+
+  /**
+   * @expectedException InvalidArgumentException
+   */
+  public function testHasParamterInvalidArgumentException() {
+    Parser::parseSnippet('function foo($bar) {}')->hasParameter(1);
+  }
 }

@@ -11,6 +11,7 @@ class ParameterTraitTest extends \PHPUnit_Framework_TestCase {
     $this->assertTrue($function->hasParameter('a'));
     $this->assertTrue($function->hasParameter('$a'));
     $this->assertTrue($function->hasParameter($function->getParameterAtIndex(0)));
+    $this->assertFalse($function->hasParameter('b'));
 
     $this->assertTrue($function->hasParameter('a', 'stdClass'));
     $this->assertFalse($function->hasParameter('a', 'Node'));

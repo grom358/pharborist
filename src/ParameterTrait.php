@@ -29,7 +29,7 @@ trait ParameterTrait {
    */
   public function getParameterNames() {
     return array_map(function(ParameterNode $parameter) {
-      return substr($parameter->getName(), 1);
+      return $parameter->getName();
     }, $this->getParameters());
   }
 
@@ -113,13 +113,14 @@ trait ParameterTrait {
    * Gets a parameter by its name.
    *
    * @param string $name
-   *  The parameter name without leading $.
+   *  The parameter name with or without leading $.
    *
    * @return ParameterNode
    *
    * @throws \UnexpectedValueException if the named parameter doesn't exist.
    */
   public function getParameterByName($name) {
+    $name = ltrim($name, '$');
     foreach ($this->getParameters() as $parameter) {
       if ($parameter->getName() === $name) {
         return $parameter;
@@ -129,30 +130,96 @@ trait ParameterTrait {
   }
 
   /**
+   * Checks if the function/method has a certain parameter.
+   *
+   * @param mixed $parameter
+   *  Either the parameter name (with or without the $), or a ParameterNode.
+   * @param string $type
+   *  Optional type hint to check as well.
+   *
+   * @return boolean
+   *
+   * @throws \InvalidArgumentException if $parameter is neither a string or
+   * a ParameterNode.
+   */
+  public function hasParameter($parameter, $type = NULL) {
+    if (is_string($parameter)) {
+      try {
+        $parameter = $this->getParameterByName($parameter);
+      }
+      catch (\UnexpectedValueException $e) {
+        return FALSE;
+      }
+    }
+    if (!($parameter instanceof ParameterNode)) {
+      throw new \InvalidArgumentException();
+    }
+    if ($parameter->parent() !== $this->parameters) {
+      return FALSE;
+    }
+    if ($type === NULL) {
+      return TRUE;
+    }
+    else {
+      return $parameter->getTypeHint()->getText() === $type;
+    }
+  }
+
+  /**
+   * Checks if the function/method has a specific required parameter.
+   *
+   * @param mixed $parameter
+   *  Either the name of the parameter (with or without leading $), or a
+   *  ParameterNode.
+   * @param string $type
+   *  Optional type hint to check.
+   *
+   * @return boolean
+   */
+  public function hasRequiredParameter($parameter, $type = NULL) {
+    return $this->hasParameter($parameter, $type, TRUE) && $this->getParameterByName($parameter)->isRequired();
+  }
+
+  /**
+   * Checks if the function/method has a specific optional parameter.
+   *
+   * @param mixed $parameter
+   *  Either the name of the parameter (with or without leading $), or a
+   *  ParameterNode.
+   * @param string $type
+   *  Optional type hint to check.
+   *
+   * @return boolean
+   */
+  public function hasOptionalParameter($parameter, $type = NULL) {
+    return $this->hasParameter($parameter, $type, FALSE) && $this->getParameterByName($parameter)->isOptional();
+  }
+
+  /**
    * @return boolean
    */
   public function hasRequiredParameters() {
     return ($this->getRequiredParameters()->count() > 0);
   }
-  
+
   /**
    * @return NodeCollection
    */
   public function getRequiredParameters() {
     return $this->parameters
-      ->children(Filter::isInstanceOf('Pharborist\ParameterNode'))
+      ->children(Filter::isInstanceOf('\Pharborist\ParameterNode'))
       ->filter(function(ParameterNode $parameter) {
         $value = $parameter->getValue();
         return !isset($value);
       });
   }
-  
+
   /**
    * @return NodeCollection
    */
   public function getOptionalParameters() {
     return $this->parameters
-      ->children(Filter::isInstanceOf('Pharborist\ParameterNode'))
+      ->children(Filter::isInstanceOf('\Pharborist\ParameterNode'))
       ->filter(function(ParameterNode $parameter) {
         $value = $parameter->getValue();
         return isset($value);

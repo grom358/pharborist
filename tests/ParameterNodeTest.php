@@ -6,6 +6,7 @@ namespace Pharborist;
  */
 class ParameterNodeTest extends \PHPUnit_Framework_TestCase {
   public function testParameterNode() {
+    /** @var \Pharborist\FunctionDeclarationNode $function */
     $function = Parser::parseSnippet('function foo(stdClass &$a = NULL) { $a = new stdClass(); }');
     $parameter = $function->getParameter(0);
 

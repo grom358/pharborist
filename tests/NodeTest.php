@@ -400,9 +400,15 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertInstanceOf('\Pharborist\StringNode', $string);
     $this->assertEquals("'foobar'", $string->getText());
 
+    $string = Node::fromScalar("'foobaz'");
+    $this->assertEquals("'foobaz'", $string->getText());
+
     $string = Node::fromScalar('Hi, $foobaz');
     $this->assertInstanceOf('\Pharborist\StringNode', $string);
     $this->assertEquals('"Hi, $foobaz"', $string->getText());
+
+    $string = Node::fromScalar('"Yippee ki-yay, $buddeh!"');
+    $this->assertEquals('"Yippee ki-yay, $buddeh!"', $string->getText());
 
     $integer = Node::fromScalar(30);
     $this->assertInstanceOf('\Pharborist\IntegerNode', $integer);

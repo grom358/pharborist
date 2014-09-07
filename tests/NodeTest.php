@@ -394,4 +394,29 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertSame($third, $second->previous());
     $this->assertSame($second, $third->next());
   }
+
+  public function testFromScalar() {
+    $string = Node::fromScalar('foobar');
+    $this->assertInstanceOf('\Pharborist\StringNode', $string);
+    $this->assertEquals("'foobar'", $string->getText());
+
+    $string = Node::fromScalar('Hi, $foobaz');
+    $this->assertInstanceOf('\Pharborist\StringNode', $string);
+    $this->assertEquals('"Hi, $foobaz"', $string->getText());
+
+    $integer = Node::fromScalar(30);
+    $this->assertInstanceOf('\Pharborist\IntegerNode', $integer);
+    $this->assertEquals('30', $integer->getText());
+
+    $float = Node::fromScalar(3.14156);
+    $this->assertInstanceOf('\Pharborist\FloatNode', $float);
+    $this->assertEquals('3.14156', $float->getText());
+  }
+
+  /**
+   * @expectedException \InvalidArgumentException
+   */
+  public function testFromScalarInvalidArgument() {
+    $node = Node::fromScalar([]);
+  }
 }

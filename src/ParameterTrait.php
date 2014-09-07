@@ -176,8 +176,8 @@ trait ParameterTrait {
    *
    * @return boolean
    */
-  public function hasRequiredParameter($parameter, $type) {
-    return $this->hasParameter($parameter, $type, TRUE) ? $this->getParameterByName($parameter)->isRequired() : FALSE;
+  public function hasRequiredParameter($parameter, $type = NULL) {
+    return $this->hasParameter($parameter, $type, TRUE) && $this->getParameterByName($parameter)->isRequired();
   }
 
   /**
@@ -191,8 +191,8 @@ trait ParameterTrait {
    *
    * @return boolean
    */
-  public function hasOptionalParameter($parameter, $type) {
-    return $this->hasParameter($parameter, $type, FALSE) ? $this->getParameterByName($parameter)->isOptional() : FALSE;
+  public function hasOptionalParameter($parameter, $type = NULL) {
+    return $this->hasParameter($parameter, $type, FALSE) && $this->getParameterByName($parameter)->isOptional();
   }
 
   /**
@@ -207,7 +207,7 @@ trait ParameterTrait {
    */
   public function getRequiredParameters() {
     return $this->parameters
-      ->children(Filter::isInstanceOf('Pharborist\ParameterNode'))
+      ->children(Filter::isInstanceOf('\Pharborist\ParameterNode'))
       ->filter(function(ParameterNode $parameter) {
         $value = $parameter->getValue();
         return !isset($value);
@@ -219,7 +219,7 @@ trait ParameterTrait {
    */
   public function getOptionalParameters() {
     return $this->parameters
-      ->children(Filter::isInstanceOf('Pharborist\ParameterNode'))
+      ->children(Filter::isInstanceOf('\Pharborist\ParameterNode'))
       ->filter(function(ParameterNode $parameter) {
         $value = $parameter->getValue();
         return isset($value);

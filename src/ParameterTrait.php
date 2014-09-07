@@ -129,12 +129,74 @@ trait ParameterTrait {
   }
 
   /**
+   * Checks if the function/method has a certain parameter.
+   *
+   * @param mixed $parameter
+   *  Either the parameter name (with or without the $), or a ParameterNode.
+   * @param string $type
+   *  Optional type hint to check as well.
+   *
+   * @return boolean
+   *
+   * @throws \InvalidArgumentException if $parameter is neither a string or
+   * a ParameterNode.
+   */
+  public function hasParameter($parameter, $type = NULL) {
+    if ($parameter instanceof ParameterNode) {
+      $exists = in_array($parameter, $this->getParameters(), TRUE);
+    }
+    elseif (is_string($parameter)) {
+      $exists = in_array($parameter, $this->getParameterNames());
+    }
+    else {
+      throw new \InvalidArgumentException();
+    }
+
+    if ($exists) {
+      return $type ? $this->getParameterByName($parameter)->getTypeHint()->getText() === $type : FALSE;
+    }
+    else {
+      return FALSE;
+    }
+  }
+
+  /**
+   * Checks if the function/method has a specific required parameter.
+   *
+   * @param mixed $parameter
+   *  Either the name of the parameter (with or without leading $), or a
+   *  ParameterNode.
+   * @param string $type
+   *  Optional type hint to check.
+   *
+   * @return boolean
+   */
+  public function hasRequiredParameter($parameter, $type) {
+    return $this->hasParameter($parameter, $type, TRUE) ? $this->getParameterByName($name)->isRequired() : FALSE;
+  }
+
+  /**
+   * Checks if the function/method has a specific optional parameter.
+   *
+   * @param mixed $parameter
+   *  Either the name of the parameter (with or without leading $), or a
+   *  ParameterNode.
+   * @param string $type
+   *  Optional type hint to check.
+   *
+   * @return boolean
+   */
+  public function hasOptionalParameter($parameter, $type) {
+    return $this->hasParameter($parameter, $type, FALSE) ? $this->getParameterByName($parameter)->isOptional() : FALSE;
+  }
+
+  /**
    * @return boolean
    */
   public function hasRequiredParameters() {
     return ($this->getRequiredParameters()->count() > 0);
   }
-  
+
   /**
    * @return NodeCollection
    */

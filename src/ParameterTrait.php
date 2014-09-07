@@ -113,13 +113,14 @@ trait ParameterTrait {
    * Gets a parameter by its name.
    *
    * @param string $name
-   *  The parameter name without leading $.
+   *  The parameter name with or without leading $.
    *
    * @return ParameterNode
    *
    * @throws \UnexpectedValueException if the named parameter doesn't exist.
    */
   public function getParameterByName($name) {
+    $name = ltrim($name, '$');
     foreach ($this->getParameters() as $parameter) {
       if ($parameter->getName() === $name) {
         return $parameter;
@@ -142,22 +143,25 @@ trait ParameterTrait {
    * a ParameterNode.
    */
   public function hasParameter($parameter, $type = NULL) {
-    if ($parameter instanceof ParameterNode) {
-      $exists = in_array($parameter, $this->getParameters(), TRUE);
+    if (is_string($parameter)) {
+      try {
+        $parameter = $this->getParameterByName($parameter);
+      }
+      catch (\UnexpectedValueException $e) {
+        return FALSE;
+      }
     }
-    elseif (is_string($parameter)) {
-      $parameter = ltrim($parameter, '$');
-      $exists = in_array($parameter, $this->getParameterNames());
-    }
-    else {
+    if (!($parameter instanceof ParameterNode)) {
       throw new \InvalidArgumentException();
     }
-
-    if ($exists) {
-      return $type ? $this->getParameterByName($parameter)->getTypeHint()->getText() === $type : TRUE;
+    if ($parameter->parent() !== $this->parameters) {
+      return FALSE;
+    }
+    if ($type === NULL) {
+      return TRUE;
     }
     else {
-      return FALSE;
+      return $parameter->getTypeHint()->getText() === $type;
     }
   }
 
@@ -209,7 +213,7 @@ trait ParameterTrait {
         return !isset($value);
       });
   }
-  
+
   /**
    * @return NodeCollection
    */

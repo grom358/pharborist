@@ -6,6 +6,7 @@ namespace Pharborist;
  */
 class ParameterTraitTest extends \PHPUnit_Framework_TestCase {
   public function testHasParameter() {
+    /** @var \Pharborist\FunctionDeclarationNode $function */
     $function = Parser::parseSnippet('function foo(stdClass &$a = NULL) { $a = new stdClass(); }');
 
     $this->assertTrue($function->hasParameter('a'));
@@ -27,7 +28,7 @@ class ParameterTraitTest extends \PHPUnit_Framework_TestCase {
   }
 
   /**
-   * @expectedException InvalidArgumentException
+   * @expectedException \InvalidArgumentException
    */
   public function testHasParamterInvalidArgumentException() {
     Parser::parseSnippet('function foo($bar) {}')->hasParameter(1);

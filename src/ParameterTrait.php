@@ -29,7 +29,7 @@ trait ParameterTrait {
    */
   public function getParameterNames() {
     return array_map(function(ParameterNode $parameter) {
-      return substr($parameter->getName(), 1);
+      return $parameter->getName();
     }, $this->getParameters());
   }
 
@@ -146,6 +146,7 @@ trait ParameterTrait {
       $exists = in_array($parameter, $this->getParameters(), TRUE);
     }
     elseif (is_string($parameter)) {
+      $parameter = ltrim($parameter, '$');
       $exists = in_array($parameter, $this->getParameterNames());
     }
     else {
@@ -153,7 +154,7 @@ trait ParameterTrait {
     }
 
     if ($exists) {
-      return $type ? $this->getParameterByName($parameter)->getTypeHint()->getText() === $type : FALSE;
+      return $type ? $this->getParameterByName($parameter)->getTypeHint()->getText() === $type : TRUE;
     }
     else {
       return FALSE;
@@ -172,7 +173,7 @@ trait ParameterTrait {
    * @return boolean
    */
   public function hasRequiredParameter($parameter, $type) {
-    return $this->hasParameter($parameter, $type, TRUE) ? $this->getParameterByName($name)->isRequired() : FALSE;
+    return $this->hasParameter($parameter, $type, TRUE) ? $this->getParameterByName($parameter)->isRequired() : FALSE;
   }
 
   /**

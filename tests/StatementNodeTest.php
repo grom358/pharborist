@@ -13,6 +13,6 @@ class Foobar {
 
 }
 END;
-    $this->assertEquals(5, Parser::parseSnippet($text)->getLineCount());
+    $this->assertEquals(6, Parser::parseSnippet($text)->getLineCount());
   }
 }

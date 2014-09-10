@@ -12,12 +12,15 @@ abstract class StatementNode extends ParentNode {
    * @return integer
    */
   public function getLineCount() {
-    return $this
+    $count = 0;
+
+    $this
       ->find(Filter::isInstanceOf('\Pharborist\WhitespaceNode'))
-      ->filter(function(WhitespaceNode $node) {
-        return $node->getNewlineCount() > 0;
-      })
-      ->count();
+      ->each(function(WhitespaceNode $node) use (&$count) {
+        $count += $node->getNewlineCount();
+      });
+
+    return $count;
   }
 
 }

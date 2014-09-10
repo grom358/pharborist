@@ -217,4 +217,26 @@ EOF;
     $this->assertEquals('namespace\Level\MyClass', $name->getText());
     $this->assertEquals('\Top\Sub\Level\MyClass', $name->getAbsolutePath());
   }
+
+  public function testCreate() {
+    $namespace = NameNode::create('MyNamespace');
+    $this->assertCount(1, $namespace->children());
+    $this->assertEquals('MyNamespace', $namespace->firstChild()->getText());
+
+    $namespace = NameNode::create('Top\Sub');
+    /** @var Node[] $children */
+    $children = $namespace->children();
+    $this->assertCount(3, $children);
+    $this->assertEquals('Top', $children[0]->getText());
+    $this->assertEquals('\\', $children[1]->getText());
+    $this->assertEquals('Sub', $children[2]->getText());
+
+    $namespace = NameNode::create('\Top\Sub');
+    $children = $namespace->children();
+    $this->assertCount(4, $children);
+    $this->assertEquals('\\', $children[0]->getText());
+    $this->assertEquals('Top', $children[1]->getText());
+    $this->assertEquals('\\', $children[2]->getText());
+    $this->assertEquals('Sub', $children[3]->getText());
+  }
 }

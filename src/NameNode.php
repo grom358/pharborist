@@ -24,9 +24,17 @@ class NameNode extends ParentNode {
    * @return NameNode
    */
   public static function create($name) {
-    // @TODO Handle qualified namespace path.
+    $parts = explode('\\', $name);
     $name_node = new NameNode();
-    $name_node->append(Token::identifier($name));
+    foreach ($parts as $i => $part) {
+      $part = trim($part);
+      if ($i > 0) {
+        $name_node->append(Token::namespaceSeparator());
+      }
+      if ($part !== '') {
+        $name_node->append(Token::identifier($part));
+      }
+    }
     return $name_node;
   }
 

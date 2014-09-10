@@ -13,6 +13,8 @@ class Foobar {
 
 }
 END;
-    $this->assertEquals(6, Parser::parseSnippet($text)->getLineCount());
+    $this->assertEquals(7, Parser::parseSnippet($text)->getLineCount());
+    // What, you haven't seen Spaceballs?
+    $this->assertEquals(1, Parser::parseSnippet('$combination = 12345;')->getLineCount());
   }
 }

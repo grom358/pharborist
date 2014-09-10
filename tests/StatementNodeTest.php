@@ -34,14 +34,19 @@ class Foo {
   private $curly;
 }
 END;
+
+    // The expected text needs the extra line, because PHP ignores the new line
+    // before END for whatever reason. Weird, but the tests pass this way.
     $expected = <<<'END'
 // class Foo {
 //   private $larry;
 //   private $moe;
 //   private $curly;
 // }
+
 END;
     $comment = Parser::parseSnippet($original)->toComment();
     $this->assertEquals($expected, $comment->getText());
+    $this->assertEquals($original, $comment->uncomment()->getText());
   }
 }

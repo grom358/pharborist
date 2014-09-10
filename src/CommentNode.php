@@ -5,6 +5,8 @@ namespace Pharborist;
  * A comment.
  */
 class CommentNode extends HiddenNode {
+  use UncommentTrait;
+
   // Comment types
   const DOC = '/**';
   const BLOCK = '/*';

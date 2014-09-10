@@ -4,12 +4,12 @@ namespace Pharborist;
 
 class StatementNodeTest extends \PHPUnit_Framework_TestCase {
   public function testGetLineCount() {
-    $text = <<<END
+    $text = <<<'END'
 class Foobar {
 
-  protected \$name;
+  protected $name;
 
-  protected \$age;
+  protected $age;
 
 }
 END;

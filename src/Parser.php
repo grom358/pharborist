@@ -1228,7 +1228,19 @@ class Parser {
           return $this->functionCall($namespace_path);
         }
         else {
-          $node = new ConstantNode();
+          $constant_name = strtolower($namespace_path->getText());
+          if ($constant_name === 'true') {
+            $node = new TrueNode();
+          }
+          elseif ($constant_name === 'false') {
+            $node = new FalseNode();
+          }
+          elseif ($constant_name === 'null') {
+            $node = new NullNode();
+          }
+          else {
+            $node = new ConstantNode();
+          }
           $node->addChild($namespace_path, 'constantName');
           return $node;
         }

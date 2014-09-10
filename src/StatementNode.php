@@ -5,7 +5,6 @@ namespace Pharborist;
  * A statement.
  */
 abstract class StatementNode extends ParentNode {
-
   /**
    * Gets the number of lines spanned by this statement.
    *
@@ -25,4 +24,12 @@ abstract class StatementNode extends ParentNode {
     return $count;
   }
 
+  /**
+   * Creates a commented-out version of this statement.
+   *
+   * @return \Pharborist\CommentNode|\Pharborist\LineCommentBlockNode
+   */
+  public function toComment() {
+    return CommentNode::create($this->getText());
+  }
 }

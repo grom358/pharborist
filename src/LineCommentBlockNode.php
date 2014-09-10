@@ -5,6 +5,8 @@ namespace Pharborist;
  * A block of line comments.
  */
 class LineCommentBlockNode extends ParentNode {
+  use UncommentTrait;
+
   /**
    * Create line comment block.
    *
@@ -15,7 +17,7 @@ class LineCommentBlockNode extends ParentNode {
   public static function create($comment) {
     $block_comment = new LineCommentBlockNode();
     $comment = trim($comment);
-    $lines = array_map('trim', explode("\n", $comment));
+    $lines = array_map('rtrim', explode("\n", $comment));
     foreach ($lines as $line) {
       $comment_node = new CommentNode(T_COMMENT, '// ' . $line . "\n");
       $block_comment->addChild($comment_node);

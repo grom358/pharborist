@@ -5,6 +5,8 @@ namespace Pharborist;
  * A comment.
  */
 class CommentNode extends HiddenNode {
+  use UncommentTrait;
+
   // Comment types
   const DOC = '/**';
   const BLOCK = '/*';
@@ -81,7 +83,11 @@ class CommentNode extends HiddenNode {
     switch ($this->commentType) {
       case self::SINGLE:
       case self::HASH:
-        return trim(substr($this->text, strlen($this->commentType)));
+        $comment_text = rtrim(substr($this->text, strlen($this->commentType)));
+        if ($comment_text[0] === ' ') {
+          $comment_text = substr($comment_text, 1);
+        }
+        return $comment_text;
       case self::DOC:
         $lines = explode("\n", $this->text);
         if (count($lines) === 1) {

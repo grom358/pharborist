@@ -43,6 +43,24 @@ class CommentNode extends HiddenNode {
   }
 
   /**
+   * Create line comment.
+   *
+   * @param string $comment
+   *   Comment without leading prefix.
+   * @return CommentNode|LineCommentBlockNode
+   */
+  public static function create($comment) {
+    $comment = trim($comment);
+    $nl_count = substr_count($comment, "\n");
+    if ($nl_count > 1) {
+      return LineCommentBlockNode::create($comment);
+    }
+    else {
+      return new CommentNode(T_COMMENT, '// ' . $comment . "\n");
+    }
+  }
+
+  /**
    * @return string
    */
   public function getCommentType() {

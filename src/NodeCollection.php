@@ -162,6 +162,54 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
   }
 
   /**
+   * Get the element at index.
+   *
+   * @param int $index
+   *   Index of element to get.
+   *
+   * @return Node
+   */
+  public function get($index) {
+    return $this->nodes[$index];
+  }
+
+  /**
+   * Index of first element that is matched by callback.
+   *
+   * @param callable $callback
+   *   Callback to test for node match.
+   *
+   * @return int
+   *   Index of first element that is matched by callback.
+   */
+  public function index(callable $callback) {
+    foreach ($this->nodes as $i => $node) {
+      if ($callback($node)) {
+        return $i;
+      }
+    }
+    return -1;
+  }
+
+  /**
+   * Test is any element in collection matches.
+   *
+   * @param callable $callback
+   *   Callback to test for node match.
+   *
+   * @return boolean
+   *   TRUE if any element in set of nodes matches.
+   */
+  public function is(callable $callback) {
+    foreach ($this->nodes as $node) {
+      if ($callback($node)) {
+        return TRUE;
+      }
+    }
+    return FALSE;
+  }
+
+  /**
    * Get the parent of each node in the current set of matched nodes,
    * optionally filtered by a callback.
    * @param callable $callback An optional callback to filter by.

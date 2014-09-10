@@ -81,6 +81,20 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertNull($node->closest($false));
   }
 
+  public function testIndex() {
+    $parent = $this->createParentNode();
+    /** @var Node[] $nodes */
+    $nodes = [];
+    for ($i = 0; $i < 5; $i++) {
+      $node = $this->createNode($i);
+      $nodes[] = $node;
+      $node->appendTo($parent);
+    }
+
+    $third = $nodes[2];
+    $this->assertEquals(2, $third->index());
+  }
+
   public function testSiblings() {
     $parent = $this->createParentNode();
     /** @var Node[] $nodes */

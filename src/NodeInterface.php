@@ -51,6 +51,12 @@ interface NodeInterface {
   public function closest(callable $callback);
 
   /**
+   * Get the position of the element relative to its sibling elements.
+   * @return int
+   */
+  public function index();
+
+  /**
    * Get the previous sibling.
    * @param callable $callback An optional callback to filter by.
    * @return Node

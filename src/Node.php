@@ -71,6 +71,19 @@ abstract class Node implements NodeInterface {
     return NULL;
   }
 
+  public function index() {
+    $index = 0;
+    $child = $this->parent->head;
+    while ($child) {
+      if ($child === $this) {
+        return $index;
+      }
+      $child = $child->next;
+      $index++;
+    }
+    return -1;
+  }
+
   public function previous(callable $callback = NULL) {
     if ($callback) {
       return $callback($this->previous) ? $this->previous : NULL;

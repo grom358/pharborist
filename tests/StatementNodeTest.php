@@ -25,4 +25,23 @@ db_delete('variable')
 END;
     $this->assertEquals(3, Parser::parseSnippet($text)->getLineCount());
   }
+
+  public function testToComment() {
+    $original = <<<'END'
+class Foo {
+  private $larry;
+  private $moe;
+  private $curly;
+}
+END;
+    $expected = <<<'END'
+// class Foo {
+//   private $larry;
+//   private $moe;
+//   private $curly;
+// }
+END;
+    $comment = Parser::parseSnippet($original)->toComment();
+    $this->assertEquals($expected, $comment->getText());
+  }
 }

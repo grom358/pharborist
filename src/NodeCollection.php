@@ -73,7 +73,7 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
     throw new \BadMethodCallException('NodeCollection offsetUnset not supported');
   }
 
-  
+
   /**
    * Returns if the collection is empty.
    *
@@ -132,6 +132,23 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
    */
   public function map(callable $callback) {
     return new NodeCollection(array_map($callback, $this->nodes));
+  }
+
+  /**
+   * Iteratively reduce the collection to a single value using a callback.
+   *
+   * @param callable $callback
+   *   Callback function that receives the return value of the previous
+   *   iteration and the current node in the set being processed.
+   * @param mixed $initial
+   *   The initial value for first iteration, or final result in case
+   *   of empty collection.
+   *
+   * @return mixed
+   *   Returns the resulting value.
+   */
+  public function reduce(callable $callback, $initial = NULL) {
+    return array_reduce($this->nodes, $callback, $initial);
   }
 
   /**

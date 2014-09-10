@@ -543,4 +543,14 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
     $this->assertSame($one, $map[0]);
     $this->assertSame($first, $map[1]);
   }
+
+  public function testReduce() {
+    $first = Token::identifier('hello');
+    $second = Token::identifier('world');
+    $collection = new NodeCollection([$first, $second], FALSE);
+    $ret = $collection->reduce(function ($carry, TokenNode $node) {
+      return $carry === '' ? $node->getText() : $carry . ' ' . $node->getText();
+    }, '');
+    $this->assertEquals('hello world', $ret);
+  }
 }

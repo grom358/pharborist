@@ -4,7 +4,7 @@ namespace Pharborist;
 /**
  * A lookup to a class method.
  *
- * For example, MyClass::classMethod
+ * For example, MyClass::classMethod()
  */
 class ClassMethodCallNode extends CallNode implements VariableExpressionNode {
   /**
@@ -55,5 +55,30 @@ class ClassMethodCallNode extends CallNode implements VariableExpressionNode {
     $this->methodName->replaceWith($method_name);
     $this->methodName = $method_name;
     return $this;
+  }
+
+  /**
+   * Creates a method call on a class with an empty argument list.
+   *
+   * @param Node|string $class_name
+   *  The class node which is typically NameNode of class.
+   * @param string $method_name
+   *  The name of the called method.
+   *
+   * @return static
+   */
+  public static function create($class_name, $method_name) {
+    if (is_string($class_name)) {
+      $class_name = NameNode::create($class_name);
+    }
+    /** @var ClassMethodCallNode $node */
+    $node = new static();
+    $node->addChild($class_name, 'className');
+    $node->addChild(Token::doubleColon());
+    $node->addChild(NameNode::create($method_name), 'methodName');
+    $node->addChild(Token::openParen());
+    $node->addChild(new CommaListNode(), 'arguments');
+    $node->addChild(Token::closeParen());
+    return $node;
   }
 }

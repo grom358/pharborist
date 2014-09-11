@@ -8,6 +8,20 @@ class NamespaceNode extends StatementNode {
   use DocCommentTrait;
 
   /**
+   * Create namespace declaration.
+   *
+   * @param NameNode|string $name
+   *   Namespace path.
+   *
+   * @return NamespaceNode
+   */
+  public static function create($name) {
+    $name = (string) $name;
+    $namespace_node = Parser::parseSnippet("namespace $name;");
+    return $namespace_node;
+  }
+
+  /**
    * @var NameNode
    */
   protected $name;

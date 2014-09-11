@@ -67,16 +67,6 @@ class Parser {
   private $currentType;
 
   /**
-   * @var NameNode
-   */
-  private $baseName;
-
-  /**
-   * @var array
-   */
-  private $imports;
-
-  /**
    * Constructor.
    */
   public function __construct() {
@@ -105,8 +95,6 @@ class Parser {
    * @return TopNode Root node of the tree
    */
   public function buildTree(TokenIterator $iterator) {
-    $this->baseName = NULL;
-    $this->imports = [];
     $this->iterator = $iterator;
     $this->current = $this->iterator->current();
     $this->currentType = $this->current ? $this->current->getType() : NULL;
@@ -164,6 +152,22 @@ class Parser {
   public static function parseSnippet($snippet) {
     $tree = self::parseSource('<?php ' . $snippet);
     return $tree->firstChild()->next();
+  }
+
+  /**
+   * Parse a PHP expression.
+   *
+   * @param string $expression
+   *   PHP expression snippet.
+   *
+   * @return ExpressionNode
+   *   The expression.
+   */
+  public static function parseExpression($expression) {
+    $tree = self::parseSource('<?php ' . $expression . ';');
+    /** @var ExpressionStatementNode $statement_node */
+    $statement_node = $tree->firstChild()->next();
+    return $statement_node->getExpression()->remove();
   }
 
   /**
@@ -299,7 +303,6 @@ class Parser {
   private function constDeclaration() {
     $node = new ConstantDeclarationNode();
     $name_node = new NameNode();
-    $name_node->setBase($this->baseName);
     $this->mustMatch(T_STRING, $name_node, NULL, TRUE);
     $node->addChild($name_node, 'name');
     if ($this->mustMatch('=', $node)) {
@@ -1221,14 +1224,25 @@ class Parser {
       case T_NAMESPACE:
         $namespace_path = $this->name();
         if ($this->currentType === T_DOUBLE_COLON) {
-          $this->resolve($namespace_path);
           return $this->exprClass($namespace_path);
         }
         elseif ($this->currentType === '(') {
           return $this->functionCall($namespace_path);
         }
         else {
-          $node = new ConstantNode();
+          $constant_name = strtolower($namespace_path->getText());
+          if ($constant_name === 'true') {
+            $node = new TrueNode();
+          }
+          elseif ($constant_name === 'false') {
+            $node = new FalseNode();
+          }
+          elseif ($constant_name === 'null') {
+            $node = new NullNode();
+          }
+          else {
+            $node = new ConstantNode();
+          }
           $node->addChild($namespace_path, 'constantName');
           return $node;
         }
@@ -1396,7 +1410,6 @@ class Parser {
       case T_NS_SEPARATOR:
       case T_NAMESPACE:
         $namespace_path = $this->name();
-        $this->resolve($namespace_path);
         if ($this->currentType === T_DOUBLE_COLON) {
           $node = $this->staticMember($namespace_path);
           return $this->dynamicClassNameReference($node);
@@ -1729,7 +1742,6 @@ class Parser {
           return $this->functionCall($namespace_path);
         }
         elseif ($this->currentType === T_DOUBLE_COLON) {
-          $this->resolve($namespace_path);
           return $this->varClass($namespace_path);
         }
         break;
@@ -2000,7 +2012,6 @@ class Parser {
     $this->mustMatch(T_FUNCTION, $node);
     $this->tryMatch('&', $node, 'reference');
     $name_node = new NameNode();
-    $name_node->setBase($this->baseName);
     $this->mustMatch(T_STRING, $name_node, NULL, TRUE);
     $node->addChild($name_node, 'name');
     $this->parameterList($node);
@@ -2127,7 +2138,6 @@ class Parser {
    */
   private function name() {
     $node = new NameNode();
-    $node->setBase($this->baseName);
     if ($this->tryMatch(T_NAMESPACE, $node)) {
       $this->mustMatch(T_NS_SEPARATOR, $node);
     }
@@ -2141,31 +2151,16 @@ class Parser {
     return $node;
   }
 
-  private function resolve(NameNode $name) {
-    $info = $name->getPathInfo();
-    if (!$info['absolute'] && !$info['relative']) {
-      /** @var TokenNode $first */
-      $first = $info['parts'][0];
-      $first_text = $first->getText();
-      if (array_key_exists($first_text, $this->imports)) {
-        $name->setAlias($this->imports[$first_text]);
-      }
-    }
-  }
-
   /**
    * Parse a namespace declaration.
    * @return NamespaceNode
    */
   private function _namespace() {
-    $this->baseName = NULL;
-    $this->imports = [];
     $node = new NamespaceNode();
     $this->matchDocComment($node);
     $this->mustMatch(T_NAMESPACE, $node);
     if ($this->currentType === T_STRING) {
       $name = $this->namespaceName();
-      $this->baseName = $name->getPath();
       $node->addChild($name, 'name');
     }
     if ($this->tryMatch('{', $node)) {
@@ -2247,16 +2242,14 @@ class Parser {
     $declaration = new UseDeclarationNode();
     $node = new NameNode();
     $this->tryMatch(T_NS_SEPARATOR, $node);
-    $alias = $this->mustMatch(T_STRING, $node, NULL, TRUE)->getText();
+    $this->mustMatch(T_STRING, $node, NULL, TRUE)->getText();
     while ($this->tryMatch(T_NS_SEPARATOR, $node)) {
-      $alias = $this->mustMatch(T_STRING, $node, NULL, TRUE)->getText();
+      $this->mustMatch(T_STRING, $node, NULL, TRUE)->getText();
     }
     $declaration->addChild($node, 'name');
-    $full_name = $node->getAbsolutePath();
     if ($this->tryMatch(T_AS, $declaration)) {
-      $alias = $this->mustMatch(T_STRING, $declaration, 'alias', TRUE)->getText();
+      $this->mustMatch(T_STRING, $declaration, 'alias', TRUE)->getText();
     }
-    $this->imports[$alias] = $full_name;
     return $declaration;
   }
 
@@ -2270,7 +2263,6 @@ class Parser {
     $this->tryMatch(T_ABSTRACT, $node, 'abstract') || $this->tryMatch(T_FINAL, $node, 'final');
     $this->mustMatch(T_CLASS, $node);
     $name_node = new NameNode();
-    $name_node->setBase($this->baseName);
     $this->mustMatch(T_STRING, $name_node, NULL, TRUE);
     $node->addChild($name_node, 'name');
     if ($this->tryMatch(T_EXTENDS, $node)) {
@@ -2541,7 +2533,6 @@ class Parser {
     $this->matchDocComment($node);
     $this->mustMatch(T_INTERFACE, $node);
     $name_node = new NameNode();
-    $name_node->setBase($this->baseName);
     $this->mustMatch(T_STRING, $name_node, NULL, TRUE);
     $node->addChild($name_node, 'name');
     if ($this->tryMatch(T_EXTENDS, $node)) {
@@ -2605,7 +2596,6 @@ class Parser {
     $this->matchDocComment($node);
     $this->mustMatch(T_TRAIT, $node);
     $name_node = new NameNode();
-    $name_node->setBase($this->baseName);
     $this->mustMatch(T_STRING, $name_node, NULL, TRUE);
     $node->addChild($name_node, 'name');
     if ($this->tryMatch(T_EXTENDS, $node)) {

@@ -702,7 +702,7 @@ class Token {
   }
 
   public static function openTag() {
-    return new TokenNode(T_OPEN_TAG, '<?php');
+    return new TokenNode(T_OPEN_TAG, '<?php' . "\n");
   }
 
   public static function openEchoTag() {

@@ -8,40 +8,38 @@ namespace Pharborist;
  */
 class NameNode extends ParentNode {
   /**
-   * @var string
-   */
-  protected $basePath;
-
-  /**
-   * @var string
-   */
-  protected $alias;
-
-  /**
    * Create namespace path.
    *
    * @param string $name
    * @return NameNode
    */
   public static function create($name) {
-    // @TODO Handle qualified namespace path.
+    $parts = explode('\\', $name);
     $name_node = new NameNode();
-    $name_node->append(Token::identifier($name));
+    foreach ($parts as $i => $part) {
+      $part = trim($part);
+      if ($i > 0) {
+        $name_node->append(Token::namespaceSeparator());
+      }
+      if ($part !== '') {
+        $name_node->append(Token::identifier($part));
+      }
+    }
     return $name_node;
   }
 
   /**
-   * @param string $base
+   * @return string
    */
-  public function setBase($base) {
-    $this->basePath = $base;
-  }
-
-  /**
-   * @param string $alias
-   */
-  public function setAlias($alias) {
-    $this->alias = $alias;
+  public function getBasePath() {
+    /** @var NamespaceNode $namespace */
+    $namespace = $this->closest(Filter::isInstanceOf('\Pharborist\NamespaceNode'));
+    if (!$namespace) {
+      return '\\';
+    }
+    else {
+      return '\\' . $namespace->getName()->getText() . '\\';
+    }
   }
 
   /**
@@ -142,20 +140,49 @@ class NameNode extends ParentNode {
     return $path;
   }
 
+  /**
+   * @param string $name
+   *   The unqualified name to resolve.
+   *
+   * @return string
+   */
+  protected function resolveUnqualified($name) {
+    $namespace = $this->closest(Filter::isInstanceOf('\Pharborist\NamespaceNode'));
+    if (!$namespace) {
+      return '\\' . $name;
+    }
+    if ($this->parent() instanceof FunctionCallNode) {
+      return $this->getBasePath() . $name;
+    }
+    if ($this->parent() instanceof UseDeclarationNode) {
+      return '\\' . $this->getPath();
+    }
+    /** @var UseDeclarationNode $use_declaration */
+    foreach ($namespace->find(Filter::isInstanceOf('\Pharborist\UseDeclarationNode')) as $use_declaration) {
+      $bounded_name = $use_declaration->getBoundedName();
+      if ($bounded_name === $name) {
+        return '\\' . $use_declaration->getName()->getPath();
+      }
+    }
+    return $this->getBasePath() . $name;
+  }
+
   public function getAbsolutePath() {
     /** @var TokenNode[] $parts */
     $info = $this->getPathInfo();
     $absolute = $info['absolute'];
+    $relative = $info['relative'];
     $parts = $info['parts'];
-    if ($this->alias) {
-      $path = $this->alias;
+
+    if (!$absolute && !$relative) {
+      $path = $this->resolveUnqualified($parts[0]->getText());
       unset($parts[0]);
       if (!empty($parts)) {
         $path .= '\\';
       }
     }
     else {
-      $path = '\\' . (!$absolute && $this->basePath ? $this->basePath . '\\' : '');
+      $path = $absolute ? '\\' : $this->getBasePath();
       if ($parts[0]->getType() === T_NAMESPACE) {
         unset($parts[0]);
       }

@@ -73,7 +73,7 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
     throw new \BadMethodCallException('NodeCollection offsetUnset not supported');
   }
 
-  
+
   /**
    * Returns if the collection is empty.
    *
@@ -135,6 +135,23 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
   }
 
   /**
+   * Iteratively reduce the collection to a single value using a callback.
+   *
+   * @param callable $callback
+   *   Callback function that receives the return value of the previous
+   *   iteration and the current node in the set being processed.
+   * @param mixed $initial
+   *   The initial value for first iteration, or final result in case
+   *   of empty collection.
+   *
+   * @return mixed
+   *   Returns the resulting value.
+   */
+  public function reduce(callable $callback, $initial = NULL) {
+    return array_reduce($this->nodes, $callback, $initial);
+  }
+
+  /**
    * Returns the raw array of nodes, like jQuery's get() called with no
    * arguments.
    *
@@ -142,6 +159,54 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
    */
   public function toArray() {
     return $this->nodes;
+  }
+
+  /**
+   * Get the element at index.
+   *
+   * @param int $index
+   *   Index of element to get.
+   *
+   * @return Node
+   */
+  public function get($index) {
+    return $this->nodes[$index];
+  }
+
+  /**
+   * Index of first element that is matched by callback.
+   *
+   * @param callable $callback
+   *   Callback to test for node match.
+   *
+   * @return int
+   *   Index of first element that is matched by callback.
+   */
+  public function index(callable $callback) {
+    foreach ($this->nodes as $i => $node) {
+      if ($callback($node)) {
+        return $i;
+      }
+    }
+    return -1;
+  }
+
+  /**
+   * Test is any element in collection matches.
+   *
+   * @param callable $callback
+   *   Callback to test for node match.
+   *
+   * @return boolean
+   *   TRUE if any element in set of nodes matches.
+   */
+  public function is(callable $callback) {
+    foreach ($this->nodes as $node) {
+      if ($callback($node)) {
+        return TRUE;
+      }
+    }
+    return FALSE;
   }
 
   /**

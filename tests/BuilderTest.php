@@ -76,4 +76,62 @@ EOF;
     $property->setVisibility(Token::_protected());
     $this->assertEquals('protected $someProperty;', $property->getText());
   }
+
+  public function testObjectMethodCall() {
+    $object = Token::variable('$object');
+    $method_call = ObjectMethodCallNode::create($object, 'someMethod');
+    $this->assertInstanceOf('\Pharborist\ObjectMethodCallNode', $method_call);
+    $this->assertEquals($object, $method_call->getObject());
+    $this->assertEquals('$object', $method_call->getObject()->getText());
+    $this->assertEquals('someMethod', $method_call->getMethodName()->getText());
+    $this->assertCount(0, $method_call->getArguments());
+    $var = Parser::parseExpression('$a');
+    $method_call->appendArgument($var);
+    $arg = $method_call->getArguments()[0];
+    $this->assertInstanceOf('\Pharborist\VariableNode', $arg);
+    $this->assertEquals('$a', $arg->getText());
+  }
+
+  public function testClassMethodCall() {
+    $method_call = ClassMethodCallNode::create('TestClass', 'someMethod');
+    $this->assertInstanceOf('\Pharborist\ClassMethodCallNode', $method_call);
+    $this->assertEquals('TestClass', $method_call->getClassName()->getText());
+    $this->assertEquals('someMethod', $method_call->getMethodName()->getText());
+    $this->assertCount(0, $method_call->getArguments());
+    $var = Parser::parseExpression('$a');
+    $method_call->appendArgument($var);
+    $arg = $method_call->getArguments()[0];
+    $this->assertInstanceOf('\Pharborist\VariableNode', $arg);
+    $this->assertEquals('$a', $arg->getText());
+  }
+
+  public function testChainMethodCall() {
+    $object = Token::variable('$object');
+    $method_call = ObjectMethodCallNode::create($object, 'someMethod');
+    $chained_call = $method_call->appendMethodCall('chained');
+    $this->assertEquals('$object->someMethod()', $chained_call->getObject()->getText());
+    $this->assertEquals('chained', $chained_call->getMethodName()->getText());
+
+    $source = <<<'EOF'
+<?php
+$object->someMethod();
+EOF;
+    $tree = Parser::parseSource($source);
+    /** @var ExpressionStatementNode $expr_statement */
+    $expr_statement = $tree->firstChild()->next();
+    /** @var ObjectMethodCallNode $method_call */
+    $method_call = $expr_statement->getExpression();
+    $method_call->appendMethodCall('chained');
+    $expected = <<<'EOF'
+<?php
+$object->someMethod()->chained();
+EOF;
+    $this->assertEquals($expected, $tree->getText());
+  }
+
+  public function testFunctionDeclaration() {
+    $expected = 'function test($a, $b) {}';
+    $function = FunctionDeclarationNode::create('test', ['$a', '$b']);
+    $this->assertEquals($expected, $function->getText());
+  }
 }

@@ -5,6 +5,8 @@ namespace Pharborist;
  * A comment.
  */
 class CommentNode extends HiddenNode {
+  use UncommentTrait;
+
   // Comment types
   const DOC = '/**';
   const BLOCK = '/*';
@@ -43,6 +45,24 @@ class CommentNode extends HiddenNode {
   }
 
   /**
+   * Create line comment.
+   *
+   * @param string $comment
+   *   Comment without leading prefix.
+   * @return CommentNode|LineCommentBlockNode
+   */
+  public static function create($comment) {
+    $comment = trim($comment);
+    $nl_count = substr_count($comment, "\n");
+    if ($nl_count > 1) {
+      return LineCommentBlockNode::create($comment);
+    }
+    else {
+      return new CommentNode(T_COMMENT, '// ' . $comment . "\n");
+    }
+  }
+
+  /**
    * @return string
    */
   public function getCommentType() {
@@ -63,7 +83,11 @@ class CommentNode extends HiddenNode {
     switch ($this->commentType) {
       case self::SINGLE:
       case self::HASH:
-        return trim(substr($this->text, strlen($this->commentType)));
+        $comment_text = rtrim(substr($this->text, strlen($this->commentType)));
+        if ($comment_text[0] === ' ') {
+          $comment_text = substr($comment_text, 1);
+        }
+        return $comment_text;
       case self::DOC:
         $lines = explode("\n", $this->text);
         if (count($lines) === 1) {

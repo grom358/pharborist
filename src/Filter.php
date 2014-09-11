@@ -151,4 +151,17 @@ class Filter {
       };
     }
   }
+
+  /**
+   * Callback to test if match to given node.
+   *
+   * @param Node $match
+   *
+   * @return callable
+   */
+  public static function is(Node $match) {
+    return function ($node) use ($match) {
+      return $node === $match;
+    };
+  }
 }

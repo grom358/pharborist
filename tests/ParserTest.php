@@ -1878,6 +1878,26 @@ EOF;
   }
 
   /**
+   * Test constants.
+   */
+  public function testConstants() {
+    $this->parseExpression('SOME_CONST', '\Pharborist\ConstantNode');
+
+    /** @var TrueNode $true */
+    $this->parseExpression('true', '\Pharborist\TrueNode');
+    $true = $this->parseExpression('TRUE', '\Pharborist\TrueNode');
+    $this->assertTrue($true->toBoolean());
+
+    /** @var FalseNode $false */
+    $this->parseExpression('false', '\Pharborist\FalseNode');
+    $false = $this->parseExpression('FALSE', '\Pharborist\FalseNode');
+    $this->assertFalse($false->toBoolean());
+
+    $this->parseExpression('NULL', '\Pharborist\NullNode');
+    $this->parseExpression('null', '\Pharborist\NullNode');
+  }
+
+  /**
    * @requires PHP 5.5
    */
   public function testFinally() {

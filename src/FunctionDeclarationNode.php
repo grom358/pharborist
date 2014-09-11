@@ -8,6 +8,30 @@ class FunctionDeclarationNode extends StatementNode {
   use FunctionTrait;
 
   /**
+   * Create a function declaration.
+   *
+   * @param NameNode|string $function_name
+   *   The function name.
+   * @param array $parameters
+   *   (Optional) List of parameters.
+   *
+   * @return FunctionDeclarationNode
+   */
+  public static function create($function_name, $parameters = NULL) {
+    /** @var FunctionDeclarationNode $function */
+    $function = Parser::parseSnippet("function $function_name() {}");
+    if (is_array($parameters)) {
+      foreach ($parameters as $parameter) {
+        if (is_string($parameter)) {
+          $parameter = ParameterNode::create($parameter);
+        }
+        $function->appendParameter($parameter);
+      }
+    }
+    return $function;
+  }
+
+  /**
    * @var StatementBlockNode
    */
   protected $body;

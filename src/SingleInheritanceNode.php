@@ -204,13 +204,20 @@ abstract class SingleInheritanceNode extends StatementNode {
   }
 
   /**
-   * Add method to class.
+   * Adds a method to a class.
    *
-   * @param string|ClassMethodNode $method
+   * @param \Pharborist\FunctionDeclarationNode|\Pharborist\ClassMethodNode|string $method
+   *  The method to append. Can either be an existing method, a function (which
+   *  will be converted to a public method), or a string (a new public method
+   *  will be created with that name).
+   *
    * @return $this
    */
   public function appendMethod($method) {
-    if (is_string($method)) {
+    if ($method instanceof FunctionDeclarationNode) {
+      $method = ClassMethodNode::fromFunction($method);
+    }
+    elseif (is_string($method)) {
       $method = ClassMethodNode::create($method);
     }
     $nl = Settings::get('formatter.nl');

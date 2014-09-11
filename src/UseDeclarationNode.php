@@ -28,4 +28,18 @@ class UseDeclarationNode extends ParentNode {
   public function getAlias() {
     return $this->alias;
   }
+
+  /**
+   * Name bounded inside namespace.
+   *
+   * @return string
+   */
+  public function getBoundedName() {
+    if ($this->alias) {
+      return $this->alias->getText();
+    }
+    else {
+      return $this->name->lastChild()->getText();
+    }
+  }
 }

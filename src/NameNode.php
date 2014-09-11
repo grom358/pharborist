@@ -8,11 +8,6 @@ namespace Pharborist;
  */
 class NameNode extends ParentNode {
   /**
-   * @var string
-   */
-  protected $alias;
-
-  /**
    * Create namespace path.
    *
    * @param string $name
@@ -45,13 +40,6 @@ class NameNode extends ParentNode {
     else {
       return '\\' . $namespace->getName()->getText() . '\\';
     }
-  }
-
-  /**
-   * @param string $alias
-   */
-  public function setAlias($alias) {
-    $this->alias = $alias;
   }
 
   /**
@@ -152,13 +140,42 @@ class NameNode extends ParentNode {
     return $path;
   }
 
+  /**
+   * @param string $name
+   *   The unqualified name to resolve.
+   *
+   * @return string
+   */
+  protected function resolveUnqualified($name) {
+    $namespace = $this->closest(Filter::isInstanceOf('\Pharborist\NamespaceNode'));
+    if (!$namespace) {
+      return '\\' . $name;
+    }
+    if ($this->parent() instanceof FunctionCallNode) {
+      return $this->getBasePath() . $name;
+    }
+    if ($this->parent() instanceof UseDeclarationNode) {
+      return '\\' . $this->getPath();
+    }
+    /** @var UseDeclarationNode $use_declaration */
+    foreach ($namespace->find(Filter::isInstanceOf('\Pharborist\UseDeclarationNode')) as $use_declaration) {
+      $bounded_name = $use_declaration->getBoundedName();
+      if ($bounded_name === $name) {
+        return '\\' . $use_declaration->getName()->getPath();
+      }
+    }
+    return $this->getBasePath() . $name;
+  }
+
   public function getAbsolutePath() {
     /** @var TokenNode[] $parts */
     $info = $this->getPathInfo();
     $absolute = $info['absolute'];
+    $relative = $info['relative'];
     $parts = $info['parts'];
-    if ($this->alias) {
-      $path = $this->alias;
+
+    if (!$absolute && !$relative) {
+      $path = $this->resolveUnqualified($parts[0]->getText());
       unset($parts[0]);
       if (!empty($parts)) {
         $path .= '\\';

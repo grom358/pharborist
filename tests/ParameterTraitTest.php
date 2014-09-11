@@ -5,6 +5,21 @@ namespace Pharborist;
  * Tests various methods of ParameterTrait.
  */
 class ParameterTraitTest extends \PHPUnit_Framework_TestCase {
+  /**
+   * @depends testHasParameter
+   */
+  public function testAppendParameter() {
+    $function = Parser::parseSnippet('function baz() {}');
+
+    $function->appendParameter(ParameterNode::create('$neo'));
+    $this->assertTrue($function->hasParameter('neo'));
+
+    $function->appendParameter(function(FunctionDeclarationNode $function) {
+      return ParameterNode::create('$trinity');
+    });
+    $this->assertTrue($function->hasParameter('trinity'));
+  }
+
   public function testHasParameter() {
     /** @var \Pharborist\FunctionDeclarationNode $function */
     $function = Parser::parseSnippet('function foo(stdClass &$a = NULL) { $a = new stdClass(); }');

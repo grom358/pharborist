@@ -43,10 +43,27 @@ trait ParameterTrait {
   }
 
   /**
-   * @param ParameterNode $parameter
+   * Appends a parameter.
+   *
+   * @param \Pharborist\ParameterNode|callable $parameter
+   *  Either an existing parameter node, or a callable which will return
+   *  the parameter to append. The callable will receive $this as its
+   *  only argument.
+   *
    * @return $this
+   *
+   * @throws \InvalidArgumentException
    */
-  public function appendParameter(ParameterNode $parameter) {
+  public function appendParameter($parameter) {
+    if ($parameter instanceof ParameterNode) {
+      $this->parameters->appendItem($parameter);
+    }
+    elseif (is_callable($parameter)) {
+      $this->appendParameter($parameter($this));
+    }
+    else {
+      throw new \InvalidArgumentException();
+    }
     $this->parameters->appendItem($parameter);
     return $this;
   }

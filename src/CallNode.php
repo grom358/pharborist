@@ -12,7 +12,9 @@ abstract class CallNode extends ParentNode {
    *
    * @return ObjectMethodCallNode
    */
-  public function appendCall($method_name) {
-    return ObjectMethodCallNode::create($this, $method_name);
+  public function appendMethodCall($method_name) {
+    $method_call = ObjectMethodCallNode::create(clone $this, $method_name);
+    $this->replaceWith($method_call);
+    return $method_call;
   }
 }

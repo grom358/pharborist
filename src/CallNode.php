@@ -6,4 +6,8 @@ namespace Pharborist;
  */
 abstract class CallNode extends ParentNode {
   use ArgumentTrait;
+
+  public function appendCall($method_name) {
+    return ObjectMethodCallNode::create($this, $method_name);
+  }
 }

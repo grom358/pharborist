@@ -128,4 +128,10 @@ $object->someMethod()->chained();
 EOF;
     $this->assertEquals($expected, $tree->getText());
   }
+
+  public function testFunctionDeclaration() {
+    $expected = 'function test($a, $b) {}';
+    $function = FunctionDeclarationNode::create('test', ['$a', '$b']);
+    $this->assertEquals($expected, $function->getText());
+  }
 }

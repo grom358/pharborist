@@ -190,4 +190,14 @@ class NameNode extends ParentNode {
     $path .= implode('\\', $parts);
     return $path;
   }
+
+  /**
+   * Returns if this name is in the global namespace, which is functionally
+   * the same as having no namespace.
+   *
+   * @return boolean
+   */
+  public function isGlobal() {
+    return $this->getBasePath() === '\\';
+  }
 }

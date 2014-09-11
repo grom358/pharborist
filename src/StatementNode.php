@@ -32,4 +32,27 @@ abstract class StatementNode extends ParentNode {
   public function toComment() {
     return CommentNode::create($this->getText());
   }
+
+  /**
+   * Adds a line comment block above the statement.
+   *
+   * @param \Pharborist\LineCommentBlockNode|string $comment
+   *  The comment to add.
+   *
+   * @return $this
+   *
+   * @throws \InvalidArgumentException
+   */
+  public function addCommentAbove($comment) {
+    if ($comment instanceof LineCommentBlockNode) {
+      $this->before($comment);
+    }
+    elseif (is_string($comment)) {
+      $this->addCommentAbove(LineCommentBlockNode::create($comment));
+    }
+    else {
+      throw new \InvalidArgumentException();
+    }
+    return $this;
+  }
 }

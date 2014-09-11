@@ -43,4 +43,27 @@ class ObjectMethodCallNode extends CallNode implements VariableExpressionNode {
     $this->methodName = $method_name;
     return $this;
   }
+
+  /**
+   * Creates a chainable method call on an object with an empty argument list,
+   * e.g. ->foo()
+   *
+   * @param \Pharborist\Node $parent
+   *  The expression to which this call will be chained.
+   * @param string $method_name
+   *  The name of the called method.
+   *
+   * @return static
+   */
+  public static function create(Node $parent, $method_name) {
+    $node = new static();
+    $node->addChild($parent, 'object');
+    $node->addChild(Token::objectOperator());
+    $node->addChild(NameNode::create($method_name), 'methodName');
+    $node->addChild(Token::openParen());
+    $node->addChild(new CommaListNode(), 'arguments');
+    $node->addChild(Token::closeParen());
+
+    return $node;
+  }
 }

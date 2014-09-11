@@ -33,6 +33,16 @@ class TernaryOperationNode extends ParentNode implements ExpressionNode {
   }
 
   /**
+   * @param ExpressionNode $condition
+   *
+   * @return $this
+   */
+  public function setCondition(ExpressionNode $condition) {
+    $this->condition->replaceWith($condition);
+    return $this;
+  }
+
+  /**
    * @return ExpressionNode
    */
   public function getThen() {
@@ -40,9 +50,29 @@ class TernaryOperationNode extends ParentNode implements ExpressionNode {
   }
 
   /**
+   * @param ExpressionNode $then
+   *
+   * @return $this
+   */
+  public function setThen(ExpressionNode $then) {
+    $this->then->replaceWith($then);
+    return $this;
+  }
+
+  /**
    * @return ExpressionNode
    */
   public function getElse() {
     return $this->else;
+  }
+
+  /**
+   * @param ExpressionNode $else
+   *
+   * @return $this
+   */
+  public function setElse(ExpressionNode $else) {
+    $this->condition->replaceWith($else);
+    return $this;
   }
 }

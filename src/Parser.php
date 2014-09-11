@@ -167,6 +167,22 @@ class Parser {
   }
 
   /**
+   * Parse a PHP expression.
+   *
+   * @param string $expression
+   *   PHP expression snippet.
+   *
+   * @return ExpressionNode
+   *   The expression.
+   */
+  public static function parseExpression($expression) {
+    $tree = self::parseSource('<?php ' . $expression . ';');
+    /** @var ExpressionStatementNode $statement_node */
+    $statement_node = $tree->firstChild()->next();
+    return $statement_node->getExpression()->remove();
+  }
+
+  /**
    * Parse zero or more template statements.
    * @param ParentNode $node Node to append matches to.
    * @throws ParserException

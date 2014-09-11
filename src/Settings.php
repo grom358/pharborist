@@ -20,3 +20,4 @@ class Settings {
 
 Settings::set('formatter.nl', "\n");
 Settings::set('formatter.indent', '  ');
+Settings::set('formatter.boolean_null.upper', TRUE);

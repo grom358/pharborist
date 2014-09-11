@@ -10,11 +10,6 @@ class NameNode extends ParentNode {
   /**
    * @var string
    */
-  protected $basePath;
-
-  /**
-   * @var string
-   */
   protected $alias;
 
   /**
@@ -39,10 +34,17 @@ class NameNode extends ParentNode {
   }
 
   /**
-   * @param string $base
+   * @return string
    */
-  public function setBase($base) {
-    $this->basePath = $base;
+  public function getBasePath() {
+    /** @var NamespaceNode $namespace */
+    $namespace = $this->closest(Filter::isInstanceOf('\Pharborist\NamespaceNode'));
+    if (!$namespace) {
+      return '\\';
+    }
+    else {
+      return '\\' . $namespace->getName()->getText() . '\\';
+    }
   }
 
   /**
@@ -163,7 +165,7 @@ class NameNode extends ParentNode {
       }
     }
     else {
-      $path = '\\' . (!$absolute && $this->basePath ? $this->basePath . '\\' : '');
+      $path = $absolute ? '\\' : $this->getBasePath();
       if ($parts[0]->getType() === T_NAMESPACE) {
         unset($parts[0]);
       }

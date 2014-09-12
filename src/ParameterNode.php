@@ -33,6 +33,7 @@ class ParameterNode extends ParentNode {
    * @return ParameterNode
    */
   public static function create($parameter_name) {
+    $parameter_name = '$' . ltrim($parameter_name, '$');
     $parameter_node = new ParameterNode();
     $parameter_node->append(new VariableNode(T_VARIABLE, $parameter_name));
     return $parameter_node;

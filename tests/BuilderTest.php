@@ -134,4 +134,34 @@ EOF;
     $function = FunctionDeclarationNode::create('test', ['$a', '$b']);
     $this->assertEquals($expected, $function->getText());
   }
+
+  public function testBrokenIndent() {
+    $class = <<<END
+class DefaultController extends ControllerBase {
+
+}
+END;
+
+    $function = <<<'END'
+function diff_diffs_overview($node) {
+  drupal_set_title(t('Revisions for %title', array('%title' => $node->title)), PASS_THROUGH);
+  return drupal_get_form('diff_node_revisions', $node);
+}
+END;
+
+    $expected = <<<'END'
+class DefaultController extends ControllerBase {
+
+  public function diff_diffs_overview($node) {
+    drupal_set_title(t('Revisions for %title', array('%title' => $node->title)), PASS_THROUGH);
+    return drupal_get_form('diff_node_revisions', $node);
+  }
+}
+END;
+
+    $class = Parser::parseSnippet($class);
+    $function = Parser::parseSnippet($function);
+    $class->appendMethod(ClassMethodNode::fromFunction($function));
+    $this->assertEquals($expected, $class->getText());
+  }
 }

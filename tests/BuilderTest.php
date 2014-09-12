@@ -135,11 +135,9 @@ EOF;
     $this->assertEquals($expected, $function->getText());
   }
 
-  public function testBrokenIndent() {
+  public function testFunctionToMethod() {
     $class = <<<END
-class DefaultController extends ControllerBase {
-
-}
+class DefaultController extends ControllerBase {}
 END;
 
     $function = <<<'END'
@@ -151,7 +149,6 @@ END;
 
     $expected = <<<'END'
 class DefaultController extends ControllerBase {
-
   public function diff_diffs_overview($node) {
     drupal_set_title(t('Revisions for %title', array('%title' => $node->title)), PASS_THROUGH);
     return drupal_get_form('diff_node_revisions', $node);
@@ -159,6 +156,7 @@ class DefaultController extends ControllerBase {
 }
 END;
 
+    /** @var ClassNode $class */
     $class = Parser::parseSnippet($class);
     $function = Parser::parseSnippet($function);
     $class->appendMethod(ClassMethodNode::fromFunction($function));

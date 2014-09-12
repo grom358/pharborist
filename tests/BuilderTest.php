@@ -133,5 +133,9 @@ EOF;
     $expected = 'function test($a, $b) {}';
     $function = FunctionDeclarationNode::create('test', ['$a', '$b']);
     $this->assertEquals($expected, $function->getText());
+
+    $function = FunctionDeclarationNode::create('badoink');
+    $function->appendParameter(ParameterNode::create('badonk'));
+    $this->assertEquals('function badoink($badonk) {}', $function->getText());
   }
 }

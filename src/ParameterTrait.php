@@ -55,13 +55,10 @@ trait ParameterTrait {
    * @throws \InvalidArgumentException
    */
   public function appendParameter($parameter) {
-    if ($parameter instanceof ParameterNode) {
-      $this->parameters->appendItem($parameter);
+    if (is_callable($parameter)) {
+      $parameter = $parameter($this);
     }
-    elseif (is_callable($parameter)) {
-      $this->appendParameter($parameter($this));
-    }
-    else {
+    if (!($parameter instanceof ParameterNode)) {
       throw new \InvalidArgumentException();
     }
     $this->parameters->appendItem($parameter);

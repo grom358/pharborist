@@ -128,4 +128,16 @@ class ClassNode extends SingleInheritanceNode {
   public function hasProperty($name) {
     return in_array(ltrim($name, '$'), $this->getPropertyNames());
   }
+
+  /**
+   * Returns if the class has the named method, regardless of visibility.
+   *
+   * @param string $name
+   *  The method name.
+   *
+   * @return boolean
+   */
+  public function hasMethod($name) {
+    return in_array($name, $this->getMethodNames());
+  }
 }

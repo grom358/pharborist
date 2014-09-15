@@ -11,11 +11,18 @@ class ClassNodeTest extends \PHPUnit_Framework_TestCase {
     $class = Parser::parseSnippet('class Foo { public function wambooli() {} }');
     $this->assertSame(['wambooli'], $class->getMethodNames());
   }
+
   public function testHasProperty() {
     $class = Parser::parseSnippet('class Foo { protected $bar; }');
     $this->assertTrue($class->hasProperty('bar'));
     $this->assertTrue($class->hasProperty('$bar'));
     $this->assertFalse($class->hasProperty('baz'));
     $this->assertFalse($class->hasProperty('$baz'));
+  }
+
+  public function testHasMethod() {
+    $class = Parser::parseSnippet('class Foo { public function wambooli() {} }');
+    $this->assertTrue($class->hasMethod('wambooli'));
+    $this->assertFalse($class->hasMethod('blorf'));
   }
 }

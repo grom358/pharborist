@@ -116,4 +116,16 @@ class ClassNode extends SingleInheritanceNode {
       return $node->getName()->getText();
     }, $methods);
   }
+
+  /**
+   * Returns if the class has the named property, regardless of visibility.
+   *
+   * @param string $name
+   *  The property name, with or without a leading $.
+   *
+   * @return boolean
+   */
+  public function hasProperty($name) {
+    return in_array(ltrim($name, '$'), $this->getPropertyNames());
+  }
 }

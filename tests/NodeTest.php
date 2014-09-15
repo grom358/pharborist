@@ -431,6 +431,20 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
     $float = Node::fromScalar(3.14156);
     $this->assertInstanceOf('\Pharborist\FloatNode', $float);
     $this->assertEquals('3.14156', $float->getText());
+
+    $true = Node::fromScalar(TRUE);
+    $this->assertInstanceOf('\Pharborist\TrueNode', $true);
+    $this->assertSame(TRUE, $true->toBoolean());
+    $this->assertEquals('TRUE', $true->getText());
+
+    $false = Node::fromScalar(FALSE);
+    $this->assertInstanceOf('\Pharborist\FalseNode', $false);
+    $this->assertSame(TRUE, $false->toBoolean());
+    $this->assertEquals('TRUE', $false->getText());
+
+    $null = Node::fromScalar(NULL);
+    $this->assertInstanceOf('\Pharborist\NullNode', $null);
+    $this->assertEquals('NULL', $null->getText());
   }
 
   /**

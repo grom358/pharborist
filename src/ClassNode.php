@@ -90,4 +90,17 @@ class ClassNode extends SingleInheritanceNode {
     }
     return $this;
   }
+
+  /**
+   * Returns the names of all class property names, regardless of visibility.
+   *
+   * @return string[]
+   */
+  public function getPropertyNames() {
+    $properties = $this->find(Filter::isInstanceOf('\Pharborist\ClassMemberNode'))->toArray();
+
+    return array_map(function(ClassMemberNode $property) {
+      return ltrim($property->getName(), '$');
+    }, $properties);
+  }
 }

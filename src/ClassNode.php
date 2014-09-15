@@ -167,10 +167,7 @@ class ClassNode extends SingleInheritanceNode {
       ->filter(function(ClassMemberNode $property) use ($name) {
         return ltrim($property->getName(), '$') === $name;
       });
-
-    if (!$properties->isEmpty()) {
-      return $properties[0];
-    }
+    return $properties->isEmpty() ? NULL : $properties[0];
   }
 
   /**
@@ -187,9 +184,6 @@ class ClassNode extends SingleInheritanceNode {
       ->filter(function(ClassMethodNode $method) use ($name) {
         return $method->getName()->getText() === $name;
       });
-
-    if (!$methods->isEmpty()) {
-      return $methods[0];
-    }
+    return $methods->isEmpty() ? NULL : $methods[0];
   }
 }

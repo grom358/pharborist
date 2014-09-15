@@ -39,14 +39,18 @@ class ClassNodeTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testGetProperty() {
-    $property = Parser::parseSnippet('class Foo { protected $bar; public $baz; }')->getProperty('baz');
+    $class = Parser::parseSnippet('class Foo { protected $bar; public $baz; }');
+    $property = $class->getProperty('baz');
     $this->assertInstanceOf('\Pharborist\ClassMemberNode', $property);
     $this->assertEquals('$baz', $property->getText());
+    $this->assertNull($class->getProperty('oops'));
   }
 
   public function testGetMethod() {
-    $method = Parser::parseSnippet('class Foo { public function wambooli() {} }')->getMethod('wambooli');
+    $class = Parser::parseSnippet('class Foo { public function wambooli() {} }');
+    $method = $class->getMethod('wambooli');
     $this->assertInstanceOf('\Pharborist\ClassMethodNode', $method);
     $this->assertEquals('wambooli', $method->getName()->getText());
+    $this->assertNull($class->getMethod('harrr'));
   }
 }

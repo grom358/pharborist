@@ -92,7 +92,7 @@ class ClassNode extends SingleInheritanceNode {
   }
 
   /**
-   * Returns the names of all class property names, regardless of visibility.
+   * Returns the names of all class properties, regardless of visibility.
    *
    * @return string[]
    */
@@ -102,5 +102,18 @@ class ClassNode extends SingleInheritanceNode {
     return array_map(function(ClassMemberNode $property) {
       return ltrim($property->getName(), '$');
     }, $properties);
+  }
+
+  /**
+   * Returns the names of all class methods, regardless of visibility.
+   *
+   * @return string[]
+   */
+  public function getMethodNames() {
+    $methods = $this->find(Filter::isInstanceOf('\Pharborist\ClassMethodNode'))->toArray();
+
+    return array_map(function(ClassMethodNode $node) {
+      return $node->getName()->getText();
+    }, $methods);
   }
 }

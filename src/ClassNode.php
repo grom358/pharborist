@@ -150,4 +150,46 @@ class ClassNode extends SingleInheritanceNode {
   public function getAllMethods() {
     return $this->find(Filter::isInstanceOf('\Pharborist\ClassMethodNode'));
   }
+
+  /**
+   * Returns a property by name, if it exists.
+   *
+   * @param string $name
+   *  The property name, with or without the $.
+   *
+   * @return \Pharborist\ClassMemberNode|NULL
+   */
+  public function getProperty($name) {
+    $name = ltrim($name, '$');
+
+    $properties = $this
+      ->getAllProperties()
+      ->filter(function(ClassMemberNode $property) use ($name) {
+        return ltrim($property->getName(), '$') === $name;
+      });
+
+    if (!$properties->isEmpty()) {
+      return $properties[0];
+    }
+  }
+
+  /**
+   * Returns a method by name, if it exists.
+   *
+   * @param string $name
+   *  The method name.
+   *
+   * @return \Pharborist\ClassMethodNode|NULL
+   */
+  public function getMethod($name) {
+    $methods = $this
+      ->getAllMethods()
+      ->filter(function(ClassMethodNode $method) use ($name) {
+        return $method->getName()->getText() === $name;
+      });
+
+    if (!$methods->isEmpty()) {
+      return $methods[0];
+    }
+  }
 }

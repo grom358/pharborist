@@ -17,6 +17,7 @@ class NamespaceNode extends StatementNode {
    */
   public static function create($name) {
     $name = (string) $name;
+    $name = ltrim($name, '\\');
     $namespace_node = Parser::parseSnippet("namespace $name;");
     return $namespace_node;
   }

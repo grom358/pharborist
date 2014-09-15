@@ -166,4 +166,9 @@ END;
     $class->appendMethod(ClassMethodNode::fromFunction($function));
     $this->assertEquals($expected, $class->getText());
   }
+
+  public function testNamespaceNode() {
+    $ns = NamespaceNode::create('\Drupal\pantaloons');
+    $this->assertInstanceOf('\Pharborist\NamespaceNode', $ns);
+  }
 }

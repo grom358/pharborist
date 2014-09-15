@@ -25,4 +25,16 @@ class ClassNodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertTrue($class->hasMethod('wambooli'));
     $this->assertFalse($class->hasMethod('blorf'));
   }
+
+  public function testGetAllProperties() {
+    $properties = Parser::parseSnippet('class Foo { protected $bar; public $baz; }')->getAllProperties();
+    $this->assertInstanceOf('\Pharborist\NodeCollection', $properties);
+    $this->assertEquals(2, $properties->count());
+  }
+
+  public function testGetAllMethods() {
+    $methods = Parser::parseSnippet('class Foo { public function wambooli() {} }')->getAllMethods();
+    $this->assertInstanceOf('\Pharborist\NodeCollection', $methods);
+    $this->assertEquals(1, $methods->count());
+  }
 }

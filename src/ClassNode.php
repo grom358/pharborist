@@ -97,11 +97,9 @@ class ClassNode extends SingleInheritanceNode {
    * @return string[]
    */
   public function getPropertyNames() {
-    $properties = $this->find(Filter::isInstanceOf('\Pharborist\ClassMemberNode'))->toArray();
-
     return array_map(function(ClassMemberNode $property) {
       return ltrim($property->getName(), '$');
-    }, $properties);
+    }, $this->getAllProperties()->toArray());
   }
 
   /**
@@ -110,11 +108,9 @@ class ClassNode extends SingleInheritanceNode {
    * @return string[]
    */
   public function getMethodNames() {
-    $methods = $this->find(Filter::isInstanceOf('\Pharborist\ClassMethodNode'))->toArray();
-
     return array_map(function(ClassMethodNode $node) {
       return $node->getName()->getText();
-    }, $methods);
+    }, $this->getAllMethods()->toArray());
   }
 
   /**
@@ -139,5 +135,19 @@ class ClassNode extends SingleInheritanceNode {
    */
   public function hasMethod($name) {
     return in_array($name, $this->getMethodNames());
+  }
+
+  /**
+   * @return \Pharborist\NodeCollection
+   */
+  public function getAllProperties() {
+    return $this->find(Filter::isInstanceOf('\Pharborist\ClassMemberNode'));
+  }
+
+  /**
+   * @return \Pharborist\NodeCollection
+   */
+  public function getAllMethods() {
+    return $this->find(Filter::isInstanceOf('\Pharborist\ClassMethodNode'));
   }
 }

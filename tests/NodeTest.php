@@ -445,12 +445,49 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
     $null = Node::fromScalar(NULL);
     $this->assertInstanceOf('\Pharborist\NullNode', $null);
     $this->assertEquals('NULL', $null->getText());
+
+    /** @var ArrayNode $array */
+    $array = Node::fromScalar(array('hello', 30, 3.14156, TRUE, FALSE, NULL, 'key' => 'value', 42 => 'num'));
+    $elements = $array->getElements();
+    /** @var ArrayPairNode $pair */
+    $pair = $elements[0];
+    $element = $pair->getValue();
+    $this->assertInstanceOf('\Pharborist\StringNode', $element);
+    $this->assertEquals("'hello'", $element->getText());
+    $pair = $elements[1];
+    $element = $pair->getValue();
+    $this->assertInstanceOf('\Pharborist\IntegerNode', $element);
+    $this->assertEquals('30', $element->getText());
+    $pair = $elements[2];
+    $element = $pair->getValue();
+    $this->assertInstanceOf('\Pharborist\FloatNode', $element);
+    $this->assertEquals('3.14156', $element->getText());
+    $pair = $elements[3];
+    $element = $pair->getValue();
+    $this->assertInstanceOf('\Pharborist\TrueNode', $element);
+    $this->assertEquals('TRUE', $element->getText());
+    $pair = $elements[4];
+    $element = $pair->getValue();
+    $this->assertInstanceOf('\Pharborist\FalseNode', $element);
+    $this->assertEquals('FALSE', $element->getText());
+    $pair = $elements[5];
+    $element = $pair->getValue();
+    $this->assertInstanceOf('\Pharborist\NullNode', $element);
+    $this->assertEquals('NULL', $element->getText());
+    $pair = $elements[6];
+    $this->assertInstanceOf('\Pharborist\StringNode', $pair->getKey());
+    $this->assertEquals("'key'", $pair->getKey()->getText());
+    $this->assertEquals("'value'", $pair->getValue()->getText());
+    $pair = $elements[7];
+    $this->assertInstanceOf('\Pharborist\IntegerNode', $pair->getKey());
+    $this->assertEquals('42', $pair->getKey()->getText());
+    $this->assertEquals("'num'", $pair->getValue()->getText());
   }
 
   /**
    * @expectedException \InvalidArgumentException
    */
   public function testFromScalarInvalidArgument() {
-    $node = Node::fromScalar([]);
+    $node = Node::fromScalar(new \stdClass());
   }
 }

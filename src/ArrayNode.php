@@ -32,4 +32,37 @@ class ArrayNode extends ParentNode implements ExpressionNode {
   public function isMultidimensional() {
     return (boolean) $this->elements->children(Filter::isInstanceOf('Pharborist\ArrayNode'))->count();
   }
+
+  /**
+   * @return array
+   */
+  public function getValue() {
+    $ret = array();
+    foreach ($this->elements->getItems() as $element) {
+      if ($element instanceof ArrayPairNode) {
+        $key = $element->getKey()->getValue();
+        $value = $element->getValue()->getValue();
+        $ret[$key] = $value;
+      }
+      else {
+        $ret[] = $element->getValue();
+      }
+    }
+    return $ret;
+  }
+
+  /**
+   * @param ArrayElementNode[] $elements
+   *   Array elements.
+   *
+   * @return ArrayNode
+   */
+  public static function create($elements) {
+    /** @var ArrayNode $node */
+    $node = Parser::parseExpression('[]');
+    foreach ($elements as $element) {
+      $node->getElementList()->appendItem($element);
+    }
+    return $node;
+  }
 }

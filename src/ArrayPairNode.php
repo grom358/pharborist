@@ -28,4 +28,22 @@ class ArrayPairNode extends ParentNode implements ArrayElementNode {
   public function getValue() {
     return $this->value;
   }
+
+  /**
+   * @param Node $key
+   *   Array element's key.
+   * @param Node $value
+   *   Array element's value.
+   *
+   * @return ArrayPairNode
+   */
+  public static function create($key, $value) {
+    $node = new ArrayPairNode();
+    $node->addChild($key, 'key');
+    $node->addChild(Token::space());
+    $node->addChild(Token::doubleArrow());
+    $node->addChild(Token::space());
+    $node->addChild($value, 'value');
+    return $node;
+  }
 }

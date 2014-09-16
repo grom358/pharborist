@@ -498,15 +498,22 @@ abstract class Node implements NodeInterface {
   /**
    * Creates a Node from a scalar value.
    *
-   * @param string|integer|float|boolean|null $value
+   * @param string|integer|float|boolean|array|null $value
    *  The value to create a node for.
    *
-   * @return FloatNode|IntegerNode|StringNode|BooleanNode|NullNode
+   * @return FloatNode|IntegerNode|StringNode|BooleanNode|NullNode|ArrayNode
    *
    * @throws \InvalidArgumentException if $value is not a scalar.
    */
   public static function fromScalar($value) {
-    if (is_string($value)) {
+    if (is_array($value)) {
+      $elements = [];
+      foreach ($value as $k => $v) {
+        $elements[] = ArrayPairNode::create(static::fromScalar($k), static::fromScalar($v));
+      }
+      return ArrayNode::create($elements);
+    }
+    elseif (is_string($value)) {
       return new StringNode(T_STRING, var_export($value, TRUE));
     }
     elseif (is_integer($value)) {

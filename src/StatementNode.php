@@ -2,7 +2,21 @@
 namespace Pharborist;
 
 /**
- * A statement.
+ * Base class for any statement.
+ *
+ * <p>A statement is a single executable unit of PHP code. You can think of a
+ * statement as a single &quot;sentence&quot; of code, usually ending with
+ * a semicolon. A single statement usually (but not always!) occupies a single
+ * line.</p>
+ * <p>Here's an example of a perfectly valid statement:</p>
+ * <pre><code>echo "Let's not go to Camelot. 'Tis a silly place.\n";</code></pre>
+ * <p>Statements can contain other statements, or a block of statements surrounded
+ * by curly braces. A single statement is usually made up of one or more
+ * expressions.</p>
+ * <p>Declarations are also statements. For instance, if/elseif/else and switch/case
+ * structures are statements, including all of their blocks. So is are class and function
+ * declarations. The body of the class or function is a statement block, but it's
+ * contained by the class or function declaration, which is a statement.</p>
  */
 abstract class StatementNode extends ParentNode {
   /**

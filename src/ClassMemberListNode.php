@@ -29,7 +29,7 @@ class ClassMemberListNode extends ClassStatementNode {
    * @return boolean
    */
   public function isStatic() {
-    return isset($this->static) && $this->static->getType() === T_STATIC;
+    return isset($this->static);
   }
 
   /**
@@ -40,21 +40,24 @@ class ClassMemberListNode extends ClassStatementNode {
   }
 
   /**
-   * @param boolean $static
+   * @param boolean $is_static
    *
    * @return $this
    */
-  public function setStatic($static) {
-    if ($static === TRUE && empty($this->static)) {
-      // @todo Er...is it possible that there might not *be* a visibility
-      // node here? If so, how to handle that?
-      $this->static = Token::_static()->insertAfter($this->visibility);
-      WhitespaceNode::create(' ')->insertBefore($this->static);
+  public function setStatic($is_static) {
+    if ($is_static) {
+      if (!isset($this->static)) {
+        $this->static = Token::_static();
+        $this->visibility->after([Token::space(), $this->static]);
+      }
     }
-    elseif ($static === FALSE && isset($this->static)) {
-      $this->static->next()->remove();
-      $this->static->remove();
-      $this->static = NULL;
+    else {
+      if (isset($this->static)) {
+        // Remove whitespace after static keyword.
+        $this->static->next()->remove();
+        // Remove static keyword.
+        $this->static->remove();
+      }
     }
     return $this;
   }

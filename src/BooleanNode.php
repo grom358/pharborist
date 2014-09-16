@@ -29,4 +29,11 @@ abstract class BooleanNode extends ConstantNode {
    *   TRUE or FALSE.
    */
   abstract public function toBoolean();
+
+  /**
+   * @return boolean
+   */
+  public function getValue() {
+    return $this->toBoolean();
+  }
 }

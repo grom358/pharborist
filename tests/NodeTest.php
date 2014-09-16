@@ -484,6 +484,46 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals("'num'", $pair->getValue()->getText());
   }
 
+  public function testToScalar() {
+    $string = Node::fromScalar('foobar');
+    $this->assertInstanceOf('\Pharborist\StringNode', $string);
+    $this->assertSame('foobar', $string->getValue());
+
+    $integer = Node::fromScalar(30);
+    $this->assertInstanceOf('\Pharborist\IntegerNode', $integer);
+    $this->assertSame(30, $integer->getValue());
+
+    $float = Node::fromScalar(3.14156);
+    $this->assertInstanceOf('\Pharborist\FloatNode', $float);
+    $this->assertSame(3.14156, $float->getValue());
+
+    $true = Node::fromScalar(TRUE);
+    $this->assertInstanceOf('\Pharborist\TrueNode', $true);
+    $this->assertSame(TRUE, $true->getValue());
+
+    $false = Node::fromScalar(FALSE);
+    $this->assertInstanceOf('\Pharborist\FalseNode', $false);
+    $this->assertSame(FALSE, $false->getValue());
+
+    $null = Node::fromScalar(NULL);
+    $this->assertInstanceOf('\Pharborist\NullNode', $null);
+    $this->assertNull($null->getValue());
+
+    /** @var ArrayNode $array */
+    $array = Node::fromScalar(array('hello', 30, 3.14156, TRUE, FALSE, NULL, 'key' => 'value', 42 => 'num'));
+    $items = $array->getValue();
+    $this->assertSame('hello', $items[0]);
+    $this->assertSame(30, $items[1]);
+    $this->assertSame(3.14156, $items[2]);
+    $this->assertTrue($items[3]);
+    $this->assertFalse($items[4]);
+    $this->assertNull($items[5]);
+    $this->assertArrayHasKey('key', $items);
+    $this->assertSame('value', $items['key']);
+    $this->assertArrayHasKey(42, $items);
+    $this->assertSame('num', $items[42]);
+  }
+
   /**
    * @expectedException \InvalidArgumentException
    */

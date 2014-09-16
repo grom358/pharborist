@@ -14,4 +14,11 @@ class NullNode extends ConstantNode {
     $node->addChild(NameNode::create($is_upper ? 'NULL' : 'null'), 'constantName');
     return $node;
   }
+
+  /**
+   * @return null
+   */
+  public function getValue() {
+    return NULL;
+  }
 }

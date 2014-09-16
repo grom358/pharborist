@@ -26,6 +26,16 @@ trait VisibilityTrait {
       $this->visibility->remove();
     }
     else {
+      if ($visibility === 'private' || $visibility === T_PRIVATE) {
+        $visibility = Token::_private();
+      }
+      elseif ($visibility === 'protected' || $visibility === T_PROTECTED) {
+        $visibility = Token::_protected();
+      }
+      elseif ($visibility === 'public' || $visibility === T_PUBLIC) {
+        $visibility = Token::_public();
+      }
+
       if (isset($this->visibility)) {
         $this->visibility->replaceWith($visibility);
       }

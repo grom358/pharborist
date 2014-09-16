@@ -17,7 +17,8 @@ class ConstantNode extends ParentNode implements ExpressionNode {
     if (is_string($name)) {
       $name = NameNode::create($name);
     }
-    $node = new ConstantNode();
+    /** @var ConstantNode $node */
+    $node = new static();
     $node->addChild($name, 'constantName');
     return $node;
   }

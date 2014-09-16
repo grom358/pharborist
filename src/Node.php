@@ -495,6 +495,37 @@ abstract class Node implements NodeInterface {
     });
   }
 
+  /**
+   * Creates a Node from a scalar value.
+   *
+   * @param string|integer|float|boolean|null $value
+   *  The value to create a node for.
+   *
+   * @return FloatNode|IntegerNode|StringNode|BooleanNode|NullNode
+   *
+   * @throws \InvalidArgumentException if $value is not a scalar.
+   */
+  public static function fromScalar($value) {
+    if (is_string($value)) {
+      return new StringNode(T_STRING, var_export($value, TRUE));
+    }
+    elseif (is_integer($value)) {
+      return new IntegerNode(T_LNUMBER, $value);
+    }
+    elseif (is_float($value)) {
+      return new FloatNode(T_DNUMBER, $value);
+    }
+    elseif (is_bool($value)) {
+      return BooleanNode::create($value);
+    }
+    elseif (is_null($value)) {
+      return NullNode::create('NULL');
+    }
+    else {
+      throw new \InvalidArgumentException();
+    }
+  }
+
   public function __clone() {
     // Clone does not belong to any parent.
     $this->parent = NULL;

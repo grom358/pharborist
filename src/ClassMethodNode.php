@@ -146,7 +146,7 @@ class ClassMethodNode extends ClassStatementNode {
   }
 
   /**
-   * Gets the fully qualified name of the method, e.g. \My\Namespaced\Class::foo().
+   * Gets the fully qualified name of the method, e.g. \My\Namespaced\Class::foo.
    *
    * @return string
    */

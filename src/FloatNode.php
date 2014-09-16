@@ -4,7 +4,7 @@ namespace Pharborist;
 /**
  * A float scalar.
  */
-class FloatNode extends TokenNode implements ExpressionNode {
+class FloatNode extends TokenNode implements ExpressionNode, ScalarNode {
   /**
    * @return float
    */

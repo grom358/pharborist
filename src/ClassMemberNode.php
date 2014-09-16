@@ -15,6 +15,14 @@ class ClassMemberNode extends ParentNode {
    */
   protected $value;
 
+  public static function create($name, ExpressionNode $value = NULL, $visibility = 'public') {
+    $code = $visibility . ' $' . ltrim($name, '$');
+    if ($value instanceof ExpressionNode) {
+      $code .= ' = ' . $value;
+    }
+    return Parser::parseSnippet('class Foo { ' . $code . '; }')->getBody()->firstChild()->remove();
+  }
+
   /**
    * @return Node
    */

@@ -2,9 +2,12 @@
 namespace Pharborist;
 
 /**
- * A namespace path to function, constant, class, trait or interface.
+ * The name of namespace, function, constant, class, trait or interface.
  *
- * For example, MyNamespace\MyClass
+ * This node is used for things whose name is namespace-aware. Variables, for
+ * example, cannot be namespaced, but classes can. That's why class names
+ * are wrapped by NameNode: because NameNodes are aware of the namespace they
+ * live in, even when moved from one namespace to another.
  */
 class NameNode extends ParentNode {
   /**

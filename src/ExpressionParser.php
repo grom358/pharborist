@@ -2,7 +2,9 @@
 namespace Pharborist;
 
 /**
- * Parse expression using the shunting yard algorithm.
+ * Parses expressions using the shunting yard algorithm.
+ *
+ * @internal
  */
 class ExpressionParser {
   /**

@@ -145,6 +145,15 @@ class ClassMethodNode extends ClassStatementNode {
     return $this->body;
   }
 
+  /**
+   * Gets the fully qualified name of the method, e.g. \My\Namespaced\Class::foo.
+   *
+   * @return string
+   */
+  public function getFullyQualifiedName() {
+    return $this->closest(Filter::isInstanceOf('\Pharborist\ClassNode'))->getName()->getAbsolutePath() . '::' . $this->getName();
+  }
+
   protected function childInserted(Node $node) {
     static $visibilityTypes = [T_PUBLIC, T_PROTECTED, T_PRIVATE];
     if ($node instanceof TokenNode) {

@@ -1,8 +1,10 @@
 <?php
-
 namespace Pharborist;
 
+use Pharborist\Operator\BinaryOperationNode;
+
 class BinaryOperationNodeTest extends \PHPUnit_Framework_TestCase {
+  /** @var BinaryOperationNode $op */
   private $op;
 
   public function __construct() {

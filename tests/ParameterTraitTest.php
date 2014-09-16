@@ -28,6 +28,22 @@ class ParameterTraitTest extends \PHPUnit_Framework_TestCase {
   }
 
   /**
+   * @depends testHasParameter
+   */
+  public function testAppendParameter() {
+    /** @var \Pharborist\FunctionDeclarationNode $function */
+    $function = Parser::parseSnippet('function baz() {}');
+
+    $function->appendParameter(ParameterNode::create('$neo'));
+    $this->assertTrue($function->hasParameter('neo'));
+
+    $function->appendParameter(function(FunctionDeclarationNode $function) {
+      return ParameterNode::create('$trinity');
+    });
+    $this->assertTrue($function->hasParameter('trinity'));
+  }
+
+  /**
    * @expectedException \InvalidArgumentException
    */
   public function testHasParamterInvalidArgumentException() {

@@ -90,4 +90,100 @@ class ClassNode extends SingleInheritanceNode {
     }
     return $this;
   }
+
+  /**
+   * Returns the names of all class properties, regardless of visibility.
+   *
+   * @return string[]
+   */
+  public function getPropertyNames() {
+    return array_map(function(ClassMemberNode $property) {
+      return ltrim($property->getName(), '$');
+    }, $this->getAllProperties()->toArray());
+  }
+
+  /**
+   * Returns the names of all class methods, regardless of visibility.
+   *
+   * @return string[]
+   */
+  public function getMethodNames() {
+    return array_map(function(ClassMethodNode $node) {
+      return $node->getName()->getText();
+    }, $this->getAllMethods()->toArray());
+  }
+
+  /**
+   * Returns if the class has the named property, regardless of visibility.
+   *
+   * @param string $name
+   *  The property name, with or without a leading $.
+   *
+   * @return boolean
+   */
+  public function hasProperty($name) {
+    return in_array(ltrim($name, '$'), $this->getPropertyNames());
+  }
+
+  /**
+   * Returns if the class has the named method, regardless of visibility.
+   *
+   * @param string $name
+   *  The method name.
+   *
+   * @return boolean
+   */
+  public function hasMethod($name) {
+    return in_array($name, $this->getMethodNames());
+  }
+
+  /**
+   * @return \Pharborist\NodeCollection
+   */
+  public function getAllProperties() {
+    return $this->find(Filter::isInstanceOf('\Pharborist\ClassMemberNode'));
+  }
+
+  /**
+   * @return \Pharborist\NodeCollection
+   */
+  public function getAllMethods() {
+    return $this->find(Filter::isInstanceOf('\Pharborist\ClassMethodNode'));
+  }
+
+  /**
+   * Returns a property by name, if it exists.
+   *
+   * @param string $name
+   *  The property name, with or without the $.
+   *
+   * @return \Pharborist\ClassMemberNode|NULL
+   */
+  public function getProperty($name) {
+    $name = ltrim($name, '$');
+
+    $properties = $this
+      ->getAllProperties()
+      ->filter(function(ClassMemberNode $property) use ($name) {
+        return ltrim($property->getName(), '$') === $name;
+      });
+    return $properties->isEmpty() ? NULL : $properties[0];
+  }
+
+  /**
+   * Returns a method by name, if it exists.
+   *
+   * @param string $name
+   *  The method name.
+   *
+   * @return \Pharborist\ClassMethodNode|NULL
+   */
+  public function getMethod($name) {
+    $methods = $this
+      ->getAllMethods()
+      ->filter(function(ClassMethodNode $method) use ($name) {
+        return $method->getName()->getText() === $name;
+      });
+    return $methods->isEmpty() ? NULL : $methods[0];
+  }
 }

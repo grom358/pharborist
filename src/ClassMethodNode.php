@@ -46,6 +46,13 @@ class ClassMethodNode extends ClassStatementNode {
     $body = $function_node->getBody();
     $body->addIndent(Settings::get('formatter.indent'));
     $method->getBody()->replaceWith($body);
+    // Indenting a function only indents its statements, however since we have
+    // converted a function into a method we also wish to indent the closing
+    // brace, so get the last whitespace node and add an indent to it.
+    /** @var WhitespaceNode $ws_node */
+    $ws_node = $method->getBody()->children(Filter::isInstanceOf('\Pharborist\WhitespaceNode'))->last()[0];
+    $text = $ws_node->getText();
+    $ws_node->setText($text . Settings::get('formatter.indent'));
     return $method;
   }
 

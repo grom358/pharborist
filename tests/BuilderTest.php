@@ -133,5 +133,42 @@ EOF;
     $expected = 'function test($a, $b) {}';
     $function = FunctionDeclarationNode::create('test', ['$a', '$b']);
     $this->assertEquals($expected, $function->getText());
+
+    $function = FunctionDeclarationNode::create('badoink');
+    $function->appendParameter(ParameterNode::create('badonk'));
+    $this->assertEquals('function badoink($badonk) {}', $function->getText());
+  }
+
+  public function testFunctionToMethod() {
+    $class = <<<END
+class DefaultController extends ControllerBase {}
+END;
+
+    $function = <<<'END'
+function diff_diffs_overview($node) {
+  drupal_set_title(t('Revisions for %title', array('%title' => $node->title)), PASS_THROUGH);
+  return drupal_get_form('diff_node_revisions', $node);
+}
+END;
+
+    $expected = <<<'END'
+class DefaultController extends ControllerBase {
+  public function diff_diffs_overview($node) {
+    drupal_set_title(t('Revisions for %title', array('%title' => $node->title)), PASS_THROUGH);
+    return drupal_get_form('diff_node_revisions', $node);
+  }
+}
+END;
+
+    /** @var ClassNode $class */
+    $class = Parser::parseSnippet($class);
+    $function = Parser::parseSnippet($function);
+    $class->appendMethod(ClassMethodNode::fromFunction($function));
+    $this->assertEquals($expected, $class->getText());
+  }
+
+  public function testNamespaceNode() {
+    $ns = NamespaceNode::create('\Drupal\pantaloons');
+    $this->assertInstanceOf('\Pharborist\NamespaceNode', $ns);
   }
 }

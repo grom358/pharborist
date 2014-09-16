@@ -11,9 +11,15 @@ class StringNodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals("I'll harrr to that!", $string->getValue());
 
     // Test escaped characters in double quoted string.
-    $this->assertEquals("hello\nworld", StringNode::create('"hello\nworld"')->getValue());
+    $string = <<<'EOF'
+"h\145llo\\n\nw\x6Frld"
+EOF;
+    $this->assertEquals("hello\\n\nworld", StringNode::create($string)->getValue());
 
     // Test escaped characters in single quoted string.
-    $this->assertEquals('it\'s alive', StringNode::create("'it\\'s alive'")->getValue());
+    $string = <<<'EOF'
+'it\'s \a\\\'live'
+EOF;
+    $this->assertEquals("it's \\a\\'live", StringNode::create($string)->getValue());
   }
 }

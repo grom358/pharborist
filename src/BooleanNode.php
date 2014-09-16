@@ -14,12 +14,11 @@ abstract class BooleanNode extends ConstantNode {
    * @return BooleanNode
    */
   public static function create($boolean) {
-    $is_upper = Settings::get('formatter.boolean_null.upper', TRUE);
     if ($boolean) {
-      return ConstantNode::create($is_upper ? 'TRUE' : 'true');
+      return TrueNode::create();
     }
     else {
-      return ConstantNode::create($is_upper ? 'FALSE' : 'false');
+      return FalseNode::create();
     }
   }
 

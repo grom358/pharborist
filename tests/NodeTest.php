@@ -415,14 +415,14 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals("'foobar'", $string->getText());
 
     $string = Node::fromScalar("'foobaz'");
-    $this->assertEquals("'foobaz'", $string->getText());
+    $this->assertEquals("'\\'foobaz\\''", $string->getText());
 
     $string = Node::fromScalar('Hi, $foobaz');
     $this->assertInstanceOf('\Pharborist\StringNode', $string);
-    $this->assertEquals('"Hi, $foobaz"', $string->getText());
+    $this->assertEquals("'Hi, \$foobaz'", $string->getText());
 
     $string = Node::fromScalar('"Yippee ki-yay, $buddeh!"');
-    $this->assertEquals('"Yippee ki-yay, $buddeh!"', $string->getText());
+    $this->assertEquals("'\"Yippee ki-yay, \$buddeh!\"'", $string->getText());
 
     $integer = Node::fromScalar(30);
     $this->assertInstanceOf('\Pharborist\IntegerNode', $integer);
@@ -439,8 +439,8 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
 
     $false = Node::fromScalar(FALSE);
     $this->assertInstanceOf('\Pharborist\FalseNode', $false);
-    $this->assertSame(TRUE, $false->toBoolean());
-    $this->assertEquals('TRUE', $false->getText());
+    $this->assertSame(FALSE, $false->toBoolean());
+    $this->assertEquals('FALSE', $false->getText());
 
     $null = Node::fromScalar(NULL);
     $this->assertInstanceOf('\Pharborist\NullNode', $null);

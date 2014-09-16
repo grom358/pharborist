@@ -507,7 +507,7 @@ abstract class Node implements NodeInterface {
    */
   public static function fromScalar($value) {
     if (is_string($value)) {
-      return new StringNode(T_STRING, $value);
+      return new StringNode(T_STRING, var_export($value, TRUE));
     }
     elseif (is_integer($value)) {
       return new IntegerNode(T_LNUMBER, $value);

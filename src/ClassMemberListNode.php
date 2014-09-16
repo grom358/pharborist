@@ -26,10 +26,37 @@ class ClassMemberListNode extends ClassStatementNode {
   }
 
   /**
+   * @return boolean
+   */
+  public function isStatic() {
+    return isset($this->static) && $this->static->getType() === T_STATIC;
+  }
+
+  /**
    * @return TokenNode
    */
   public function getStatic() {
     return $this->static;
+  }
+
+  /**
+   * @param boolean $static
+   *
+   * @return $this
+   */
+  public function setStatic($static) {
+    if ($static === TRUE && empty($this->static)) {
+      // @todo Er...is it possible that there might not *be* a visibility
+      // node here? If so, how to handle that?
+      $this->static = Token::_static()->insertAfter($this->visibility);
+      WhitespaceNode::create(' ')->insertBefore($this->static);
+    }
+    elseif ($static === FALSE && isset($this->static)) {
+      $this->static->next()->remove();
+      $this->static->remove();
+      $this->static = NULL;
+    }
+    return $this;
   }
 
   /**

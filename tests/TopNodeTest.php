@@ -19,7 +19,8 @@ class TopNodeTest extends \PHPUnit_Framework_TestCase {
 
     $this->assertTrue($doc->hasNamespace('Pharborist'));
     $this->assertFalse($doc->hasNamespace('\Drupal'));
-    $this->assertSame(['Pharborist'], $doc->getNamespaceNames());
+    $this->assertContains('Pharborist', $doc->getNamespaceNames());
+    $this->assertContains('\Pharborist', $doc->getNamespaceNames(TRUE));
 
     $namespaces = $doc->getNamespaces();
     $this->assertInstanceOf('\Pharborist\NodeCollection', $namespaces);
@@ -40,5 +41,6 @@ class Foo {}
 END;
     $doc = Parser::parseSource($code);
     $this->assertTrue($doc->hasNamespace('RoundTable\Knights\MontyPython'));
+    $this->assertContains('\RoundTable\Knights\MontyPython', $doc->getNamespaceNames(TRUE));
   }
 }

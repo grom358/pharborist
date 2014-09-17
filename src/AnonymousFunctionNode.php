@@ -1,8 +1,14 @@
 <?php
+
+/**
+ * @file
+ * Contains \Pharborist\AnonymousFunctionNode.
+ */
+
 namespace Pharborist;
 
 /**
- * An anonymous function.
+ * An anonymous function (closure).
  */
 class AnonymousFunctionNode extends ParentNode implements ExpressionNode {
   use ParameterTrait;

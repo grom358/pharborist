@@ -57,6 +57,22 @@ class FunctionDeclarationNode extends StatementNode {
     return $this->body;
   }
 
+  /**
+   * Creates a class method from this function and add it to the given
+   * class definition.
+   *
+   * @param \Pharborist\ClassNode $class
+   *  The class to add the new method to.
+   *
+   * @return \Pharborist\ClassMethodNode
+   *  The newly created method.
+   */
+  public function cloneAsMethodOf(ClassNode $class) {
+    $clone = ClassMethodNode::fromFunction($this);
+    $class->appendMethod($clone);
+    return $clone;
+  }
+
   protected function childInserted(Node $node) {
     if ($node instanceof TokenNode && $node->getType() === '&') {
       $this->reference = $node;

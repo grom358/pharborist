@@ -50,9 +50,12 @@ class ClassMethodNode extends ClassStatementNode {
     // converted a function into a method we also wish to indent the closing
     // brace, so get the last whitespace node and add an indent to it.
     /** @var WhitespaceNode $ws_node */
-    $ws_node = $method->getBody()->children(Filter::isInstanceOf('\Pharborist\WhitespaceNode'))->last()[0];
-    $text = $ws_node->getText();
-    $ws_node->setText($text . Settings::get('formatter.indent'));
+    $ws = $method->getBody()->children(Filter::isInstanceOf('\Pharborist\WhitespaceNode'));
+    if ($ws->count() > 0) {
+      $ws_node = $ws->last()[0];
+      $text = $ws_node->getText();
+      $ws_node->setText($text . Settings::get('formatter.indent'));
+    }
     return $method;
   }
 
@@ -140,6 +143,15 @@ class ClassMethodNode extends ClassStatementNode {
    */
   public function getBody() {
     return $this->body;
+  }
+
+  /**
+   * Gets the fully qualified name of the method, e.g. \My\Namespaced\Class::foo.
+   *
+   * @return string
+   */
+  public function getFullyQualifiedName() {
+    return $this->closest(Filter::isInstanceOf('\Pharborist\ClassNode'))->getName()->getAbsolutePath() . '::' . $this->getName();
   }
 
   protected function childInserted(Node $node) {

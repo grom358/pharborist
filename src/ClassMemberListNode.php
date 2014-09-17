@@ -26,10 +26,40 @@ class ClassMemberListNode extends ClassStatementNode {
   }
 
   /**
+   * @return boolean
+   */
+  public function isStatic() {
+    return isset($this->static);
+  }
+
+  /**
    * @return TokenNode
    */
   public function getStatic() {
     return $this->static;
+  }
+
+  /**
+   * @param boolean $is_static
+   *
+   * @return $this
+   */
+  public function setStatic($is_static) {
+    if ($is_static) {
+      if (!isset($this->static)) {
+        $this->static = Token::_static();
+        $this->visibility->after([Token::space(), $this->static]);
+      }
+    }
+    else {
+      if (isset($this->static)) {
+        // Remove whitespace after static keyword.
+        $this->static->next()->remove();
+        // Remove static keyword.
+        $this->static->remove();
+      }
+    }
+    return $this;
   }
 
   /**

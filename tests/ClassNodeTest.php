@@ -53,4 +53,12 @@ class ClassNodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('wambooli', $method->getName()->getText());
     $this->assertNull($class->getMethod('harrr'));
   }
+
+  /**
+   * @depends testHasProperty
+   */
+  public function testCreateProperty() {
+    $class = Parser::parseSnippet('class Foo {}')->createProperty('baz', NULL, 'protected');
+    $this->assertTrue($class->hasProperty('baz'));
+  }
 }

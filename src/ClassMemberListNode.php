@@ -26,6 +26,13 @@ class ClassMemberListNode extends ClassStatementNode {
   }
 
   /**
+   * Remove the visibility modifier.
+   */
+  protected function removeVisibility() {
+    throw new \InvalidArgumentException("Can not remove visibility from class property.");
+  }
+
+  /**
    * @return boolean
    */
   public function isStatic() {

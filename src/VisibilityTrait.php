@@ -20,10 +20,7 @@ trait VisibilityTrait {
    */
   public function setVisibility($visibility) {
     if ($visibility === NULL) {
-      // Remove whitespace after visibility keyword.
-      $this->visibility->next()->remove();
-      // Remove visibility keyword.
-      $this->visibility->remove();
+      $this->removeVisibility();
     }
     else {
       if ($visibility === 'private' || $visibility === T_PRIVATE) {

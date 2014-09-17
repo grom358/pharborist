@@ -102,13 +102,4 @@ class VisibilityTraitTest extends \PHPUnit_Framework_TestCase {
     $method->setVisibility(Token::_public());
     $this->assertSame('public', $method->getVisibility()->getText());
   }
-
-  /**
-   * @expectedException \InvalidArgumentException
-   */
-  public function testRemovePropertyVisibility() {
-    /** @var ClassMemberListNode $property */
-    $property = Parser::parseSnippet('class Foo { public $wrassle; }')->getBody()->firstChild();
-    $property->setVisibility(NULL);
-  }
 }

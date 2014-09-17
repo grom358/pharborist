@@ -19,4 +19,13 @@ class ClassMemberListNodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertTrue($b->isStatic());
     $this->assertEquals('protected static $doodle;', $b->getText());
   }
+
+  /**
+   * @expectedException \BadMethodCallException
+   */
+  public function testRemoveVisibility() {
+    /** @var ClassMemberListNode $property */
+    $property = Parser::parseSnippet('class Foo { public $wrassle; }')->getBody()->firstChild();
+    $property->setVisibility(NULL);
+  }
 }

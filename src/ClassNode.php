@@ -186,4 +186,14 @@ class ClassNode extends SingleInheritanceNode {
       });
     return $methods->isEmpty() ? NULL : $methods[0];
   }
+
+  /**
+   * Creates a new property in this class.
+   *
+   * @see ClassMemberNode::create
+   * @return $this
+   */
+  public function createProperty($name, ExpressionNode $value = NULL, $visibility = 'public') {
+    return $this->appendProperty(ClassMemberNode::create($name, $value, $visibility));
+  }
 }

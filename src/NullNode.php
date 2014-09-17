@@ -4,7 +4,7 @@ namespace Pharborist;
 /**
  * The constant NULL.
  */
-class NullNode extends ConstantNode {
+class NullNode extends ConstantNode implements ScalarNode {
   /**
    * @return NullNode
    */

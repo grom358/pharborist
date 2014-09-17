@@ -35,6 +35,9 @@ class NameNode extends ParentNode {
    * @return string
    */
   public function getBasePath() {
+    if ($this->parent() instanceof NamespaceNode) {
+      return '\\';
+    }
     /** @var NamespaceNode $namespace */
     $namespace = $this->closest(Filter::isInstanceOf('\Pharborist\NamespaceNode'));
     if (!$namespace) {
@@ -150,6 +153,9 @@ class NameNode extends ParentNode {
    * @return string
    */
   protected function resolveUnqualified($name) {
+    if ($this->parent() instanceof NamespaceNode) {
+      return '\\' . $name;
+    }
     $namespace = $this->closest(Filter::isInstanceOf('\Pharborist\NamespaceNode'));
     if (!$namespace) {
       return '\\' . $name;

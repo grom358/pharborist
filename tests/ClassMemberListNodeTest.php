@@ -28,4 +28,33 @@ class ClassMemberListNodeTest extends \PHPUnit_Framework_TestCase {
     $property = Parser::parseSnippet('class Foo { public $wrassle; }')->getBody()->firstChild();
     $property->setVisibility(NULL);
   }
+
+  public function testAddTo() {
+    /** @var ClassNode $source */
+    $source = Parser::parseSnippet('class Foo { protected $bar; }');
+    /** @var ClassNode $target */
+    $target = Parser::parseSnippet('class Bar {}');
+    /** @var ClassMemberListNode $property */
+    $property_list = $source->getBody()->firstChild();
+
+    $property_list->addTo($target);
+    $this->assertFalse($source->hasProperty('bar'));
+    $this->assertTrue($target->hasProperty('bar'));
+    $this->assertSame($property_list, $target->getProperty('bar')->parent());
+  }
+
+  public function testCloneInto() {
+    /** @var ClassNode $source */
+    $source = Parser::parseSnippet('class Foo { protected $bar; }');
+    /** @var ClassNode $target */
+    $target = Parser::parseSnippet('class Bar {}');
+    /** @var ClassMemberListNode $property_list */
+    $original_list = $source->getBody()->firstChild();
+
+    $cloned_list = $original_list->cloneInto($target);
+    $this->assertInstanceOf('\Pharborist\ClassMemberListNode', $cloned_list);
+    $this->assertNotSame($original_list, $cloned_list);
+    $this->assertTrue($source->hasProperty('bar'));
+    $this->assertTrue($target->hasProperty('bar'));
+  }
 }

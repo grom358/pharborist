@@ -75,4 +75,33 @@ class ClassMemberListNode extends ClassStatementNode {
   public function getMembers() {
     return $this->childrenByInstance('\Pharborist\ClassMemberNode');
   }
+
+  /**
+   * Adds this property list to a class, detaching it from its current
+   * parent.
+   *
+   * @param ClassNode $class
+   *  The target class.
+   *
+   * @return $this
+   */
+  public function addTo(ClassNode $class) {
+    $class->appendProperty($this->remove());
+    return $this;
+  }
+
+  /**
+   * Creates a clone of this property list and adds it to a class.
+   *
+   * @param ClassNode $class
+   *  The target class.
+   *
+   * @return static
+   *  The cloned property list.
+   */
+  public function cloneInto(ClassNode $class) {
+    $clone = clone $this;
+    $class->appendProperty($this);
+    return $clone;
+  }
 }

@@ -20,6 +20,15 @@ class ClassMemberListNodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('protected static $doodle;', $b->getText());
   }
 
+  /**
+   * @expectedException \BadMethodCallException
+   */
+  public function testRemoveVisibility() {
+    /** @var ClassMemberListNode $property */
+    $property = Parser::parseSnippet('class Foo { public $wrassle; }')->getBody()->firstChild();
+    $property->setVisibility(NULL);
+  }
+
   public function testAddTo() {
     /** @var ClassNode $source */
     $source = Parser::parseSnippet('class Foo { protected $bar; }');

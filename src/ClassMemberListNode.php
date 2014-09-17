@@ -29,7 +29,7 @@ class ClassMemberListNode extends ClassStatementNode {
    * Remove the visibility modifier.
    */
   protected function removeVisibility() {
-    throw new \InvalidArgumentException("Can not remove visibility from class property.");
+    throw new \BadMethodCallException("Can not remove visibility from class property.");
   }
 
   /**

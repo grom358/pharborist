@@ -47,5 +47,6 @@ trait VisibilityTrait {
         $this->visibility = $visibility;
       }
     }
+    return $this;
   }
 }

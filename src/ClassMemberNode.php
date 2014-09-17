@@ -52,4 +52,51 @@ class ClassMemberNode extends ParentNode {
   public function getValue() {
     return $this->value;
   }
+
+  /**
+   * @see \Pharborist\ClassMemberListNode::isStatic()
+   *
+   * @return boolean
+   */
+  public function isStatic() {
+    return $this->parent()->isStatic();
+  }
+
+  /**
+   * @see \Pharborist\ClassMemberListNode::getStatic()
+   *
+   * @return \Pharborist\TokenNode
+   */
+  public function getStatic() {
+    return $this->parent()->getStatic();
+  }
+
+  /**
+   * @see \Pharborist\ClassMemberListNode::setStatic()
+   *
+   * @return $this
+   */
+  public function setStatic($is_static) {
+    $this->parent()->setStatic($is_static);
+    return $this;
+  }
+
+  /**
+   * @see \Pharborist\VisibilityTrait::getVisibility()
+   *
+   * @return \Pharborist\TokenNode
+   */
+  public function getVisibility() {
+    return $this->parent()->getVisibility();
+  }
+
+  /**
+   * @see \Pharborist\VisibilityTrait::setVisibility()
+   *
+   * @return $this
+   */
+  public function setVisibility($visibility) {
+    $this->parent()->setVisibility($visibility);
+    return $this;
+  }
 }

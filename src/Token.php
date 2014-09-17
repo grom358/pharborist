@@ -722,7 +722,7 @@ class Token {
   }
 
   public static function _private() {
-    return new TokenNode(T_PROTECTED, 'private');
+    return new TokenNode(T_PRIVATE, 'private');
   }
 
   public static function reference() {

@@ -26,5 +26,16 @@ class TopNodeTest extends \PHPUnit_Framework_TestCase {
     $ns = $doc->getNamespace('Pharborist');
     $this->assertInstanceOf('\Pharborist\NamespaceNode', $ns);
     $this->assertSame($ns, $namespaces[0]);
+
+    $code = <<<'END'
+<?php
+namespace RoundTable\
+  Knights\
+  MontyPython;
+
+class Foo {}
+END;
+    $doc = Parser::parseSource($code);
+    $this->assertTrue($doc->hasNamespace('RoundTable\Knights\MontyPython'));
   }
 }

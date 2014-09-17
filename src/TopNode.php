@@ -57,7 +57,7 @@ class TopNode extends StatementBlockNode {
     $namespaces = $this
       ->getNamespaces()
       ->filter(function(NamespaceNode $node) use ($ns) {
-        return $node->getName()->getText() === $ns;
+        return $node->getName()->getPath() === $ns;
       });
 
     return $namespaces->isEmpty() ? NULL : $namespaces[0];
@@ -68,9 +68,11 @@ class TopNode extends StatementBlockNode {
    *
    * @return string[]
    */
-  public function getNamespaceNames() {
-    return array_map(function(NamespaceNode $ns) {
-      return $ns->getName()->getText();
-    }, $this->getNamespaces()->toArray());
+  public function getNamespaceNames($absolute = FALSE) {
+    $iterator = function(NamespaceNode $ns) use ($absolute) {
+      $name = $ns->getName();
+      return $absolute ? $name->getAbsolutePath() : $name->getPath();
+    };
+    return array_map($iterator, $this->getNamespaces()->toArray());
   }
 }

@@ -9,5 +9,8 @@ class TopNodeTest extends \PHPUnit_Framework_TestCase {
 
     $doc = TopNode::create('Pharborist');
     $this->assertEquals("<?php\n\nnamespace Pharborist;\n", $doc->getText());
+
+    $ns = $doc->children(Filter::isInstanceOf('\Pharborist\NamespaceNode'))[0];
+    $this->assertEquals('\Pharborist', $ns->getName()->getAbsolutePath());
   }
 }

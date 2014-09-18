@@ -11,6 +11,18 @@ class ReturnStatementNode extends StatementNode {
   protected $expression;
 
   /**
+   * Creates a new return statement.
+   *
+   * @param \Pharborist\ExpressionNode $expr
+   *  The expression to return.
+   *
+   * @return static
+   */
+  public static function create(ExpressionNode $expr) {
+    return Parser::parseSnippet('return ' . $expr . ';');
+  }
+
+  /**
    * @return ExpressionNode
    */
   public function getExpression() {

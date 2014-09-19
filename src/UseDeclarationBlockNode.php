@@ -2,7 +2,15 @@
 namespace Pharborist;
 
 /**
- * A block of use declaration statements.
+ * A set of use statements.
+ *
+ * Example:
+ * ```
+ * use \JohnCleese;
+ * use \EricIdle;
+ * use \TerryGilliam as TerryJones;
+ * use \MichaelPalin;
+ * ```
  */
 class UseDeclarationBlockNode extends StatementBlockNode {
   /**

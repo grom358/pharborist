@@ -2,7 +2,13 @@
 namespace Pharborist;
 
 /**
- * Use declaration.
+ * A use declaration importing a class, function, or constant into a namespace.
+ *
+ * Example:
+ * ```
+ * use Cleese;
+ * use Chapman as Palin;
+ * ```
  */
 class UseDeclarationNode extends ParentNode {
   /**

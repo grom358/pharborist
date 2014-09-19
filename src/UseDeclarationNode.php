@@ -2,7 +2,7 @@
 namespace Pharborist;
 
 /**
- * A use statement importing a class, function, or constant into a namespace.
+ * A use declaration importing a class, function, or constant into a namespace.
  *
  * Example:
  * ```

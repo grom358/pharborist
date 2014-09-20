@@ -336,6 +336,14 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
     $this->createNode('third')->appendTo($parent);
     $second->replaceWith($this->createNode('replacement'));
     $this->assertEquals('replacement', $parent->firstChild()->next()->getText());
+
+    $parent = $this->createParentNode();
+    $original = $this->createNode('original')->appendTo($parent);
+    $original->replaceWith(function(Node $node) use ($original) {
+      $this->assertSame($node, $original);
+      return $this->createNode('replacement');
+    });
+    $this->assertEquals('replacement', $parent->firstChild()->getText());
   }
 
   /**

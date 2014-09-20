@@ -268,6 +268,9 @@ abstract class Node implements NodeInterface {
         }
       }
     }
+    elseif (is_callable($nodes)) {
+      $this->replaceWith($nodes($this));
+    }
     else {
       throw new \InvalidArgumentException();
     }

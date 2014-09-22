@@ -33,7 +33,7 @@ abstract class BooleanNode extends ConstantNode implements ScalarNode {
   /**
    * @return boolean
    */
-  public function getValue() {
+  public function toValue() {
     return $this->toBoolean();
   }
 }

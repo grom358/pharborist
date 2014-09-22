@@ -8,5 +8,5 @@ interface ScalarNode extends NodeInterface {
   /**
    * @return mixed
    */
-  public function getValue();
+  public function toValue();
 }

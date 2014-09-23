@@ -1886,12 +1886,12 @@ EOF;
     /** @var TrueNode $true */
     $this->parseExpression('true', '\Pharborist\TrueNode');
     $true = $this->parseExpression('TRUE', '\Pharborist\TrueNode');
-    $this->assertTrue($true->toBoolean());
+    $this->assertTrue($true->toValue());
 
     /** @var FalseNode $false */
     $this->parseExpression('false', '\Pharborist\FalseNode');
     $false = $this->parseExpression('FALSE', '\Pharborist\FalseNode');
-    $this->assertFalse($false->toBoolean());
+    $this->assertFalse($false->toValue());
 
     $this->parseExpression('NULL', '\Pharborist\NullNode');
     $this->parseExpression('null', '\Pharborist\NullNode');

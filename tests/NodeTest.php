@@ -442,12 +442,12 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
 
     $true = Node::fromValue(TRUE);
     $this->assertInstanceOf('\Pharborist\TrueNode', $true);
-    $this->assertSame(TRUE, $true->toBoolean());
+    $this->assertTrue($true->toValue());
     $this->assertEquals('TRUE', $true->getText());
 
     $false = Node::fromValue(FALSE);
     $this->assertInstanceOf('\Pharborist\FalseNode', $false);
-    $this->assertSame(FALSE, $false->toBoolean());
+    $this->assertFalse($false->toValue());
     $this->assertEquals('FALSE', $false->getText());
 
     $null = Node::fromValue(NULL);

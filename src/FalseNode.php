@@ -26,7 +26,7 @@ class FalseNode extends BooleanNode {
    *
    * @return boolean
    */
-  public function toBoolean() {
+  public function toValue() {
     return FALSE;
   }
 }

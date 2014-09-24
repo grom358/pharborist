@@ -2,7 +2,10 @@
 namespace Pharborist;
 
 /**
- * TRUE boolean.
+ * Boolean TRUE.
+ *
+ * Represents the boolean TRUE constant, spelled `true` or `TRUE`. This does *not* represent
+ * other truthy values like 1 or `'hello'`.
  */
 class TrueNode extends BooleanNode {
   /**

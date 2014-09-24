@@ -2,7 +2,25 @@
 namespace Pharborist;
 
 /**
- * A class member.
+ * A single class member in a ClassMemberListNode.
+ *
+ * The relationship between class members and class member lists can be
+ * a bit confusing. Both of these are considered class member lists:
+ * ```
+ * protected $foo;  // A member list with one member.
+ * private $bar, $baz;
+ * ```
+ * The individual members in those lists are $foo, $bar, and $baz. Each of
+ * them is a ClassMemberNode, which will render as `$foo`, `$bar`, and `$baz`,
+ * respectively. And each is a child of a parent ClassMemberListNode, which
+ * has a visibility and static-ness.
+ *
+ * ClassMemberNode's getVisibility(), setVisibility(), and is/get/setStatic()
+ * methods are actually convenience methods which call the same method on the
+ * parent member list. But the visibility and static keywords are still
+ * attributes of the *list*, not the individual member.
+ *
+ * @see ClassMemberListNode
  */
 class ClassMemberNode extends ParentNode {
   /**

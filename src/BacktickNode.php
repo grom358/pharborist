@@ -2,9 +2,7 @@
 namespace Pharborist;
 
 /**
- * Backtick expression node.
- *
- * For example, `command`
+ * Backtick expression, e.g. \`ls\`.
  */
 class BacktickNode extends ParentNode implements ExpressionNode {
 

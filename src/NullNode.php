@@ -2,7 +2,7 @@
 namespace Pharborist;
 
 /**
- * The constant NULL.
+ * The NULL constant, spelled `null` or `NULL`.
  */
 class NullNode extends ConstantNode implements ScalarNode {
   /**

@@ -2,7 +2,12 @@
 namespace Pharborist;
 
 /**
- * A block of line comments.
+ * A block of line comments, e.g.:
+ * ```
+ * // This is a haiku.
+ * // Seriously, it is one.
+ * // Isn't that awesome?
+ * ```
  */
 class LineCommentBlockNode extends ParentNode {
   use UncommentTrait;
@@ -12,6 +17,7 @@ class LineCommentBlockNode extends ParentNode {
    *
    * @param string $comment
    *   Comment without leading prefix.
+   *
    * @return LineCommentBlockNode
    */
   public static function create($comment) {

@@ -2,7 +2,8 @@
 namespace Pharborist;
 
 /**
- * A class member list declaration.
+ * A class member list declaration, e.g. `protected $foo, $bar;` Even if you define
+ * a single member per declaration, it's still considered a list.
  */
 class ClassMemberListNode extends ClassStatementNode {
   use DocCommentTrait;

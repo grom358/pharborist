@@ -4,7 +4,6 @@ namespace Pharborist;
 /**
  * Base class for ClassNode and TraitNode.
  *
- * @internal
  * @see ClassNode
  * @see TraitNode
  */

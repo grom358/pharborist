@@ -1,6 +1,11 @@
 <?php
 namespace Pharborist;
 
+/**
+ * Trait used by any class method, including abstract methods.
+ *
+ * @see ClassMethodNode
+ */
 trait MethodTrait {
   use VisibilityTrait;
   use FunctionTrait;

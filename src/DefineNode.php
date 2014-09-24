@@ -2,10 +2,7 @@
 namespace Pharborist;
 
 /**
- * A function call to define().
- *
- * Define creates global level constants, therefore this class exists to allow
- * special treatment the function call.
+ * A call to `define()`, e.g. `define('VERSION', '1.0.5');`
  */
 class DefineNode extends FunctionCallNode {
 

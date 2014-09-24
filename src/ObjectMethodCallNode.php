@@ -2,9 +2,7 @@
 namespace Pharborist;
 
 /**
- * An object method call.
- *
- * For example, $object->method()
+ * An object method call, e.g. `$object->method()`
  */
 class ObjectMethodCallNode extends CallNode implements VariableExpressionNode {
   /**

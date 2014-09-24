@@ -2,7 +2,7 @@
 namespace Pharborist;
 
 /**
- * An include_once.
+ * An `include_once` statement.
  */
 class IncludeOnceNode extends ImportNode {
 

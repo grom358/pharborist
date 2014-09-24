@@ -2,9 +2,7 @@
 namespace Pharborist;
 
 /**
- * An object property.
- *
- * For example, $object->property
+ * An object property access, e.g. `$object->property`.
  */
 class ObjectPropertyNode extends ParentNode implements VariableExpressionNode {
   /**

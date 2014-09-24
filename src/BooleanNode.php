@@ -3,6 +3,9 @@ namespace Pharborist;
 
 /**
  * Base class for TRUE and FALSE.
+ *
+ * @see TrueNode
+ * @see FalseNode
  */
 abstract class BooleanNode extends ConstantNode implements ScalarNode {
   /**

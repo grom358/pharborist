@@ -6,6 +6,8 @@ namespace Pharborist;
  */
 class EchoStatementNode extends StatementNode {
   /**
+   * Returns the expressions being echoed.
+   *
    * @return ExpressionNode[]
    */
   public function getExpressions() {

@@ -2,10 +2,7 @@
 namespace Pharborist;
 
 /**
- * A constant lookup.
- *
- * For example,
- * MyNamespace\MY_CONST
+ * A constant lookup, like `MyNamespace\MY_CONST` or `IS_FUBAR`.
  */
 class ConstantNode extends ParentNode implements ExpressionNode {
   /**

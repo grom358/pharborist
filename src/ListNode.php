@@ -2,9 +2,7 @@
 namespace Pharborist;
 
 /**
- * A list function call.
- *
- * For example, list($a, $b) = expr();
+ * A call to the `list()` pseudo-function, e.g. `list ($a, $b) = foobar();`
  */
 class ListNode extends FunctionCallNode {
 

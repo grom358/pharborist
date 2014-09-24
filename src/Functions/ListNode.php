@@ -2,10 +2,10 @@
 
 /**
  * @file
- * Contains \Pharborist\ListNode.
+ * Contains \Pharborist\Functions\ListNode.
  */
 
-namespace Pharborist;
+namespace Pharborist\Functions;
 
 use Pharborist\Functions\FunctionCallNode;
 

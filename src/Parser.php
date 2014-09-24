@@ -14,6 +14,7 @@ use Pharborist\Functions\EvalNode;
 use Pharborist\Functions\FunctionCallNode;
 use Pharborist\Functions\HaltCompilerNode;
 use Pharborist\Functions\IssetNode;
+use Pharborist\Functions\ListNode;
 
 /**
  * Parses PHP tokens into syntax tree.

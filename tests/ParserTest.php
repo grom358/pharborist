@@ -8,6 +8,7 @@ use Pharborist\Functions\EvalNode;
 use Pharborist\Functions\FunctionCallNode;
 use Pharborist\Functions\HaltCompilerNode;
 use Pharborist\Functions\IssetNode;
+use Pharborist\Functions\ListNode;
 use Pharborist\Operator\BinaryOperationNode;
 use Pharborist\Operator\TernaryOperationNode;
 use Pharborist\Operator\UnaryOperationNode;
@@ -1675,13 +1676,13 @@ EOF;
     $assign = $this->parseExpression('list($a, $b, list($c1, $c2)) = [1, 2, [3.1, 3.2]]', '\Pharborist\Operator\AssignNode');
     /** @var ListNode $list */
     $list = $assign->getLeftOperand();
-    $this->assertInstanceOf('\Pharborist\ListNode', $list);
+    $this->assertInstanceOf('\Pharborist\Functions\ListNode', $list);
     $arguments = $list->getArguments();
     $this->assertCount(3, $arguments);
     $this->assertEquals('$a', $arguments[0]->getText());
     $this->assertEquals('$b', $arguments[1]->getText());
     $list = $arguments[2];
-    $this->assertInstanceOf('\Pharborist\ListNode', $list);
+    $this->assertInstanceOf('\Pharborist\Functions\ListNode', $list);
     $arguments = $list->getArguments();
     $this->assertCount(2, $arguments);
     $this->assertEquals('$c1', $arguments[0]->getText());
@@ -1690,7 +1691,7 @@ EOF;
     $assign = $this->parseExpression('list() = [1, 2]', '\Pharborist\Operator\AssignNode');
     /** @var ListNode $list */
     $list = $assign->getLeftOperand();
-    $this->assertInstanceOf('\Pharborist\ListNode', $list);
+    $this->assertInstanceOf('\Pharborist\Functions\ListNode', $list);
     $arguments = $list->getArguments();
     $this->assertCount(0, $arguments);
   }

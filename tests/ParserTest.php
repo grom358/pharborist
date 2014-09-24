@@ -2,6 +2,7 @@
 namespace Pharborist;
 
 use Pharborist\Functions\AnonymousFunctionNode;
+use Pharborist\Functions\DefineNode;
 use Pharborist\Functions\EmptyNode;
 use Pharborist\Operator\BinaryOperationNode;
 use Pharborist\Operator\TernaryOperationNode;
@@ -1776,7 +1777,7 @@ EOF;
     $this->assertEquals('/** Constant defined with define. */', $statement->getDocComment()->getText());
     /** @var DefineNode $define */
     $define = $statement->getExpression();
-    $this->assertInstanceOf('\Pharborist\DefineNode', $define);
+    $this->assertInstanceOf('\Pharborist\Functions\DefineNode', $define);
     $arguments = $define->getArguments();
     $this->assertEquals("'TEST_CONST'", $arguments[0]->getText());
     $this->assertEquals("'test'", $arguments[1]->getText());

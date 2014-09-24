@@ -2,12 +2,10 @@
 
 /**
  * @file
- * Contains \Pharborist\EvalNode.
+ * Contains \Pharborist\Functions\EvalNode.
  */
 
-namespace Pharborist;
-
-use Pharborist\Functions\FunctionCallNode;
+namespace Pharborist\Functions;
 
 /**
  * A call to `eval()`.

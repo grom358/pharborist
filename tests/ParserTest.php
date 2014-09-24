@@ -4,6 +4,7 @@ namespace Pharborist;
 use Pharborist\Functions\AnonymousFunctionNode;
 use Pharborist\Functions\DefineNode;
 use Pharborist\Functions\EmptyNode;
+use Pharborist\Functions\EvalNode;
 use Pharborist\Functions\FunctionCallNode;
 use Pharborist\Operator\BinaryOperationNode;
 use Pharborist\Operator\TernaryOperationNode;
@@ -1735,7 +1736,7 @@ EOF;
    */
   public function testEval() {
     /** @var EvalNode $eval */
-    $eval = $this->parseExpression('eval($a)', '\Pharborist\EvalNode');
+    $eval = $this->parseExpression('eval($a)', '\Pharborist\Functions\EvalNode');
     $arguments = $eval->getArguments();
     $this->assertEquals('$a', $arguments[0]->getText());
   }

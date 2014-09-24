@@ -1,5 +1,13 @@
 <?php
+
+/**
+ * @file
+ * Contains \Pharborist\CallNode.
+ */
+
 namespace Pharborist;
+
+use Pharborist\Functions\ArgumentTrait;
 
 /**
  * Base class of any function or method call, including:

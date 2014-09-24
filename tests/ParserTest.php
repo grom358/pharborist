@@ -1,6 +1,7 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Functions\AnonymousFunctionNode;
 use Pharborist\Operator\BinaryOperationNode;
 use Pharborist\Operator\TernaryOperationNode;
 use Pharborist\Operator\UnaryOperationNode;
@@ -1444,7 +1445,7 @@ EOF';
    */
   public function testAnonymousFunction() {
     /** @var AnonymousFunctionNode $function */
-    $function = $this->parseExpression('function(){ body(); }', '\Pharborist\AnonymousFunctionNode');
+    $function = $this->parseExpression('function(){ body(); }', '\Pharborist\Functions\AnonymousFunctionNode');
     $this->assertNull($function->getReference());
     $this->assertCount(0, $function->getParameters());
     $this->assertEquals('{ body(); }', $function->getBody()->getText());
@@ -1453,15 +1454,15 @@ EOF';
     $this->assertEquals('&', $function->getReference()->getText());
 
 
-    $function = $this->parseExpression('function &(){ body(); }', '\Pharborist\AnonymousFunctionNode');
+    $function = $this->parseExpression('function &(){ body(); }', '\Pharborist\Functions\AnonymousFunctionNode');
     $this->assertCount(0, $function->getParameters());
     $this->assertEquals('&', $function->getReference()->getText());
     $this->assertEquals('{ body(); }', $function->getBody()->getText());
 
-    $function = $this->parseExpression('static function(){}', '\Pharborist\AnonymousFunctionNode');
+    $function = $this->parseExpression('static function(){}', '\Pharborist\Functions\AnonymousFunctionNode');
     $this->assertCount(0, $function->getParameters());
 
-    $function = $this->parseExpression('function($a, $b) use ($x, &$y) { }', '\Pharborist\AnonymousFunctionNode');
+    $function = $this->parseExpression('function($a, $b) use ($x, &$y) { }', '\Pharborist\Functions\AnonymousFunctionNode');
     $parameters = $function->getParameters();
     $this->assertCount(2, $parameters);
     $this->assertEquals('$a', $parameters[0]->getText());
@@ -1474,7 +1475,7 @@ EOF';
     /** @var \Pharborist\Operator\AssignNode $assign */
     $assign = $this->parseExpression('$f = function($a, $b) use ($x, &$y) { }', '\Pharborist\Operator\AssignNode');
     $this->assertEquals('$f', $assign->getLeftOperand()->getText());
-    $this->assertInstanceOf('\Pharborist\AnonymousFunctionNode', $assign->getRightOperand());
+    $this->assertInstanceOf('\Pharborist\Functions\AnonymousFunctionNode', $assign->getRightOperand());
     $function = $assign->getRightOperand();
     $parameters = $function->getParameters();
     $this->assertCount(2, $parameters);

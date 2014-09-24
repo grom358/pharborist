@@ -2,12 +2,18 @@
 
 /**
  * @file
- * Contains \Pharborist\AnonymousFunctionNode.
+ * Contains \Pharborist\Functions\AnonymousFunctionNode.
  */
 
-namespace Pharborist;
+namespace Pharborist\Functions;
 
-use Pharborist\Functions\ParameterTrait;
+use Pharborist\CommaListNode;
+use Pharborist\ExpressionNode;
+use Pharborist\LexicalVariableNode;
+use Pharborist\Node;
+use Pharborist\ParentNode;
+use Pharborist\StatementBlockNode;
+use Pharborist\TokenNode;
 
 /**
  * An anonymous function (closure).

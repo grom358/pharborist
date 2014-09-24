@@ -1,5 +1,13 @@
 <?php
+
+/**
+ * @file
+ * Contains \Pharborist\Parser.
+ */
+
 namespace Pharborist;
+
+use Pharborist\Functions\AnonymousFunctionNode;
 
 /**
  * Parses PHP tokens into syntax tree.

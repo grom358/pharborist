@@ -1,5 +1,13 @@
 <?php
+
+/**
+ * @file
+ * Contains \Pharborist\ParameterNode.
+ */
+
 namespace Pharborist;
+
+use Pharborist\Functions\AnonymousFunctionNode;
 
 /**
  * A function parameter.

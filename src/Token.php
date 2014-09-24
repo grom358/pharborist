@@ -4,6 +4,7 @@ use Pharborist\Constants\DirMagicConstantNode;
 use Pharborist\Constants\FileMagicConstantNode;
 use Pharborist\Constants\FunctionMagicConstantNode;
 use Pharborist\Constants\LineMagicConstantNode;
+use Pharborist\Constants\MethodMagicConstantNode;
 
 /**
  * Factory class for tokens.

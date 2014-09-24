@@ -4,6 +4,7 @@ use Pharborist\Constants\DirMagicConstantNode;
 use Pharborist\Constants\FileMagicConstantNode;
 use Pharborist\Constants\FunctionMagicConstantNode;
 use Pharborist\Constants\LineMagicConstantNode;
+use Pharborist\Constants\MethodMagicConstantNode;
 
 /**
  * Convert PHP source into an array of tokens.

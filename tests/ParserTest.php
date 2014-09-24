@@ -803,7 +803,7 @@ EOF;
     $this->parseStaticExpression('__FILE__', '\Pharborist\Constants\FileMagicConstantNode');
     $this->parseStaticExpression('__DIR__', '\Pharborist\Constants\DirMagicConstantNode');
     $this->parseStaticExpression('__TRAIT__', '\Pharborist\TraitMagicConstantNode');
-    $this->parseStaticExpression('__METHOD__', '\Pharborist\MethodMagicConstantNode');
+    $this->parseStaticExpression('__METHOD__', '\Pharborist\Constants\MethodMagicConstantNode');
     $this->parseStaticExpression('__FUNCTION__', '\Pharborist\Constants\FunctionMagicConstantNode');
     $this->parseStaticExpression('__NAMESPACE__', '\Pharborist\NamespaceMagicConstantNode');
     $this->parseStaticExpression('__CLASS__', '\Pharborist\ClassMagicConstantNode');

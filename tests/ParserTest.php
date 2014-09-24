@@ -799,7 +799,7 @@ EOF;
     $this->parseStaticExpression('4.2', '\Pharborist\FloatNode');
     $this->parseStaticExpression("'hello'", '\Pharborist\StringNode');
     $this->parseStaticExpression('"hello"', '\Pharborist\StringNode');
-    $this->parseStaticExpression('__LINE__', '\Pharborist\LineMagicConstantNode');
+    $this->parseStaticExpression('__LINE__', '\Pharborist\Constants\LineMagicConstantNode');
     $this->parseStaticExpression('__FILE__', '\Pharborist\Constants\FileMagicConstantNode');
     $this->parseStaticExpression('__DIR__', '\Pharborist\Constants\DirMagicConstantNode');
     $this->parseStaticExpression('__TRAIT__', '\Pharborist\TraitMagicConstantNode');

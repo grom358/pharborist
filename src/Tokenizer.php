@@ -1,5 +1,6 @@
 <?php
 namespace Pharborist;
+use Pharborist\Constants\ClassMagicConstantNode;
 use Pharborist\Constants\DirMagicConstantNode;
 use Pharborist\Constants\FileMagicConstantNode;
 use Pharborist\Constants\FunctionMagicConstantNode;

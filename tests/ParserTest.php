@@ -806,7 +806,7 @@ EOF;
     $this->parseStaticExpression('__METHOD__', '\Pharborist\Constants\MethodMagicConstantNode');
     $this->parseStaticExpression('__FUNCTION__', '\Pharborist\Constants\FunctionMagicConstantNode');
     $this->parseStaticExpression('__NAMESPACE__', '\Pharborist\Constants\NamespaceMagicConstantNode');
-    $this->parseStaticExpression('__CLASS__', '\Pharborist\ClassMagicConstantNode');
+    $this->parseStaticExpression('__CLASS__', '\Pharborist\Constants\ClassMagicConstantNode');
 
     $snippet = '<<<EOF
 EOF';

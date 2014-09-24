@@ -2,12 +2,10 @@
 
 /**
  * @file
- * Contains \Pharborist\IssetNode.
+ * Contains \Pharborist\Functions\IssetNode.
  */
 
-namespace Pharborist;
-
-use Pharborist\Functions\FunctionCallNode;
+namespace Pharborist\Functions;
 
 /**
  * A call to `isset()`, e.g. `isset($baz);`

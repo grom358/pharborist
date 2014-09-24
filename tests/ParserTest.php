@@ -7,6 +7,7 @@ use Pharborist\Functions\EmptyNode;
 use Pharborist\Functions\EvalNode;
 use Pharborist\Functions\FunctionCallNode;
 use Pharborist\Functions\HaltCompilerNode;
+use Pharborist\Functions\IssetNode;
 use Pharborist\Operator\BinaryOperationNode;
 use Pharborist\Operator\TernaryOperationNode;
 use Pharborist\Operator\UnaryOperationNode;
@@ -1726,7 +1727,7 @@ EOF;
    */
   public function testIsset() {
     /** @var IssetNode $isset */
-    $isset = $this->parseExpression('isset($a, $b)', '\Pharborist\IssetNode');
+    $isset = $this->parseExpression('isset($a, $b)', '\Pharborist\Functions\IssetNode');
     $arguments = $isset->getArguments();
     $this->assertEquals('$a', $arguments[0]->getText());
     $this->assertEquals('$b', $arguments[1]->getText());

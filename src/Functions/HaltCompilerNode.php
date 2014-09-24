@@ -2,12 +2,10 @@
 
 /**
  * @file
- * Contains \Pharborist\HaltCompilerNode.
+ * Contains \Pharborist\Functions\HaltCompilerNode.
  */
 
-namespace Pharborist;
-
-use Pharborist\Functions\FunctionCallNode;
+namespace Pharborist\Functions;
 
 /**
  * A __halt_compiler() function call.

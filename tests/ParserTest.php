@@ -6,6 +6,7 @@ use Pharborist\Functions\DefineNode;
 use Pharborist\Functions\EmptyNode;
 use Pharborist\Functions\EvalNode;
 use Pharborist\Functions\FunctionCallNode;
+use Pharborist\Functions\HaltCompilerNode;
 use Pharborist\Operator\BinaryOperationNode;
 use Pharborist\Operator\TernaryOperationNode;
 use Pharborist\Operator\UnaryOperationNode;
@@ -177,7 +178,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
    */
   public function testHaltCompiler() {
     /** @var HaltCompilerNode $node */
-    $node = $this->parseSnippet('__halt_compiler();', '\Pharborist\HaltCompilerNode');
+    $node = $this->parseSnippet('__halt_compiler();', '\Pharborist\Functions\HaltCompilerNode');
     $this->assertEquals('__halt_compiler', $node->getName()->getText());
     $this->assertEquals("__halt_compiler();", $node->getText());
   }
@@ -188,7 +189,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
    * @expectedExceptionMessage __halt_compiler can only be used from the outermost scope
    */
   public function testInnerHaltCompiler() {
-    $this->parseSnippet("{ __halt_compiler(); }", '\Pharborist\HaltCompilerNode');
+    $this->parseSnippet("{ __halt_compiler(); }", '\Pharborist\Functions\HaltCompilerNode');
   }
 
   /**

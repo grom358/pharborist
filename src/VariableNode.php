@@ -1,5 +1,13 @@
 <?php
+
+/**
+ * @file
+ * Contains \Pharborist\VariableNode.
+ */
+
 namespace Pharborist;
+
+use Pharborist\Functions\LexicalVariableNode;
 
 /**
  * A basic variable.

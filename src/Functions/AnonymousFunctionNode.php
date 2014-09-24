@@ -9,7 +9,6 @@ namespace Pharborist\Functions;
 
 use Pharborist\CommaListNode;
 use Pharborist\ExpressionNode;
-use Pharborist\LexicalVariableNode;
 use Pharborist\Node;
 use Pharborist\ParentNode;
 use Pharborist\StatementBlockNode;

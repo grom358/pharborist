@@ -1,5 +1,13 @@
 <?php
-namespace Pharborist;
+
+/**
+ * @file
+ * Contains \Pharborist\Functions\LexicalVariableNode.
+ */
+
+namespace Pharborist\Functions;
+
+use Pharborist\NodeInterface;
 
 /**
  * A lexical variable imported by an anonymous function in its `use` statement.

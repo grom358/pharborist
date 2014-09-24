@@ -26,7 +26,7 @@ class BinaryOperationNodeTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testGetRightOperand() {
-    $this->assertInstanceOf('Pharborist\ConstantNode', $this->op->getRightOperand());
+    $this->assertInstanceOf('Pharborist\Constants\ConstantNode', $this->op->getRightOperand());
     $this->assertEquals('TRUE', $this->op->getRightOperand()->getText());
   }
 }

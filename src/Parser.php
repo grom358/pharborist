@@ -1,5 +1,8 @@
 <?php
+
 namespace Pharborist;
+
+use Pharborist\Constants\ConstantNode;
 
 /**
  * Parses PHP tokens into syntax tree.

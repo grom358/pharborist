@@ -1,6 +1,7 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Constants\ConstantNode;
 use Pharborist\Operator\BinaryOperationNode;
 use Pharborist\Operator\TernaryOperationNode;
 use Pharborist\Operator\UnaryOperationNode;
@@ -823,7 +824,7 @@ EOF';
     $this->parseStaticExpression($snippet, '\Pharborist\HeredocNode'); //@todo NowDocNode
 
     /** @var ConstantNode $const */
-    $const = $this->parseStaticExpression('namespace\MY_CONST', '\Pharborist\ConstantNode');
+    $const = $this->parseStaticExpression('namespace\MY_CONST', '\Pharborist\Constants\ConstantNode');
     $this->assertEquals('namespace\MY_CONST', $const->getConstantName()->getText());
 
     /** @var ClassConstantLookupNode $class_constant_lookup */
@@ -1881,7 +1882,7 @@ EOF;
    * Test constants.
    */
   public function testConstants() {
-    $this->parseExpression('SOME_CONST', '\Pharborist\ConstantNode');
+    $this->parseExpression('SOME_CONST', '\Pharborist\Constants\ConstantNode');
 
     /** @var TrueNode $true */
     $this->parseExpression('true', '\Pharborist\TrueNode');

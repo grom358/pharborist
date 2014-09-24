@@ -1,5 +1,13 @@
 <?php
+
+/**
+ * @file
+ * Contains \Pharborist\BooleanNode.
+ */
+
 namespace Pharborist;
+
+use Pharborist\Constants\ConstantNode;
 
 /**
  * Base class for TRUE and FALSE.

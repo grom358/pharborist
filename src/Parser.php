@@ -8,6 +8,7 @@
 namespace Pharborist;
 
 use Pharborist\Functions\AnonymousFunctionNode;
+use Pharborist\Functions\CallbackCallNode;
 use Pharborist\Functions\DefineNode;
 use Pharborist\Functions\EmptyNode;
 use Pharborist\Functions\EvalNode;

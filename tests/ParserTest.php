@@ -2,6 +2,7 @@
 namespace Pharborist;
 
 use Pharborist\Functions\AnonymousFunctionNode;
+use Pharborist\Functions\CallbackCallNode;
 use Pharborist\Functions\DefineNode;
 use Pharborist\Functions\EmptyNode;
 use Pharborist\Functions\EvalNode;
@@ -1056,7 +1057,7 @@ EOF';
     $this->assertEquals('$a', $var_var->getVariable()->getText());
 
     /** @var CallbackCallNode $callback_call */
-    $callback_call = $this->parseVariable('$a($x, $y)', '\Pharborist\CallbackCallNode');
+    $callback_call = $this->parseVariable('$a($x, $y)', '\Pharborist\Functions\CallbackCallNode');
     $this->assertEquals('$a', $callback_call->getCallback()->getText());
     $arguments = $callback_call->getArguments();
     $this->assertCount(2, $arguments);
@@ -1197,7 +1198,7 @@ EOF';
     $this->assertEquals('$a', $var_var->getVariable()->getText());
 
     /** @var CallbackCallNode $callback_call */
-    $callback_call = $this->parseExpression('$a()', '\Pharborist\CallbackCallNode');
+    $callback_call = $this->parseExpression('$a()', '\Pharborist\Functions\CallbackCallNode');
     $this->assertEquals('$a', $callback_call->getCallback()->getText());
 
     /** @var ObjectMethodCallNode $obj_method_call */

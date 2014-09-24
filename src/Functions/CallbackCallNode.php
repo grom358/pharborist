@@ -2,12 +2,13 @@
 
 /**
  * @file
- * Contains \Pharborist\CallbackCallNode.
+ * Contains \Pharborist\Functions\CallbackCallNode.
  */
 
-namespace Pharborist;
+namespace Pharborist\Functions;
 
-use Pharborist\Functions\CallNode;
+use Pharborist\ExpressionNode;
+use Pharborist\Node;
 
 /**
  * A call to a callback function in a variable, e.g. `$foo = $callback('baz');`

@@ -2,12 +2,21 @@
 
 /**
  * @file
- * Contains \Pharborist\ParameterNode.
+ * Contains \Pharborist\Functions\ParameterNode.
  */
 
-namespace Pharborist;
+namespace Pharborist\Functions;
 
-use Pharborist\Functions\AnonymousFunctionNode;
+use Pharborist\ClassMethodNode;
+use Pharborist\ExpressionNode;
+use Pharborist\Filter;
+use Pharborist\FunctionDeclarationNode;
+use Pharborist\NameNode;
+use Pharborist\Node;
+use Pharborist\ParentNode;
+use Pharborist\Token;
+use Pharborist\TokenNode;
+use Pharborist\VariableNode;
 
 /**
  * A function parameter.

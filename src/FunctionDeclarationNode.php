@@ -8,6 +8,7 @@
 namespace Pharborist;
 
 use Pharborist\Functions\FunctionTrait;
+use Pharborist\Functions\ParameterNode;
 
 /**
  * A function declaration.

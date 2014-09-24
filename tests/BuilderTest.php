@@ -1,5 +1,13 @@
 <?php
+
+/**
+ * @file
+ * Contains \Pharborist\BuilderTest.
+ */
+
 namespace Pharborist;
+
+use Pharborist\Functions\ParameterNode;
 
 /**
  * Tests builder methods.

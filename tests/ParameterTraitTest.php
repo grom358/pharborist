@@ -1,5 +1,13 @@
 <?php
+
+/**
+ * @file
+ * Contains \Pharborist\ParameterTraitTest.
+ */
+
 namespace Pharborist;
+
+use Pharborist\Functions\ParameterNode;
 
 /**
  * Tests various methods of ParameterTrait.

@@ -8,7 +8,6 @@
 namespace Pharborist\Functions;
 
 use Pharborist\Filter;
-use Pharborist\ParameterNode;
 use Pharborist\NodeCollection;
 use Pharborist\CommaListNode;
 
@@ -56,7 +55,7 @@ trait ParameterTrait {
   /**
    * Appends a parameter.
    *
-   * @param \Pharborist\ParameterNode|callable $parameter
+   * @param \Pharborist\Functions\ParameterNode|callable $parameter
    *  Either an existing parameter node, or a callable which will return
    *  the parameter to append. The callable will receive $this as its
    *  only argument.

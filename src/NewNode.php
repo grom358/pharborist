@@ -2,9 +2,8 @@
 namespace Pharborist;
 
 /**
- * A new expression.
- *
- * For example, new MyClass()
+ * A new object being created, e.g. `$foo = new Foo();`. You can access the constructor
+ * arguments as with any function or method call.
  */
 class NewNode extends ParentNode implements ExpressionNode {
   use ArgumentTrait;

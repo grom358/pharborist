@@ -2,7 +2,7 @@
 namespace Pharborist;
 
 /**
- * An isset function call.
+ * A call to `isset()`, e.g. `isset($baz);`
  */
 class IssetNode extends FunctionCallNode {
 

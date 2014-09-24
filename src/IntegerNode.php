@@ -2,7 +2,7 @@
 namespace Pharborist;
 
 /**
- * An integer scalar.
+ * An integer scalar, like 2 or 30.
  */
 class IntegerNode extends TokenNode implements ExpressionNode, ScalarNode {
   /**

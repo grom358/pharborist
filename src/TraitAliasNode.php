@@ -2,9 +2,7 @@
 namespace Pharborist;
 
 /**
- * A trait alias.
- *
- * For example, B::bigTalk as talk;
+ * A trait alias, e.g. `B::bigTalk as talk;`
  */
 class TraitAliasNode extends TraitAdaptationStatementNode {
   /**

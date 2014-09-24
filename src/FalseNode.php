@@ -4,9 +4,8 @@ namespace Pharborist;
 /**
  * Boolean FALSE.
  *
- * <p>Represents the boolean FALSE constant, spelled either <code>FALSE</code>
- * or <code>false</code>. This does <em>not</em> represent other falsy values like
- * '' or 0.</p>
+ * Represents the boolean FALSE constant, spelled either `FALSE` or `false`. This
+ * does *not* represent other falsy values, like empty strings or 0.
  */
 class FalseNode extends BooleanNode {
   /**

@@ -70,6 +70,8 @@ class ClassMethodNode extends ClassStatementNode {
   }
 
   /**
+   * Returns the `abstract` keyword from the method declaration.
+   *
    * @return TokenNode
    */
   public function getAbstract() {
@@ -116,6 +118,8 @@ class ClassMethodNode extends ClassStatementNode {
   }
 
   /**
+   * Returns the `final` keyword from the method declaration.
+   *
    * @return TokenNode
    */
   public function getFinal() {

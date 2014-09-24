@@ -2,9 +2,7 @@
 namespace Pharborist;
 
 /**
- * A empty function call.
- *
- * For example, empty($a)
+ * A call to `empty()`, e.g. `empty($foo);`
  */
 class EmptyNode extends FunctionCallNode {
 

@@ -2,7 +2,7 @@
 namespace Pharborist;
 
 /**
- * An eval function call.
+ * A call to `eval()`.
  */
 class EvalNode extends FunctionCallNode {
 

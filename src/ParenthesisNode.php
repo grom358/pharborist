@@ -2,7 +2,7 @@
 namespace Pharborist;
 
 /**
- * A parenthesis expression.
+ * Any expression enclosed by parentheses, e.g. `(($a && $b) || ($a && $c))`
  */
 class ParenthesisNode extends ParentNode implements ExpressionNode {
   /**

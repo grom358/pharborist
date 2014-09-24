@@ -2,9 +2,7 @@
 namespace Pharborist;
 
 /**
- * A callback call.
- *
- * For example, $callback().
+ * A call to a callback function in a variable, e.g. `$foo = $callback('baz');`
  */
 class CallbackCallNode extends CallNode implements ExpressionNode {
   /**

@@ -2,9 +2,7 @@
 namespace Pharborist;
 
 /**
- * A global statement.
- *
- * For example, global $a, $b;
+ * A global statement, e.g. `global $a, $b`
  */
 class GlobalStatementNode extends StatementNode {
   /**

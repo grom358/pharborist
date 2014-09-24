@@ -2,9 +2,11 @@
 namespace Pharborist;
 
 /**
- * A string constant.
+ * A string, like e.g. `'hello world'` or `"We are the knights who say, 'Ni!'"`. This
+ * does *not* include strings interspersed with variables or other expressions --
+ * those are handled by InterpolatedStringNode.
  *
- * For example, 'hello world'
+ * @see \Pharborist\InterpolatedStringNode
  */
 class StringNode extends TokenNode implements ExpressionNode, ScalarNode {
   /**

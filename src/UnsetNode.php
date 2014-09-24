@@ -2,9 +2,7 @@
 namespace Pharborist;
 
 /**
- * Unset function call.
- *
- * For example, unset($a)
+ * A call to `unset()`, e.g. `unset($foobar);`
  */
 class UnsetNode extends FunctionCallNode {
 

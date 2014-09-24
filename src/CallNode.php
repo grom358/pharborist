@@ -2,7 +2,14 @@
 namespace Pharborist;
 
 /**
- * A function/method call.
+ * Base class of any function or method call, including:
+ *
+ * ```
+ * foobar();
+ * $foo->bar();
+ * Foo::bar();
+ * $foo('bar');
+ * ```
  */
 abstract class CallNode extends ParentNode {
   use ArgumentTrait;

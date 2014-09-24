@@ -1,5 +1,6 @@
 <?php
 namespace Pharborist;
+use Pharborist\Constants\DirMagicConstantNode;
 
 /**
  * Convert PHP source into an array of tokens.

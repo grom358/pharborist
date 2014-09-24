@@ -1,5 +1,6 @@
 <?php
 namespace Pharborist;
+use Pharborist\Constants\DirMagicConstantNode;
 
 /**
  * Factory class for tokens.

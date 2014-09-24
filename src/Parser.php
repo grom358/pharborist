@@ -8,6 +8,7 @@
 namespace Pharborist;
 
 use Pharborist\Functions\AnonymousFunctionNode;
+use Pharborist\Functions\EmptyNode;
 
 /**
  * Parses PHP tokens into syntax tree.

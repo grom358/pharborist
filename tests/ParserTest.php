@@ -2,6 +2,7 @@
 namespace Pharborist;
 
 use Pharborist\Functions\AnonymousFunctionNode;
+use Pharborist\Functions\EmptyNode;
 use Pharborist\Operator\BinaryOperationNode;
 use Pharborist\Operator\TernaryOperationNode;
 use Pharborist\Operator\UnaryOperationNode;
@@ -1742,7 +1743,7 @@ EOF;
    */
   public function testEmpty() {
     /** @var EmptyNode $empty */
-    $empty = $this->parseExpression('empty(expr())', '\Pharborist\EmptyNode');
+    $empty = $this->parseExpression('empty(expr())', '\Pharborist\Functions\EmptyNode');
     $arguments = $empty->getArguments();
     $this->assertEquals('expr()', $arguments[0]->getText());
   }

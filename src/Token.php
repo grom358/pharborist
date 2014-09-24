@@ -2,6 +2,7 @@
 namespace Pharborist;
 use Pharborist\Constants\DirMagicConstantNode;
 use Pharborist\Constants\FileMagicConstantNode;
+use Pharborist\Constants\FunctionMagicConstantNode;
 
 /**
  * Factory class for tokens.

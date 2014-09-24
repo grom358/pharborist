@@ -2,12 +2,10 @@
 
 /**
  * @file
- * Contains \Pharborist\UnsetNode.
+ * Contains \Pharborist\Functions\UnsetNode.
  */
 
-namespace Pharborist;
-
-use Pharborist\Functions\FunctionCallNode;
+namespace Pharborist\Functions;
 
 /**
  * A call to `unset()`, e.g. `unset($foobar);`

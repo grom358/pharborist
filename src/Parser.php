@@ -17,6 +17,7 @@ use Pharborist\Functions\HaltCompilerNode;
 use Pharborist\Functions\IssetNode;
 use Pharborist\Functions\ListNode;
 use Pharborist\Functions\ParameterNode;
+use Pharborist\Functions\UnsetNode;
 
 /**
  * Parses PHP tokens into syntax tree.

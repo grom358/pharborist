@@ -1,5 +1,13 @@
 <?php
+
+/**
+ * @file
+ * Contains \Pharborist\FunctionCallNode.
+ */
+
 namespace Pharborist;
+
+use Pharborist\Functions\CallNode;
 
 /**
  * A function call.

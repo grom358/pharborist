@@ -2,12 +2,13 @@
 
 /**
  * @file
- * Contains \Pharborist\CallNode.
+ * Contains \Pharborist\Functions\CallNode.
  */
 
-namespace Pharborist;
+namespace Pharborist\Functions;
 
-use Pharborist\Functions\ArgumentTrait;
+use Pharborist\ObjectMethodCallNode;
+use Pharborist\ParentNode;
 
 /**
  * Base class of any function or method call, including:

@@ -1,5 +1,13 @@
 <?php
+
+/**
+ * @file
+ * Contains \Pharborist\CallMethodCallNode.
+ */
+
 namespace Pharborist;
+
+use Pharborist\Functions\CallNode;
 
 /**
  * A call to a static class method, e.g. `MyClass::classMethod()`

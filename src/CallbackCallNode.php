@@ -1,5 +1,13 @@
 <?php
+
+/**
+ * @file
+ * Contains \Pharborist\CallbackCallNode.
+ */
+
 namespace Pharborist;
+
+use Pharborist\Functions\CallNode;
 
 /**
  * A call to a callback function in a variable, e.g. `$foo = $callback('baz');`

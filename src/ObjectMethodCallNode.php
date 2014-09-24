@@ -1,5 +1,13 @@
 <?php
+
+/**
+ * @file
+ * Contains \Pharborist\ObjectMethodCallNode.
+ */
+
 namespace Pharborist;
+
+use Pharborist\Functions\CallNode;
 
 /**
  * An object method call, e.g. `$object->method()`

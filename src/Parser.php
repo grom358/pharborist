@@ -12,6 +12,7 @@ use Pharborist\Functions\DefineNode;
 use Pharborist\Functions\EmptyNode;
 use Pharborist\Functions\EvalNode;
 use Pharborist\Functions\FunctionCallNode;
+use Pharborist\Functions\FunctionDeclarationNode;
 use Pharborist\Functions\HaltCompilerNode;
 use Pharborist\Functions\IssetNode;
 use Pharborist\Functions\ListNode;

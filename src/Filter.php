@@ -8,6 +8,7 @@
 namespace Pharborist;
 
 use Pharborist\Functions\FunctionCallNode;
+use Pharborist\Functions\FunctionDeclarationNode;
 
 /**
  * Factory for creating common callback filters.

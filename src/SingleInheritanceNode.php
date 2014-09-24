@@ -1,5 +1,13 @@
 <?php
+
+/**
+ * @file
+ * Contains \Pharborist\SingleInheritanceNode.
+ */
+
 namespace Pharborist;
+
+use Pharborist\Functions\FunctionDeclarationNode;
 
 /**
  * Base class for ClassNode and TraitNode.
@@ -209,7 +217,7 @@ abstract class SingleInheritanceNode extends StatementNode {
   /**
    * Adds a method to a class.
    *
-   * @param \Pharborist\FunctionDeclarationNode|\Pharborist\ClassMethodNode|string $method
+   * @param \Pharborist\Functions\FunctionDeclarationNode|\Pharborist\ClassMethodNode|string $method
    *  The method to append. Can either be an existing method, a function (which
    *  will be converted to a public method), or a string (a new public method
    *  will be created with that name).

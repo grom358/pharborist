@@ -2,13 +2,19 @@
 
 /**
  * @file
- * Contains \Pharborist\FunctionDeclarationNode.
+ * Contains \Pharborist\Functions\FunctionDeclarationNode.
  */
 
-namespace Pharborist;
+namespace Pharborist\Functions;
 
-use Pharborist\Functions\FunctionTrait;
-use Pharborist\Functions\ParameterNode;
+use Pharborist\ClassMethodNode;
+use Pharborist\ClassNode;
+use Pharborist\NameNode;
+use Pharborist\Node;
+use Pharborist\Parser;
+use Pharborist\StatementBlockNode;
+use Pharborist\StatementNode;
+use Pharborist\TokenNode;
 
 /**
  * A function declaration.

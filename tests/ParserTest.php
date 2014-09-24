@@ -6,6 +6,7 @@ use Pharborist\Functions\DefineNode;
 use Pharborist\Functions\EmptyNode;
 use Pharborist\Functions\EvalNode;
 use Pharborist\Functions\FunctionCallNode;
+use Pharborist\Functions\FunctionDeclarationNode;
 use Pharborist\Functions\HaltCompilerNode;
 use Pharborist\Functions\IssetNode;
 use Pharborist\Functions\ListNode;
@@ -25,7 +26,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
     // Test with a real file.
     $tree = Parser::parseFile(__DIR__ . '/files/basic.php');
     $this->assertInstanceOf('\Pharborist\Node', $tree);
-    $this->assertCount(1, $tree->children(Filter::isInstanceOf('\Pharborist\FunctionDeclarationNode')));
+    $this->assertCount(1, $tree->children(Filter::isInstanceOf('\Pharborist\Functions\FunctionDeclarationNode')));
     // Test with a non-existant file.
     $tree = Parser::parseFile('no-such-file.php');
     $this->assertFalse($tree);
@@ -116,7 +117,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
     /** @var FunctionDeclarationNode $function_declaration */
     $function_declaration = $this->parseSnippet(
       'function my_func(array $a, callable $b, namespace\Test $c, \MyNamespace\Test $d, $e = 1, &$f, $g) { }',
-      '\Pharborist\FunctionDeclarationNode'
+      '\Pharborist\Functions\FunctionDeclarationNode'
     );
     $this->assertNull($function_declaration->getReference());
     $this->assertEquals('my_func', $function_declaration->getName()->getText());
@@ -1535,7 +1536,7 @@ EOF';
     $empty_statement = $this->parseSnippet('; /** function */ function test() { }', '\Pharborist\BlankStatementNode');
     /** @var FunctionDeclarationNode $function */
     $function = $empty_statement->next()->next();
-    $this->assertInstanceOf('\Pharborist\FunctionDeclarationNode', $function);
+    $this->assertInstanceOf('\Pharborist\Functions\FunctionDeclarationNode', $function);
     $this->assertEquals('/** function */', $function->getDocComment());
   }
 

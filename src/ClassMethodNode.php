@@ -1,5 +1,13 @@
 <?php
+
+/**
+ * @file
+ * Contains \Pharborist\ClassMethodNode.
+ */
+
 namespace Pharborist;
+
+use Pharborist\Functions\FunctionDeclarationNode;
 
 /**
  * A class method.

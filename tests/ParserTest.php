@@ -800,7 +800,7 @@ EOF;
     $this->parseStaticExpression("'hello'", '\Pharborist\StringNode');
     $this->parseStaticExpression('"hello"', '\Pharborist\StringNode');
     $this->parseStaticExpression('__LINE__', '\Pharborist\LineMagicConstantNode');
-    $this->parseStaticExpression('__FILE__', '\Pharborist\FileMagicConstantNode');
+    $this->parseStaticExpression('__FILE__', '\Pharborist\Constants\FileMagicConstantNode');
     $this->parseStaticExpression('__DIR__', '\Pharborist\Constants\DirMagicConstantNode');
     $this->parseStaticExpression('__TRAIT__', '\Pharborist\TraitMagicConstantNode');
     $this->parseStaticExpression('__METHOD__', '\Pharborist\MethodMagicConstantNode');

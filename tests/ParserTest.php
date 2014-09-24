@@ -1,6 +1,7 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Constants\ConstantDeclarationStatementNode;
 use Pharborist\Constants\ConstantNode;
 use Pharborist\Operator\BinaryOperationNode;
 use Pharborist\Operator\TernaryOperationNode;
@@ -162,7 +163,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
    */
   public function testConstDeclaration() {
     /** @var ConstantDeclarationStatementNode $const_declaration_list */
-    $const_declaration_list = $this->parseSnippet('const MyConst = 1;', '\Pharborist\ConstantDeclarationStatementNode');
+    $const_declaration_list = $this->parseSnippet('const MyConst = 1;', '\Pharborist\Constants\ConstantDeclarationStatementNode');
     $const_declaration = $const_declaration_list->getDeclarations()[0];
     $this->assertEquals('MyConst', $const_declaration->getName()->getText());
     $this->assertEquals('1', $const_declaration->getValue()->getText());
@@ -239,7 +240,7 @@ EOF;
 
     /** @var ConstantDeclarationStatementNode $const_statement */
     $const_statement = $statements[0];
-    $this->assertInstanceOf('\Pharborist\ConstantDeclarationStatementNode', $const_statement);
+    $this->assertInstanceOf('\Pharborist\Constants\ConstantDeclarationStatementNode', $const_statement);
     $this->assertEquals('/** const doc comment */', $const_statement->getDocComment()->getText());
 
     /** @var ClassMemberListNode $class_member_list */
@@ -376,7 +377,7 @@ EOF;
 
     /** @var ConstantDeclarationStatementNode $constant_declaration_statement */
     $constant_declaration_statement = $statements[0];
-    $this->assertInstanceOf('\Pharborist\ConstantDeclarationStatementNode', $constant_declaration_statement);
+    $this->assertInstanceOf('\Pharborist\Constants\ConstantDeclarationStatementNode', $constant_declaration_statement);
     $constant_declaration = $constant_declaration_statement->getDeclarations()[0];
     $this->assertEquals('MY_CONST', $constant_declaration->getName()->getText());
     $this->assertEquals('1', $constant_declaration->getValue()->getText());
@@ -784,7 +785,7 @@ EOF;
   public function parseStaticExpression($static_expression, $expected_type) {
     $statement_snippet = 'const EXPR = ' . $static_expression . ';' . PHP_EOL;
     /** @var ConstantDeclarationStatementNode $statement_node */
-    $statement_node = $this->parseSnippet($statement_snippet, '\Pharborist\ConstantDeclarationStatementNode');
+    $statement_node = $this->parseSnippet($statement_snippet, '\Pharborist\Constants\ConstantDeclarationStatementNode');
     $declaration = $statement_node->getDeclarations()[0];
     $expression_node = $declaration->getValue();
     $this->assertInstanceOf($expected_type, $expression_node);

@@ -1,5 +1,16 @@
 <?php
-namespace Pharborist;
+
+/**
+ * @file
+ * Contains \Pharborist\Constants\ConstantDeclarationNode.
+ */
+
+namespace Pharborist\Constants;
+
+use Pharborist\ParentNode;
+use Pharborist\NameNode;
+use Pharborist\ExpressionNode;
+use Pharborist\TokenNode;
 
 /**
  * Constant declaration.

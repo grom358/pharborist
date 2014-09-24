@@ -2,6 +2,8 @@
 
 namespace Pharborist;
 
+use Pharborist\Constants\ConstantDeclarationNode;
+use Pharborist\Constants\ConstantDeclarationStatementNode;
 use Pharborist\Constants\ConstantNode;
 
 /**

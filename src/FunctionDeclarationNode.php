@@ -1,5 +1,13 @@
 <?php
+
+/**
+ * @file
+ * Contains \Pharborist\FunctionDeclarationNode.
+ */
+
 namespace Pharborist;
+
+use Pharborist\Functions\FunctionTrait;
 
 /**
  * A function declaration.

@@ -1,7 +1,16 @@
 <?php
-namespace Pharborist;
 
-use Pharborist\Functions\ParameterTrait;
+/**
+ * @file
+ * Contains \Pharborist\Functions\FunctionTrait.
+ */
+
+namespace Pharborist\Functions;
+
+use Pharborist\DocCommentTrait;
+use Pharborist\NameNode;
+use Pharborist\Token;
+use Pharborist\TokenNode;
 
 trait FunctionTrait {
   use ParameterTrait;

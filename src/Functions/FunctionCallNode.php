@@ -2,12 +2,13 @@
 
 /**
  * @file
- * Contains \Pharborist\FunctionCallNode.
+ * Contains \Pharborist\Functions\FunctionCallNode.
  */
 
-namespace Pharborist;
+namespace Pharborist\Functions;
 
-use Pharborist\Functions\CallNode;
+use Pharborist\NameNode;
+use Pharborist\VariableExpressionNode;
 
 /**
  * A function call.

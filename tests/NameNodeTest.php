@@ -1,6 +1,8 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Functions\FunctionCallNode;
+
 class NameNodeTest extends \PHPUnit_Framework_TestCase {
   public function testUnqualified() {
     $snippet = <<<'EOF'

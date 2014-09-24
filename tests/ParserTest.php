@@ -4,6 +4,7 @@ namespace Pharborist;
 use Pharborist\Functions\AnonymousFunctionNode;
 use Pharborist\Functions\DefineNode;
 use Pharborist\Functions\EmptyNode;
+use Pharborist\Functions\FunctionCallNode;
 use Pharborist\Operator\BinaryOperationNode;
 use Pharborist\Operator\TernaryOperationNode;
 use Pharborist\Operator\UnaryOperationNode;
@@ -1063,7 +1064,7 @@ EOF';
     $this->assertEquals('$a', $obj_method_call->getMethodName()->getText());
 
     /** @var FunctionCallNode $function_call */
-    $function_call = $this->parseVariable('a()', '\Pharborist\FunctionCallNode');
+    $function_call = $this->parseVariable('a()', '\Pharborist\Functions\FunctionCallNode');
     $this->assertEquals('a', $function_call->getName()->getText());
 
     /** @var ClassMethodCallNode $class_method_call */
@@ -1200,7 +1201,7 @@ EOF';
     $this->assertEquals('$a', $obj_method_call->getMethodName()->getText());
 
     /** @var FunctionCallNode $function_call */
-    $function_call = $this->parseExpression('a()', '\Pharborist\FunctionCallNode');
+    $function_call = $this->parseExpression('a()', '\Pharborist\Functions\FunctionCallNode');
     $this->assertEquals('a', $function_call->getName()->getText());
 
     /** @var ClassMethodCallNode $class_method_call */
@@ -1412,7 +1413,7 @@ EOF';
    */
   public function testFunctionCall() {
     /** @var FunctionCallNode $function_call */
-    $function_call = $this->parseExpression('do_something(&$a, $b)', '\Pharborist\FunctionCallNode');
+    $function_call = $this->parseExpression('do_something(&$a, $b)', '\Pharborist\Functions\FunctionCallNode');
     $this->assertEquals('do_something', $function_call->getName()->getText());
     $arguments = $function_call->getArguments();
     $this->assertEquals('&$a', $arguments[0]->getText());

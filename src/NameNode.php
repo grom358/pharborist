@@ -1,5 +1,13 @@
 <?php
+
+/**
+ * @file
+ * Contains \Pharborist\NameNode.
+ */
+
 namespace Pharborist;
+
+use Pharborist\Functions\FunctionCallNode;
 
 /**
  * The name of namespace, function, constant, class, trait or interface.

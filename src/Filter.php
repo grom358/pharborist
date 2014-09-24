@@ -1,5 +1,13 @@
 <?php
+
+/**
+ * @file
+ * Contains \Pharborist\Filter.
+ */
+
 namespace Pharborist;
+
+use Pharborist\Functions\FunctionCallNode;
 
 /**
  * Factory for creating common callback filters.

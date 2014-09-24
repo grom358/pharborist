@@ -7,8 +7,6 @@
 
 namespace Pharborist\Functions;
 
-use Pharborist\FunctionCallNode;
-
 /**
  * A call to `empty()`, e.g. `empty($foo);`
  */

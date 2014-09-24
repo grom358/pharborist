@@ -10,6 +10,7 @@ namespace Pharborist;
 use Pharborist\Functions\AnonymousFunctionNode;
 use Pharborist\Functions\DefineNode;
 use Pharborist\Functions\EmptyNode;
+use Pharborist\Functions\FunctionCallNode;
 
 /**
  * Parses PHP tokens into syntax tree.

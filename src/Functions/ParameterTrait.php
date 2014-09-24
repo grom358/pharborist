@@ -1,5 +1,16 @@
 <?php
-namespace Pharborist;
+
+/**
+ * @file
+ * Contains \Pharborist\Functions\ParameterTrait.
+ */
+
+namespace Pharborist\Functions;
+
+use Pharborist\Filter;
+use Pharborist\ParameterNode;
+use Pharborist\NodeCollection;
+use Pharborist\CommaListNode;
 
 /**
  * Trait for nodes that have parameters. For example, function declarations.

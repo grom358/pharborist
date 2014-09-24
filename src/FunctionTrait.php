@@ -1,6 +1,8 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Functions\ParameterTrait;
+
 trait FunctionTrait {
   use ParameterTrait;
   use DocCommentTrait;

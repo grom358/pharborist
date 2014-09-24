@@ -7,6 +7,8 @@
 
 namespace Pharborist;
 
+use Pharborist\Functions\ParameterTrait;
+
 /**
  * An anonymous function (closure).
  */

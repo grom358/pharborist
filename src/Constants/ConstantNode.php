@@ -1,5 +1,9 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Constants;
+
+use Pharborist\ParentNode;
+use Pharborist\NameNode;
+use Pharborist\ExpressionNode;
 
 /**
  * A constant lookup, like `MyNamespace\MY_CONST` or `IS_FUBAR`.
@@ -8,7 +12,7 @@ class ConstantNode extends ParentNode implements ExpressionNode {
   /**
    * @param string|NameNode $name
    *
-   * @return ConstantNode
+   * @return static
    */
   public static function create($name) {
     if (is_string($name)) {

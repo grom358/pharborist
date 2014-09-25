@@ -1,6 +1,8 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Constants\ConstantDeclarationStatementNode;
+use Pharborist\Constants\ConstantNode;
 use Pharborist\Functions\AnonymousFunctionNode;
 use Pharborist\Functions\CallbackCallNode;
 use Pharborist\Functions\DefineNode;
@@ -171,7 +173,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
    */
   public function testConstDeclaration() {
     /** @var ConstantDeclarationStatementNode $const_declaration_list */
-    $const_declaration_list = $this->parseSnippet('const MyConst = 1;', '\Pharborist\ConstantDeclarationStatementNode');
+    $const_declaration_list = $this->parseSnippet('const MyConst = 1;', '\Pharborist\Constants\ConstantDeclarationStatementNode');
     $const_declaration = $const_declaration_list->getDeclarations()[0];
     $this->assertEquals('MyConst', $const_declaration->getName()->getText());
     $this->assertEquals('1', $const_declaration->getValue()->getText());
@@ -248,7 +250,7 @@ EOF;
 
     /** @var ConstantDeclarationStatementNode $const_statement */
     $const_statement = $statements[0];
-    $this->assertInstanceOf('\Pharborist\ConstantDeclarationStatementNode', $const_statement);
+    $this->assertInstanceOf('\Pharborist\Constants\ConstantDeclarationStatementNode', $const_statement);
     $this->assertEquals('/** const doc comment */', $const_statement->getDocComment()->getText());
 
     /** @var ClassMemberListNode $class_member_list */
@@ -385,7 +387,7 @@ EOF;
 
     /** @var ConstantDeclarationStatementNode $constant_declaration_statement */
     $constant_declaration_statement = $statements[0];
-    $this->assertInstanceOf('\Pharborist\ConstantDeclarationStatementNode', $constant_declaration_statement);
+    $this->assertInstanceOf('\Pharborist\Constants\ConstantDeclarationStatementNode', $constant_declaration_statement);
     $constant_declaration = $constant_declaration_statement->getDeclarations()[0];
     $this->assertEquals('MY_CONST', $constant_declaration->getName()->getText());
     $this->assertEquals('1', $constant_declaration->getValue()->getText());
@@ -793,7 +795,7 @@ EOF;
   public function parseStaticExpression($static_expression, $expected_type) {
     $statement_snippet = 'const EXPR = ' . $static_expression . ';' . PHP_EOL;
     /** @var ConstantDeclarationStatementNode $statement_node */
-    $statement_node = $this->parseSnippet($statement_snippet, '\Pharborist\ConstantDeclarationStatementNode');
+    $statement_node = $this->parseSnippet($statement_snippet, '\Pharborist\Constants\ConstantDeclarationStatementNode');
     $declaration = $statement_node->getDeclarations()[0];
     $expression_node = $declaration->getValue();
     $this->assertInstanceOf($expected_type, $expression_node);
@@ -808,14 +810,14 @@ EOF;
     $this->parseStaticExpression('4.2', '\Pharborist\FloatNode');
     $this->parseStaticExpression("'hello'", '\Pharborist\StringNode');
     $this->parseStaticExpression('"hello"', '\Pharborist\StringNode');
-    $this->parseStaticExpression('__LINE__', '\Pharborist\LineMagicConstantNode');
-    $this->parseStaticExpression('__FILE__', '\Pharborist\FileMagicConstantNode');
-    $this->parseStaticExpression('__DIR__', '\Pharborist\DirMagicConstantNode');
-    $this->parseStaticExpression('__TRAIT__', '\Pharborist\TraitMagicConstantNode');
-    $this->parseStaticExpression('__METHOD__', '\Pharborist\MethodMagicConstantNode');
-    $this->parseStaticExpression('__FUNCTION__', '\Pharborist\FunctionMagicConstantNode');
-    $this->parseStaticExpression('__NAMESPACE__', '\Pharborist\NamespaceMagicConstantNode');
-    $this->parseStaticExpression('__CLASS__', '\Pharborist\ClassMagicConstantNode');
+    $this->parseStaticExpression('__LINE__', '\Pharborist\Constants\LineMagicConstantNode');
+    $this->parseStaticExpression('__FILE__', '\Pharborist\Constants\FileMagicConstantNode');
+    $this->parseStaticExpression('__DIR__', '\Pharborist\Constants\DirMagicConstantNode');
+    $this->parseStaticExpression('__TRAIT__', '\Pharborist\Constants\TraitMagicConstantNode');
+    $this->parseStaticExpression('__METHOD__', '\Pharborist\Constants\MethodMagicConstantNode');
+    $this->parseStaticExpression('__FUNCTION__', '\Pharborist\Constants\FunctionMagicConstantNode');
+    $this->parseStaticExpression('__NAMESPACE__', '\Pharborist\Constants\NamespaceMagicConstantNode');
+    $this->parseStaticExpression('__CLASS__', '\Pharborist\Constants\ClassMagicConstantNode');
 
     $snippet = '<<<EOF
 EOF';
@@ -833,7 +835,7 @@ EOF';
     $this->parseStaticExpression($snippet, '\Pharborist\HeredocNode'); //@todo NowDocNode
 
     /** @var ConstantNode $const */
-    $const = $this->parseStaticExpression('namespace\MY_CONST', '\Pharborist\ConstantNode');
+    $const = $this->parseStaticExpression('namespace\MY_CONST', '\Pharborist\Constants\ConstantNode');
     $this->assertEquals('namespace\MY_CONST', $const->getConstantName()->getText());
 
     /** @var ClassConstantLookupNode $class_constant_lookup */
@@ -1891,7 +1893,7 @@ EOF;
    * Test constants.
    */
   public function testConstants() {
-    $this->parseExpression('SOME_CONST', '\Pharborist\ConstantNode');
+    $this->parseExpression('SOME_CONST', '\Pharborist\Constants\ConstantNode');
 
     /** @var TrueNode $true */
     $this->parseExpression('true', '\Pharborist\TrueNode');

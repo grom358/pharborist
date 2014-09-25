@@ -1,6 +1,8 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Constants\ConstantNode;
+
 /**
  * Base class for TRUE and FALSE.
  *

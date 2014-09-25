@@ -1,6 +1,10 @@
 <?php
+
 namespace Pharborist;
 
+use Pharborist\Constants\ConstantDeclarationNode;
+use Pharborist\Constants\ConstantDeclarationStatementNode;
+use Pharborist\Constants\ConstantNode;
 use Pharborist\Functions\AnonymousFunctionNode;
 use Pharborist\Functions\CallbackCallNode;
 use Pharborist\Functions\DefineNode;

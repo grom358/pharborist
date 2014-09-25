@@ -1,6 +1,8 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Constants\ConstantNode;
+
 /**
  * The NULL constant, spelled `null` or `NULL`.
  */

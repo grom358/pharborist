@@ -1,5 +1,12 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Functions;
+
+use Pharborist\CommaListNode;
+use Pharborist\ExpressionNode;
+use Pharborist\Node;
+use Pharborist\ParentNode;
+use Pharborist\StatementBlockNode;
+use Pharborist\TokenNode;
 
 /**
  * An anonymous function (closure).

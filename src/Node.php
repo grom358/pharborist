@@ -499,7 +499,7 @@ abstract class Node implements NodeInterface {
   }
 
   /**
-   * Creates a Node from a scalar value.
+   * Creates a Node from a php value.
    *
    * @param string|integer|float|boolean|array|null $value
    *  The value to create a node for.
@@ -508,11 +508,11 @@ abstract class Node implements NodeInterface {
    *
    * @throws \InvalidArgumentException if $value is not a scalar.
    */
-  public static function fromScalar($value) {
+  public static function fromValue($value) {
     if (is_array($value)) {
       $elements = [];
       foreach ($value as $k => $v) {
-        $elements[] = ArrayPairNode::create(static::fromScalar($k), static::fromScalar($v));
+        $elements[] = ArrayPairNode::create(static::fromValue($k), static::fromValue($v));
       }
       return ArrayNode::create($elements);
     }

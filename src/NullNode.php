@@ -20,7 +20,7 @@ class NullNode extends ConstantNode implements ScalarNode {
   /**
    * @return null
    */
-  public function getValue() {
+  public function toValue() {
     return NULL;
   }
 }

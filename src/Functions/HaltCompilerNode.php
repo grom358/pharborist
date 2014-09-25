@@ -1,5 +1,5 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Functions;
 
 /**
  * A __halt_compiler() function call.

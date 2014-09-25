@@ -18,7 +18,12 @@ class TrueNode extends BooleanNode {
     return $node;
   }
 
-  public function toBoolean() {
+  /**
+   * Gets the boolean value of the node.
+   *
+   * @return boolean
+   */
+  public function toValue() {
     return TRUE;
   }
 }

@@ -1,5 +1,8 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Functions;
+
+use Pharborist\ObjectMethodCallNode;
+use Pharborist\ParentNode;
 
 /**
  * Base class of any function or method call, including:

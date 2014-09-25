@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Pharborist\Constants\FileMagicConstantNode.
- */
-
 namespace Pharborist\Constants;
 
 use Pharborist\TokenNode;

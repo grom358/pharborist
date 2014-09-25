@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Pharborist\Constants\ConstantNode.
- */
-
 namespace Pharborist\Constants;
 
 use Pharborist\ParentNode;

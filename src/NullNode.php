@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Pharborist\NullNode.
- */
-
 namespace Pharborist;
 
 use Pharborist\Constants\ConstantNode;

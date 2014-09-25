@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Pharborist\BooleanNode.
- */
-
 namespace Pharborist;
 
 use Pharborist\Constants\ConstantNode;

@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Pharborist\Functions\EmptyNode.
- */
-
 namespace Pharborist\Functions;
 
 /**

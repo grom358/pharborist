@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Pharborist\Functions\ParameterNode.
- */
-
 namespace Pharborist\Functions;
 
 use Pharborist\ClassMethodNode;

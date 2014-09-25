@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Pharborist\SingleInheritanceNode.
- */
-
 namespace Pharborist;
 
 use Pharborist\Functions\FunctionDeclarationNode;

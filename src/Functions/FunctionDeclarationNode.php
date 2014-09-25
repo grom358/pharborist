@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Pharborist\Functions\FunctionDeclarationNode.
- */
-
 namespace Pharborist\Functions;
 
 use Pharborist\ClassMethodNode;

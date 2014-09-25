@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Pharborist\BuilderTest.
- */
-
 namespace Pharborist;
 
 use Pharborist\Functions\FunctionDeclarationNode;

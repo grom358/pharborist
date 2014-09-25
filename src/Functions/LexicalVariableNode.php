@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Pharborist\Functions\LexicalVariableNode.
- */
-
 namespace Pharborist\Functions;
 
 use Pharborist\NodeInterface;

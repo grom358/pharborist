@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Pharborist\ParameterTraitTest.
- */
-
 namespace Pharborist;
 
 use Pharborist\Functions\FunctionDeclarationNode;

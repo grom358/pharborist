@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Pharborist\CallMethodCallNode.
- */
-
 namespace Pharborist;
 
 use Pharborist\Functions\CallNode;

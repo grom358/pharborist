@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Pharborist\Parser.
- */
-
 namespace Pharborist;
 
 use Pharborist\Functions\AnonymousFunctionNode;

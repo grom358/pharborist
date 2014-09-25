@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Pharborist\Functions\FunctionTrait.
- */
-
 namespace Pharborist\Functions;
 
 use Pharborist\DocCommentTrait;

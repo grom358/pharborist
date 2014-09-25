@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Pharborist\MethodTrait.
- */
-
 namespace Pharborist;
 
 use Pharborist\Functions\FunctionTrait;

@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Pharborist\Functions\AnonymousFunctionNode.
- */
-
 namespace Pharborist\Functions;
 
 use Pharborist\CommaListNode;

@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Pharborist\Functions\ParameterTrait.
- */
-
 namespace Pharborist\Functions;
 
 use Pharborist\Filter;

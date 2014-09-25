@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Pharborist\Functions\DefineNode.
- */
-
 namespace Pharborist\Functions;
 
 /**

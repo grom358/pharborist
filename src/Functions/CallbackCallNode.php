@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Pharborist\Functions\CallbackCallNode.
- */
-
 namespace Pharborist\Functions;
 
 use Pharborist\ExpressionNode;

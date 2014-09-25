@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Pharborist\UnsetStatementNode.
- */
-
 namespace Pharborist;
 
 use Pharborist\Functions\UnsetNode;

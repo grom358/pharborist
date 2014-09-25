@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Pharborist\Functions\ArgumentTrait.
- */
-
 namespace Pharborist\Functions;
 
 use Pharborist\ExpressionNode;

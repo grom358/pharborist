@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Pharborist\Functions\EvalNode.
- */
-
 namespace Pharborist\Functions;
 
 /**

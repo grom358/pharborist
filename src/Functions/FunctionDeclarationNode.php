@@ -1,5 +1,14 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Functions;
+
+use Pharborist\ClassMethodNode;
+use Pharborist\ClassNode;
+use Pharborist\NameNode;
+use Pharborist\Node;
+use Pharborist\Parser;
+use Pharborist\StatementBlockNode;
+use Pharborist\StatementNode;
+use Pharborist\TokenNode;
 
 /**
  * A function declaration.

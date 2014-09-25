@@ -1,6 +1,9 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Functions\FunctionDeclarationNode;
+use Pharborist\Functions\ParameterNode;
+
 /**
  * Tests builder methods.
  */

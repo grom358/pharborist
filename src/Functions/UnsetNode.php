@@ -1,5 +1,5 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Functions;
 
 /**
  * A call to `unset()`, e.g. `unset($foobar);`

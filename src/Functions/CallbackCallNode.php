@@ -1,5 +1,8 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Functions;
+
+use Pharborist\ExpressionNode;
+use Pharborist\Node;
 
 /**
  * A call to a callback function in a variable, e.g. `$foo = $callback('baz');`

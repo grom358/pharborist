@@ -1,6 +1,19 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Functions\AnonymousFunctionNode;
+use Pharborist\Functions\CallbackCallNode;
+use Pharborist\Functions\DefineNode;
+use Pharborist\Functions\EmptyNode;
+use Pharborist\Functions\EvalNode;
+use Pharborist\Functions\FunctionCallNode;
+use Pharborist\Functions\FunctionDeclarationNode;
+use Pharborist\Functions\HaltCompilerNode;
+use Pharborist\Functions\IssetNode;
+use Pharborist\Functions\ListNode;
+use Pharborist\Functions\ParameterNode;
+use Pharborist\Functions\UnsetNode;
+
 /**
  * Parses PHP tokens into syntax tree.
  *

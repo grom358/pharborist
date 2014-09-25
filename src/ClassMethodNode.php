@@ -1,6 +1,8 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Functions\FunctionDeclarationNode;
+
 /**
  * A class method.
  */

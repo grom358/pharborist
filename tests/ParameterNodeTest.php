@@ -6,11 +6,11 @@ namespace Pharborist;
  */
 class ParameterNodeTest extends \PHPUnit_Framework_TestCase {
   public function testParameterNode() {
-    /** @var \Pharborist\FunctionDeclarationNode $function */
+    /** @var \Pharborist\Functions\FunctionDeclarationNode $function */
     $function = Parser::parseSnippet('function foo(stdClass &$a = NULL) { $a = new stdClass(); }');
     $parameter = $function->getParameter(0);
 
-    $this->assertInstanceOf('Pharborist\FunctionDeclarationNode', $parameter->getFunction());
+    $this->assertInstanceOf('Pharborist\Functions\FunctionDeclarationNode', $parameter->getFunction());
     $this->assertEquals('stdClass', $parameter->getTypeHint()->getText());
     $this->assertInstanceOf('Pharborist\TokenNode', $parameter->getReference());
     $this->assertFalse($parameter->isRequired());

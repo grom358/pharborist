@@ -1,5 +1,9 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Functions;
+
+use Pharborist\Filter;
+use Pharborist\NodeCollection;
+use Pharborist\CommaListNode;
 
 /**
  * Trait for nodes that have parameters. For example, function declarations.
@@ -45,7 +49,7 @@ trait ParameterTrait {
   /**
    * Appends a parameter.
    *
-   * @param \Pharborist\ParameterNode|callable $parameter
+   * @param \Pharborist\Functions\ParameterNode|callable $parameter
    *  Either an existing parameter node, or a callable which will return
    *  the parameter to append. The callable will receive $this as its
    *  only argument.

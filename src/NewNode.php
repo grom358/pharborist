@@ -1,6 +1,8 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Functions\ArgumentTrait;
+
 /**
  * A new object being created, e.g. `$foo = new Foo();`. You can access the constructor
  * arguments as with any function or method call.

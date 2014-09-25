@@ -1,5 +1,5 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Functions;
 
 /**
  * A call to `empty()`, e.g. `empty($foo);`

@@ -1,5 +1,8 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Functions;
+
+use Pharborist\NameNode;
+use Pharborist\VariableExpressionNode;
 
 /**
  * A function call.

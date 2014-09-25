@@ -26,7 +26,7 @@ class StringNode extends TokenNode implements ExpressionNode, ScalarNode {
    *
    * @return string
    */
-  public function getValue() {
+  public function toValue() {
     $text = $this->getText();
     $quote_char = $text[0];
     $text = substr($text, 1, -1);

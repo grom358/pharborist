@@ -774,9 +774,11 @@ class Parser {
   private function _global() {
     $node = new GlobalStatementNode();
     $this->mustMatch(T_GLOBAL, $node);
+    $variables = new CommaListNode();
     do {
-      $node->addChild($this->globalVar());
-    } while ($this->tryMatch(',', $node));
+      $variables->addChild($this->globalVar());
+    } while ($this->tryMatch(',', $variables));
+    $node->addChild($variables, 'variables');
     $this->endStatement($node);
     return $node;
   }

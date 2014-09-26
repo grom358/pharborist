@@ -219,9 +219,11 @@ class Parser {
   private function echoTagStatement() {
     $node = new EchoTagStatementNode();
     $this->mustMatch(T_OPEN_TAG_WITH_ECHO, $node);
+    $expressions = new CommaListNode();
     do {
-      $node->addChild($this->expr());
-    } while ($this->tryMatch(',', $node));
+      $expressions->addChild($this->expr());
+    } while ($this->tryMatch(',', $expressions));
+    $node->addChild($expressions, 'expressions');
     $this->tryMatch(';', $node);
     $this->mustMatch(T_CLOSE_TAG, $node, NULL, TRUE);
     return $node;

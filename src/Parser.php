@@ -813,9 +813,11 @@ class Parser {
   private function _echo() {
     $node = new EchoStatementNode();
     $this->mustMatch(T_ECHO, $node);
+    $expressions = new CommaListNode();
     do {
-      $node->addChild($this->expr());
-    } while ($this->tryMatch(',', $node));
+      $expressions->addChild($this->expr());
+    } while ($this->tryMatch(',', $expressions));
+    $node->addChild($expressions, 'expressions');
     $this->endStatement($node);
     return $node;
   }

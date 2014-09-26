@@ -2422,9 +2422,11 @@ class Parser {
     $node = new ClassMemberListNode();
     $node->mergeNode($doc_comment);
     $node->mergeNode($modifiers);
+    $members = new CommaListNode();
     do {
-      $node->addChild($this->classMember());
-    } while ($this->tryMatch(',', $node));
+      $members->addChild($this->classMember());
+    } while ($this->tryMatch(',', $members));
+    $node->addChild($members, 'members');
     $this->endStatement($node);
     return $node;
   }

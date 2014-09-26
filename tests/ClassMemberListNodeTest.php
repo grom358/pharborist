@@ -40,7 +40,7 @@ class ClassMemberListNodeTest extends \PHPUnit_Framework_TestCase {
     $property_list->addTo($target);
     $this->assertFalse($source->hasProperty('bar'));
     $this->assertTrue($target->hasProperty('bar'));
-    $this->assertSame($property_list, $target->getProperty('bar')->parent());
+    $this->assertSame($property_list, $target->getProperty('bar')->parent()->parent());
   }
 
   public function testCloneInto() {

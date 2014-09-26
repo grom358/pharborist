@@ -12,9 +12,21 @@ class ConstantDeclarationStatementNode extends ClassStatementNode implements Int
   use DocCommentTrait;
 
   /**
+   * @var \Pharborist\CommaListNode
+   */
+  protected $declarations;
+
+  /**
+   * @return \Pharborist\CommaListNode
+   */
+  public function getDeclarationList() {
+    return $this->declarations;
+  }
+
+  /**
    * @return ConstantDeclarationNode[]
    */
   public function getDeclarations() {
-    return $this->childrenByInstance('\Pharborist\Constants\ConstantDeclarationNode');
+    return $this->declarations->getItems();
   }
 }

@@ -72,12 +72,19 @@ class ClassMemberNode extends ParentNode {
   }
 
   /**
+   * @return ClassMemberListNode
+   */
+  protected function getClassMemberListNode() {
+    return $this->parent()->parent();
+  }
+
+  /**
    * @see \Pharborist\ClassMemberListNode::isStatic()
    *
    * @return boolean
    */
   public function isStatic() {
-    return $this->parent()->isStatic();
+    return $this->getClassMemberListNode()->isStatic();
   }
 
   /**
@@ -86,7 +93,7 @@ class ClassMemberNode extends ParentNode {
    * @return \Pharborist\TokenNode
    */
   public function getStatic() {
-    return $this->parent()->getStatic();
+    return $this->getClassMemberListNode()->getStatic();
   }
 
   /**
@@ -95,7 +102,7 @@ class ClassMemberNode extends ParentNode {
    * @return $this
    */
   public function setStatic($is_static) {
-    $this->parent()->setStatic($is_static);
+    $this->getClassMemberListNode()->setStatic($is_static);
     return $this;
   }
 
@@ -105,7 +112,7 @@ class ClassMemberNode extends ParentNode {
    * @return \Pharborist\TokenNode
    */
   public function getVisibility() {
-    return $this->parent()->getVisibility();
+    $this->getClassMemberListNode()->getVisibility();
   }
 
   /**
@@ -114,7 +121,7 @@ class ClassMemberNode extends ParentNode {
    * @return $this
    */
   public function setVisibility($visibility) {
-    $this->parent()->setVisibility($visibility);
+    $this->getClassMemberListNode()->setVisibility($visibility);
     return $this;
   }
 }

@@ -6,11 +6,23 @@ namespace Pharborist;
  */
 class EchoStatementNode extends StatementNode {
   /**
-   * Returns the expressions being echoed.
+   * @var CommaListNode
+   */
+  protected $expressions;
+
+  /**
+   * @return CommaListNode
+   */
+  public function getExpressionList() {
+    return $this->expressions;
+  }
+
+  /**
+   * Return the expressions being echoed.
    *
    * @return ExpressionNode[]
    */
   public function getExpressions() {
-    return $this->childrenByInstance('\Pharborist\ExpressionNode');
+    return $this->expressions->getItems();
   }
 }

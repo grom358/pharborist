@@ -15,6 +15,11 @@ class ClassMemberListNode extends ClassStatementNode {
   protected $static;
 
   /**
+   * @var CommaListNode
+   */
+  protected $members;
+
+  /**
    * @param string $property
    *   Property name.
    * @return ClassMemberListNode
@@ -71,10 +76,17 @@ class ClassMemberListNode extends ClassStatementNode {
   }
 
   /**
+   * @return CommaListNode
+   */
+  public function getMemberList() {
+    return $this->members;
+  }
+
+  /**
    * @return ClassMemberNode[]
    */
   public function getMembers() {
-    return $this->childrenByInstance('\Pharborist\ClassMemberNode');
+    return $this->members->getItems();
   }
 
   /**

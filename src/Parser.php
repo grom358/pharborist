@@ -2257,7 +2257,7 @@ class Parser {
   private function _use() {
     $node = new UseDeclarationStatementNode();
     $this->mustMatch(T_USE, $node);
-    $this->tryMatch(T_FUNCTION, $node) || $this->tryMatch(T_CONST, $node);
+    $this->tryMatch(T_FUNCTION, $node, 'useFunction') || $this->tryMatch(T_CONST, $node, 'useConst');
     $declarations = new CommaListNode();
     do {
       $declarations->addChild($this->useDeclaration());

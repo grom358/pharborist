@@ -310,9 +310,11 @@ class Parser {
     $node = new ConstantDeclarationStatementNode();
     $this->matchDocComment($node);
     $this->mustMatch(T_CONST, $node);
+    $declarations = new CommaListNode();
     do {
-      $node->addChild($this->constDeclaration());
-    } while ($this->tryMatch(',', $node));
+      $declarations->addChild($this->constDeclaration());
+    } while ($this->tryMatch(',', $declarations));
+    $node->addChild($declarations, 'declarations');
     $this->endStatement($node);
     return $node;
   }

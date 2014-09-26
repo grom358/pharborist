@@ -935,6 +935,8 @@ class Parser {
     $node = new DeclareNode();
     $this->mustMatch(T_DECLARE, $node);
     $this->mustMatch('(', $node);
+    $directives = new CommaListNode();
+    $node->addChild($directives, 'directives');
     if (!$this->tryMatch(')', $node, NULL, FALSE, TRUE)) {
       do {
         $declare_directive = new DeclareDirectiveNode();
@@ -942,8 +944,8 @@ class Parser {
         if ($this->tryMatch('=', $declare_directive)) {
           $declare_directive->addChild($this->staticScalar(), 'value');
         }
-        $node->addChild($declare_directive);
-      } while ($this->tryMatch(',', $node));
+        $directives->addChild($declare_directive);
+      } while ($this->tryMatch(',', $directives));
       $this->mustMatch(')', $node, NULL, FALSE, TRUE);
     }
     if ($this->tryMatch(':', $node, NULL, FALSE, TRUE)) {

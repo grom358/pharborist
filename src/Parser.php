@@ -422,9 +422,11 @@ class Parser {
     $node = new StaticVariableStatementNode();
     $this->matchDocComment($node);
     $this->mustMatch(T_STATIC, $node);
+    $variables = new CommaListNode();
     do {
-      $node->addChild($this->staticVariable());
-    } while ($this->tryMatch(',', $node));
+      $variables->addChild($this->staticVariable());
+    } while ($this->tryMatch(',', $variables));
+    $node->addChild($variables, 'variables');
     $this->endStatement($node);
     return $node;
   }

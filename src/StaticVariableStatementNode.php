@@ -10,9 +10,21 @@ class StaticVariableStatementNode extends StatementNode {
   use DocCommentTrait;
 
   /**
+   * @var CommaListNode
+   */
+  protected $variables;
+
+  /**
+   * @return CommaListNode
+   */
+  public function getVariableList() {
+    return $this->variables;
+  }
+
+  /**
    * @return StaticVariableNode[]
    */
   public function getVariables() {
-    return $this->childrenByInstance('\Pharborist\StaticVariableNode');
+    return $this->variables->getItems();
   }
 }

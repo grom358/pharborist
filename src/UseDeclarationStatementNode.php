@@ -12,9 +12,21 @@ namespace Pharborist;
  */
 class UseDeclarationStatementNode extends StatementNode {
   /**
+   * @var CommaListNode
+   */
+  protected $declarations;
+
+  /**
+   * @return CommaListNode
+   */
+  public function getDeclarationList() {
+    return $this->declarations;
+  }
+
+  /**
    * @return UseDeclarationNode[]
    */
   public function getDeclarations() {
-    return $this->childrenByInstance('\Pharborist\UseDeclarationNode');
+    return $this->declarations->getItems();
   }
 }

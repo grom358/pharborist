@@ -2258,9 +2258,11 @@ class Parser {
     $node = new UseDeclarationStatementNode();
     $this->mustMatch(T_USE, $node);
     $this->tryMatch(T_FUNCTION, $node) || $this->tryMatch(T_CONST, $node);
+    $declarations = new CommaListNode();
     do {
-      $node->addChild($this->useDeclaration());
-    } while ($this->tryMatch(',', $node));
+      $declarations->addChild($this->useDeclaration());
+    } while ($this->tryMatch(',', $declarations));
+    $node->addChild($declarations, 'declarations');
     $this->endStatement($node);
     return $node;
   }

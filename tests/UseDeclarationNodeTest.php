@@ -32,6 +32,10 @@ class UseDeclarationNodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertInstanceOf('\Pharborist\TokenNode', $alias);
     $this->assertEquals(T_STRING, $alias->getType());
     $this->assertEquals('Foobaz as Blorf', $no_alias->getText());
+
+    $no_alias->setAlias(NULL);
+    $this->assertFalse($no_alias->hasAlias());
+    $this->assertEquals('Foobaz', $no_alias->getText());
   }
 
   /**

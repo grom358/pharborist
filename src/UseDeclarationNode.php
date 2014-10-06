@@ -41,9 +41,9 @@ class UseDeclarationNode extends ParentNode {
   }
 
   /**
-   * Sets the imported item's alias.
+   * Sets the imported item's alias. If NULL is passed, the alias is removed.
    *
-   * @param \Pharborist\TokenNode|string $alias
+   * @param \Pharborist\TokenNode|string|NULL $alias
    *
    * @return $this
    *
@@ -65,6 +65,11 @@ class UseDeclarationNode extends ParentNode {
         $this->addChild(WhitespaceNode::create(' '));
         $this->addChild($alias, 'alias');
       }
+    }
+    elseif ($alias === NULL && $this->hasAlias()) {
+      $this->alias->previousUntil(Filter::isInstanceOf('\Pharborist\NameNode'))->remove();
+      $this->alias->remove();
+      $this->alias = NULL;
     }
     else {
       throw new \InvalidArgumentException();

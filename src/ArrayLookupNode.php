@@ -44,10 +44,39 @@ class ArrayLookupNode extends ParentNode implements VariableExpressionNode {
   }
 
   /**
-   * @return Node
+   * @return \Pharborist\Node[]
    */
-  public function getKey() {
-    return $this->key;
+  public function getKeys() {
+    $keys = [ clone $this->key ];
+    if ($this->array instanceof ArrayLookupNode) {
+      $keys = array_merge($this->array->getKeys(), $keys);
+    }
+    return $keys;
+  }
+
+  /**
+   * Returns a specific key in the lookup.
+   *
+   * @param integer $index
+   *  The index of the key to return.
+   *
+   * @return \Pharborist\Node
+   *
+   * @throws
+   *  \InvalidArgumentException if $index is not an integer.
+   *  \OutOfBoundsException if $index is less than zero or greater than the
+   *  number of keys in the lookup.
+   */
+  public function getKey($index = 0) {
+    $keys = $this->getKeys();
+
+    if (!is_integer($index)) {
+      throw new \InvalidArgumentException();
+    }
+    if ($index < 0 || $index >= count($keys)) {
+      throw new \OutOfBoundsException();
+    }
+    return $keys[$index];
   }
 
   /**
@@ -77,10 +106,6 @@ class ArrayLookupNode extends ParentNode implements VariableExpressionNode {
     if (!$this->hasScalarKeys()) {
       throw new \DomainException('Cannot extract non-scalar keys from array lookup ' . $this);
     }
-    $keys = [ $this->key->toValue() ];
-    if ($this->array instanceof ArrayLookupNode) {
-      $keys = array_merge($this->array->extractKeys(), $keys);
-    }
-    return $keys;
+    return array_map(function(Node $key) { return $key->toValue(); }, $this->getKeys());
   }
 }

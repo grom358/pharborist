@@ -19,7 +19,7 @@ class ReturnStatementNode extends StatementNode {
    * @return static
    */
   public static function create(ExpressionNode $expr) {
-    return Parser::parseSnippet('return ' . $expr . ';');
+    return Parser::parseSnippet('return ' . $expr->getText() . ';');
   }
 
   /**

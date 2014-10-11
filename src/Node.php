@@ -536,6 +536,16 @@ abstract class Node implements NodeInterface {
     }
   }
 
+  /**
+   * Returns the statement (or statement block) which contains this node, if
+   * it's part of a statement.
+   *
+   * @return StatementNode|StatementBlockNode|NULL
+   */
+  public function getStatement() {
+    return $this->closest(Filter::isInstanceOf('\Pharborist\StatementNode', '\Pharborist\StatementBlockNode'));
+  }
+
   public function __clone() {
     // Clone does not belong to any parent.
     $this->parent = NULL;

@@ -43,7 +43,11 @@ class Filter {
   }
 
   /**
-   * @param string $class_name
+   * Callback to filter for nodes of certain types.
+   *
+   * @param string $class_name ...
+   *  At least one fully-qualified Pharborist node type to search for.
+   *
    * @return callable
    */
   public static function isInstanceOf($class_name) {

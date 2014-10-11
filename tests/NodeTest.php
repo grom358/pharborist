@@ -549,5 +549,6 @@ END;
     $foo = $function->find(Filter::isFunctionCall('foo'))->get(0)->getStatement();
     $this->assertInstanceOf('\Pharborist\StatementNode', $foo);
     $this->assertEquals('return foo();', $foo->getText());
+    $this->assertSame($function, $function->getStatement());
   }
 }

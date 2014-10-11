@@ -1,6 +1,7 @@
 <?php
 namespace Pharborist\Functions;
 
+use Pharborist\EllipsisNode;
 use Pharborist\Filter;
 use Pharborist\NodeCollection;
 use Pharborist\CommaListNode;
@@ -242,5 +243,18 @@ trait ParameterTrait {
         $value = $parameter->getValue();
         return isset($value);
       });
+  }
+
+  /**
+   * Returns if the final parameter is variadic (PHP 5.6+), as in:
+   * `function foobaz($a, $b, ...$c)`
+   *
+   * @return boolean
+   */
+  public function isVariadic() {
+    // In a variadic function, the last parameter is the only one which is
+    // allowed to be variadic, and according to the parser, EllipsisNode will
+    // wrap the parameter expression.
+    return $this->parameters->lastChild() instanceof EllipsisNode;
   }
 }

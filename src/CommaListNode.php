@@ -251,4 +251,13 @@ class CommaListNode extends ParentNode {
     $pop_item->remove();
     return $pop_item;
   }
+
+  /**
+   * Returns this comma list as an ArrayNode.
+   *
+   * @return ArrayNode
+   */
+  public function toArrayNode() {
+    return ($this->parent instanceof ArrayNode) ? $this->parent : Parser::parseExpression('[' . $this . ']');
+  }
 }

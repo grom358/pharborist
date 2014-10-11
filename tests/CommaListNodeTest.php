@@ -141,4 +141,21 @@ class CommaListNodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertCount(0, $items);
     $this->assertNull($list->shift());
   }
+
+  public function testToArrayNode() {
+    $list = new CommaListNode();
+    $list->appendItem(Node::fromValue('foo'));
+    $list->appendItem(Node::fromValue('baz'));
+    $list->appendItem(Node::fromValue(30));
+    $array = $list->toArrayNode();
+    $this->assertInstanceOf('\Pharborist\ArrayNode', $array);
+    $this->assertCount(3, $array->getElements());
+    $this->assertInstanceOf('\Pharborist\StringNode', $array->getElementList()->getItem(0));
+    $this->assertEquals('foo', $array->getElementList()->getItem(0)->toValue());
+    $this->assertInstanceOf('\Pharborist\StringNode', $array->getElementList()->getItem(1));
+    $this->assertEquals('baz', $array->getElementList()->getItem(1)->toValue());
+    $this->assertInstanceOf('\Pharborist\IntegerNode', $array->getElementList()->getItem(2));
+    $this->assertEquals(30, $array->getElementList()->getItem(2)->toValue());
+    $this->assertEquals("['foo', 'baz', 30]", $array->getText());
+  }
 }

@@ -65,4 +65,16 @@ class ObjectMethodCallNode extends CallNode implements VariableExpressionNode {
     $node->addChild(Token::closeParen());
     return $node;
   }
+
+  /**
+   * If this is a chained method call (e.g., foo()->bar()->baz()), returns
+   * the previous call in the chain.
+   *
+   * @return \Pharborist\Functions\CallNode
+   */
+  public function getPreviousCall() {
+    if ($this->object instanceof CallNode) {
+      return $this->object;
+    }
+  }
 }

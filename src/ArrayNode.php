@@ -69,6 +69,44 @@ class ArrayNode extends ParentNode implements ExpressionNode {
   }
 
   /**
+   * Returns if the array has a specific key.
+   *
+   * @param mixed $key
+   *  Either a scalar value ('foo') or an ExpressionNode representing the key.
+   *  If $key is an ExpressionNode, the key's string representation is compared
+   *  with the string representations of the array keys. Otherwise, the actual
+   *  value is compared.
+   * @param boolean $recursive
+   *  Whether or not to check every level of the array.
+   *
+   * @return boolean
+   *
+   * @throws \InvalidArgumentException
+   */
+  public function hasKey($key, $recursive = TRUE) {
+    if (!($key instanceof ExpressionNode) && !is_scalar($key)) {
+      throw new \InvalidArgumentException();
+    }
+
+    $keys = $this->getKeys($recursive);
+    if (is_scalar($key)) {
+      return (boolean) $keys
+        ->filter(Filter::isInstanceOf('\Pharborist\ScalarNode'))
+        ->filter(function(ScalarNode $node) use ($key) {
+          return $node->toValue() === $key;
+        })
+        ->count();
+    }
+    else {
+      return (boolean) $keys
+        ->filter(function(ExpressionNode $expr) use ($key) {
+          return $expr->getText() === $key->getText();
+        })
+        ->count();
+    }
+  }
+
+  /**
    * @return NodeCollection
    */
   public function getKeys($recursive = TRUE) {

@@ -6,6 +6,30 @@ class ArrayNodeTest extends \PHPUnit_Framework_TestCase {
     return $node->toValue();
   }
 
+  public function testHasKey() {
+    /** @var ArrayNode $array */
+    $array = Parser::parseExpression('array("a", "b", "c")');
+    $this->assertFalse($array->hasKey(0));
+
+    $array = Parser::parseExpression('array("a" => "apple", "b" => "bear", "c" => "cauldron")');
+    $this->assertTrue($array->hasKey('a'));
+    $this->assertFalse($array->hasKey('d'));
+
+    $array = Parser::parseExpression('array(0 => "foo", 1 => "baz", 2 => array(0 => "a", 1 => "b", 2 => "c"))');
+    $this->assertTrue($array->hasKey(1));
+    $this->assertFalse($array->hasKey('2'));
+
+    $array = Parser::parseExpression('array(0 => "foo", 1 => array(0 => "a", 1 => "b", 2 => "c"))');
+    $this->assertTrue($array->hasKey(1));
+    $this->assertTrue($array->hasKey(2));
+    $this->assertFalse($array->hasKey(2, FALSE));
+
+    $array = Parser::parseExpression('array($key => "hurrr")');
+    $this->assertFalse($array->hasKey('$key'));
+    $var = Token::variable('$key');
+    $this->assertTrue($array->hasKey($var));
+  }
+
   public function testGetNonIndexedArrayKeys() {
     /** @var ArrayNode $array */
     $array = Parser::parseExpression('array("a", "b", "c")');

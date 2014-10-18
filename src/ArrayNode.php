@@ -2,7 +2,7 @@
 namespace Pharborist;
 
 /**
- * Node for php array.
+ * A PHP array, e.g. `array(1, 3, 'banana', 'apple')`
  */
 class ArrayNode extends ParentNode implements ExpressionNode {
   /**
@@ -66,6 +66,46 @@ class ArrayNode extends ParentNode implements ExpressionNode {
       }
     }
     return $ret;
+  }
+
+  /**
+   * @return NodeCollection
+   */
+  public function getKeys($recursive = TRUE) {
+    $keys = new NodeCollection([]);
+    foreach ($this->elements->getItems() as $element) {
+      if ($element instanceof ArrayPairNode) {
+        $keys->add($element->getKey());
+
+        $value = $element->getValue();
+        if ($value instanceof ArrayNode && $recursive) {
+          $keys->add($value->getKeys($recursive));
+        }
+      }
+    }
+    return $keys;
+  }
+
+  /**
+   * @return NodeCollection
+   */
+  public function getValues($flatten = TRUE) {
+    $values = new NodeCollection([]);
+    foreach ($this->elements->getItems() as $element) {
+      if ($element instanceof ArrayPairNode) {
+        $value = $element->getValue();
+        if ($value instanceof ArrayNode && $flatten) {
+          $values->add($value->getValues($flatten));
+        }
+        else {
+          $values->add($value);
+        }
+      }
+      else {
+        $values->add($element);
+      }
+    }
+    return $values;
   }
 
   /**

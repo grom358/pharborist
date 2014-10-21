@@ -538,4 +538,17 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
   public function testFromScalarInvalidArgument() {
     $node = Node::fromValue(new \stdClass());
   }
+
+  public function testGetStatement() {
+    $function = <<<END
+function foobaz() {
+  return foo();
+}
+END;
+    $function = Parser::parseSnippet($function);
+    $foo = $function->find(Filter::isFunctionCall('foo'))->get(0)->getStatement();
+    $this->assertInstanceOf('\Pharborist\StatementNode', $foo);
+    $this->assertEquals('return foo();', $foo->getText());
+    $this->assertSame($function, $function->getStatement());
+  }
 }

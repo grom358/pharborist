@@ -4,7 +4,7 @@ namespace Pharborist;
 use Pharborist\Functions\ArgumentTrait;
 
 /**
- * A new object being created, e.g. `$foo = new Foo();`
+ * A new expression, e.g. `new Foo()`
  *
  * You can access and modify the constructor arguments as with any other
  * function or method call.

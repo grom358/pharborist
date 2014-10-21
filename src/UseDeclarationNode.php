@@ -52,8 +52,6 @@ class UseDeclarationNode extends ParentNode {
    * @param \Pharborist\TokenNode|string|NULL $alias
    *
    * @return $this
-   *
-   * @todo Accept a string and convert it to a token.
    */
   public function setAlias($alias) {
     if (is_string($alias)) {

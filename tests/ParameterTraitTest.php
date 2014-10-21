@@ -1,12 +1,15 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Functions\FunctionDeclarationNode;
+use Pharborist\Functions\ParameterNode;
+
 /**
  * Tests various methods of ParameterTrait.
  */
 class ParameterTraitTest extends \PHPUnit_Framework_TestCase {
   public function testHasParameter() {
-    /** @var \Pharborist\FunctionDeclarationNode $function */
+    /** @var \Pharborist\Functions\FunctionDeclarationNode $function */
     $function = Parser::parseSnippet('function foo(stdClass &$a = NULL) { $a = new stdClass(); }');
 
     $this->assertTrue($function->hasParameter('a'));
@@ -31,7 +34,7 @@ class ParameterTraitTest extends \PHPUnit_Framework_TestCase {
    * @depends testHasParameter
    */
   public function testAppendParameter() {
-    /** @var \Pharborist\FunctionDeclarationNode $function */
+    /** @var \Pharborist\Functions\FunctionDeclarationNode $function */
     $function = Parser::parseSnippet('function baz() {}');
 
     $function->appendParameter(ParameterNode::create('$neo'));

@@ -2,9 +2,7 @@
 namespace Pharborist;
 
 /**
- * Ellipsis parameter.
- *
- * For example, a_func($a, ...$b);
+ * A variadic function parameter, e.g. `a_func($a, ...$b)`
  */
 class EllipsisNode extends ParentNode {
   /**

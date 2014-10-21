@@ -6,10 +6,11 @@ namespace Pharborist;
  */
 class DocCommentNode extends CommentNode {
   /**
-   * Create PHPDoc comment.
+   * Creates a PHPDoc comment.
    *
    * @param string $comment
-   *   Comment without asterisks but formatted into lines.
+   *   The comment body without asterisks, but formatted into lines.
+   *
    * @return DocCommentNode
    */
   public static function create($comment) {

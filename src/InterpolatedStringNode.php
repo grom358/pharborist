@@ -2,9 +2,8 @@
 namespace Pharborist;
 
 /**
- * An interpolated string.
- *
- * For example, "Hello $name, welcome to php."
+ * An interpolated string, containing variables or expressions.
+ * Example: `"Hello there $name, welcome to Pharborist."`
  */
 class InterpolatedStringNode extends ParentNode implements ExpressionNode {
 

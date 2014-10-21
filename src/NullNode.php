@@ -1,8 +1,10 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Constants\ConstantNode;
+
 /**
- * The constant NULL.
+ * The NULL constant, spelled `null` or `NULL`.
  */
 class NullNode extends ConstantNode implements ScalarNode {
   /**
@@ -18,7 +20,7 @@ class NullNode extends ConstantNode implements ScalarNode {
   /**
    * @return null
    */
-  public function getValue() {
+  public function toValue() {
     return NULL;
   }
 }

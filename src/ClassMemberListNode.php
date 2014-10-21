@@ -2,7 +2,8 @@
 namespace Pharborist;
 
 /**
- * A class member list declaration.
+ * A class member list declaration, e.g. `protected $foo, $bar;` Even if you define
+ * a single member per declaration, it's still considered a list.
  */
 class ClassMemberListNode extends ClassStatementNode {
   use DocCommentTrait;
@@ -12,6 +13,11 @@ class ClassMemberListNode extends ClassStatementNode {
    * @var TokenNode
    */
   protected $static;
+
+  /**
+   * @var CommaListNode
+   */
+  protected $members;
 
   /**
    * @param string $property
@@ -70,10 +76,17 @@ class ClassMemberListNode extends ClassStatementNode {
   }
 
   /**
+   * @return CommaListNode
+   */
+  public function getMemberList() {
+    return $this->members;
+  }
+
+  /**
    * @return ClassMemberNode[]
    */
   public function getMembers() {
-    return $this->childrenByInstance('\Pharborist\ClassMemberNode');
+    return $this->members->getItems();
   }
 
   /**

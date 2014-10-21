@@ -2,9 +2,7 @@
 namespace Pharborist;
 
 /**
- * A class constant lookup.
- *
- * For example: MyClass::MY_CONST
+ * A class constant lookup, e.g. `MyClass::MY_CONST`
  */
 class ClassConstantLookupNode extends ParentNode implements ExpressionNode {
   /**

@@ -1,5 +1,10 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Constants;
+
+use Pharborist\ParentNode;
+use Pharborist\NameNode;
+use Pharborist\ExpressionNode;
+use Pharborist\TokenNode;
 
 /**
  * Constant declaration.

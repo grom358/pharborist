@@ -1,8 +1,8 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Functions;
 
 /**
- * An eval function call.
+ * A call to `eval()`.
  */
 class EvalNode extends FunctionCallNode {
 

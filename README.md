@@ -20,7 +20,7 @@ $alias = $tree->ensureUseDeclaration('Drupal\Component\Utility\String', 'Utility
 // Find all calls to check_plain and rename them to use String::checkPlain
 $function_calls = $tree->find(Filter::functionCall('check_plain'));
 foreach ($function_calls as $call) {
-  $class_method_call = NodeFactory::createClassMethodCall($alias, 'check_plain', $call->getArgumentList());
+  $class_method_call = ClassMethodCallNode::create($alias, 'check_plain', $call->getArgumentList());
   $call->replaceWith($class_method_call);
 }
 ```
@@ -41,3 +41,7 @@ if ($namespace->count() > 1) {
 }
 ```
 [![Build Status](https://travis-ci.org/grom358/pharborist.png?branch=master)](https://travis-ci.org/grom358/pharborist)
+
+# API
+Pharborist's API is documented at http://www.phenaproxima.net/pharborist. Pharborist
+is still under heavy development, so it changes fairly frequently.

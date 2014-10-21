@@ -2,7 +2,7 @@
 namespace Pharborist;
 
 /**
- * A require.
+ * A `require` statement.
  */
 class RequireNode extends ImportNode {
 

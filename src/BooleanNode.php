@@ -1,15 +1,20 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Constants\ConstantNode;
+
 /**
  * Base class for TRUE and FALSE.
+ *
+ * @see TrueNode
+ * @see FalseNode
  */
 abstract class BooleanNode extends ConstantNode implements ScalarNode {
   /**
-   * Create
+   * Creates a BooleanNode.
    *
    * @param mixed $boolean
-   *   Boolean value.
+   *  The boolean to create. Pass a truthy value for TrueNode, falsy for FalseNode.
    *
    * @return BooleanNode
    */
@@ -23,17 +28,9 @@ abstract class BooleanNode extends ConstantNode implements ScalarNode {
   }
 
   /**
-   * Boolean value of constant.
+   * Returns the boolean value of constant.
    *
    * @return boolean
-   *   TRUE or FALSE.
    */
-  abstract public function toBoolean();
-
-  /**
-   * @return boolean
-   */
-  public function getValue() {
-    return $this->toBoolean();
-  }
+  abstract public function toValue();
 }

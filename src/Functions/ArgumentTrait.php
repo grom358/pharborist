@@ -1,5 +1,8 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Functions;
+
+use Pharborist\ExpressionNode;
+use Pharborist\CommaListNode;
 
 /**
  * Trait for nodes that have arguments. For example, function calls.

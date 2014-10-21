@@ -2,7 +2,7 @@
 namespace Pharborist;
 
 /**
- * Top node of tree.
+ * The root node of any Pharborist syntax tree.
  */
 class TopNode extends StatementBlockNode {
   /**

@@ -1,5 +1,22 @@
 <?php
+
 namespace Pharborist;
+
+use Pharborist\Constants\ConstantDeclarationNode;
+use Pharborist\Constants\ConstantDeclarationStatementNode;
+use Pharborist\Constants\ConstantNode;
+use Pharborist\Functions\AnonymousFunctionNode;
+use Pharborist\Functions\CallbackCallNode;
+use Pharborist\Functions\DefineNode;
+use Pharborist\Functions\EmptyNode;
+use Pharborist\Functions\EvalNode;
+use Pharborist\Functions\FunctionCallNode;
+use Pharborist\Functions\FunctionDeclarationNode;
+use Pharborist\Functions\HaltCompilerNode;
+use Pharborist\Functions\IssetNode;
+use Pharborist\Functions\ListNode;
+use Pharborist\Functions\ParameterNode;
+use Pharborist\Functions\UnsetNode;
 
 /**
  * Parses PHP tokens into syntax tree.
@@ -202,9 +219,11 @@ class Parser {
   private function echoTagStatement() {
     $node = new EchoTagStatementNode();
     $this->mustMatch(T_OPEN_TAG_WITH_ECHO, $node);
+    $expressions = new CommaListNode();
     do {
-      $node->addChild($this->expr());
-    } while ($this->tryMatch(',', $node));
+      $expressions->addChild($this->expr());
+    } while ($this->tryMatch(',', $expressions));
+    $node->addChild($expressions, 'expressions');
     $this->tryMatch(';', $node);
     $this->mustMatch(T_CLOSE_TAG, $node, NULL, TRUE);
     return $node;
@@ -291,9 +310,11 @@ class Parser {
     $node = new ConstantDeclarationStatementNode();
     $this->matchDocComment($node);
     $this->mustMatch(T_CONST, $node);
+    $declarations = new CommaListNode();
     do {
-      $node->addChild($this->constDeclaration());
-    } while ($this->tryMatch(',', $node));
+      $declarations->addChild($this->constDeclaration());
+    } while ($this->tryMatch(',', $declarations));
+    $node->addChild($declarations, 'declarations');
     $this->endStatement($node);
     return $node;
   }
@@ -401,9 +422,11 @@ class Parser {
     $node = new StaticVariableStatementNode();
     $this->matchDocComment($node);
     $this->mustMatch(T_STATIC, $node);
+    $variables = new CommaListNode();
     do {
-      $node->addChild($this->staticVariable());
-    } while ($this->tryMatch(',', $node));
+      $variables->addChild($this->staticVariable());
+    } while ($this->tryMatch(',', $variables));
+    $node->addChild($variables, 'variables');
     $this->endStatement($node);
     return $node;
   }
@@ -751,9 +774,11 @@ class Parser {
   private function _global() {
     $node = new GlobalStatementNode();
     $this->mustMatch(T_GLOBAL, $node);
+    $variables = new CommaListNode();
     do {
-      $node->addChild($this->globalVar());
-    } while ($this->tryMatch(',', $node));
+      $variables->addChild($this->globalVar());
+    } while ($this->tryMatch(',', $variables));
+    $node->addChild($variables, 'variables');
     $this->endStatement($node);
     return $node;
   }
@@ -788,9 +813,11 @@ class Parser {
   private function _echo() {
     $node = new EchoStatementNode();
     $this->mustMatch(T_ECHO, $node);
+    $expressions = new CommaListNode();
     do {
-      $node->addChild($this->expr());
-    } while ($this->tryMatch(',', $node));
+      $expressions->addChild($this->expr());
+    } while ($this->tryMatch(',', $expressions));
+    $node->addChild($expressions, 'expressions');
     $this->endStatement($node);
     return $node;
   }
@@ -908,6 +935,8 @@ class Parser {
     $node = new DeclareNode();
     $this->mustMatch(T_DECLARE, $node);
     $this->mustMatch('(', $node);
+    $directives = new CommaListNode();
+    $node->addChild($directives, 'directives');
     if (!$this->tryMatch(')', $node, NULL, FALSE, TRUE)) {
       do {
         $declare_directive = new DeclareDirectiveNode();
@@ -915,8 +944,8 @@ class Parser {
         if ($this->tryMatch('=', $declare_directive)) {
           $declare_directive->addChild($this->staticScalar(), 'value');
         }
-        $node->addChild($declare_directive);
-      } while ($this->tryMatch(',', $node));
+        $directives->addChild($declare_directive);
+      } while ($this->tryMatch(',', $directives));
       $this->mustMatch(')', $node, NULL, FALSE, TRUE);
     }
     if ($this->tryMatch(':', $node, NULL, FALSE, TRUE)) {
@@ -2228,10 +2257,12 @@ class Parser {
   private function _use() {
     $node = new UseDeclarationStatementNode();
     $this->mustMatch(T_USE, $node);
-    $this->tryMatch(T_FUNCTION, $node) || $this->tryMatch(T_CONST, $node);
+    $this->tryMatch(T_FUNCTION, $node, 'useFunction') || $this->tryMatch(T_CONST, $node, 'useConst');
+    $declarations = new CommaListNode();
     do {
-      $node->addChild($this->useDeclaration());
-    } while ($this->tryMatch(',', $node));
+      $declarations->addChild($this->useDeclaration());
+    } while ($this->tryMatch(',', $declarations));
+    $node->addChild($declarations, 'declarations');
     $this->endStatement($node);
     return $node;
   }
@@ -2405,9 +2436,11 @@ class Parser {
     $node = new ClassMemberListNode();
     $node->mergeNode($doc_comment);
     $node->mergeNode($modifiers);
+    $members = new CommaListNode();
     do {
-      $node->addChild($this->classMember());
-    } while ($this->tryMatch(',', $node));
+      $members->addChild($this->classMember());
+    } while ($this->tryMatch(',', $members));
+    $node->addChild($members, 'members');
     $this->endStatement($node);
     return $node;
   }

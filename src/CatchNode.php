@@ -28,6 +28,8 @@ class CatchNode extends ParentNode {
   }
 
   /**
+   * Returns the variable for the caught exception.
+   *
    * @return VariableNode
    */
   public function getVariable() {

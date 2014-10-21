@@ -1,5 +1,8 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Constants;
+
+use Pharborist\TokenNode;
+use Pharborist\ExpressionNode;
 
 /**
  * Magic __CLASS__ constant.

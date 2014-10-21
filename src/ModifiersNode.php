@@ -3,6 +3,8 @@ namespace Pharborist;
 
 /**
  * Method/member modifiers.
+ *
+ * @internal
  */
 class ModifiersNode extends ParentNode {
   /**

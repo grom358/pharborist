@@ -2,15 +2,25 @@
 namespace Pharborist;
 
 /**
- * A global statement.
- *
- * For example, global $a, $b;
+ * A global statement, e.g. `global $a, $b`
  */
 class GlobalStatementNode extends StatementNode {
+  /**
+   * @var CommaListNode
+   */
+  protected $variables;
+
+  /**
+   * @return CommaListNode
+   */
+  public function getVariableList() {
+    return $this->variables;
+  }
+
   /**
    * @return VariableExpressionNode[]
    */
   public function getVariables() {
-    return $this->childrenByInstance('\Pharborist\VariableExpressionNode');
+    return $this->variables->getItems();
   }
 }

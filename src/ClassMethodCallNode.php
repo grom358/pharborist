@@ -1,10 +1,10 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Functions\CallNode;
+
 /**
- * A lookup to a class method.
- *
- * For example, MyClass::classMethod()
+ * A call to a static class method, e.g. `MyClass::classMethod()`
  */
 class ClassMethodCallNode extends CallNode implements VariableExpressionNode {
   /**

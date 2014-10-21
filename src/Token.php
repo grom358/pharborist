@@ -1,5 +1,12 @@
 <?php
 namespace Pharborist;
+use Pharborist\Constants\ClassMagicConstantNode;
+use Pharborist\Constants\DirMagicConstantNode;
+use Pharborist\Constants\FileMagicConstantNode;
+use Pharborist\Constants\FunctionMagicConstantNode;
+use Pharborist\Constants\LineMagicConstantNode;
+use Pharborist\Constants\MethodMagicConstantNode;
+use Pharborist\Constants\NamespaceMagicConstantNode;
 
 /**
  * Factory class for tokens.

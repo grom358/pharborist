@@ -1,0 +1,8 @@
+source:
+  - src
+destination: docs/html
+charset:
+  - UTF-8
+title: Pharborist
+accessLevels:
+  - public

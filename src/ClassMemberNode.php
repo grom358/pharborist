@@ -2,7 +2,25 @@
 namespace Pharborist;
 
 /**
- * A class member.
+ * A single class member in a ClassMemberListNode.
+ *
+ * The relationship between class members and class member lists can be
+ * a bit confusing. Both of these are considered class member lists:
+ * ```
+ * protected $foo;  // A member list with one member.
+ * private $bar, $baz;
+ * ```
+ * The individual members in those lists are $foo, $bar, and $baz. Each of
+ * them is a ClassMemberNode, which will render as `$foo`, `$bar`, and `$baz`,
+ * respectively. And each is a child of a parent ClassMemberListNode, which
+ * has a visibility and static-ness.
+ *
+ * ClassMemberNode's getVisibility(), setVisibility(), and is/get/setStatic()
+ * methods are actually convenience methods which call the same method on the
+ * parent member list. But the visibility and static keywords are still
+ * attributes of the *list*, not the individual member.
+ *
+ * @see ClassMemberListNode
  */
 class ClassMemberNode extends ParentNode {
   /**
@@ -34,7 +52,7 @@ class ClassMemberNode extends ParentNode {
   public static function create($name, ExpressionNode $value = NULL, $visibility = 'public') {
     $code = $visibility . ' $' . ltrim($name, '$');
     if ($value instanceof ExpressionNode) {
-      $code .= ' = ' . $value;
+      $code .= ' = ' . $value->getText();
     }
     return Parser::parseSnippet('class Foo { ' . $code . '; }')->getBody()->firstChild()->remove();
   }
@@ -54,12 +72,19 @@ class ClassMemberNode extends ParentNode {
   }
 
   /**
+   * @return ClassMemberListNode
+   */
+  protected function getClassMemberListNode() {
+    return $this->parent()->parent();
+  }
+
+  /**
    * @see \Pharborist\ClassMemberListNode::isStatic()
    *
    * @return boolean
    */
   public function isStatic() {
-    return $this->parent()->isStatic();
+    return $this->getClassMemberListNode()->isStatic();
   }
 
   /**
@@ -68,7 +93,7 @@ class ClassMemberNode extends ParentNode {
    * @return \Pharborist\TokenNode
    */
   public function getStatic() {
-    return $this->parent()->getStatic();
+    return $this->getClassMemberListNode()->getStatic();
   }
 
   /**
@@ -77,7 +102,7 @@ class ClassMemberNode extends ParentNode {
    * @return $this
    */
   public function setStatic($is_static) {
-    $this->parent()->setStatic($is_static);
+    $this->getClassMemberListNode()->setStatic($is_static);
     return $this;
   }
 
@@ -87,7 +112,7 @@ class ClassMemberNode extends ParentNode {
    * @return \Pharborist\TokenNode
    */
   public function getVisibility() {
-    return $this->parent()->getVisibility();
+    $this->getClassMemberListNode()->getVisibility();
   }
 
   /**
@@ -96,7 +121,7 @@ class ClassMemberNode extends ParentNode {
    * @return $this
    */
   public function setVisibility($visibility) {
-    $this->parent()->setVisibility($visibility);
+    $this->getClassMemberListNode()->setVisibility($visibility);
     return $this;
   }
 }

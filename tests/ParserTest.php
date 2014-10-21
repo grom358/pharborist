@@ -1,6 +1,18 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Constants\ConstantDeclarationStatementNode;
+use Pharborist\Constants\ConstantNode;
+use Pharborist\Functions\AnonymousFunctionNode;
+use Pharborist\Functions\CallbackCallNode;
+use Pharborist\Functions\DefineNode;
+use Pharborist\Functions\EmptyNode;
+use Pharborist\Functions\EvalNode;
+use Pharborist\Functions\FunctionCallNode;
+use Pharborist\Functions\FunctionDeclarationNode;
+use Pharborist\Functions\HaltCompilerNode;
+use Pharborist\Functions\IssetNode;
+use Pharborist\Functions\ListNode;
 use Pharborist\Operator\BinaryOperationNode;
 use Pharborist\Operator\TernaryOperationNode;
 use Pharborist\Operator\UnaryOperationNode;
@@ -17,7 +29,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
     // Test with a real file.
     $tree = Parser::parseFile(__DIR__ . '/files/basic.php');
     $this->assertInstanceOf('\Pharborist\Node', $tree);
-    $this->assertCount(1, $tree->children(Filter::isInstanceOf('\Pharborist\FunctionDeclarationNode')));
+    $this->assertCount(1, $tree->children(Filter::isInstanceOf('\Pharborist\Functions\FunctionDeclarationNode')));
     // Test with a non-existant file.
     $tree = Parser::parseFile('no-such-file.php');
     $this->assertFalse($tree);
@@ -108,7 +120,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
     /** @var FunctionDeclarationNode $function_declaration */
     $function_declaration = $this->parseSnippet(
       'function my_func(array $a, callable $b, namespace\Test $c, \MyNamespace\Test $d, $e = 1, &$f, $g) { }',
-      '\Pharborist\FunctionDeclarationNode'
+      '\Pharborist\Functions\FunctionDeclarationNode'
     );
     $this->assertNull($function_declaration->getReference());
     $this->assertEquals('my_func', $function_declaration->getName()->getText());
@@ -161,7 +173,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
    */
   public function testConstDeclaration() {
     /** @var ConstantDeclarationStatementNode $const_declaration_list */
-    $const_declaration_list = $this->parseSnippet('const MyConst = 1;', '\Pharborist\ConstantDeclarationStatementNode');
+    $const_declaration_list = $this->parseSnippet('const MyConst = 1;', '\Pharborist\Constants\ConstantDeclarationStatementNode');
     $const_declaration = $const_declaration_list->getDeclarations()[0];
     $this->assertEquals('MyConst', $const_declaration->getName()->getText());
     $this->assertEquals('1', $const_declaration->getValue()->getText());
@@ -172,7 +184,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
    */
   public function testHaltCompiler() {
     /** @var HaltCompilerNode $node */
-    $node = $this->parseSnippet('__halt_compiler();', '\Pharborist\HaltCompilerNode');
+    $node = $this->parseSnippet('__halt_compiler();', '\Pharborist\Functions\HaltCompilerNode');
     $this->assertEquals('__halt_compiler', $node->getName()->getText());
     $this->assertEquals("__halt_compiler();", $node->getText());
   }
@@ -183,7 +195,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
    * @expectedExceptionMessage __halt_compiler can only be used from the outermost scope
    */
   public function testInnerHaltCompiler() {
-    $this->parseSnippet("{ __halt_compiler(); }", '\Pharborist\HaltCompilerNode');
+    $this->parseSnippet("{ __halt_compiler(); }", '\Pharborist\Functions\HaltCompilerNode');
   }
 
   /**
@@ -238,7 +250,7 @@ EOF;
 
     /** @var ConstantDeclarationStatementNode $const_statement */
     $const_statement = $statements[0];
-    $this->assertInstanceOf('\Pharborist\ConstantDeclarationStatementNode', $const_statement);
+    $this->assertInstanceOf('\Pharborist\Constants\ConstantDeclarationStatementNode', $const_statement);
     $this->assertEquals('/** const doc comment */', $const_statement->getDocComment()->getText());
 
     /** @var ClassMemberListNode $class_member_list */
@@ -375,7 +387,7 @@ EOF;
 
     /** @var ConstantDeclarationStatementNode $constant_declaration_statement */
     $constant_declaration_statement = $statements[0];
-    $this->assertInstanceOf('\Pharborist\ConstantDeclarationStatementNode', $constant_declaration_statement);
+    $this->assertInstanceOf('\Pharborist\Constants\ConstantDeclarationStatementNode', $constant_declaration_statement);
     $constant_declaration = $constant_declaration_statement->getDeclarations()[0];
     $this->assertEquals('MY_CONST', $constant_declaration->getName()->getText());
     $this->assertEquals('1', $constant_declaration->getValue()->getText());
@@ -783,7 +795,7 @@ EOF;
   public function parseStaticExpression($static_expression, $expected_type) {
     $statement_snippet = 'const EXPR = ' . $static_expression . ';' . PHP_EOL;
     /** @var ConstantDeclarationStatementNode $statement_node */
-    $statement_node = $this->parseSnippet($statement_snippet, '\Pharborist\ConstantDeclarationStatementNode');
+    $statement_node = $this->parseSnippet($statement_snippet, '\Pharborist\Constants\ConstantDeclarationStatementNode');
     $declaration = $statement_node->getDeclarations()[0];
     $expression_node = $declaration->getValue();
     $this->assertInstanceOf($expected_type, $expression_node);
@@ -798,14 +810,14 @@ EOF;
     $this->parseStaticExpression('4.2', '\Pharborist\FloatNode');
     $this->parseStaticExpression("'hello'", '\Pharborist\StringNode');
     $this->parseStaticExpression('"hello"', '\Pharborist\StringNode');
-    $this->parseStaticExpression('__LINE__', '\Pharborist\LineMagicConstantNode');
-    $this->parseStaticExpression('__FILE__', '\Pharborist\FileMagicConstantNode');
-    $this->parseStaticExpression('__DIR__', '\Pharborist\DirMagicConstantNode');
-    $this->parseStaticExpression('__TRAIT__', '\Pharborist\TraitMagicConstantNode');
-    $this->parseStaticExpression('__METHOD__', '\Pharborist\MethodMagicConstantNode');
-    $this->parseStaticExpression('__FUNCTION__', '\Pharborist\FunctionMagicConstantNode');
-    $this->parseStaticExpression('__NAMESPACE__', '\Pharborist\NamespaceMagicConstantNode');
-    $this->parseStaticExpression('__CLASS__', '\Pharborist\ClassMagicConstantNode');
+    $this->parseStaticExpression('__LINE__', '\Pharborist\Constants\LineMagicConstantNode');
+    $this->parseStaticExpression('__FILE__', '\Pharborist\Constants\FileMagicConstantNode');
+    $this->parseStaticExpression('__DIR__', '\Pharborist\Constants\DirMagicConstantNode');
+    $this->parseStaticExpression('__TRAIT__', '\Pharborist\Constants\TraitMagicConstantNode');
+    $this->parseStaticExpression('__METHOD__', '\Pharborist\Constants\MethodMagicConstantNode');
+    $this->parseStaticExpression('__FUNCTION__', '\Pharborist\Constants\FunctionMagicConstantNode');
+    $this->parseStaticExpression('__NAMESPACE__', '\Pharborist\Constants\NamespaceMagicConstantNode');
+    $this->parseStaticExpression('__CLASS__', '\Pharborist\Constants\ClassMagicConstantNode');
 
     $snippet = '<<<EOF
 EOF';
@@ -823,7 +835,7 @@ EOF';
     $this->parseStaticExpression($snippet, '\Pharborist\HeredocNode'); //@todo NowDocNode
 
     /** @var ConstantNode $const */
-    $const = $this->parseStaticExpression('namespace\MY_CONST', '\Pharborist\ConstantNode');
+    $const = $this->parseStaticExpression('namespace\MY_CONST', '\Pharborist\Constants\ConstantNode');
     $this->assertEquals('namespace\MY_CONST', $const->getConstantName()->getText());
 
     /** @var ClassConstantLookupNode $class_constant_lookup */
@@ -1047,7 +1059,7 @@ EOF';
     $this->assertEquals('$a', $var_var->getVariable()->getText());
 
     /** @var CallbackCallNode $callback_call */
-    $callback_call = $this->parseVariable('$a($x, $y)', '\Pharborist\CallbackCallNode');
+    $callback_call = $this->parseVariable('$a($x, $y)', '\Pharborist\Functions\CallbackCallNode');
     $this->assertEquals('$a', $callback_call->getCallback()->getText());
     $arguments = $callback_call->getArguments();
     $this->assertCount(2, $arguments);
@@ -1060,7 +1072,7 @@ EOF';
     $this->assertEquals('$a', $obj_method_call->getMethodName()->getText());
 
     /** @var FunctionCallNode $function_call */
-    $function_call = $this->parseVariable('a()', '\Pharborist\FunctionCallNode');
+    $function_call = $this->parseVariable('a()', '\Pharborist\Functions\FunctionCallNode');
     $this->assertEquals('a', $function_call->getName()->getText());
 
     /** @var ClassMethodCallNode $class_method_call */
@@ -1188,7 +1200,7 @@ EOF';
     $this->assertEquals('$a', $var_var->getVariable()->getText());
 
     /** @var CallbackCallNode $callback_call */
-    $callback_call = $this->parseExpression('$a()', '\Pharborist\CallbackCallNode');
+    $callback_call = $this->parseExpression('$a()', '\Pharborist\Functions\CallbackCallNode');
     $this->assertEquals('$a', $callback_call->getCallback()->getText());
 
     /** @var ObjectMethodCallNode $obj_method_call */
@@ -1197,7 +1209,7 @@ EOF';
     $this->assertEquals('$a', $obj_method_call->getMethodName()->getText());
 
     /** @var FunctionCallNode $function_call */
-    $function_call = $this->parseExpression('a()', '\Pharborist\FunctionCallNode');
+    $function_call = $this->parseExpression('a()', '\Pharborist\Functions\FunctionCallNode');
     $this->assertEquals('a', $function_call->getName()->getText());
 
     /** @var ClassMethodCallNode $class_method_call */
@@ -1409,7 +1421,7 @@ EOF';
    */
   public function testFunctionCall() {
     /** @var FunctionCallNode $function_call */
-    $function_call = $this->parseExpression('do_something(&$a, $b)', '\Pharborist\FunctionCallNode');
+    $function_call = $this->parseExpression('do_something(&$a, $b)', '\Pharborist\Functions\FunctionCallNode');
     $this->assertEquals('do_something', $function_call->getName()->getText());
     $arguments = $function_call->getArguments();
     $this->assertEquals('&$a', $arguments[0]->getText());
@@ -1444,7 +1456,7 @@ EOF';
    */
   public function testAnonymousFunction() {
     /** @var AnonymousFunctionNode $function */
-    $function = $this->parseExpression('function(){ body(); }', '\Pharborist\AnonymousFunctionNode');
+    $function = $this->parseExpression('function(){ body(); }', '\Pharborist\Functions\AnonymousFunctionNode');
     $this->assertNull($function->getReference());
     $this->assertCount(0, $function->getParameters());
     $this->assertEquals('{ body(); }', $function->getBody()->getText());
@@ -1453,15 +1465,15 @@ EOF';
     $this->assertEquals('&', $function->getReference()->getText());
 
 
-    $function = $this->parseExpression('function &(){ body(); }', '\Pharborist\AnonymousFunctionNode');
+    $function = $this->parseExpression('function &(){ body(); }', '\Pharborist\Functions\AnonymousFunctionNode');
     $this->assertCount(0, $function->getParameters());
     $this->assertEquals('&', $function->getReference()->getText());
     $this->assertEquals('{ body(); }', $function->getBody()->getText());
 
-    $function = $this->parseExpression('static function(){}', '\Pharborist\AnonymousFunctionNode');
+    $function = $this->parseExpression('static function(){}', '\Pharborist\Functions\AnonymousFunctionNode');
     $this->assertCount(0, $function->getParameters());
 
-    $function = $this->parseExpression('function($a, $b) use ($x, &$y) { }', '\Pharborist\AnonymousFunctionNode');
+    $function = $this->parseExpression('function($a, $b) use ($x, &$y) { }', '\Pharborist\Functions\AnonymousFunctionNode');
     $parameters = $function->getParameters();
     $this->assertCount(2, $parameters);
     $this->assertEquals('$a', $parameters[0]->getText());
@@ -1474,7 +1486,7 @@ EOF';
     /** @var \Pharborist\Operator\AssignNode $assign */
     $assign = $this->parseExpression('$f = function($a, $b) use ($x, &$y) { }', '\Pharborist\Operator\AssignNode');
     $this->assertEquals('$f', $assign->getLeftOperand()->getText());
-    $this->assertInstanceOf('\Pharborist\AnonymousFunctionNode', $assign->getRightOperand());
+    $this->assertInstanceOf('\Pharborist\Functions\AnonymousFunctionNode', $assign->getRightOperand());
     $function = $assign->getRightOperand();
     $parameters = $function->getParameters();
     $this->assertCount(2, $parameters);
@@ -1527,7 +1539,7 @@ EOF';
     $empty_statement = $this->parseSnippet('; /** function */ function test() { }', '\Pharborist\BlankStatementNode');
     /** @var FunctionDeclarationNode $function */
     $function = $empty_statement->next()->next();
-    $this->assertInstanceOf('\Pharborist\FunctionDeclarationNode', $function);
+    $this->assertInstanceOf('\Pharborist\Functions\FunctionDeclarationNode', $function);
     $this->assertEquals('/** function */', $function->getDocComment());
   }
 
@@ -1668,13 +1680,13 @@ EOF;
     $assign = $this->parseExpression('list($a, $b, list($c1, $c2)) = [1, 2, [3.1, 3.2]]', '\Pharborist\Operator\AssignNode');
     /** @var ListNode $list */
     $list = $assign->getLeftOperand();
-    $this->assertInstanceOf('\Pharborist\ListNode', $list);
+    $this->assertInstanceOf('\Pharborist\Functions\ListNode', $list);
     $arguments = $list->getArguments();
     $this->assertCount(3, $arguments);
     $this->assertEquals('$a', $arguments[0]->getText());
     $this->assertEquals('$b', $arguments[1]->getText());
     $list = $arguments[2];
-    $this->assertInstanceOf('\Pharborist\ListNode', $list);
+    $this->assertInstanceOf('\Pharborist\Functions\ListNode', $list);
     $arguments = $list->getArguments();
     $this->assertCount(2, $arguments);
     $this->assertEquals('$c1', $arguments[0]->getText());
@@ -1683,7 +1695,7 @@ EOF;
     $assign = $this->parseExpression('list() = [1, 2]', '\Pharborist\Operator\AssignNode');
     /** @var ListNode $list */
     $list = $assign->getLeftOperand();
-    $this->assertInstanceOf('\Pharborist\ListNode', $list);
+    $this->assertInstanceOf('\Pharborist\Functions\ListNode', $list);
     $arguments = $list->getArguments();
     $this->assertCount(0, $arguments);
   }
@@ -1720,7 +1732,7 @@ EOF;
    */
   public function testIsset() {
     /** @var IssetNode $isset */
-    $isset = $this->parseExpression('isset($a, $b)', '\Pharborist\IssetNode');
+    $isset = $this->parseExpression('isset($a, $b)', '\Pharborist\Functions\IssetNode');
     $arguments = $isset->getArguments();
     $this->assertEquals('$a', $arguments[0]->getText());
     $this->assertEquals('$b', $arguments[1]->getText());
@@ -1731,7 +1743,7 @@ EOF;
    */
   public function testEval() {
     /** @var EvalNode $eval */
-    $eval = $this->parseExpression('eval($a)', '\Pharborist\EvalNode');
+    $eval = $this->parseExpression('eval($a)', '\Pharborist\Functions\EvalNode');
     $arguments = $eval->getArguments();
     $this->assertEquals('$a', $arguments[0]->getText());
   }
@@ -1741,7 +1753,7 @@ EOF;
    */
   public function testEmpty() {
     /** @var EmptyNode $empty */
-    $empty = $this->parseExpression('empty(expr())', '\Pharborist\EmptyNode');
+    $empty = $this->parseExpression('empty(expr())', '\Pharborist\Functions\EmptyNode');
     $arguments = $empty->getArguments();
     $this->assertEquals('expr()', $arguments[0]->getText());
   }
@@ -1774,7 +1786,7 @@ EOF;
     $this->assertEquals('/** Constant defined with define. */', $statement->getDocComment()->getText());
     /** @var DefineNode $define */
     $define = $statement->getExpression();
-    $this->assertInstanceOf('\Pharborist\DefineNode', $define);
+    $this->assertInstanceOf('\Pharborist\Functions\DefineNode', $define);
     $arguments = $define->getArguments();
     $this->assertEquals("'TEST_CONST'", $arguments[0]->getText());
     $this->assertEquals("'test'", $arguments[1]->getText());
@@ -1881,17 +1893,17 @@ EOF;
    * Test constants.
    */
   public function testConstants() {
-    $this->parseExpression('SOME_CONST', '\Pharborist\ConstantNode');
+    $this->parseExpression('SOME_CONST', '\Pharborist\Constants\ConstantNode');
 
     /** @var TrueNode $true */
     $this->parseExpression('true', '\Pharborist\TrueNode');
     $true = $this->parseExpression('TRUE', '\Pharborist\TrueNode');
-    $this->assertTrue($true->toBoolean());
+    $this->assertTrue($true->toValue());
 
     /** @var FalseNode $false */
     $this->parseExpression('false', '\Pharborist\FalseNode');
     $false = $this->parseExpression('FALSE', '\Pharborist\FalseNode');
-    $this->assertFalse($false->toBoolean());
+    $this->assertFalse($false->toValue());
 
     $this->parseExpression('NULL', '\Pharborist\NullNode');
     $this->parseExpression('null', '\Pharborist\NullNode');

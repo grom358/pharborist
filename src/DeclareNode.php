@@ -11,10 +11,22 @@ class DeclareNode extends StatementNode {
   protected $body;
 
   /**
+   * @var CommaListNode
+   */
+  protected $directives;
+
+  /**
+   * @return CommaListNode
+   */
+  public function getDirectiveList() {
+    return $this->directives;
+  }
+
+  /**
    * @return DeclareDirectiveNode[]
    */
   public function getDirectives() {
-    return $this->childrenByInstance('\Pharborist\DeclareDirectiveNode');
+    return $this->directives->getItems();
   }
 
   /**

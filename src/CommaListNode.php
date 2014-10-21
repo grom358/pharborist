@@ -2,7 +2,8 @@
 namespace Pharborist;
 
 /**
- * Comma separated list.
+ * Any comma-separated set of nodes. This includes class member lists, function
+ * call arguments, array elements, etc.
  */
 class CommaListNode extends ParentNode {
   /**

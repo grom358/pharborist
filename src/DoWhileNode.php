@@ -2,7 +2,7 @@
 namespace Pharborist;
 
 /**
- * do while control structure.
+ * do-while control structure.
  */
 class DoWhileNode extends StatementNode {
   /**

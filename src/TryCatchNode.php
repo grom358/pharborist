@@ -40,7 +40,8 @@ class TryCatchNode extends StatementNode {
    * Returns if this try/catch has a catch for a certain exception type.
    *
    * @param string $exception ...
-   *  At least one exception type to check for.
+   *  At least one exception type to check for. Each should be a fully qualified
+   *  name, e.g. `\Exception` instead of `Exception`.
    *
    * @return boolean
    */
@@ -48,7 +49,7 @@ class TryCatchNode extends StatementNode {
     $exceptions = func_get_args();
 
     foreach ($this->getCatches() as $catch) {
-      if (in_array($catch->getExceptionType()->getText(), $exceptions, TRUE)) {
+      if (in_array($catch->getExceptionType()->getAbsolutePath(), $exceptions, TRUE)) {
         return TRUE;
       }
     }

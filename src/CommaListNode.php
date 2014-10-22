@@ -258,6 +258,6 @@ class CommaListNode extends ParentNode {
    * @return ArrayNode
    */
   public function toArrayNode() {
-    return ($this->parent instanceof ArrayNode) ? $this->parent : Parser::parseExpression('[' . $this . ']');
+    return ($this->parent instanceof ArrayNode) ? clone $this->parent : Parser::parseExpression('[' . $this->getText() . ']');
   }
 }

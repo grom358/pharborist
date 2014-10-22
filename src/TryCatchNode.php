@@ -35,4 +35,24 @@ class TryCatchNode extends StatementNode {
   public function getFinally() {
     return $this->finally;
   }
+
+  /**
+   * Returns if this try/catch has a catch for a certain exception type.
+   *
+   * @param string $exception ...
+   *  At least one exception type to check for. Each should be a fully qualified
+   *  name, e.g. `\Exception` instead of `Exception`.
+   *
+   * @return boolean
+   */
+  public function catches($exception) {
+    $exceptions = func_get_args();
+
+    foreach ($this->getCatches() as $catch) {
+      if (in_array($catch->getExceptionType()->getAbsolutePath(), $exceptions, TRUE)) {
+        return TRUE;
+      }
+    }
+    return FALSE;
+  }
 }

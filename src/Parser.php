@@ -1494,7 +1494,7 @@ class Parser {
       $node->addChild($object, 'object');
       $this->mustMatch(T_OBJECT_OPERATOR, $node);
       $node->addChild($this->objectProperty(), 'property');
-      $object = $node;
+      $object = $this->offsetVariable($node);
     }
     return $node;
   }
@@ -1855,15 +1855,23 @@ class Parser {
       $node->mergeNode($operator_node);
       $node->addChild($object_property, 'methodName');
       $this->functionCallParameterList($node);
+      $node = $this->arrayDeference($node);
     }
     else {
       $node = new ObjectPropertyNode();
       $node->addChild($object, 'object');
       $node->mergeNode($operator_node);
       $node->addChild($object_property, 'property');
+      $node = $this->offsetVariable($node);
+      if ($this->currentType === '(') {
+        $call = new CallbackCallNode();
+        $call->addChild($node, 'callback');
+        $this->functionCallParameterList($call);
+        $node = $this->arrayDeference($call);
+      }
     }
 
-    return $this->objectDereference($this->arrayDeference($node));
+    return $this->objectDereference($node);
   }
 
   /**
@@ -1872,10 +1880,10 @@ class Parser {
    */
   private function objectProperty() {
     if ($this->currentType === T_STRING) {
-      return $this->offsetVariable($this->mustMatchToken(T_STRING));
+      return $this->mustMatchToken(T_STRING);
     }
     elseif ($this->currentType === '{') {
-      return $this->offsetVariable($this->bracesExpr());
+      return $this->bracesExpr();
     }
     else {
       return $this->indirectReference();

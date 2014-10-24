@@ -32,4 +32,12 @@ class WhitespaceNode extends HiddenNode {
   public function getNewlineCount() {
     return $this->newlineCount;
   }
+
+  public function indent($indent, $level = 0) {
+    if ($this->newlineCount > 0) {
+      // Only indent multi-line whitespace.
+      $nl = Settings::get('formatter.nl');
+      $this->text = str_repeat($nl, $this->newlineCount) . str_repeat($indent, $level);
+    }
+  }
 }

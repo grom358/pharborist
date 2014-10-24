@@ -193,7 +193,7 @@ abstract class SingleInheritanceNode extends StatementNode {
     $indent = Settings::get('formatter.indent');
     $properties = $this->statements->children(Filter::isInstanceOf('\Pharborist\ClassMemberListNode'));
     if ($properties->count() === 0) {
-      $this->statements->prepend([
+      $this->statements->head->after([
         WhitespaceNode::create($nl . $indent),
         $property,
         WhitespaceNode::create($nl),
@@ -227,7 +227,7 @@ abstract class SingleInheritanceNode extends StatementNode {
     }
     $nl = Settings::get('formatter.nl');
     $indent = Settings::get('formatter.indent');
-    $this->statements->append([
+    $this->statements->tail->before([
       WhitespaceNode::create($nl . $indent),
       $method,
       WhitespaceNode::create($nl),

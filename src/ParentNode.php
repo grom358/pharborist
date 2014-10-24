@@ -447,4 +447,13 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
     $class_name = get_class($this);
     return array($class_name => $children);
   }
+
+  public function indent($indent, $level = 0) {
+    $child = $this->head;
+    while ($child) {
+      $child->indent($indent, $level);
+      $child = $child->next;
+    }
+    return $this;
+  }
 }

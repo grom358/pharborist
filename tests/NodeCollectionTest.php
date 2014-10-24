@@ -509,6 +509,10 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
       $nodes[] = $node;
     }
     $collection = new NodeCollection($nodes, FALSE);
+
+    $slice = $collection->slice(4);
+    $this->assertCount(1, $slice);
+
     $slice = $collection->slice(2, 4);
     $this->assertCount(2, $slice);
 

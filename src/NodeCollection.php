@@ -105,19 +105,21 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
       $end_index = $this->count() + $end_index;
     }
     $last_index = $this->count() - 1;
-    if ($end_index === NULL) {
-      $end_index = $last_index;
-    }
     if ($start_index > $last_index) {
       $start_index = $last_index;
     }
-    if ($end_index > $last_index) {
-      $end_index = $last_index;
+    if ($end_index !== NULL) {
+      if ($end_index > $last_index) {
+        $end_index = $last_index;
+      }
+      if ($start_index > $end_index) {
+        $start_index = $end_index;
+      }
+      $length = $end_index - $start_index;
     }
-    if ($start_index > $end_index) {
-      $start_index = $end_index;
+    else {
+      $length = $this->count() - $start_index;
     }
-    $length = $end_index - $start_index;
     return new NodeCollection(array_slice($this->nodes, $start_index, $length));
   }
 

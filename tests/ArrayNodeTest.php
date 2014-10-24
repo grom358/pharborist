@@ -35,7 +35,13 @@ class ArrayNodeTest extends \PHPUnit_Framework_TestCase {
     $array = Parser::parseExpression('array("a", "b", "c")');
     $keys = $array->getKeys();
     $this->assertInstanceOf('\Pharborist\NodeCollection', $keys);
-    $this->assertTrue($keys->isEmpty());
+    $this->assertCount(3, $keys);
+    $this->assertInstanceOf('\Pharborist\IntegerNode', $keys[0]);
+    $this->assertSame(0, $keys[0]->toValue());
+    $this->assertInstanceOf('\Pharborist\IntegerNode', $keys[1]);
+    $this->assertSame(1, $keys[1]->toValue());
+    $this->assertInstanceOf('\Pharborist\IntegerNode', $keys[2]);
+    $this->assertSame(2, $keys[2]->toValue());
   }
 
   public function testGetIndexedArrayKeys() {

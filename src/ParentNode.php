@@ -381,18 +381,33 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
     $this->parent = NULL;
     $this->previous = NULL;
     $this->next = NULL;
-    list($this->head, $properties) = unserialize(serialize([$this->head, $this->getProperties()]));
-    // Relink nodes to parent.
+    $properties = $this->getProperties();
+    $children = [];
     $child = $this->head;
     while ($child) {
-      $child->parent = $this;
-      if ($child->next !== NULL) {
-        $this->tail = $child->next;
+      if (($key = array_search($child, $properties, TRUE) !== FALSE)) {
+        $children[$key] = clone $child;
+      }
+      else {
+        $children[] = clone $child;
       }
       $child = $child->next;
     }
-    foreach ($properties as $name => $value) {
-      $this->{$name} = $value;
+    $keys = array_keys($children);
+    $this->head = empty($children) ? NULL : $children[$keys[0]];
+    $this->tail = $this->head;
+    $prev = NULL;
+    foreach ($children as $key => $child) {
+      if (!is_int($key)) {
+        $this->{$key} = $child;
+      }
+      $this->tail = $child;
+      $child->parent = $this;
+      $child->previous = $prev;
+      if ($prev) {
+        $prev->next = $child;
+      }
+      $prev = $child;
     }
   }
 

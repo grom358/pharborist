@@ -30,7 +30,7 @@ class ClassMethodNode extends ClassStatementNode {
    */
   public static function create($method_name) {
     /** @var ClassNode $class_node */
-    $class_node = Parser::parseSnippet("class Property {public function {$method_name}() {}}");
+    $class_node = Parser::parseSnippet("class Method {public function {$method_name}() {}}");
     $method_node = $class_node->getBody()->firstChild()->remove();
     return $method_node;
   }
@@ -42,23 +42,15 @@ class ClassMethodNode extends ClassStatementNode {
    * @return ClassMethodNode
    */
   public static function fromFunction(FunctionDeclarationNode $function_node) {
-    $method = static::create($function_node->getName()->getText());
-    $function_node = clone $function_node;
-    $method->getParameterList()->replaceWith($function_node->getParameterList());
-    $body = $function_node->getBody();
-    $body->addIndent(Settings::get('formatter.indent'));
-    $method->getBody()->replaceWith($body);
-    // Indenting a function only indents its statements, however since we have
-    // converted a function into a method we also wish to indent the closing
-    // brace, so get the last whitespace node and add an indent to it.
-    /** @var WhitespaceNode $ws_node */
-    $ws = $method->getBody()->children(Filter::isInstanceOf('\Pharborist\WhitespaceNode'));
-    if ($ws->count() > 0) {
-      $ws_node = $ws->last()[0];
-      $text = $ws_node->getText();
-      $ws_node->setText($text . Settings::get('formatter.indent'));
-    }
-    return $method;
+    $method_name = $function_node->getName()->getText();
+    $parameters = $function_node->getParameterList()->getText();
+    $indent = Settings::get('formatter.indent');
+    $nl = Settings::get('formatter.nl');
+    $body = str_replace($nl, $nl . $indent, $function_node->getBody()->getText());
+    /** @var ClassNode $class_node */
+    $class_node = Parser::parseSnippet("class Method {public function {$method_name}($parameters) $body}");
+    $method_node = $class_node->getBody()->firstChild()->remove();
+    return $method_node;
   }
 
   /**

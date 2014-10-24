@@ -2055,7 +2055,7 @@ class Parser {
     $node->addChild($name_node, 'name');
     $this->parameterList($node);
     $this->matchHidden($node);
-    $node->addChild($this->innerStatementBlock(), 'body');
+    $this->body($node);
     return $node;
   }
 
@@ -2108,6 +2108,16 @@ class Parser {
       return $this->name();
     }
     return NULL;
+  }
+
+  /**
+   * Parse function/method body.
+   *
+   * @param FunctionDeclarationNode|ClassMethodNode $function
+   *   Function or method.
+   */
+  private function body($function) {
+    $function->addChild($this->innerStatementBlock(), 'body');
   }
 
   /**
@@ -2485,7 +2495,7 @@ class Parser {
       return $node;
     }
     $this->matchHidden($node);
-    $node->addChild($this->innerStatementBlock(), 'body');
+    $this->body($node);
     return $node;
   }
 

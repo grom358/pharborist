@@ -150,6 +150,9 @@ END;
     $function = <<<'END'
 function diff_diffs_overview($node) {
   drupal_set_title(t('Revisions for %title', array('%title' => $node->title)), PASS_THROUGH);
+  if ($cond) {
+    test();
+  }
   return drupal_get_form('diff_node_revisions', $node);
 }
 END;
@@ -158,6 +161,9 @@ END;
 class DefaultController extends ControllerBase {
   public function diff_diffs_overview($node) {
     drupal_set_title(t('Revisions for %title', array('%title' => $node->title)), PASS_THROUGH);
+    if ($cond) {
+      test();
+    }
     return drupal_get_form('diff_node_revisions', $node);
   }
 }

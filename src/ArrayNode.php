@@ -90,33 +90,38 @@ class ArrayNode extends ParentNode implements ExpressionNode {
 
     $keys = $this->getKeys($recursive);
     if (is_scalar($key)) {
-      return (boolean) $keys
+      return $keys
         ->filter(Filter::isInstanceOf('\Pharborist\ScalarNode'))
         ->filter(function(ScalarNode $node) use ($key) {
           return $node->toValue() === $key;
         })
-        ->count();
+        ->count() > 0;
     }
     else {
-      return (boolean) $keys
+      return $keys
         ->filter(function(ExpressionNode $expr) use ($key) {
           return $expr->getText() === $key->getText();
         })
-        ->count();
+        ->count() > 0;
     }
   }
 
   /**
+   * Get the keys of the array.
+   *
+   * @param boolean $recursive
+   *   (optional) TRUE to get keys of array elements that are also arrays.
+   *
    * @return NodeCollection
    */
   public function getKeys($recursive = TRUE) {
-    $keys = new NodeCollection([]);
+    $keys = new NodeCollection();
     foreach ($this->elements->getItems() as $element) {
       if ($element instanceof ArrayPairNode) {
         $keys->add($element->getKey());
 
         $value = $element->getValue();
-        if ($value instanceof ArrayNode && $recursive) {
+        if ($recursive && $value instanceof ArrayNode) {
           $keys->add($value->getKeys($recursive));
         }
       }
@@ -125,15 +130,20 @@ class ArrayNode extends ParentNode implements ExpressionNode {
   }
 
   /**
+   * Get the values of the array.
+   *
+   * @param boolean $recursive
+   *   (optional) TRUE to get values of array elements that are also arrays.
+   *
    * @return NodeCollection
    */
-  public function getValues($flatten = TRUE) {
-    $values = new NodeCollection([]);
+  public function getValues($recursive = TRUE) {
+    $values = new NodeCollection();
     foreach ($this->elements->getItems() as $element) {
       if ($element instanceof ArrayPairNode) {
         $value = $element->getValue();
-        if ($value instanceof ArrayNode && $flatten) {
-          $values->add($value->getValues($flatten));
+        if ($recursive && $value instanceof ArrayNode) {
+          $values->add($value->getValues($recursive));
         }
         else {
           $values->add($value);

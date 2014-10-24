@@ -43,7 +43,11 @@ class Filter {
   }
 
   /**
-   * @param string $class_name
+   * Callback to filter for nodes of certain types.
+   *
+   * @param string $class_name ...
+   *  At least one fully-qualified Pharborist node type to search for.
+   *
    * @return callable
    */
   public static function isInstanceOf($class_name) {
@@ -61,13 +65,18 @@ class Filter {
 
   /**
    * Callback to filter for specific function declaration.
-   * @param string $function_name
+   *
+   * @param string $function_name ...
+   *  At least one function name to search for.
+   *
    * @return callable
    */
   public static function isFunction($function_name) {
-    return function ($node) use ($function_name) {
+    $function_names = func_get_args();
+
+    return function ($node) use ($function_names) {
       if ($node instanceof FunctionDeclarationNode) {
-        return $node->getName()->getText() === $function_name;
+        return in_array($node->getName()->getText(), $function_names, TRUE);
       }
       return FALSE;
     };
@@ -75,13 +84,18 @@ class Filter {
 
   /**
    * Callback to filter for calls to a function.
-   * @param string $function_name
+   *
+   * @param string $function_name ...
+   *  At least one function name to search for.
+   *
    * @return callable
    */
   public static function isFunctionCall($function_name) {
-    return function ($node) use ($function_name) {
+    $function_names = func_get_args();
+
+    return function ($node) use ($function_names) {
       if ($node instanceof FunctionCallNode) {
-        return $node->getName()->getText() === $function_name;
+        return in_array($node->getName()->getText(), $function_names, TRUE);
       }
       return FALSE;
     };
@@ -89,13 +103,18 @@ class Filter {
 
   /**
    * Callback to filter for specific class declaration.
-   * @param string $class_name
+   *
+   * @param string $class_name ...
+   *  At least one class name to search for.
+   *
    * @return callable
    */
   public static function isClass($class_name) {
-    return function ($node) use ($class_name) {
+    $class_names = func_get_args();
+
+    return function ($node) use ($class_names) {
       if ($node instanceof ClassNode) {
-        return $node->getName()->getText() === $class_name;
+        return in_array($node->getName()->getText(), $class_names, TRUE);
       }
       return FALSE;
     };

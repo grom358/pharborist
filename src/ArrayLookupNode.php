@@ -44,9 +44,68 @@ class ArrayLookupNode extends ParentNode implements VariableExpressionNode {
   }
 
   /**
-   * @return Node
+   * @return \Pharborist\Node[]
    */
-  public function getKey() {
-    return $this->key;
+  public function getKeys() {
+    $keys = [ clone $this->key ];
+    if ($this->array instanceof ArrayLookupNode) {
+      $keys = array_merge($this->array->getKeys(), $keys);
+    }
+    return $keys;
+  }
+
+  /**
+   * Returns a specific key in the lookup.
+   *
+   * @param integer $index
+   *  The index of the key to return.
+   *
+   * @return \Pharborist\Node
+   *
+   * @throws
+   *  \InvalidArgumentException if $index is not an integer.
+   *  \OutOfBoundsException if $index is less than zero or greater than the
+   *  number of keys in the lookup.
+   */
+  public function getKey($index = 0) {
+    $keys = $this->getKeys();
+
+    if (!is_integer($index)) {
+      throw new \InvalidArgumentException();
+    }
+    if ($index < 0 || $index >= count($keys)) {
+      throw new \OutOfBoundsException();
+    }
+    return $keys[$index];
+  }
+
+  /**
+   * Returns TRUE if all keys in the lookup are scalar. So a lookup like
+   * $foo['bar']['baz'][0] will be TRUE, but $foo[$bar]['baz'][0] won't.
+   *
+   * @return boolean
+   */
+  public function hasScalarKeys() {
+    if ($this->key instanceof ScalarNode) {
+      return $this->array instanceof ArrayLookupNode ? $this->array->hasScalarKeys() : TRUE;
+    }
+    else {
+      return FALSE;
+    }
+  }
+
+  /**
+   * Returns every key in the lookup. For example, $foo['bar']['baz'][5] will
+   * return ['bar', 'baz', 5].
+   *
+   * @return mixed[]
+   *
+   * @throws \DomainException if the lookup contains any non-scalar keys.
+   */
+  public function extractKeys() {
+    if (!$this->hasScalarKeys()) {
+      throw new \DomainException('Cannot extract non-scalar keys from array lookup ' . $this);
+    }
+    return array_map(function(Node $key) { return $key->toValue(); }, $this->getKeys());
   }
 }

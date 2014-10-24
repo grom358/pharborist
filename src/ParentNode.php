@@ -385,7 +385,8 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
     $children = [];
     $child = $this->head;
     while ($child) {
-      if (($key = array_search($child, $properties, TRUE) !== FALSE)) {
+      $key = array_search($child, $properties, TRUE);
+      if ($key !== FALSE) {
         $children[$key] = clone $child;
       }
       else {

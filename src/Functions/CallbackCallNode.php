@@ -5,7 +5,7 @@ use Pharborist\ExpressionNode;
 use Pharborist\Node;
 
 /**
- * A call to a callback function in a variable, e.g. `$foo = $callback('baz');`
+ * A call to a callback function, e.g. `$callback('baz')`
  */
 class CallbackCallNode extends CallNode implements ExpressionNode {
   /**

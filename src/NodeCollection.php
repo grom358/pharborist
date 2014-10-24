@@ -27,7 +27,7 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
     return array_values($sort);
   }
 
-  public function __construct($nodes, $sort = TRUE) {
+  public function __construct($nodes = [], $sort = TRUE) {
     $this->nodes = $sort ? static::sortUnique($nodes) : $nodes;
   }
 

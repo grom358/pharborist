@@ -3,6 +3,7 @@ namespace Pharborist\Functions;
 
 use Pharborist\ExpressionNode;
 use Pharborist\CommaListNode;
+use Pharborist\Node;
 
 /**
  * Trait for nodes that have arguments. For example, function calls.
@@ -28,20 +29,50 @@ trait ArgumentTrait {
   }
 
   /**
-   * @param ExpressionNode $argument
+   * @param mixed $argument
+   *  The argument to prepend. Can be an ExpressionNode or a scalar value,
+   *  which will be converted to an expression.
+   *
    * @return $this
+   *
+   * @throws \InvalidArgumentException
    */
-  public function appendArgument(ExpressionNode $argument) {
-    $this->arguments->appendItem($argument);
+  public function appendArgument($argument) {
+    if (is_scalar($argument)) {
+      $argument = Node::fromValue($argument);
+    }
+
+    if ($argument instanceof ExpressionNode) {
+      $this->arguments->appendItem($argument);
+    }
+    else {
+      throw new \InvalidArgumentException();
+    }
+
     return $this;
   }
 
   /**
-   * @param ExpressionNode $argument
+   * @param mixed $argument
+   *  The argument to prepend. Can be an ExpressionNode or a scalar value,
+   *  which will be converted to an expression.
+   *
    * @return $this
+   *
+   * @throws \InvalidArgumentException
    */
-  public function prependArgument(ExpressionNode $argument) {
-    $this->arguments->prependItem($argument);
+  public function prependArgument($argument) {
+    if (is_scalar($argument)) {
+      $argument = Node::fromValue($argument);
+    }
+
+    if ($argument instanceof ExpressionNode) {
+      $this->arguments->prependItem($argument);
+    }
+    else {
+      throw new \InvalidArgumentException();
+    }
+
     return $this;
   }
 

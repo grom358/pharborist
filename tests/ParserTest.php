@@ -1932,4 +1932,56 @@ EOF;
     $this->parseExpression('1 ** 2', '\Pharborist\Operator\PowerNode');
     $this->parseExpression('1 **= 2', '\Pharborist\Operator\PowerAssignNode');
   }
+
+  /**
+   * Test combining array lookup with object property lookup.
+   */
+  public function testObjectPropertyArray() {
+    /** @var ArrayLookupNode $lookup */
+    $lookup = $this->parseExpression('$account->pants_status[LANGUAGE_NONE]', '\Pharborist\ArrayLookupNode');
+    $this->assertEquals('LANGUAGE_NONE', $lookup->getKey()->getText());
+    /** @var ObjectPropertyNode $property */
+    $property = $lookup->getArray();
+    $this->assertInstanceOf('\Pharborist\ObjectPropertyNode', $property);
+    $this->assertSame($lookup, $property->parent());
+    $this->assertEquals('$account', $property->getObject()->getText());
+    $this->assertEquals('pants_status', $property->getProperty()->getText());
+
+    $property = $this->parseExpression('$account->$a[KEY]', '\Pharborist\ObjectPropertyNode');
+    $this->assertEquals('$account', $property->getObject()->getText());
+    $lookup = $property->getProperty();
+    $this->assertInstanceOf('\Pharborist\ArrayLookupNode', $lookup);
+    $this->assertEquals('$a', $lookup->getArray()->getText());
+    $this->assertEquals('KEY', $lookup->getKey()->getText());
+  }
+
+  /**
+   * Test calling a callback function that is inside an array property.
+   */
+  public function testObjectPropertyArrayCall() {
+    /** @var CallbackCallNode $call */
+    $call = $this->parseExpression('$object->property[KEY]()', '\Pharborist\Functions\CallbackCallNode');
+    /** @var ArrayLookupNode $lookup */
+    $lookup = $call->getCallback();
+    $this->assertInstanceOf('\Pharborist\ArrayLookupNode', $lookup);
+    /** @var ObjectPropertyNode $property */
+    $property = $lookup->getArray();
+    $this->assertInstanceOf('\Pharborist\ObjectPropertyNode', $property);
+    $this->assertEquals('$object', $property->getObject()->getText());
+    $this->assertEquals('property', $property->getProperty()->getText());
+  }
+
+  /**
+   * Test calling a method where method name is dynamic.
+   */
+  public function testObjectDynamicMethodCall() {
+    /** @var ObjectMethodCallNode $method_call */
+    $method_call = $this->parseExpression('$object->$a[KEY]()', '\Pharborist\ObjectMethodCallNode');
+    $this->assertEquals('$object', $method_call->getObject()->getText());
+    /** @var ArrayLookupNode $lookup */
+    $lookup = $method_call->getMethodName();
+    $this->assertInstanceOf('\Pharborist\ArrayLookupNode', $lookup);
+    $this->assertEquals('$a', $lookup->getArray()->getText());
+    $this->assertEquals('KEY', $lookup->getKey()->getText());
+  }
 }

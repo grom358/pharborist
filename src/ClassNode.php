@@ -141,14 +141,19 @@ class ClassNode extends SingleInheritanceNode {
    * @return \Pharborist\NodeCollection
    */
   public function getAllProperties() {
-    return $this->find(Filter::isInstanceOf('\Pharborist\ClassMemberNode'));
+    $properties = [];
+    /** @var ClassMemberListNode $node */
+    foreach ($this->statements->children(Filter::isInstanceOf('\Pharborist\ClassMemberListNode')) as $node) {
+      $properties = array_merge($properties, $node->getMembers());
+    }
+    return new NodeCollection($properties);
   }
 
   /**
    * @return \Pharborist\NodeCollection
    */
   public function getAllMethods() {
-    return $this->find(Filter::isInstanceOf('\Pharborist\ClassMethodNode'));
+    return $this->statements->children(Filter::isInstanceOf('\Pharborist\ClassMethodNode'));
   }
 
   /**

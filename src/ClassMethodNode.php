@@ -31,7 +31,7 @@ class ClassMethodNode extends ClassStatementNode {
   public static function create($method_name) {
     /** @var ClassNode $class_node */
     $class_node = Parser::parseSnippet("class Method {public function {$method_name}() {}}");
-    $method_node = $class_node->getBody()->firstChild()->remove();
+    $method_node = $class_node->getStatements()[0]->remove();
     return $method_node;
   }
 
@@ -49,7 +49,7 @@ class ClassMethodNode extends ClassStatementNode {
     $body = str_replace($nl, $nl . $indent, $function_node->getBody()->getText());
     /** @var ClassNode $class_node */
     $class_node = Parser::parseSnippet("class Method {public function {$method_name}($parameters) $body}");
-    $method_node = $class_node->getBody()->firstChild()->remove();
+    $method_node = $class_node->getStatements()[0]->remove();
     return $method_node;
   }
 

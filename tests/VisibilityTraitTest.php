@@ -4,8 +4,10 @@ namespace Pharborist;
 
 class VisibilityTraitTest extends \PHPUnit_Framework_TestCase {
   public function testSetVisibility() {
+    /** @var ClassNode $class_node */
+    $class_node = Parser::parseSnippet('class Foo { public function wrassle() {} }');
     /** @var ClassMethodNode $method */
-    $method = Parser::parseSnippet('class Foo { public function wrassle() {} }')->getBody()->firstChild();
+    $method = $class_node->getStatements()[0];
 
     $method->setVisibility('private');
     $this->assertStringStartsWith('private', $method->getText());
@@ -40,8 +42,10 @@ class VisibilityTraitTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testSetVisibilityTokenType() {
+    /** @var ClassNode $class_node */
+    $class_node = Parser::parseSnippet('class Foo { public function wrassle() {} }');
     /** @var ClassMethodNode $method */
-    $method = Parser::parseSnippet('class Foo { public function wrassle() {} }')->getBody()->firstChild();
+    $method = $class_node->getStatements()[0];
 
     $method->setVisibility('private');
     $this->assertSame(T_PRIVATE, $method->getVisibility()->getType());
@@ -72,8 +76,10 @@ class VisibilityTraitTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testSetVisibilityTokenText() {
+    /** @var ClassNode $class_node */
+    $class_node = Parser::parseSnippet('class Foo { public function wrassle() {} }');
     /** @var ClassMethodNode $method */
-    $method = Parser::parseSnippet('class Foo { public function wrassle() {} }')->getBody()->firstChild();
+    $method = $class_node->getStatements()[0];
 
     $method->setVisibility('private');
     $this->assertSame('private', $method->getVisibility()->getText());

@@ -27,7 +27,7 @@ class ClassMemberListNode extends ClassStatementNode {
   public static function create($property) {
     /** @var ClassNode $class_node */
     $class_node = Parser::parseSnippet("class Property {private \${$property};}");
-    $property = $class_node->getBody()->firstChild()->remove();
+    $property = $class_node->getStatements()[0]->remove();
     return $property;
   }
 

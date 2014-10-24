@@ -54,7 +54,9 @@ class ClassMemberNode extends ParentNode {
     if ($value instanceof ExpressionNode) {
       $code .= ' = ' . $value->getText();
     }
-    return Parser::parseSnippet('class Foo { ' . $code . '; }')->getBody()->firstChild()->remove();
+    /** @var ClassNode $class_node */
+    $class_node = Parser::parseSnippet('class Foo { ' . $code . '; }');
+    return $class_node->getStatements()[0]->remove();
   }
 
   /**

@@ -90,19 +90,19 @@ class ArrayNode extends ParentNode implements ExpressionNode {
 
     $keys = $this->getKeys($recursive);
     if (is_scalar($key)) {
-      return (boolean) $keys
+      return $keys
         ->filter(Filter::isInstanceOf('\Pharborist\ScalarNode'))
         ->filter(function(ScalarNode $node) use ($key) {
           return $node->toValue() === $key;
         })
-        ->count();
+        ->count() > 0;
     }
     else {
-      return (boolean) $keys
+      return $keys
         ->filter(function(ExpressionNode $expr) use ($key) {
           return $expr->getText() === $key->getText();
         })
-        ->count();
+        ->count() > 0;
     }
   }
 

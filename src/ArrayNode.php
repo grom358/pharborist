@@ -107,6 +107,11 @@ class ArrayNode extends ParentNode implements ExpressionNode {
   }
 
   /**
+   * Get the keys of the array.
+   *
+   * @param boolean $recursive
+   *   (optional) TRUE to get keys of array elements that are also arrays.
+   *
    * @return NodeCollection
    */
   public function getKeys($recursive = TRUE) {
@@ -116,7 +121,7 @@ class ArrayNode extends ParentNode implements ExpressionNode {
         $keys->add($element->getKey());
 
         $value = $element->getValue();
-        if ($value instanceof ArrayNode && $recursive) {
+        if ($recursive && $value instanceof ArrayNode) {
           $keys->add($value->getKeys($recursive));
         }
       }
@@ -125,15 +130,20 @@ class ArrayNode extends ParentNode implements ExpressionNode {
   }
 
   /**
+   * Get the values of the array.
+   *
+   * @param boolean $recursive
+   *   (optional) TRUE to get values of array elements that are also arrays.
+   *
    * @return NodeCollection
    */
-  public function getValues($flatten = TRUE) {
+  public function getValues($recursive = TRUE) {
     $values = new NodeCollection();
     foreach ($this->elements->getItems() as $element) {
       if ($element instanceof ArrayPairNode) {
         $value = $element->getValue();
-        if ($value instanceof ArrayNode && $flatten) {
-          $values->add($value->getValues($flatten));
+        if ($recursive && $value instanceof ArrayNode) {
+          $values->add($value->getValues($recursive));
         }
         else {
           $values->add($value);

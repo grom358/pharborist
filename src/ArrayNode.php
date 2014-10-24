@@ -110,7 +110,7 @@ class ArrayNode extends ParentNode implements ExpressionNode {
    * @return NodeCollection
    */
   public function getKeys($recursive = TRUE) {
-    $keys = new NodeCollection([]);
+    $keys = new NodeCollection();
     foreach ($this->elements->getItems() as $element) {
       if ($element instanceof ArrayPairNode) {
         $keys->add($element->getKey());
@@ -128,7 +128,7 @@ class ArrayNode extends ParentNode implements ExpressionNode {
    * @return NodeCollection
    */
   public function getValues($flatten = TRUE) {
-    $values = new NodeCollection([]);
+    $values = new NodeCollection();
     foreach ($this->elements->getItems() as $element) {
       if ($element instanceof ArrayPairNode) {
         $value = $element->getValue();

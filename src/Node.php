@@ -6,7 +6,7 @@ namespace Pharborist;
  *
  * @section Nodes
  * A node is the basic building block of a PHP syntax tree. It represents a
- * single cohesive piece of code. Nodes are made up one or more tokens, which 
+ * single cohesive piece of code. Nodes are made up one or more tokens, which
  * are individual characters or strings which mean something to the PHP
  * interpreter. Pharborist provides a node class for just about every kind of
  * statement or expression you can write in PHP.
@@ -424,12 +424,10 @@ abstract class Node implements NodeInterface {
     if ($this instanceof TopNode) {
       return spl_object_hash($this);
     }
-    if ($this->parent) {
-      $path = $this->parent->sortKey() . '/';
+    if (!$this->parent) {
+      return '~/' . spl_object_hash($this);
     }
-    else {
-      $path = '~/';
-    }
+    $path = $this->parent->sortKey() . '/';
     $position = 0;
     $previous = $this->previous;
     while ($previous) {

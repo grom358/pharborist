@@ -5,6 +5,8 @@ namespace Pharborist;
 use Pharborist\Constants\ConstantDeclarationNode;
 use Pharborist\Constants\ConstantDeclarationStatementNode;
 use Pharborist\Constants\ConstantNode;
+use Pharborist\Exceptions\CatchNode;
+use Pharborist\Exceptions\TryCatchNode;
 use Pharborist\Functions\AnonymousFunctionNode;
 use Pharborist\Functions\CallbackCallNode;
 use Pharborist\Functions\DefineNode;

@@ -3,6 +3,7 @@ namespace Pharborist;
 
 use Pharborist\Constants\ConstantDeclarationStatementNode;
 use Pharborist\Constants\ConstantNode;
+use Pharborist\Exceptions\TryCatchNode;
 use Pharborist\Functions\AnonymousFunctionNode;
 use Pharborist\Functions\CallbackCallNode;
 use Pharborist\Functions\DefineNode;
@@ -723,8 +724,8 @@ try { try_body(); }
 catch (SomeException $e) { some_body(); }
 catch (OtherException $e) { other_body(); }
 EOF;
-    /** @var TryCatchNode $try_catch */
-    $try_catch = $this->parseSnippet($snippet, '\Pharborist\TryCatchNode');
+    /** @var \Pharborist\Exceptions\TryCatchNode $try_catch */
+    $try_catch = $this->parseSnippet($snippet, '\Pharborist\Exceptions\TryCatchNode');
     $this->assertEquals('{ try_body(); }', $try_catch->getTry()->getText());
     $catches = $try_catch->getCatches();
     $catch = $catches[0];
@@ -1918,7 +1919,7 @@ try { try_body(); }
 finally { finally_body(); }
 EOF;
     /** @var TryCatchNode $try_catch */
-    $try_catch = $this->parseSnippet($snippet, '\Pharborist\TryCatchNode');
+    $try_catch = $this->parseSnippet($snippet, '\Pharborist\Exceptions\TryCatchNode');
     $this->assertEquals('{ try_body(); }', $try_catch->getTry()->getText());
     $this->assertNotNull($try_catch->getFinally());
     $this->assertEquals('{ finally_body(); }', $try_catch->getFinally()->getText());

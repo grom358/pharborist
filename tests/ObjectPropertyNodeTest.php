@@ -4,18 +4,13 @@ namespace Pharborist;
 class ObjectPropertyNodeTest extends \PHPUnit_Framework_TestCase {
   public function testGetRootProperty() {
     /** @var ObjectPropertyNode $property */
-    $property = Parser::parseExpression('$node->field_foo[LANGUAGE_NONE][0]["value"]');
+    $property = Parser::parseExpression('$foo->bar->baz');
     $this->assertInstanceOf('\Pharborist\ObjectPropertyNode', $property);
-    $root_property = $property->getRootProperty();
-    $this->assertInstanceOf('\Pharborist\TokenNode', $root_property);
-    $this->assertSame(T_STRING, $root_property->getType());
-    $this->assertEquals('field_foo', $root_property->getText());
+    $this->assertEquals('bar', $property->getRootProperty()->getText());
 
-    $property = Parser::parseExpression('$node->$field["value"]');
+    $property = Parser::parseExpression('$foo->$bar');
     $this->assertInstanceOf('\Pharborist\ObjectPropertyNode', $property);
-    $root_property = $property->getRootProperty();
-    $this->assertInstanceOf('\Pharborist\VariableNode', $root_property);
-    $this->assertEquals('$field', $root_property->getText());
+    $this->assertEquals('$bar', $property->getRootProperty()->getText());
   }
 
   /**
@@ -23,7 +18,7 @@ class ObjectPropertyNodeTest extends \PHPUnit_Framework_TestCase {
    */
   public function testGetPropertyName() {
     /** @var ObjectPropertyNode $property */
-    $property = Parser::parseExpression('$node->field_foo[LANGUAGE_NONE][0]["value"]');
+    $property = Parser::parseExpression('$node->field_foo');
     $this->assertEquals('field_foo', $property->getPropertyName());
 
     $property = Parser::parseExpression('$node->$field["value"]');

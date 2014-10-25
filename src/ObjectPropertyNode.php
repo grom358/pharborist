@@ -46,19 +46,15 @@ class ObjectPropertyNode extends ParentNode implements VariableExpressionNode {
   /**
    * Returns the root property.
    *
-   * For example, given an expression like $node->body['und'][0]['value'],
-   * this method will return the identifier (T_STRING TokenNode) 'body'. Or,
-   * given an expression like $foo->bar->baz, will return the identifier 'bar'.
+   * For example, given an expression like $foo->bar->baz this method will
+   * return the identifier (T_STRING TokenNode) 'bar'.
    *
    * @return Node
-   *   A node for the root property.
+   *   The node for the root property.
    */
   public function getRootProperty() {
-    if ($this->property instanceof ObjectPropertyNode) {
-      return $this->property->getRootProperty();
-    }
-    elseif ($this->property instanceof ArrayLookupNode) {
-      return $this->property->getRoot();
+    if ($this->object instanceof ObjectPropertyNode) {
+      return $this->object->getRootProperty();
     }
     else {
       return $this->property;

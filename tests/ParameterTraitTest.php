@@ -60,8 +60,8 @@ function foo($a, $b, ...$c) {
 }
 END;
 
-//    $func = Parser::parseSource($doc)->children(Filter::isFunction('foo'));
-//    $this->assertTrue($func->isVariadic());
+    $func = Parser::parseSource($doc)->children(Filter::isFunction('foo'));
+    $this->assertTrue($func->isVariadic());
 
     $doc = <<<'END'
 <?php

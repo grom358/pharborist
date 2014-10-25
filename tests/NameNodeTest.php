@@ -2,6 +2,8 @@
 namespace Pharborist;
 
 use Pharborist\Functions\FunctionCallNode;
+use Pharborist\Namespaces\NameNode;
+use Pharborist\Namespaces\NamespaceNode;
 use Pharborist\Objects\ClassMethodCallNode;
 use Pharborist\Objects\NewNode;
 

@@ -3,7 +3,7 @@ namespace Pharborist\Objects;
 
 use Pharborist\CommaListNode;
 use Pharborist\Functions\CallNode;
-use Pharborist\NameNode;
+use Pharborist\Namespaces\NameNode;
 use Pharborist\Node;
 use Pharborist\Token;
 use Pharborist\Variables\VariableExpressionNode;
@@ -13,7 +13,7 @@ use Pharborist\Variables\VariableExpressionNode;
  */
 class ClassMethodCallNode extends CallNode implements VariableExpressionNode {
   /**
-   * @var NameNode|Node
+   * @var \Pharborist\Namespaces\NameNode|Node
    */
   protected $className;
 
@@ -23,7 +23,7 @@ class ClassMethodCallNode extends CallNode implements VariableExpressionNode {
   protected $methodName;
 
   /**
-   * @return NameNode|Node
+   * @return \Pharborist\Namespaces\NameNode|Node
    */
   public function getClassName() {
     return $this->className;

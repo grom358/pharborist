@@ -1,7 +1,7 @@
 <?php
 namespace Pharborist\Functions;
 
-use Pharborist\NameNode;
+use Pharborist\Namespaces\NameNode;
 use Pharborist\Variables\VariableExpressionNode;
 
 /**
@@ -21,7 +21,7 @@ class FunctionCallNode extends CallNode implements VariableExpressionNode {
   }
 
   /**
-   * @param string|NameNode $name
+   * @param string|\Pharborist\Namespaces\NameNode $name
    * @return $this
    */
   public function setName($name) {

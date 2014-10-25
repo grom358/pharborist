@@ -2,6 +2,7 @@
 namespace Pharborist;
 
 use Pharborist\Constants\ConstantNode;
+use Pharborist\Namespaces\NameNode;
 
 /**
  * The NULL constant, spelled `null` or `NULL`.

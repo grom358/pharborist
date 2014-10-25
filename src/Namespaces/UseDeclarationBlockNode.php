@@ -1,5 +1,7 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Namespaces;
+
+use Pharborist\StatementBlockNode;
 
 /**
  * A set of use statements.
@@ -17,6 +19,6 @@ class UseDeclarationBlockNode extends StatementBlockNode {
    * @return UseDeclarationStatementNode[]
    */
   public function getDeclarationStatements() {
-    return $this->childrenByInstance('\Pharborist\UseDeclarationStatementNode');
+    return $this->childrenByInstance('\Pharborist\Namespaces\UseDeclarationStatementNode');
   }
 }

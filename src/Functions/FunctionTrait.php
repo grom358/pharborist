@@ -2,7 +2,7 @@
 namespace Pharborist\Functions;
 
 use Pharborist\DocCommentTrait;
-use Pharborist\NameNode;
+use Pharborist\Namespaces\NameNode;
 use Pharborist\Token;
 use Pharborist\TokenNode;
 
@@ -16,7 +16,7 @@ trait FunctionTrait {
   protected $reference;
 
   /**
-   * @var NameNode
+   * @var \Pharborist\Namespaces\NameNode
    */
   protected $name;
 

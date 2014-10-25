@@ -1,5 +1,13 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Namespaces;
+
+use Pharborist\ParentNode;
+use Pharborist\TokenNode;
+use Pharborist\Filter;
+use Pharborist\WhitespaceNode;
+use Pharborist\Token;
+use Pharborist\Node;
+use Pharborist\Parser;
 
 /**
  * A use declaration importing a class, function, or constant into a namespace.
@@ -71,7 +79,7 @@ class UseDeclarationNode extends ParentNode {
       }
     }
     elseif ($alias === NULL && $this->hasAlias()) {
-      $this->alias->previousUntil(Filter::isInstanceOf('\Pharborist\NameNode'))->remove();
+      $this->alias->previousUntil(Filter::isInstanceOf('\Pharborist\Namespaces\NameNode'))->remove();
       $this->alias->remove();
       $this->alias = NULL;
     }

@@ -3,7 +3,7 @@ namespace Pharborist\Objects;
 
 use Pharborist\ExpressionNode;
 use Pharborist\Functions\ArgumentTrait;
-use Pharborist\NameNode;
+use Pharborist\Namespaces\NameNode;
 use Pharborist\ParentNode;
 
 /**
@@ -16,14 +16,14 @@ class NewNode extends ParentNode implements ExpressionNode {
   use ArgumentTrait;
 
   /**
-   * @var NameNode
+   * @var \Pharborist\Namespaces\NameNode
    */
   protected $className;
 
   /**
    * Returns the name of the instantiated class.
    *
-   * @return NameNode
+   * @return \Pharborist\Namespaces\NameNode
    */
   public function getClassName() {
     return $this->className;

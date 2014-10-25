@@ -3,14 +3,14 @@ namespace Pharborist\Objects;
 
 use Pharborist\ParentNode;
 use Pharborist\Node;
-use Pharborist\NameNode;
+use Pharborist\Namespaces\NameNode;
 
 /**
  * A reference to trait method name as part of a trait use declaration.
  */
 class TraitMethodReferenceNode extends ParentNode {
   /**
-   * @var NameNode
+   * @var \Pharborist\Namespaces\NameNode
    */
   protected $traitName;
 

@@ -1,6 +1,8 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Namespaces\NamespaceNode;
+
 /**
  * The root node of any Pharborist syntax tree.
  */
@@ -42,7 +44,7 @@ class TopNode extends StatementBlockNode {
    * @return \Pharborist\NodeCollection
    */
   public function getNamespaces() {
-    return $this->children(Filter::isInstanceOf('\Pharborist\NamespaceNode'));
+    return $this->children(Filter::isInstanceOf('\Pharborist\Namespaces\NamespaceNode'));
   }
 
   /**
@@ -51,7 +53,7 @@ class TopNode extends StatementBlockNode {
    * @param string $ns
    *  The name of the namespace to look for.
    *
-   * @return \Pharborist\NamespaceNode|NULL
+   * @return \Pharborist\Namespaces\NamespaceNode|NULL
    */
   public function getNamespace($ns) {
     $namespaces = $this

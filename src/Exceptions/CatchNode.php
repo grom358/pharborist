@@ -2,7 +2,7 @@
 namespace Pharborist\Exceptions;
 
 use Pharborist\ParentNode;
-use Pharborist\NameNode;
+use Pharborist\Namespaces\NameNode;
 use Pharborist\StatementBlockNode;
 use Pharborist\Variables\VariableNode;
 

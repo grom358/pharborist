@@ -1,5 +1,9 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Namespaces;
+
+use Pharborist\CommaListNode;
+use Pharborist\StatementNode;
+use Pharborist\TokenNode;
 
 /**
  * Use declaration statement, importing several classes, functions, or constants

@@ -2,7 +2,7 @@
 namespace Pharborist\Constants;
 
 use Pharborist\ParentNode;
-use Pharborist\NameNode;
+use Pharborist\Namespaces\NameNode;
 use Pharborist\ExpressionNode;
 
 /**
@@ -25,12 +25,12 @@ class ConstantNode extends ParentNode implements ExpressionNode {
   }
 
   /**
-   * @var NameNode
+   * @var \Pharborist\Namespaces\NameNode
    */
   protected $constantName;
 
   /**
-   * @return NameNode
+   * @return \Pharborist\Namespaces\NameNode
    */
   public function getConstantName() {
     return $this->constantName;

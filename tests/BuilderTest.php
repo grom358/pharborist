@@ -3,6 +3,7 @@ namespace Pharborist;
 
 use Pharborist\Functions\FunctionDeclarationNode;
 use Pharborist\Functions\ParameterNode;
+use Pharborist\Namespaces\NamespaceNode;
 use Pharborist\Objects\ClassMemberListNode;
 use Pharborist\Objects\ClassMethodCallNode;
 use Pharborist\Objects\ClassMethodNode;
@@ -183,6 +184,6 @@ END;
 
   public function testNamespaceNode() {
     $ns = NamespaceNode::create('\Drupal\pantaloons');
-    $this->assertInstanceOf('\Pharborist\NamespaceNode', $ns);
+    $this->assertInstanceOf('\Pharborist\Namespaces\NamespaceNode', $ns);
   }
 }

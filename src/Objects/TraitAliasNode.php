@@ -1,7 +1,7 @@
 <?php
 namespace Pharborist\Objects;
 
-use Pharborist\NameNode;
+use Pharborist\Namespaces\NameNode;
 use Pharborist\TokenNode;
 
 /**

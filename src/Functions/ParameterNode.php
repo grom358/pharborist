@@ -4,7 +4,7 @@ namespace Pharborist\Functions;
 use Pharborist\Objects\ClassMethodNode;
 use Pharborist\ExpressionNode;
 use Pharborist\Filter;
-use Pharborist\NameNode;
+use Pharborist\Namespaces\NameNode;
 use Pharborist\Node;
 use Pharborist\ParentNode;
 use Pharborist\Token;

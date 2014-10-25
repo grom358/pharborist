@@ -5,7 +5,7 @@ use Pharborist\CommaListNode;
 use Pharborist\DocCommentTrait;
 use Pharborist\Filter;
 use Pharborist\Functions\FunctionDeclarationNode;
-use Pharborist\NameNode;
+use Pharborist\Namespaces\NameNode;
 use Pharborist\Settings;
 use Pharborist\StatementBlockNode;
 use Pharborist\StatementNode;
@@ -23,12 +23,12 @@ abstract class SingleInheritanceNode extends StatementNode {
   use DocCommentTrait;
 
   /**
-   * @var NameNode
+   * @var \Pharborist\Namespaces\NameNode
    */
   protected $name;
 
   /**
-   * @var NameNode
+   * @var \Pharborist\Namespaces\NameNode
    */
   protected $extends;
 
@@ -43,7 +43,7 @@ abstract class SingleInheritanceNode extends StatementNode {
   protected $statements;
 
   /**
-   * @return NameNode
+   * @return \Pharborist\Namespaces\NameNode
    */
   public function getName() {
     return $this->name;
@@ -71,7 +71,7 @@ abstract class SingleInheritanceNode extends StatementNode {
   }
 
   /**
-   * @param string|NameNode $extends
+   * @param string|\Pharborist\Namespaces\NameNode $extends
    * @return $this
    */
   public function setExtends($extends) {

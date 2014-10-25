@@ -3,7 +3,7 @@ namespace Pharborist\Functions;
 
 use Pharborist\Objects\ClassMethodNode;
 use Pharborist\Objects\ClassNode;
-use Pharborist\NameNode;
+use Pharborist\Namespaces\NameNode;
 use Pharborist\Node;
 use Pharborist\Parser;
 use Pharborist\StatementBlockNode;

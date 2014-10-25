@@ -1,7 +1,11 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Namespaces;
 
+use Pharborist\Filter;
 use Pharborist\Functions\FunctionCallNode;
+use Pharborist\ParentNode;
+use Pharborist\Token;
+use Pharborist\TokenNode;
 
 /**
  * The name of namespace, function, constant, class, trait or interface.
@@ -41,7 +45,7 @@ class NameNode extends ParentNode {
       return '\\';
     }
     /** @var NamespaceNode $namespace */
-    $namespace = $this->closest(Filter::isInstanceOf('\Pharborist\NamespaceNode'));
+    $namespace = $this->closest(Filter::isInstanceOf('\Pharborist\Namespaces\NamespaceNode'));
     if (!$namespace) {
       return '\\';
     }
@@ -158,7 +162,7 @@ class NameNode extends ParentNode {
     if ($this->parent() instanceof NamespaceNode) {
       return '\\' . $name;
     }
-    $namespace = $this->closest(Filter::isInstanceOf('\Pharborist\NamespaceNode'));
+    $namespace = $this->closest(Filter::isInstanceOf('\Pharborist\Namespaces\NamespaceNode'));
     if (!$namespace) {
       return '\\' . $name;
     }
@@ -169,7 +173,7 @@ class NameNode extends ParentNode {
       return '\\' . $this->getPath();
     }
     /** @var UseDeclarationNode $use_declaration */
-    foreach ($namespace->find(Filter::isInstanceOf('\Pharborist\UseDeclarationNode')) as $use_declaration) {
+    foreach ($namespace->find(Filter::isInstanceOf('\Pharborist\Namespaces\UseDeclarationNode')) as $use_declaration) {
       $bounded_name = $use_declaration->getBoundedName();
       if ($bounded_name === $name) {
         return '\\' . $use_declaration->getName()->getPath();

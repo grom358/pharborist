@@ -1,6 +1,8 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Namespaces\UseDeclarationBlockNode;
+
 class UseDeclarationStatementNodeTest extends \PHPUnit_Framework_TestCase {
   public function testImportClass() {
     /** @var UseDeclarationBlockNode $use_block */

@@ -1,6 +1,8 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Namespaces\NameNode;
+
 /**
  * Boolean FALSE.
  *

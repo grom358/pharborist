@@ -28,6 +28,8 @@ use Pharborist\Functions\FunctionDeclarationNode;
 use Pharborist\Functions\HaltCompilerNode;
 use Pharborist\Functions\IssetNode;
 use Pharborist\Functions\ListNode;
+use Pharborist\Namespaces\NamespaceNode;
+use Pharborist\Namespaces\UseDeclarationBlockNode;
 use Pharborist\Objects\ClassConstantLookupNode;
 use Pharborist\Objects\ClassMemberListNode;
 use Pharborist\Objects\ClassMemberLookupNode;
@@ -113,20 +115,20 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
    */
   public function testNamespace() {
     /** @var NamespaceNode $namespace_node */
-    $namespace_node = $this->parseSnippet('/** test */ namespace MyNamespace\Test ; body();', '\Pharborist\NamespaceNode');
+    $namespace_node = $this->parseSnippet('/** test */ namespace MyNamespace\Test ; body();', '\Pharborist\Namespaces\NamespaceNode');
     $this->assertEquals('/** test */', $namespace_node->getDocComment()->getText());
     $this->assertEquals('MyNamespace\Test', $namespace_node->getName()->getText());
     $this->assertEquals('body();', $namespace_node->getBody()->getText());
 
     // Test with body
     /** @var NamespaceNode $namespace_node */
-    $namespace_node = $this->parseSnippet('namespace MyNamespace\Test\Body { }', '\Pharborist\NamespaceNode');
+    $namespace_node = $this->parseSnippet('namespace MyNamespace\Test\Body { }', '\Pharborist\Namespaces\NamespaceNode');
     $this->assertEquals('MyNamespace\Test\Body', $namespace_node->getName()->getText());
     $this->assertNotNull($namespace_node->getBody());
 
     // Test global
     /** @var NamespaceNode $namespace_node */
-    $namespace_node = $this->parseSnippet('namespace { }', '\Pharborist\NamespaceNode');
+    $namespace_node = $this->parseSnippet('namespace { }', '\Pharborist\Namespaces\NamespaceNode');
     $this->assertNull($namespace_node->getName());
     $this->assertNotNull($namespace_node->getBody());
   }
@@ -138,7 +140,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
     /** @var UseDeclarationBlockNode $use_block */
     $use_block = $this->parseSnippet(
       'use MyNamespace\MyClass as MyAlias ;',
-      '\Pharborist\UseDeclarationBlockNode'
+      '\Pharborist\Namespaces\UseDeclarationBlockNode'
     );
     $use_declaration_statement = $use_block->getDeclarationStatements()[0];
     $use_declaration = $use_declaration_statement->getDeclarations()[0];
@@ -393,7 +395,7 @@ EOF;
 
     $trait_alias = $adaptations[3];
     $this->assertInstanceOf('\Pharborist\Objects\TraitAliasNode', $trait_alias);
-    $this->assertInstanceOf('\Pharborist\NameNode', $trait_alias->getTraitMethodReference());
+    $this->assertInstanceOf('\Pharborist\Namespaces\NameNode', $trait_alias->getTraitMethodReference());
     $this->assertEquals('sayHello', $trait_alias->getTraitMethodReference()->getText());
     $this->assertEquals('protected', $trait_alias->getVisibility()->getText());
   }

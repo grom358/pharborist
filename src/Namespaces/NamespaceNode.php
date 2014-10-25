@@ -1,5 +1,10 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Namespaces;
+
+use Pharborist\Parser;
+use Pharborist\StatementNode;
+use Pharborist\DocCommentTrait;
+use Pharborist\StatementBlockNode;
 
 /**
  * A namespace declaration.

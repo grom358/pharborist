@@ -4,9 +4,9 @@ namespace Pharborist;
 
 class UseDeclarationNodeTest extends \PHPUnit_Framework_TestCase {
   public function testAlias() {
-    /** @var \Pharborist\UseDeclarationNode $has_alias */
+    /** @var \Pharborist\Namespaces\UseDeclarationNode $has_alias */
     $has_alias = Parser::parseSnippet('use Cleese as Chapman;')->getDeclarationStatements()[0]->getDeclarations()[0];
-    $this->assertInstanceOf('\Pharborist\UseDeclarationNode', $has_alias);
+    $this->assertInstanceOf('\Pharborist\Namespaces\UseDeclarationNode', $has_alias);
     $this->assertEquals('Cleese as Chapman', $has_alias->getText());
     $this->assertTrue($has_alias->hasAlias());
     /** @var \Pharborist\TokenNode $alias */
@@ -15,9 +15,9 @@ class UseDeclarationNodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals(T_STRING, $alias->getType());
     $this->assertEquals('Chapman', $alias->getText());
 
-    /** @var \Pharborist\UseDeclarationNode $no_alias $no_alias */
+    /** @var \Pharborist\Namespaces\UseDeclarationNode $no_alias $no_alias */
     $no_alias = Parser::parseSnippet('use Foobaz;')->getDeclarationStatements()[0]->getDeclarations()[0];
-    $this->assertInstanceOf('\Pharborist\UseDeclarationNode', $no_alias);
+    $this->assertInstanceOf('\Pharborist\Namespaces\UseDeclarationNode', $no_alias);
     $this->assertFalse($no_alias->hasAlias());
     $this->assertNull($no_alias->getAlias());
 
@@ -42,7 +42,7 @@ class UseDeclarationNodeTest extends \PHPUnit_Framework_TestCase {
    * @expectedException \InvalidArgumentException
    */
   public function testSetAliasInvalidArgument() {
-    /** @var \Pharborist\UseDeclarationNode $has_alias */
+    /** @var \Pharborist\Namespaces\UseDeclarationNode $has_alias */
     $has_alias = Parser::parseSnippet('use Cleese as Chapman;')->getDeclarationStatements()[0]->getDeclarations()[0];
     $has_alias->setAlias(3.141);
   }

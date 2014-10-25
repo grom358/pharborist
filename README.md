@@ -30,13 +30,13 @@ foreach ($function_calls as $call) {
 require_once 'vendor/autoload.php';
 
 use Pharborist\Parser;
-use Pharborist\NamespaceNode;
+use Pharborist\Namespaces\NamespaceNode;
 use Pharborist\Filter;
 
 $tree = Parser::parseFile($filename);
 
 // check there only one namespace declaration
-$namespaces = $tree->children(Filter::isInstanceOf('\Pharborist\NamespaceNode'));
+$namespaces = $tree->children(Filter::isInstanceOf('\Pharborist\Namespaces\NamespaceNode'));
 if ($namespaces->count() > 1) {
   die('More then one namespace at line ' . $namespaces[1]->getSourcePosition()->getLineNumber() . PHP_EOL);
 }

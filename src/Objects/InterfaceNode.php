@@ -2,7 +2,7 @@
 namespace Pharborist\Objects;
 
 use Pharborist\TokenNode;
-use Pharborist\NameNode;
+use Pharborist\Namespaces\NameNode;
 use Pharborist\StatementNode;
 use Pharborist\DocCommentTrait;
 use Pharborist\CommaListNode;

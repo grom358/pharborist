@@ -10,7 +10,7 @@ class TopNodeTest extends \PHPUnit_Framework_TestCase {
     $doc = TopNode::create('Pharborist\Test');
     $this->assertEquals("<?php\n\nnamespace Pharborist\\Test;\n", $doc->getText());
 
-    $ns = $doc->children(Filter::isInstanceOf('\Pharborist\NamespaceNode'))[0];
+    $ns = $doc->children(Filter::isInstanceOf('\Pharborist\Namespaces\NamespaceNode'))[0];
     $this->assertEquals('\Pharborist\Test', $ns->getName()->getAbsolutePath());
   }
 
@@ -28,7 +28,7 @@ class TopNodeTest extends \PHPUnit_Framework_TestCase {
 
     $this->assertNull($doc->getNamespace('Drupal'));
     $ns = $doc->getNamespace('Pharborist');
-    $this->assertInstanceOf('\Pharborist\NamespaceNode', $ns);
+    $this->assertInstanceOf('\Pharborist\Namespaces\NamespaceNode', $ns);
     $this->assertSame($ns, $namespaces[0]);
 
     $code = <<<'END'

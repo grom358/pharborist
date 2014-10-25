@@ -1,5 +1,5 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Types;
 
 use Pharborist\Constants\ConstantNode;
 

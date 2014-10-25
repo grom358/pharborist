@@ -1,6 +1,8 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Types\BooleanNode;
+
 class BooleanNodeTest extends \PHPUnit_Framework_TestCase {
   public function testCreate() {
     $true = BooleanNode::create(TRUE);

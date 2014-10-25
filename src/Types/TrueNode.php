@@ -1,7 +1,8 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Types;
 
 use Pharborist\Namespaces\NameNode;
+use Pharborist\Settings;
 
 /**
  * Boolean TRUE.

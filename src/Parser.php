@@ -1,5 +1,4 @@
 <?php
-
 namespace Pharborist;
 
 use Pharborist\Constants\ConstantDeclarationNode;
@@ -68,6 +67,14 @@ use Pharborist\Objects\TraitMethodReferenceNode;
 use Pharborist\Objects\TraitNode;
 use Pharborist\Objects\TraitPrecedenceNode;
 use Pharborist\Objects\TraitUseNode;
+use Pharborist\Types\ArrayNode;
+use Pharborist\Types\ArrayPairNode;
+use Pharborist\Types\FalseNode;
+use Pharborist\Types\HeredocNode;
+use Pharborist\Types\InterpolatedStringNode;
+use Pharborist\Types\NullNode;
+use Pharborist\Types\StringVariableNode;
+use Pharborist\Types\TrueNode;
 use Pharborist\Variables\CompoundVariableNode;
 use Pharborist\Variables\GlobalStatementNode;
 use Pharborist\Variables\ReferenceVariableNode;

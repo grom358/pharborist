@@ -2,7 +2,7 @@
 namespace Pharborist\ControlStructures;
 
 use Pharborist\StatementNode;
-use Pharborist\IntegerNode;
+use Pharborist\Types\IntegerNode;
 
 /**
  * A continue statement.

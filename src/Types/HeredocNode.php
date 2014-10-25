@@ -1,5 +1,8 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Types;
+
+use Pharborist\ParentNode;
+use Pharborist\ExpressionNode;
 
 /**
  * A heredoc.

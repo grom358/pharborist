@@ -8,6 +8,8 @@ use Pharborist\Constants\FunctionMagicConstantNode;
 use Pharborist\Constants\LineMagicConstantNode;
 use Pharborist\Constants\MethodMagicConstantNode;
 use Pharborist\Constants\NamespaceMagicConstantNode;
+use Pharborist\Types\FloatNode;
+use Pharborist\Types\IntegerNode;
 use Pharborist\Variables\VariableNode;
 
 /**

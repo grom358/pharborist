@@ -1,5 +1,7 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Types;
+
+use Pharborist\NodeInterface;
 
 /**
  * A single, static value that is not composed of other values (like an array). The

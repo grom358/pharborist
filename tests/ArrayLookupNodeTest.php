@@ -1,6 +1,8 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Types\StringNode;
+
 class ArrayLookupNodeTest extends \PHPUnit_Framework_TestCase {
   public function testCreate() {
     $lookup = ArrayLookupNode::create(Token::variable('$form_state'), new StringNode(T_CONSTANT_ENCAPSED_STRING, "'storage'"));
@@ -12,9 +14,9 @@ class ArrayLookupNodeTest extends \PHPUnit_Framework_TestCase {
     $keys = $lookup->getKeys();
     $this->assertInternalType('array', $keys);
     $this->assertCount(2, $keys);
-    $this->assertInstanceOf('\Pharborist\StringNode', $keys[0]);
+    $this->assertInstanceOf('\Pharborist\Types\StringNode', $keys[0]);
     $this->assertEquals('bar', $keys[0]->toValue());
-    $this->assertInstanceOf('\Pharborist\StringNode', $keys[1]);
+    $this->assertInstanceOf('\Pharborist\Types\StringNode', $keys[1]);
     $this->assertEquals('baz', $keys[1]->toValue());
   }
 

@@ -1,5 +1,8 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Types;
+
+use Pharborist\ExpressionNode;
+use Pharborist\TokenNode;
 
 /**
  * A float scalar, like 29.8 or 3.141.

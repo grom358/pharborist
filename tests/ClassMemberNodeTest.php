@@ -4,6 +4,7 @@ namespace Pharborist;
 
 use Pharborist\Objects\ClassMemberNode;
 use Pharborist\Objects\ClassNode;
+use Pharborist\Types\StringNode;
 
 class ClassMemberNodeTest extends \PHPUnit_Framework_TestCase {
   public function testCreate() {

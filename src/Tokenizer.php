@@ -9,6 +9,9 @@ use Pharborist\Constants\LineMagicConstantNode;
 use Pharborist\Constants\MethodMagicConstantNode;
 use Pharborist\Constants\NamespaceMagicConstantNode;
 use Pharborist\Constants\TraitMagicConstantNode;
+use Pharborist\Types\FloatNode;
+use Pharborist\Types\IntegerNode;
+use Pharborist\Types\StringNode;
 use Pharborist\Variables\VariableNode;
 
 /**

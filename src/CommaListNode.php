@@ -1,6 +1,8 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Types\ArrayNode;
+
 /**
  * Any comma-separated set of nodes. This includes class member lists, function
  * call arguments, array elements, etc.

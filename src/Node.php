@@ -11,6 +11,13 @@ namespace Pharborist;
  * interpreter. Pharborist provides a node class for just about every kind of
  * statement or expression you can write in PHP.
  */
+use Pharborist\Types\ArrayNode;
+use Pharborist\Types\ArrayPairNode;
+use Pharborist\Types\BooleanNode;
+use Pharborist\Types\FloatNode;
+use Pharborist\Types\IntegerNode;
+use Pharborist\Types\NullNode;
+use Pharborist\Types\StringNode;
 
 /**
  * A node in the PHP syntax tree.

@@ -1,5 +1,8 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Types;
+
+use Pharborist\ExpressionNode;
+use Pharborist\TokenNode;
 
 /**
  * An integer scalar, like 2 or 30.

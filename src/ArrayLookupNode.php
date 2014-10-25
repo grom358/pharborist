@@ -1,6 +1,7 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Types\ScalarNode;
 use Pharborist\Variables\VariableExpressionNode;
 
 /**

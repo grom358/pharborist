@@ -1,6 +1,8 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Types\ArrayNode;
+
 class ArrayNodeTest extends \PHPUnit_Framework_TestCase {
   private function toScalar(Node $node) {
     return $node->toValue();
@@ -36,11 +38,11 @@ class ArrayNodeTest extends \PHPUnit_Framework_TestCase {
     $keys = $array->getKeys();
     $this->assertInstanceOf('\Pharborist\NodeCollection', $keys);
     $this->assertCount(3, $keys);
-    $this->assertInstanceOf('\Pharborist\IntegerNode', $keys[0]);
+    $this->assertInstanceOf('\Pharborist\Types\IntegerNode', $keys[0]);
     $this->assertSame(0, $keys[0]->toValue());
-    $this->assertInstanceOf('\Pharborist\IntegerNode', $keys[1]);
+    $this->assertInstanceOf('\Pharborist\Types\IntegerNode', $keys[1]);
     $this->assertSame(1, $keys[1]->toValue());
-    $this->assertInstanceOf('\Pharborist\IntegerNode', $keys[2]);
+    $this->assertInstanceOf('\Pharborist\Types\IntegerNode', $keys[2]);
     $this->assertSame(2, $keys[2]->toValue());
   }
 
@@ -50,11 +52,11 @@ class ArrayNodeTest extends \PHPUnit_Framework_TestCase {
     $keys = $array->getKeys();
     $this->assertInstanceOf('\Pharborist\NodeCollection', $keys);
     $this->assertCount(3, $keys);
-    $this->assertInstanceOf('\Pharborist\IntegerNode', $keys[0]);
+    $this->assertInstanceOf('\Pharborist\Types\IntegerNode', $keys[0]);
     $this->assertSame(0, $keys[0]->toValue());
-    $this->assertInstanceOf('\Pharborist\StringNode', $keys[1]);
+    $this->assertInstanceOf('\Pharborist\Types\StringNode', $keys[1]);
     $this->assertSame('k', $keys[1]->toValue());
-    $this->assertInstanceOf('\Pharborist\IntegerNode', $keys[2]);
+    $this->assertInstanceOf('\Pharborist\Types\IntegerNode', $keys[2]);
     $this->assertSame(1, $keys[2]->toValue());
   }
 
@@ -93,7 +95,7 @@ class ArrayNodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertCount(3, $values);
     $this->assertEquals('foo', $values[0]->toValue());
     $this->assertEquals('baz', $values[1]->toValue());
-    $this->assertInstanceOf('\Pharborist\ArrayNode', $values[2]);
+    $this->assertInstanceOf('\Pharborist\Types\ArrayNode', $values[2]);
     $this->assertSame(['a','b','c'], array_map([$this, 'toScalar'], $values[2]->getValues()->toArray()));
   }
 

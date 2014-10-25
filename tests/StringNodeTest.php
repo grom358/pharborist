@@ -2,6 +2,8 @@
 
 namespace Pharborist;
 
+use Pharborist\Types\StringNode;
+
 class StringNodeTest extends \PHPUnit_Framework_TestCase {
   public function testGetValue() {
     $string = StringNode::create('\'Goodbye, cruel world!\'');

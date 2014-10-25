@@ -1,6 +1,8 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Types\ArrayElementNode;
+
 /**
  * Interface for nodes that represent expressions.
  *

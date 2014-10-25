@@ -49,6 +49,10 @@ use Pharborist\Objects\TraitUseNode;
 use Pharborist\Operators\BinaryOperationNode;
 use Pharborist\Operators\TernaryOperationNode;
 use Pharborist\Operators\UnaryOperationNode;
+use Pharborist\Types\ArrayNode;
+use Pharborist\Types\ArrayPairNode;
+use Pharborist\Types\FalseNode;
+use Pharborist\Types\TrueNode;
 use Pharborist\Variables\CompoundVariableNode;
 use Pharborist\Variables\GlobalStatementNode;
 use Pharborist\Variables\ReferenceVariableNode;
@@ -844,10 +848,10 @@ EOF;
    * Test static expressions.
    */
   public function testStaticExpression() {
-    $this->parseStaticExpression('42', '\Pharborist\IntegerNode');
-    $this->parseStaticExpression('4.2', '\Pharborist\FloatNode');
-    $this->parseStaticExpression("'hello'", '\Pharborist\StringNode');
-    $this->parseStaticExpression('"hello"', '\Pharborist\StringNode');
+    $this->parseStaticExpression('42', '\Pharborist\Types\IntegerNode');
+    $this->parseStaticExpression('4.2', '\Pharborist\Types\FloatNode');
+    $this->parseStaticExpression("'hello'", '\Pharborist\Types\StringNode');
+    $this->parseStaticExpression('"hello"', '\Pharborist\Types\StringNode');
     $this->parseStaticExpression('__LINE__', '\Pharborist\Constants\LineMagicConstantNode');
     $this->parseStaticExpression('__FILE__', '\Pharborist\Constants\FileMagicConstantNode');
     $this->parseStaticExpression('__DIR__', '\Pharborist\Constants\DirMagicConstantNode');
@@ -859,18 +863,18 @@ EOF;
 
     $snippet = '<<<EOF
 EOF';
-    $this->parseStaticExpression($snippet, '\Pharborist\HeredocNode');
+    $this->parseStaticExpression($snippet, '\Pharborist\Types\HeredocNode');
 
     $snippet = '<<<EOF
 test
 EOF';
-    $this->parseStaticExpression($snippet, '\Pharborist\HeredocNode');
+    $this->parseStaticExpression($snippet, '\Pharborist\Types\HeredocNode');
 
     //@todo test contents of heredoc
     $snippet = '<<<\'EOF\'
 test
 EOF';
-    $this->parseStaticExpression($snippet, '\Pharborist\HeredocNode'); //@todo NowDocNode
+    $this->parseStaticExpression($snippet, '\Pharborist\Types\HeredocNode'); //@todo NowDocNode
 
     /** @var ConstantNode $const */
     $const = $this->parseStaticExpression('namespace\MY_CONST', '\Pharborist\Constants\ConstantNode');
@@ -934,19 +938,19 @@ EOF';
    */
   public function testArray() {
     /** @var ArrayNode $array */
-    $array = $this->parseExpression('array(3, 5, 8, )', '\Pharborist\ArrayNode');
+    $array = $this->parseExpression('array(3, 5, 8, )', '\Pharborist\Types\ArrayNode');
     $elements = $array->getElements();
     $this->assertEquals('3', $elements[0]->getText());
     $this->assertEquals('5', $elements[1]->getText());
     $this->assertEquals('8', $elements[2]->getText());
 
-    $array = $this->parseExpression('[3, 5, 8]', '\Pharborist\ArrayNode');
+    $array = $this->parseExpression('[3, 5, 8]', '\Pharborist\Types\ArrayNode');
     $elements = $array->getElements();
     $this->assertEquals('3', $elements[0]->getText());
     $this->assertEquals('5', $elements[1]->getText());
     $this->assertEquals('8', $elements[2]->getText());
 
-    $array = $this->parseExpression('array("a" => 1, "b" => 2)', '\Pharborist\ArrayNode');
+    $array = $this->parseExpression('array("a" => 1, "b" => 2)', '\Pharborist\Types\ArrayNode');
     $elements = $array->getElements();
     /** @var ArrayPairNode $pair */
     $pair = $elements[0];
@@ -956,7 +960,7 @@ EOF';
     $this->assertEquals('"b"', $pair->getKey()->getText());
     $this->assertEquals('2', $pair->getValue()->getText());
 
-    $array = $this->parseExpression('["a" => 1, "b" => 2]', '\Pharborist\ArrayNode');
+    $array = $this->parseExpression('["a" => 1, "b" => 2]', '\Pharborist\Types\ArrayNode');
     $elements = $array->getElements();
     $pair = $elements[0];
     $this->assertEquals('"a"', $pair->getKey()->getText());
@@ -965,26 +969,26 @@ EOF';
     $this->assertEquals('"b"', $pair->getKey()->getText());
     $this->assertEquals('2', $pair->getValue()->getText());
 
-    $array = $this->parseExpression('[&$a, "k" => &$v]', '\Pharborist\ArrayNode');
+    $array = $this->parseExpression('[&$a, "k" => &$v]', '\Pharborist\Types\ArrayNode');
     $elements = $array->getElements();
     $this->assertEquals('&$a', $elements[0]->getText());
     $pair = $elements[1];
     $this->assertEquals('"k"', $pair->getKey()->getText());
     $this->assertEquals('&$v', $pair->getValue()->getText());
 
-    $array = $this->parseStaticExpression('array(3, 5, 8, )', '\Pharborist\ArrayNode');
+    $array = $this->parseStaticExpression('array(3, 5, 8, )', '\Pharborist\Types\ArrayNode');
     $elements = $array->getElements();
     $this->assertEquals('3', $elements[0]->getText());
     $this->assertEquals('5', $elements[1]->getText());
     $this->assertEquals('8', $elements[2]->getText());
 
-    $array = $this->parseStaticExpression('[3, 5, 8]', '\Pharborist\ArrayNode');
+    $array = $this->parseStaticExpression('[3, 5, 8]', '\Pharborist\Types\ArrayNode');
     $elements = $array->getElements();
     $this->assertEquals('3', $elements[0]->getText());
     $this->assertEquals('5', $elements[1]->getText());
     $this->assertEquals('8', $elements[2]->getText());
 
-    $array = $this->parseStaticExpression('array("a" => 1, "b" => 2)', '\Pharborist\ArrayNode');
+    $array = $this->parseStaticExpression('array("a" => 1, "b" => 2)', '\Pharborist\Types\ArrayNode');
     $elements = $array->getElements();
     /** @var ArrayPairNode $pair */
     $pair = $elements[0];
@@ -994,7 +998,7 @@ EOF';
     $this->assertEquals('"b"', $pair->getKey()->getText());
     $this->assertEquals('2', $pair->getValue()->getText());
 
-    $array = $this->parseStaticExpression('["a" => 1, "b" => 2]', '\Pharborist\ArrayNode');
+    $array = $this->parseStaticExpression('["a" => 1, "b" => 2]', '\Pharborist\Types\ArrayNode');
     $elements = $array->getElements();
     $pair = $elements[0];
     $this->assertEquals('"a"', $pair->getKey()->getText());
@@ -1617,15 +1621,15 @@ EOF;
     $this->assertNull($break->getLevel());
 
     $break = $this->parseSnippet('break 1;', '\Pharborist\ControlStructures\BreakStatementNode');
-    $this->assertInstanceOf('\Pharborist\IntegerNode', $break->getLevel());
+    $this->assertInstanceOf('\Pharborist\Types\IntegerNode', $break->getLevel());
     $this->assertEquals('1', $break->getLevel()->getText());
 
     $break = $this->parseSnippet('break(1);', '\Pharborist\ControlStructures\BreakStatementNode');
-    $this->assertInstanceOf('\Pharborist\IntegerNode', $break->getLevel());
+    $this->assertInstanceOf('\Pharborist\Types\IntegerNode', $break->getLevel());
     $this->assertEquals('1', $break->getLevel()->getText());
 
     $break = $this->parseSnippet('break (2);', '\Pharborist\ControlStructures\BreakStatementNode');
-    $this->assertInstanceOf('\Pharborist\IntegerNode', $break->getLevel());
+    $this->assertInstanceOf('\Pharborist\Types\IntegerNode', $break->getLevel());
     $this->assertEquals('2', $break->getLevel()->getText());
   }
 
@@ -1638,15 +1642,15 @@ EOF;
     $this->assertNull($continue->getLevel());
 
     $continue = $this->parseSnippet('continue 1;', '\Pharborist\ControlStructures\ContinueStatementNode');
-    $this->assertInstanceOf('\Pharborist\IntegerNode', $continue->getLevel());
+    $this->assertInstanceOf('\Pharborist\Types\IntegerNode', $continue->getLevel());
     $this->assertEquals('1', $continue->getLevel()->getText());
 
     $continue = $this->parseSnippet('continue(1);', '\Pharborist\ControlStructures\ContinueStatementNode');
-    $this->assertInstanceOf('\Pharborist\IntegerNode', $continue->getLevel());
+    $this->assertInstanceOf('\Pharborist\Types\IntegerNode', $continue->getLevel());
     $this->assertEquals('1', $continue->getLevel()->getText());
 
     $continue = $this->parseSnippet('continue (2);', '\Pharborist\ControlStructures\ContinueStatementNode');
-    $this->assertInstanceOf('\Pharborist\IntegerNode', $continue->getLevel());
+    $this->assertInstanceOf('\Pharborist\Types\IntegerNode', $continue->getLevel());
     $this->assertEquals('2', $continue->getLevel()->getText());
   }
 
@@ -1833,7 +1837,7 @@ EOF;
    * Test complex string.
    */
   public function testComplexString() {
-    $this->parseExpression('"start $a {$a} ${a} $a[0] ${a[0]} {$a[0]} ${$a} $a->b end"', '\Pharborist\InterpolatedStringNode');
+    $this->parseExpression('"start $a {$a} ${a} $a[0] ${a[0]} {$a[0]} ${$a} $a->b end"', '\Pharborist\Types\InterpolatedStringNode');
   }
 
   /**
@@ -1933,17 +1937,17 @@ EOF;
     $this->parseExpression('SOME_CONST', '\Pharborist\Constants\ConstantNode');
 
     /** @var TrueNode $true */
-    $this->parseExpression('true', '\Pharborist\TrueNode');
-    $true = $this->parseExpression('TRUE', '\Pharborist\TrueNode');
+    $this->parseExpression('true', '\Pharborist\Types\TrueNode');
+    $true = $this->parseExpression('TRUE', '\Pharborist\Types\TrueNode');
     $this->assertTrue($true->toValue());
 
     /** @var FalseNode $false */
-    $this->parseExpression('false', '\Pharborist\FalseNode');
-    $false = $this->parseExpression('FALSE', '\Pharborist\FalseNode');
+    $this->parseExpression('false', '\Pharborist\Types\FalseNode');
+    $false = $this->parseExpression('FALSE', '\Pharborist\Types\FalseNode');
     $this->assertFalse($false->toValue());
 
-    $this->parseExpression('NULL', '\Pharborist\NullNode');
-    $this->parseExpression('null', '\Pharborist\NullNode');
+    $this->parseExpression('NULL', '\Pharborist\Types\NullNode');
+    $this->parseExpression('null', '\Pharborist\Types\NullNode');
   }
 
   /**

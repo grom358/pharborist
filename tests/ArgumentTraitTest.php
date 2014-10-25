@@ -1,6 +1,8 @@
 <?php
-
 namespace Pharborist;
+
+use Pharborist\Types\FloatNode;
+use Pharborist\Types\StringNode;
 
 class ArgumentTraitTest extends \PHPUnit_Framework_TestCase {
   public function testAppendArgument() {
@@ -12,8 +14,8 @@ class ArgumentTraitTest extends \PHPUnit_Framework_TestCase {
 
     $call->appendArgument(1)->appendArgument('hohoho');
     $this->assertCount(2, $call->getArguments());
-    $this->assertInstanceOf('\Pharborist\IntegerNode', $call->getArgumentList()->getItem(0));
-    $this->assertInstanceof('\Pharborist\StringNode', $call->getArgumentList()->getItem(1));
+    $this->assertInstanceOf('\Pharborist\Types\IntegerNode', $call->getArgumentList()->getItem(0));
+    $this->assertInstanceof('\Pharborist\Types\StringNode', $call->getArgumentList()->getItem(1));
 
     $pi = FloatNode::fromValue(3.141);
     $call->appendArgument($pi);
@@ -25,7 +27,7 @@ class ArgumentTraitTest extends \PHPUnit_Framework_TestCase {
 
     $call->prependArgument('wozwoz');
     $this->assertCount(1, $call->getArguments());
-    $this->assertInstanceOf('\Pharborist\StringNode', $call->getArgumentList()->getItem(0));
+    $this->assertInstanceOf('\Pharborist\Types\StringNode', $call->getArgumentList()->getItem(0));
 
     $bazbaz = StringNode::fromValue('bazbaz');
     $call->prependArgument($bazbaz);

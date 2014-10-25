@@ -1,5 +1,8 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Types;
+
+use Pharborist\ExpressionNode;
+use Pharborist\TokenNode;
 
 /**
  * A string, like e.g. `'hello world'` or `"We are the knights who say, 'Ni!'"`. This
@@ -15,7 +18,7 @@ class StringNode extends TokenNode implements ExpressionNode, ScalarNode {
    * @param string $text
    *  The text of the string.
    *
-   * @return \Pharborist\StringNode
+   * @return StringNode
    */
   public static function create($text) {
     return new StringNode(T_CONSTANT_ENCAPSED_STRING, $text);

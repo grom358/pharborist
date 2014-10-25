@@ -1,6 +1,9 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Types\ArrayNode;
+use Pharborist\Types\ArrayPairNode;
+
 class NodeTest extends \PHPUnit_Framework_TestCase {
   /**
    * Create mock ParentNode.
@@ -419,39 +422,39 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
 
   public function testFromScalar() {
     $string = Node::fromValue('foobar');
-    $this->assertInstanceOf('\Pharborist\StringNode', $string);
+    $this->assertInstanceOf('\Pharborist\Types\StringNode', $string);
     $this->assertEquals("'foobar'", $string->getText());
 
     $string = Node::fromValue("'foobaz'");
     $this->assertEquals("'\\'foobaz\\''", $string->getText());
 
     $string = Node::fromValue('Hi, $foobaz');
-    $this->assertInstanceOf('\Pharborist\StringNode', $string);
+    $this->assertInstanceOf('\Pharborist\Types\StringNode', $string);
     $this->assertEquals("'Hi, \$foobaz'", $string->getText());
 
     $string = Node::fromValue('"Yippee ki-yay, $buddeh!"');
     $this->assertEquals("'\"Yippee ki-yay, \$buddeh!\"'", $string->getText());
 
     $integer = Node::fromValue(30);
-    $this->assertInstanceOf('\Pharborist\IntegerNode', $integer);
+    $this->assertInstanceOf('\Pharborist\Types\IntegerNode', $integer);
     $this->assertEquals('30', $integer->getText());
 
     $float = Node::fromValue(3.14156);
-    $this->assertInstanceOf('\Pharborist\FloatNode', $float);
+    $this->assertInstanceOf('\Pharborist\Types\FloatNode', $float);
     $this->assertEquals('3.14156', $float->getText());
 
     $true = Node::fromValue(TRUE);
-    $this->assertInstanceOf('\Pharborist\TrueNode', $true);
+    $this->assertInstanceOf('\Pharborist\Types\TrueNode', $true);
     $this->assertTrue($true->toValue());
     $this->assertEquals('TRUE', $true->getText());
 
     $false = Node::fromValue(FALSE);
-    $this->assertInstanceOf('\Pharborist\FalseNode', $false);
+    $this->assertInstanceOf('\Pharborist\Types\FalseNode', $false);
     $this->assertFalse($false->toValue());
     $this->assertEquals('FALSE', $false->getText());
 
     $null = Node::fromValue(NULL);
-    $this->assertInstanceOf('\Pharborist\NullNode', $null);
+    $this->assertInstanceOf('\Pharborist\Types\NullNode', $null);
     $this->assertEquals('NULL', $null->getText());
 
     /** @var ArrayNode $array */
@@ -460,61 +463,61 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
     /** @var ArrayPairNode $pair */
     $pair = $elements[0];
     $element = $pair->getValue();
-    $this->assertInstanceOf('\Pharborist\StringNode', $element);
+    $this->assertInstanceOf('\Pharborist\Types\StringNode', $element);
     $this->assertEquals("'hello'", $element->getText());
     $pair = $elements[1];
     $element = $pair->getValue();
-    $this->assertInstanceOf('\Pharborist\IntegerNode', $element);
+    $this->assertInstanceOf('\Pharborist\Types\IntegerNode', $element);
     $this->assertEquals('30', $element->getText());
     $pair = $elements[2];
     $element = $pair->getValue();
-    $this->assertInstanceOf('\Pharborist\FloatNode', $element);
+    $this->assertInstanceOf('\Pharborist\Types\FloatNode', $element);
     $this->assertEquals('3.14156', $element->getText());
     $pair = $elements[3];
     $element = $pair->getValue();
-    $this->assertInstanceOf('\Pharborist\TrueNode', $element);
+    $this->assertInstanceOf('\Pharborist\Types\TrueNode', $element);
     $this->assertEquals('TRUE', $element->getText());
     $pair = $elements[4];
     $element = $pair->getValue();
-    $this->assertInstanceOf('\Pharborist\FalseNode', $element);
+    $this->assertInstanceOf('\Pharborist\Types\FalseNode', $element);
     $this->assertEquals('FALSE', $element->getText());
     $pair = $elements[5];
     $element = $pair->getValue();
-    $this->assertInstanceOf('\Pharborist\NullNode', $element);
+    $this->assertInstanceOf('\Pharborist\Types\NullNode', $element);
     $this->assertEquals('NULL', $element->getText());
     $pair = $elements[6];
-    $this->assertInstanceOf('\Pharborist\StringNode', $pair->getKey());
+    $this->assertInstanceOf('\Pharborist\Types\StringNode', $pair->getKey());
     $this->assertEquals("'key'", $pair->getKey()->getText());
     $this->assertEquals("'value'", $pair->getValue()->getText());
     $pair = $elements[7];
-    $this->assertInstanceOf('\Pharborist\IntegerNode', $pair->getKey());
+    $this->assertInstanceOf('\Pharborist\Types\IntegerNode', $pair->getKey());
     $this->assertEquals('42', $pair->getKey()->getText());
     $this->assertEquals("'num'", $pair->getValue()->getText());
   }
 
   public function testToValue() {
     $string = Node::fromValue('foobar');
-    $this->assertInstanceOf('\Pharborist\StringNode', $string);
+    $this->assertInstanceOf('\Pharborist\Types\StringNode', $string);
     $this->assertSame('foobar', $string->toValue());
 
     $integer = Node::fromValue(30);
-    $this->assertInstanceOf('\Pharborist\IntegerNode', $integer);
+    $this->assertInstanceOf('\Pharborist\Types\IntegerNode', $integer);
     $this->assertSame(30, $integer->toValue());
 
     $float = Node::fromValue(3.14156);
-    $this->assertInstanceOf('\Pharborist\FloatNode', $float);
+    $this->assertInstanceOf('\Pharborist\Types\FloatNode', $float);
     $this->assertSame(3.14156, $float->toValue());
 
     $true = Node::fromValue(TRUE);
-    $this->assertInstanceOf('\Pharborist\TrueNode', $true);
+    $this->assertInstanceOf('\Pharborist\Types\TrueNode', $true);
     $this->assertSame(TRUE, $true->toValue());
 
     $false = Node::fromValue(FALSE);
-    $this->assertInstanceOf('\Pharborist\FalseNode', $false);
+    $this->assertInstanceOf('\Pharborist\Types\FalseNode', $false);
     $this->assertSame(FALSE, $false->toValue());
 
     $null = Node::fromValue(NULL);
-    $this->assertInstanceOf('\Pharborist\NullNode', $null);
+    $this->assertInstanceOf('\Pharborist\Types\NullNode', $null);
     $this->assertNull($null->toValue());
 
     /** @var ArrayNode $array */

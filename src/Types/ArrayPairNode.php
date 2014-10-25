@@ -1,5 +1,9 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Types;
+
+use Pharborist\Node;
+use Pharborist\ParentNode;
+use Pharborist\Token;
 
 /**
  * A key/value pair element in php array.

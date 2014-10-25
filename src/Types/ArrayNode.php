@@ -1,5 +1,13 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Types;
+
+use Pharborist\ParentNode;
+use Pharborist\Token;
+use Pharborist\ExpressionNode;
+use Pharborist\Filter;
+use Pharborist\CommaListNode;
+use Pharborist\NodeCollection;
+use Pharborist\Parser;
 
 /**
  * A PHP array, e.g. `array(1, 3, 'banana', 'apple')`
@@ -101,7 +109,7 @@ class ArrayNode extends ParentNode implements ExpressionNode {
     $keys = $this->getKeys($recursive);
     if (is_scalar($key)) {
       return $keys
-        ->filter(Filter::isInstanceOf('\Pharborist\ScalarNode'))
+        ->filter(Filter::isInstanceOf('\Pharborist\Types\ScalarNode'))
         ->is(function(ScalarNode $node) use ($key) {
           return $node->toValue() === $key;
         });

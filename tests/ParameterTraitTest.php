@@ -62,8 +62,8 @@ class ParameterTraitTest extends \PHPUnit_Framework_TestCase {
 function foo($a, $b, ...$c) {
 }
 END;
-
-    $func = Parser::parseSource($doc)->children(Filter::isFunction('foo'));
+    /** @var \Pharborist\Functions\FunctionDeclarationNode $func */
+    $func = Parser::parseSource($doc)->children(Filter::isFunction('foo'))->get(0);
     $this->assertTrue($func->isVariadic());
 
     $doc = <<<'END'

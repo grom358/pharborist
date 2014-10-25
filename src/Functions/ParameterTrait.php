@@ -252,9 +252,10 @@ trait ParameterTrait {
    * @return boolean
    */
   public function isVariadic() {
+    $parameters = $this->getParameters();
+    $last_parameter = end($parameters);
     // In a variadic function, the last parameter is the only one which is
-    // allowed to be variadic, and according to the parser, EllipsisNode will
-    // wrap the parameter expression.
-    return $this->parameters->lastChild() instanceof EllipsisNode;
+    // allowed to be variadic.
+    return $last_parameter->getVariadic() !== NULL;
   }
 }

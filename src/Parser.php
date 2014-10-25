@@ -2086,7 +2086,7 @@ class Parser {
       $node->addChild($type, 'typeHint');
     }
     $this->tryMatch('&', $node, 'reference');
-    $this->tryMatch(T_ELLIPSIS, $node);
+    $this->tryMatch(T_ELLIPSIS, $node, 'variadic');
     $this->mustMatch(T_VARIABLE, $node, 'name', TRUE);
     if ($this->tryMatch('=', $node)) {
       $node->addChild($this->staticScalar(), 'value');

@@ -44,6 +44,20 @@ class ArrayNodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertSame(2, $keys[2]->toValue());
   }
 
+  public function testGetKeysMixed() {
+    /** @var ArrayNode $array */
+    $array = Parser::parseExpression('array("a", "k" => "v", "b")');
+    $keys = $array->getKeys();
+    $this->assertInstanceOf('\Pharborist\NodeCollection', $keys);
+    $this->assertCount(3, $keys);
+    $this->assertInstanceOf('\Pharborist\IntegerNode', $keys[0]);
+    $this->assertSame(0, $keys[0]->toValue());
+    $this->assertInstanceOf('\Pharborist\StringNode', $keys[1]);
+    $this->assertSame('k', $keys[1]->toValue());
+    $this->assertInstanceOf('\Pharborist\IntegerNode', $keys[2]);
+    $this->assertSame(1, $keys[2]->toValue());
+  }
+
   public function testGetIndexedArrayKeys() {
     /** @var ArrayNode $array */
     $array = Parser::parseExpression('array("a" => "apple", "b" => "bear", "c" => "cauldron")');

@@ -18,7 +18,8 @@ trait DocCommentTrait {
     if ($whitespace_token->getType() !== T_WHITESPACE) {
       return '';
     }
-    $lines = explode("\n", $whitespace_token->getText());
+    $nl = Settings::get('formatter.nl');
+    $lines = explode($nl, $whitespace_token->getText());
     $last_line = end($lines);
     return $last_line;
   }

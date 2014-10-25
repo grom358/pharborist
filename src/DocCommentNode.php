@@ -32,19 +32,6 @@ class DocCommentNode extends CommentNode {
    * @return $this
    */
   public function setIndent($indent) {
-    // Normalize comment block.
-    $this->removeIndent();
-    // Add indent to comment block.
-    $this->addIndent($indent);
-    return $this;
-  }
-
-  /**
-   * Remove indent from document comment.
-   *
-   * @return $this
-   */
-  public function removeIndent() {
     $lines = explode("\n", $this->text);
     if (count($lines) === 1) {
       return $this;
@@ -56,10 +43,10 @@ class DocCommentNode extends CommentNode {
         $comment .= trim($line) . "\n";
       }
       elseif ($i === $last_index) {
-        $comment .= ' ' . trim($line);
+        $comment .= $indent . ' ' . trim($line);
       }
       else {
-        $comment .= ' ' . trim($line) . "\n";
+        $comment .= $indent . ' ' . trim($line) . "\n";
       }
     }
     $this->setText($comment);

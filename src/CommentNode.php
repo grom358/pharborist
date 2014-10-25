@@ -119,32 +119,4 @@ class CommentNode extends HiddenNode {
         throw new \LogicException("Unhandled comment type in CommentNode::getCommentText()");
     }
   }
-
-  /**
-   * Add indent to comment.
-   *
-   * @param string $whitespace
-   *   Additional whitespace to add.
-   * @return $this
-   */
-  public function addIndent($whitespace) {
-    $lines = explode("\n", $this->text);
-    if (count($lines) === 1) {
-      return $this;
-    }
-    $comment = '';
-    $last_index = count($lines) - 1;
-    foreach ($lines as $i => $line) {
-      if ($i === 0) {
-        $comment .= trim($line) . "\n";
-      } elseif ($i === $last_index) {
-        $comment .= $whitespace . rtrim($line);
-      }
-      else {
-        $comment .=  $whitespace . rtrim($line) . "\n";
-      }
-    }
-    $this->setText($comment);
-    return $this;
-  }
 }

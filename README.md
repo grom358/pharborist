@@ -31,13 +31,14 @@ require_once 'vendor/autoload.php';
 
 use Pharborist\Parser;
 use Pharborist\NamespaceNode;
+use Pharborist\Filter;
 
 $tree = Parser::parseFile($filename);
 
 // check there only one namespace declaration
-$namespaces = $tree->children(Filter::isInstanceOf(NamespaceNode::class));
-if ($namespace->count() > 1) {
-  die('More then one namespace at line ' . $namespaces[1]->getSourcePosition());
+$namespaces = $tree->children(Filter::isInstanceOf(new NamespaceNode()));
+if ($namespaces->count() > 1) {
+  die('More then one namespace at line ' . $namespaces[1]->getSourcePosition()->getLineNumber());
 }
 ```
 [![Build Status](https://travis-ci.org/grom358/pharborist.png?branch=master)](https://travis-ci.org/grom358/pharborist)

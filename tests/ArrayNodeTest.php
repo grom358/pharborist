@@ -9,7 +9,7 @@ class ArrayNodeTest extends \PHPUnit_Framework_TestCase {
   public function testHasKey() {
     /** @var ArrayNode $array */
     $array = Parser::parseExpression('array("a", "b", "c")');
-    $this->assertFalse($array->hasKey(0));
+    $this->assertTrue($array->hasKey(0));
 
     $array = Parser::parseExpression('array("a" => "apple", "b" => "bear", "c" => "cauldron")');
     $this->assertTrue($array->hasKey('a'));

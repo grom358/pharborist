@@ -114,15 +114,16 @@ class ArrayNode extends ParentNode implements ExpressionNode {
    *
    * @return NodeCollection
    */
-  public function getKeys($recursive = TRUE, $echo = FALSE) {
+  public function getKeys($recursive = TRUE) {
     $keys = new NodeCollection();
-    foreach ($this->elements->getItems() as $index => $element) {
+    $index = 0;
+    foreach ($this->elements->getItems() as $element) {
       if ($element instanceof ArrayPairNode) {
         $keys->add($element->getKey());
         $value = $element->getValue();
       }
       else {
-        $keys->add(IntegerNode::fromValue($index), FALSE);
+        $keys->add(Token::integer($index++));
         $value = $element;
       }
 

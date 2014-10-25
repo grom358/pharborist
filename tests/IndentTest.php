@@ -264,4 +264,32 @@ EOF;
     $tree->indent('  ');
     $this->assertEquals($expected, $tree->getText());
   }
+
+  public function testArray() {
+    $source = <<<'EOF'
+<?php
+$a = array(
+'a',
+'b' => array(
+'one',
+'two'
+),
+'c'
+);
+EOF;
+    $expected = <<<'EOF'
+<?php
+$a = array(
+  'a',
+  'b' => array(
+    'one',
+    'two'
+  ),
+  'c'
+);
+EOF;
+    $tree = Parser::parseSource($source);
+    $tree->indent('  ');
+    $this->assertEquals($expected, $tree->getText());
+  }
 }

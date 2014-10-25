@@ -57,6 +57,7 @@ use Pharborist\Objects\ClassNode;
 use Pharborist\Objects\InterfaceMethodNode;
 use Pharborist\Objects\InterfaceNode;
 use Pharborist\Objects\ModifiersNode;
+use Pharborist\Objects\NameExpressionNode;
 use Pharborist\Objects\NewNode;
 use Pharborist\Objects\ObjectMethodCallNode;
 use Pharborist\Objects\ObjectPropertyNode;

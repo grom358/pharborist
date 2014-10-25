@@ -1,5 +1,7 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Objects;
+
+use Pharborist\ParentNode;
 
 /**
  * A dynamic name for method/member.

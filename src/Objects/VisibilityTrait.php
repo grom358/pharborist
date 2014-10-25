@@ -1,5 +1,8 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Objects;
+
+use Pharborist\Token;
+use Pharborist\TokenNode;
 
 trait VisibilityTrait {
   /**

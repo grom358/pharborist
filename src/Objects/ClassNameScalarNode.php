@@ -1,5 +1,9 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Objects;
+
+use Pharborist\ParentNode;
+use Pharborist\Node;
+use Pharborist\ExpressionNode;
 
 /**
  * A class name scalar (in PHP 5.5 and later). Example: `MyClass::class`.

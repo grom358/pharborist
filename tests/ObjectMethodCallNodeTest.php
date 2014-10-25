@@ -1,8 +1,10 @@
 <?php
-
 namespace Pharborist;
 
 class ObjectMethodCallNodeTest extends \PHPUnit_Framework_TestCase {
+  /**
+   * @var \Pharborist\Objects\ObjectMethodCallNode
+   */
   private $call;
 
   public function __construct() {
@@ -26,11 +28,11 @@ class ObjectMethodCallNodeTest extends \PHPUnit_Framework_TestCase {
 
   public function testGetPreviousCall() {
     $call = Parser::parseSnippet('\Drupal::database()->insert("razmatazz");')->firstChild();
-    $this->assertInstanceOf('\Pharborist\ObjectMethodCallNode', $call);
-    $this->assertInstanceOf('\Pharborist\ClassMethodCallNode', $call->getPreviousCall());
+    $this->assertInstanceOf('\Pharborist\Objects\ObjectMethodCallNode', $call);
+    $this->assertInstanceOf('\Pharborist\Objects\ClassMethodCallNode', $call->getPreviousCall());
 
     $call = Parser::parseSnippet('$raz->matazz();')->firstChild();
-    $this->assertInstanceOf('\Pharborist\ObjectMethodCallNode', $call);
+    $this->assertInstanceOf('\Pharborist\Objects\ObjectMethodCallNode', $call);
     $this->assertNull($call->getPreviousCall());
   }
 }

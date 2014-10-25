@@ -1,5 +1,10 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Objects;
+
+use Pharborist\ParentNode;
+use Pharborist\Node;
+use Pharborist\ExpressionNode;
+use Pharborist\TokenNode;
 
 /**
  * A class constant lookup, e.g. `MyClass::MY_CONST`

@@ -1,5 +1,12 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Objects;
+
+use Pharborist\ExpressionNode;
+use Pharborist\Filter;
+use Pharborist\NodeCollection;
+use Pharborist\Parser;
+use Pharborist\Token;
+use Pharborist\TokenNode;
 
 /**
  * Class declaration.
@@ -143,7 +150,7 @@ class ClassNode extends SingleInheritanceNode {
   public function getAllProperties() {
     $properties = [];
     /** @var ClassMemberListNode $node */
-    foreach ($this->statements->children(Filter::isInstanceOf('\Pharborist\ClassMemberListNode')) as $node) {
+    foreach ($this->statements->children(Filter::isInstanceOf('\Pharborist\Objects\ClassMemberListNode')) as $node) {
       $properties = array_merge($properties, $node->getMembers());
     }
     return new NodeCollection($properties);
@@ -153,7 +160,7 @@ class ClassNode extends SingleInheritanceNode {
    * @return \Pharborist\NodeCollection
    */
   public function getAllMethods() {
-    return $this->statements->children(Filter::isInstanceOf('\Pharborist\ClassMethodNode'));
+    return $this->statements->children(Filter::isInstanceOf('\Pharborist\Objects\ClassMethodNode'));
   }
 
   /**
@@ -162,7 +169,7 @@ class ClassNode extends SingleInheritanceNode {
    * @param string $name
    *  The property name, with or without the $.
    *
-   * @return \Pharborist\ClassMemberNode|NULL
+   * @return \Pharborist\Objects\ClassMemberNode|NULL
    */
   public function getProperty($name) {
     $name = ltrim($name, '$');
@@ -181,7 +188,7 @@ class ClassNode extends SingleInheritanceNode {
    * @param string $name
    *  The method name.
    *
-   * @return \Pharborist\ClassMethodNode|NULL
+   * @return \Pharborist\Objects\ClassMethodNode|NULL
    */
   public function getMethod($name) {
     $methods = $this

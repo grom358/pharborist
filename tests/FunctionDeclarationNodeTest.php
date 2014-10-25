@@ -4,7 +4,7 @@ namespace Pharborist;
 
 class FunctionDeclarationNodeTest extends \PHPUnit_Framework_TestCase {
   public function testCloneAsMethodOf() {
-    /** @var \Pharborist\ClassNode $class */
+    /** @var \Pharborist\Objects\ClassNode $class */
     $class = Parser::parseSnippet('class Camelot {}');
     /** @var \Pharborist\Functions\FunctionDeclarationNode $func */
     $func = Parser::parseSnippet('function sing_goofy_song() {}');

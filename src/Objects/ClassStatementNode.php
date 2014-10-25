@@ -1,5 +1,7 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Objects;
+
+use Pharborist\StatementNode;
 
 /**
  * A class statement.

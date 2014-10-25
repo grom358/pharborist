@@ -1,7 +1,7 @@
 <?php
 namespace Pharborist\Functions;
 
-use Pharborist\ObjectMethodCallNode;
+use Pharborist\Objects\ObjectMethodCallNode;
 use Pharborist\ParentNode;
 
 /**
@@ -46,7 +46,7 @@ abstract class CallNode extends ParentNode {
    * @param string $method_name
    *  The name of the method to call.
    *
-   * @return ObjectMethodCallNode
+   * @return \Pharborist\Objects\ObjectMethodCallNode
    *  The newly-created method call, in which every previous part of the chain will be the
    *  "object", and $method_name will be the "method". The call will be created without
    *  arguments, but you can add some using appendArgument().

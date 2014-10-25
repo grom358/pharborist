@@ -1,15 +1,17 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Objects\ObjectPropertyNode;
+
 class ObjectPropertyNodeTest extends \PHPUnit_Framework_TestCase {
   public function testGetRootProperty() {
     /** @var ObjectPropertyNode $property */
     $property = Parser::parseExpression('$foo->bar->baz');
-    $this->assertInstanceOf('\Pharborist\ObjectPropertyNode', $property);
+    $this->assertInstanceOf('\Pharborist\Objects\ObjectPropertyNode', $property);
     $this->assertEquals('bar', $property->getRootProperty()->getText());
 
     $property = Parser::parseExpression('$foo->$bar');
-    $this->assertInstanceOf('\Pharborist\ObjectPropertyNode', $property);
+    $this->assertInstanceOf('\Pharborist\Objects\ObjectPropertyNode', $property);
     $this->assertEquals('$bar', $property->getRootProperty()->getText());
   }
 

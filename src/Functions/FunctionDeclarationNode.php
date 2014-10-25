@@ -1,8 +1,8 @@
 <?php
 namespace Pharborist\Functions;
 
-use Pharborist\ClassMethodNode;
-use Pharborist\ClassNode;
+use Pharborist\Objects\ClassMethodNode;
+use Pharborist\Objects\ClassNode;
 use Pharborist\NameNode;
 use Pharborist\Node;
 use Pharborist\Parser;
@@ -70,10 +70,10 @@ class FunctionDeclarationNode extends StatementNode {
    * Creates a class method from this function and add it to the given
    * class definition.
    *
-   * @param \Pharborist\ClassNode $class
+   * @param \Pharborist\Objects\ClassNode $class
    *  The class to add the new method to.
    *
-   * @return \Pharborist\ClassMethodNode
+   * @return \Pharborist\Objects\ClassMethodNode
    *  The newly created method.
    */
   public function cloneAsMethodOf(ClassNode $class) {

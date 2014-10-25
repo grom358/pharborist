@@ -1,7 +1,7 @@
 <?php
 namespace Pharborist\Functions;
 
-use Pharborist\ClassMethodNode;
+use Pharborist\Objects\ClassMethodNode;
 use Pharborist\ExpressionNode;
 use Pharborist\Filter;
 use Pharborist\NameNode;
@@ -86,10 +86,10 @@ class ParameterNode extends ParentNode {
   /**
    * Returns the function which defines this parameter.
    *
-   * @return FunctionDeclarationNode|ClassMethodNode|AnonymousFunctionNode|NULL
+   * @return FunctionDeclarationNode|\Pharborist\Objects\ClassMethodNode|AnonymousFunctionNode|NULL
    */
   public function getFunction() {
-    return $this->closest(Filter::isInstanceOf('Pharborist\Functions\FunctionDeclarationNode', 'Pharborist\ClassMethodNode', 'Pharborist\AnonymousFunctionNode'));
+    return $this->closest(Filter::isInstanceOf('Pharborist\Functions\FunctionDeclarationNode', 'Pharborist\Objects\ClassMethodNode', 'Pharborist\AnonymousFunctionNode'));
   }
 
   /**

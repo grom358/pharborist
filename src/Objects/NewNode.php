@@ -1,7 +1,10 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Objects;
 
+use Pharborist\ExpressionNode;
 use Pharborist\Functions\ArgumentTrait;
+use Pharborist\NameNode;
+use Pharborist\ParentNode;
 
 /**
  * A new expression, e.g. `new Foo()`

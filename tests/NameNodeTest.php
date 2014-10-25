@@ -2,6 +2,8 @@
 namespace Pharborist;
 
 use Pharborist\Functions\FunctionCallNode;
+use Pharborist\Objects\ClassMethodCallNode;
+use Pharborist\Objects\NewNode;
 
 class NameNodeTest extends \PHPUnit_Framework_TestCase {
   public function testUnqualified() {

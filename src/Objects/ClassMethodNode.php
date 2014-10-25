@@ -1,7 +1,14 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Objects;
 
+use Pharborist\Filter;
 use Pharborist\Functions\FunctionDeclarationNode;
+use Pharborist\Node;
+use Pharborist\Parser;
+use Pharborist\Settings;
+use Pharborist\StatementBlockNode;
+use Pharborist\Token;
+use Pharborist\TokenNode;
 
 /**
  * A class method.
@@ -159,7 +166,7 @@ class ClassMethodNode extends ClassStatementNode {
    * @return string
    */
   public function getFullyQualifiedName() {
-    return $this->closest(Filter::isInstanceOf('\Pharborist\ClassNode'))->getName()->getAbsolutePath() . '::' . $this->getName();
+    return $this->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode'))->getName()->getAbsolutePath() . '::' . $this->getName();
   }
 
   protected function childInserted(Node $node) {

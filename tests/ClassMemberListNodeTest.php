@@ -2,6 +2,9 @@
 
 namespace Pharborist;
 
+use Pharborist\Objects\ClassMemberListNode;
+use Pharborist\Objects\ClassNode;
+
 class ClassMemberListNodeTest extends \PHPUnit_Framework_TestCase {
   public function testStatic() {
     /** @var ClassNode $class_node */
@@ -57,7 +60,7 @@ class ClassMemberListNodeTest extends \PHPUnit_Framework_TestCase {
     $original_list = $source->getStatements()[0];
 
     $cloned_list = $original_list->cloneInto($target);
-    $this->assertInstanceOf('\Pharborist\ClassMemberListNode', $cloned_list);
+    $this->assertInstanceOf('\Pharborist\Objects\ClassMemberListNode', $cloned_list);
     $this->assertNotSame($original_list, $cloned_list);
     $this->assertTrue($source->hasProperty('bar'));
     $this->assertTrue($target->hasProperty('bar'));

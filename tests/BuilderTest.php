@@ -3,6 +3,11 @@ namespace Pharborist;
 
 use Pharborist\Functions\FunctionDeclarationNode;
 use Pharborist\Functions\ParameterNode;
+use Pharborist\Objects\ClassMemberListNode;
+use Pharborist\Objects\ClassMethodCallNode;
+use Pharborist\Objects\ClassMethodNode;
+use Pharborist\Objects\ClassNode;
+use Pharborist\Objects\ObjectMethodCallNode;
 
 /**
  * Tests builder methods.
@@ -83,7 +88,7 @@ EOF;
   public function testObjectMethodCall() {
     $object = Token::variable('$object');
     $method_call = ObjectMethodCallNode::create($object, 'someMethod');
-    $this->assertInstanceOf('\Pharborist\ObjectMethodCallNode', $method_call);
+    $this->assertInstanceOf('\Pharborist\Objects\ObjectMethodCallNode', $method_call);
     $this->assertEquals($object, $method_call->getObject());
     $this->assertEquals('$object', $method_call->getObject()->getText());
     $this->assertEquals('someMethod', $method_call->getMethodName()->getText());
@@ -97,7 +102,7 @@ EOF;
 
   public function testClassMethodCall() {
     $method_call = ClassMethodCallNode::create('TestClass', 'someMethod');
-    $this->assertInstanceOf('\Pharborist\ClassMethodCallNode', $method_call);
+    $this->assertInstanceOf('\Pharborist\Objects\ClassMethodCallNode', $method_call);
     $this->assertEquals('TestClass', $method_call->getClassName()->getText());
     $this->assertEquals('someMethod', $method_call->getMethodName()->getText());
     $this->assertCount(0, $method_call->getArguments());

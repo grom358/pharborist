@@ -1,5 +1,10 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Objects;
+
+use Pharborist\ExpressionNode;
+use Pharborist\Node;
+use Pharborist\ParentNode;
+use Pharborist\Parser;
 
 /**
  * A single class member in a ClassMemberListNode.

@@ -1,5 +1,8 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Objects;
+
+use Pharborist\NameNode;
+use Pharborist\TokenNode;
 
 /**
  * A trait alias, e.g. `B::bigTalk as talk;`

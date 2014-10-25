@@ -2,6 +2,9 @@
 
 namespace Pharborist;
 
+use Pharborist\Objects\ClassMethodNode;
+use Pharborist\Objects\ClassNode;
+
 class VisibilityTraitTest extends \PHPUnit_Framework_TestCase {
   public function testSetVisibility() {
     /** @var ClassNode $class_node */

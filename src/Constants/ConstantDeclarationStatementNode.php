@@ -1,9 +1,9 @@
 <?php
 namespace Pharborist\Constants;
 
-use Pharborist\ClassStatementNode;
+use Pharborist\Objects\ClassStatementNode;
 use Pharborist\DocCommentTrait;
-use Pharborist\InterfaceStatementNode;
+use Pharborist\Objects\InterfaceStatementNode;
 
 /**
  * Constant declaration statement.

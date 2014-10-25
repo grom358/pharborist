@@ -1,6 +1,9 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Objects;
 
+use Pharborist\Node;
+use Pharborist\ParentNode;
+use Pharborist\TokenNode;
 use Pharborist\Variables\VariableExpressionNode;
 
 /**

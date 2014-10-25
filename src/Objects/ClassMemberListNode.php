@@ -1,5 +1,11 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Objects;
+
+use Pharborist\TokenNode;
+use Pharborist\Parser;
+use Pharborist\DocCommentTrait;
+use Pharborist\CommaListNode;
+use Pharborist\Token;
 
 /**
  * A class member list declaration, e.g. `protected $foo, $bar;` Even if you define

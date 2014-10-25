@@ -1,7 +1,9 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Objects;
 
 use Pharborist\Functions\FunctionTrait;
+use Pharborist\Token;
+use Pharborist\TokenNode;
 
 /**
  * Trait used by any class method, including abstract methods.

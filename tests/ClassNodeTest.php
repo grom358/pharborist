@@ -3,16 +3,19 @@ namespace Pharborist;
 
 class ClassNodeTest extends \PHPUnit_Framework_TestCase {
   public function testGetPropertyNames() {
+    /** @var \Pharborist\Objects\ClassNode $class */
     $class = Parser::parseSnippet('class Foo { protected $bar; public $baz; }');
     $this->assertSame(['bar', 'baz'], $class->getPropertyNames());
   }
 
   public function testGetMethodNames() {
+    /** @var \Pharborist\Objects\ClassNode $class */
     $class = Parser::parseSnippet('class Foo { public function wambooli() {} }');
     $this->assertSame(['wambooli'], $class->getMethodNames());
   }
 
   public function testHasProperty() {
+    /** @var \Pharborist\Objects\ClassNode $class */
     $class = Parser::parseSnippet('class Foo { protected $bar; }');
     $this->assertTrue($class->hasProperty('bar'));
     $this->assertTrue($class->hasProperty('$bar'));
@@ -21,35 +24,42 @@ class ClassNodeTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testHasMethod() {
+    /** @var \Pharborist\Objects\ClassNode $class */
     $class = Parser::parseSnippet('class Foo { public function wambooli() {} }');
     $this->assertTrue($class->hasMethod('wambooli'));
     $this->assertFalse($class->hasMethod('blorf'));
   }
 
   public function testGetAllProperties() {
-    $properties = Parser::parseSnippet('class Foo { protected $bar; public $baz; }')->getAllProperties();
+    /** @var \Pharborist\Objects\ClassNode $class */
+    $class = Parser::parseSnippet('class Foo { protected $bar; public $baz; }');
+    $properties = $class->getAllProperties();
     $this->assertInstanceOf('\Pharborist\NodeCollection', $properties);
     $this->assertEquals(2, $properties->count());
   }
 
   public function testGetAllMethods() {
-    $methods = Parser::parseSnippet('class Foo { public function wambooli() {} }')->getAllMethods();
+    /** @var \Pharborist\Objects\ClassNode $class */
+    $class = Parser::parseSnippet('class Foo { public function wambooli() {} }');
+    $methods = $class->getAllMethods();
     $this->assertInstanceOf('\Pharborist\NodeCollection', $methods);
     $this->assertEquals(1, $methods->count());
   }
 
   public function testGetProperty() {
+    /** @var \Pharborist\Objects\ClassNode $class */
     $class = Parser::parseSnippet('class Foo { protected $bar; public $baz; }');
     $property = $class->getProperty('baz');
-    $this->assertInstanceOf('\Pharborist\ClassMemberNode', $property);
+    $this->assertInstanceOf('\Pharborist\Objects\ClassMemberNode', $property);
     $this->assertEquals('$baz', $property->getText());
     $this->assertNull($class->getProperty('oops'));
   }
 
   public function testGetMethod() {
+    /** @var \Pharborist\Objects\ClassNode $class */
     $class = Parser::parseSnippet('class Foo { public function wambooli() {} }');
     $method = $class->getMethod('wambooli');
-    $this->assertInstanceOf('\Pharborist\ClassMethodNode', $method);
+    $this->assertInstanceOf('\Pharborist\Objects\ClassMethodNode', $method);
     $this->assertEquals('wambooli', $method->getName()->getText());
     $this->assertNull($class->getMethod('harrr'));
   }
@@ -58,7 +68,9 @@ class ClassNodeTest extends \PHPUnit_Framework_TestCase {
    * @depends testHasProperty
    */
   public function testCreateProperty() {
-    $class = Parser::parseSnippet('class Foo {}')->createProperty('baz', NULL, 'protected');
+    /** @var \Pharborist\Objects\ClassNode $class */
+    $class = Parser::parseSnippet('class Foo {}');
+    $class->createProperty('baz', NULL, 'protected');
     $this->assertTrue($class->hasProperty('baz'));
   }
 }

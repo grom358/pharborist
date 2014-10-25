@@ -1,5 +1,8 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Objects;
+
+use Pharborist\ParentNode;
+use Pharborist\TokenNode;
 
 /**
  * Method/member modifiers.

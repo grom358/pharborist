@@ -1,5 +1,7 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Objects;
+
+use Pharborist\ParentNodeInterface;
 
 interface InterfaceStatementNode extends ParentNodeInterface {
 

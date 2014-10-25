@@ -1,5 +1,8 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Objects;
+
+use Pharborist\CommaListNode;
+use Pharborist\NameNode;
 
 /**
  * A trait precedence declaration.

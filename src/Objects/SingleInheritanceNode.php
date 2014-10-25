@@ -1,7 +1,17 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Objects;
 
+use Pharborist\CommaListNode;
+use Pharborist\DocCommentTrait;
+use Pharborist\Filter;
 use Pharborist\Functions\FunctionDeclarationNode;
+use Pharborist\NameNode;
+use Pharborist\Settings;
+use Pharborist\StatementBlockNode;
+use Pharborist\StatementNode;
+use Pharborist\Token;
+use Pharborist\TokenNode;
+use Pharborist\WhitespaceNode;
 
 /**
  * Base class for ClassNode and TraitNode.
@@ -211,7 +221,7 @@ abstract class SingleInheritanceNode extends StatementNode {
   /**
    * Adds a method to a class.
    *
-   * @param \Pharborist\Functions\FunctionDeclarationNode|\Pharborist\ClassMethodNode|string $method
+   * @param \Pharborist\Functions\FunctionDeclarationNode|\Pharborist\Objects\ClassMethodNode|string $method
    *  The method to append. Can either be an existing method, a function (which
    *  will be converted to a public method), or a string (a new public method
    *  will be created with that name).

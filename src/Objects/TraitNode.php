@@ -1,5 +1,5 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Objects;
 
 /**
  * A trait declaration.

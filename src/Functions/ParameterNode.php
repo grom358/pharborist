@@ -26,6 +26,11 @@ class ParameterNode extends ParentNode {
   protected $reference;
 
   /**
+   * @var TokenNode
+   */
+  protected $variadic;
+
+  /**
    * @var VariableNode
    */
   protected $name;
@@ -59,6 +64,9 @@ class ParameterNode extends ParentNode {
       }
       elseif ($node->getType() === '&') {
         $this->reference = $node;
+      }
+      elseif ($node->getType() === T_ELLIPSIS) {
+        $this->variadic = $node;
       }
       elseif ($node instanceof VariableNode) {
         $this->name = $node;
@@ -136,6 +144,30 @@ class ParameterNode extends ParentNode {
       }
     }
     return $this;
+  }
+
+  /**
+   * @return TokenNode
+   */
+  public function getVariadic() {
+    return $this->variadic;
+  }
+
+  /**
+   * @param boolean $is_variadic
+   * @return $this
+   */
+  public function setVariadic($is_variadic) {
+    if ($is_variadic) {
+      if (!isset($this->variadic)) {
+        $this->name->before(Token::splat());
+      }
+    }
+    else {
+      if (isset($this->variadic)) {
+        $this->variadic->remove();
+      }
+    }
   }
 
   /**

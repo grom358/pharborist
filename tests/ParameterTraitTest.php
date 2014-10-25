@@ -52,4 +52,26 @@ class ParameterTraitTest extends \PHPUnit_Framework_TestCase {
   public function testHasParamterInvalidArgumentException() {
     Parser::parseSnippet('function foo($bar) {}')->hasParameter(1);
   }
+
+  /**
+   * @requires PHP 5.6
+   */
+  public function testIsVariadic() {
+    $doc = <<<'END'
+<?php
+function foo($a, $b, ...$c) {
+}
+END;
+    /** @var \Pharborist\Functions\FunctionDeclarationNode $func */
+    $func = Parser::parseSource($doc)->children(Filter::isFunction('foo'))->get(0);
+    $this->assertTrue($func->isVariadic());
+
+    $doc = <<<'END'
+<?php
+function baz($a, $b, $c) {
+}
+END;
+    $func = Parser::parseSource($doc)->children(Filter::isFunction('baz'))->get(0);
+    $this->assertFalse($func->isVariadic());
+  }
 }

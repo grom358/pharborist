@@ -2017,7 +2017,7 @@ class Parser {
       case '&':
         return $this->writeVariable();
       case T_ELLIPSIS:
-        $node = new EllipsisNode();
+        $node = new SplatNode();
         $this->mustMatch(T_ELLIPSIS, $node);
         $node->addChild($this->expr(), 'expression');
         return $node;
@@ -2086,7 +2086,7 @@ class Parser {
       $node->addChild($type, 'typeHint');
     }
     $this->tryMatch('&', $node, 'reference');
-    $this->tryMatch(T_ELLIPSIS, $node);
+    $this->tryMatch(T_ELLIPSIS, $node, 'variadic');
     $this->mustMatch(T_VARIABLE, $node, 'name', TRUE);
     if ($this->tryMatch('=', $node)) {
       $node->addChild($this->staticScalar(), 'value');

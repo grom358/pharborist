@@ -180,6 +180,8 @@ class Token {
         return static::namespaceConstant();
       case '__TRAIT__':
         return static::traitConstant();
+      case '...':
+        return static::splat();
       case '=>':
         return static::doubleArrow();
       case '->':
@@ -750,6 +752,10 @@ class Token {
 
   public static function semiColon() {
     return new TokenNode(';', ';');
+  }
+
+  public static function splat() {
+    return new TokenNode(T_ELLIPSIS, '...');
   }
 
   public static function subtract() {

@@ -1,6 +1,7 @@
 <?php
 namespace Pharborist\Functions;
 
+use Pharborist\SplatNode;
 use Pharborist\Filter;
 use Pharborist\NodeCollection;
 use Pharborist\CommaListNode;
@@ -242,5 +243,19 @@ trait ParameterTrait {
         $value = $parameter->getValue();
         return isset($value);
       });
+  }
+
+  /**
+   * Returns if the final parameter is variadic (PHP 5.6+), as in:
+   * `function foobaz($a, $b, ...$c)`
+   *
+   * @return boolean
+   */
+  public function isVariadic() {
+    $parameters = $this->getParameters();
+    $last_parameter = end($parameters);
+    // In a variadic function, the last parameter is the only one which is
+    // allowed to be variadic.
+    return $last_parameter->getVariadic() !== NULL;
   }
 }

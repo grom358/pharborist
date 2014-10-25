@@ -1,5 +1,8 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\ControlStructures;
+
+use Pharborist\StatementNode;
+use Pharborist\IntegerNode;
 
 /**
  * A continue statement.

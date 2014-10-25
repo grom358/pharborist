@@ -1,5 +1,9 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\ControlStructures;
+
+use Pharborist\Node;
+use Pharborist\StatementNode;
+use Pharborist\ExpressionNode;
 
 /**
  * do-while control structure.

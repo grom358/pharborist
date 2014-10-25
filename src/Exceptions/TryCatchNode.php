@@ -1,5 +1,8 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Exceptions;
+
+use Pharborist\Node;
+use Pharborist\StatementNode;
 
 /**
  * A try control structure.
@@ -26,7 +29,7 @@ class TryCatchNode extends StatementNode {
    * @return CatchNode[]
    */
   public function getCatches() {
-    return $this->childrenByInstance('\Pharborist\CatchNode');
+    return $this->childrenByInstance('\Pharborist\Exceptions\CatchNode');
   }
 
   /**

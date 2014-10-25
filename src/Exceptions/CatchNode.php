@@ -1,5 +1,10 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Exceptions;
+
+use Pharborist\ParentNode;
+use Pharborist\NameNode;
+use Pharborist\StatementBlockNode;
+use Pharborist\VariableNode;
 
 /**
  * A catch in a try control structure.

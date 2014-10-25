@@ -1,10 +1,13 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\ControlStructures;
+
+use Pharborist\ParentNode;
+use Pharborist\TokenNode;
 
 /**
- * A goto statement.
+ * A goto label.
  */
-class GotoStatementNode extends StatementNode {
+class GotoLabelNode extends ParentNode {
   /**
    * @var TokenNode
    */

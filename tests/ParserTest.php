@@ -3,6 +3,20 @@ namespace Pharborist;
 
 use Pharborist\Constants\ConstantDeclarationStatementNode;
 use Pharborist\Constants\ConstantNode;
+use Pharborist\ControlStructures\BreakStatementNode;
+use Pharborist\ControlStructures\ContinueStatementNode;
+use Pharborist\ControlStructures\DeclareNode;
+use Pharborist\ControlStructures\DoWhileNode;
+use Pharborist\ControlStructures\ExitNode;
+use Pharborist\ControlStructures\ForeachNode;
+use Pharborist\ControlStructures\ForNode;
+use Pharborist\ControlStructures\GotoLabelNode;
+use Pharborist\ControlStructures\GotoStatementNode;
+use Pharborist\ControlStructures\IfNode;
+use Pharborist\ControlStructures\ImportNode;
+use Pharborist\ControlStructures\ReturnStatementNode;
+use Pharborist\ControlStructures\SwitchNode;
+use Pharborist\ControlStructures\WhileNode;
 use Pharborist\Exceptions\TryCatchNode;
 use Pharborist\Functions\AnonymousFunctionNode;
 use Pharborist\Functions\CallbackCallNode;
@@ -459,7 +473,7 @@ elseif ($another_condition) {
 else { do_else(); }
 EOF;
     /** @var IfNode $if */
-    $if = $this->parseSnippet($snippet, '\Pharborist\IfNode');
+    $if = $this->parseSnippet($snippet, '\Pharborist\ControlStructures\IfNode');
     $this->assertEquals('$condition', $if->getCondition()->getText());
     $this->assertEquals('{ then(); }', $if->getThen()->getText());
     $else_ifs = $if->getElseIfs();
@@ -486,7 +500,7 @@ else:
 endif;
 EOF;
     /** @var IfNode $if */
-    $if = $this->parseSnippet($snippet, '\Pharborist\IfNode');
+    $if = $this->parseSnippet($snippet, '\Pharborist\ControlStructures\IfNode');
     $this->assertEquals('$condition', $if->getCondition()->getText());
     $this->assertEquals('then();', $if->getThen()->getText());
     $else_ifs = $if->getElseIfs();
@@ -506,7 +520,7 @@ foreach ($array as $k => &$v)
   body();
 EOF;
     /** @var ForeachNode $foreach */
-    $foreach = $this->parseSnippet($snippet, '\Pharborist\ForeachNode');
+    $foreach = $this->parseSnippet($snippet, '\Pharborist\ControlStructures\ForeachNode');
     $this->assertEquals('$array', $foreach->getOnEach()->getText());
     $this->assertEquals('$k', $foreach->getKey()->getText());
     /** @var ReferenceVariableNode $value */
@@ -521,7 +535,7 @@ foreach ($array as $v)
   body();
 EOF;
     /** @var ForeachNode $foreach */
-    $foreach = $this->parseSnippet($snippet, '\Pharborist\ForeachNode');
+    $foreach = $this->parseSnippet($snippet, '\Pharborist\ControlStructures\ForeachNode');
     $this->assertEquals('$array', $foreach->getOnEach()->getText());
     $this->assertNull($foreach->getKey());
     $this->assertEquals('$v', $foreach->getValue()->getText());
@@ -538,7 +552,7 @@ foreach ($array as $k => &$v):
 endforeach;
 EOF;
     /** @var ForeachNode $foreach */
-    $foreach = $this->parseSnippet($snippet, '\Pharborist\ForeachNode');
+    $foreach = $this->parseSnippet($snippet, '\Pharborist\ControlStructures\ForeachNode');
     $this->assertEquals('$array', $foreach->getOnEach()->getText());
     $this->assertEquals('$k', $foreach->getKey()->getText());
     $this->assertEquals('&$v', $foreach->getValue()->getText());
@@ -550,7 +564,7 @@ foreach ($array as $v):
 endforeach;
 EOF;
     /** @var ForeachNode $foreach */
-    $foreach = $this->parseSnippet($snippet, '\Pharborist\ForeachNode');
+    $foreach = $this->parseSnippet($snippet, '\Pharborist\ControlStructures\ForeachNode');
     $this->assertEquals('$array', $foreach->getOnEach()->getText());
     $this->assertNull($foreach->getKey());
     $this->assertEquals('$v', $foreach->getValue()->getText());
@@ -566,7 +580,7 @@ while ($cond)
   body();
 EOF;
     /** @var WhileNode $while */
-    $while = $this->parseSnippet($snippet, '\Pharborist\WhileNode');
+    $while = $this->parseSnippet($snippet, '\Pharborist\ControlStructures\WhileNode');
     $this->assertEquals('$cond', $while->getCondition()->getText());
     $this->assertEquals('body();', $while->getBody()->getText());
   }
@@ -581,7 +595,7 @@ while ($cond):
 endwhile;
 EOF;
     /** @var WhileNode $while */
-    $while = $this->parseSnippet($snippet, '\Pharborist\WhileNode');
+    $while = $this->parseSnippet($snippet, '\Pharborist\ControlStructures\WhileNode');
     $this->assertEquals('$cond', $while->getCondition()->getText());
     $this->assertEquals('body();', $while->getBody()->getText());
   }
@@ -596,7 +610,7 @@ do
 while ($cond);
 EOF;
     /** @var DoWhileNode $do_while */
-    $do_while = $this->parseSnippet($snippet, '\Pharborist\DoWhileNode');
+    $do_while = $this->parseSnippet($snippet, '\Pharborist\ControlStructures\DoWhileNode');
     $this->assertEquals('body();', $do_while->getBody()->getText());
     $this->assertEquals('$cond', $do_while->getCondition()->getText());
   }
@@ -610,7 +624,7 @@ for ($i = 0; $i < 10; ++$i)
   body();
 EOF;
     /** @var ForNode $for */
-    $for = $this->parseSnippet($snippet, '\Pharborist\ForNode');
+    $for = $this->parseSnippet($snippet, '\Pharborist\ControlStructures\ForNode');
     $this->assertCount(1, $for->getInitial()->getItems());
     $this->assertEquals('$i = 0', $for->getInitial()->getText());
     $this->assertCount(1, $for->getCondition()->getItems());
@@ -630,7 +644,7 @@ for ($i = 0; $i < 10; ++$i):
 endfor;
 EOF;
     /** @var ForNode $for */
-    $for = $this->parseSnippet($snippet, '\Pharborist\ForNode');
+    $for = $this->parseSnippet($snippet, '\Pharborist\ControlStructures\ForNode');
     $this->assertEquals('$i = 0', $for->getInitial()->getText());
     $this->assertEquals('$i < 10', $for->getCondition()->getText());
     $this->assertEquals('++$i', $for->getStep()->getText());
@@ -646,7 +660,7 @@ for (;;)
   body();
 EOF;
     /** @var ForNode $for */
-    $for = $this->parseSnippet($snippet, '\Pharborist\ForNode');
+    $for = $this->parseSnippet($snippet, '\Pharborist\ControlStructures\ForNode');
     $this->assertEquals('', $for->getInitial()->getText());
     $this->assertEquals('', $for->getCondition()->getText());
     $this->assertEquals('', $for->getStep()->getText());
@@ -669,7 +683,7 @@ switch ($cond) {
 }
 EOF;
     /** @var SwitchNode $switch */
-    $switch = $this->parseSnippet($snippet, '\Pharborist\SwitchNode');
+    $switch = $this->parseSnippet($snippet, '\Pharborist\ControlStructures\SwitchNode');
     $this->assertEquals('$cond', $switch->getSwitchOn()->getText());
     $cases = $switch->getCases();
     $case = $cases[0];
@@ -682,7 +696,7 @@ EOF;
     $this->assertEquals("'through'", $case->getMatchOn()->getText());
     $this->assertEquals('break;', $case->getBody()->getText());
     $case = $cases[3];
-    $this->assertInstanceOf('\Pharborist\DefaultNode', $case);
+    $this->assertInstanceOf('\Pharborist\ControlStructures\DefaultNode', $case);
     $this->assertEquals('break;', $case->getBody()->getText());
   }
 
@@ -702,7 +716,7 @@ switch ($cond):
 endswitch;
 EOF;
     /** @var SwitchNode $switch */
-    $switch = $this->parseSnippet($snippet, '\Pharborist\SwitchNode');
+    $switch = $this->parseSnippet($snippet, '\Pharborist\ControlStructures\SwitchNode');
     $this->assertEquals('$cond', $switch->getSwitchOn()->getText());
     $cases = $switch->getCases();
     $case = $cases[0];
@@ -715,7 +729,7 @@ EOF;
     $this->assertEquals("'through'", $case->getMatchOn()->getText());
     $this->assertEquals('break;', $case->getBody()->getText());
     $case = $cases[3];
-    $this->assertInstanceOf('\Pharborist\DefaultNode', $case);
+    $this->assertInstanceOf('\Pharborist\ControlStructures\DefaultNode', $case);
     $this->assertEquals('break;', $case->getBody()->getText());
   }
 
@@ -748,7 +762,7 @@ EOF;
   public function testDeclare() {
     $snippet = 'declare(DECLARE_TEST = 1, MY_CONST = 2) { body(); }';
     /** @var DeclareNode $declare */
-    $declare = $this->parseSnippet($snippet, '\Pharborist\DeclareNode');
+    $declare = $this->parseSnippet($snippet, '\Pharborist\ControlStructures\DeclareNode');
     $directives = $declare->getDirectives();
     $directive = $directives[0];
     $this->assertEquals('DECLARE_TEST', $directive->getName()->getText());
@@ -765,7 +779,7 @@ EOF;
   public function testAlternativeDeclare() {
     $snippet = 'declare(DECLARE_TEST = 1, MY_CONST = 2): body(); enddeclare;';
     /** @var DeclareNode $declare */
-    $declare = $this->parseSnippet($snippet, '\Pharborist\DeclareNode');
+    $declare = $this->parseSnippet($snippet, '\Pharborist\ControlStructures\DeclareNode');
     $directives = $declare->getDirectives();
     $directive = $directives[0];
     $this->assertEquals('DECLARE_TEST', $directive->getName()->getText());
@@ -1580,19 +1594,18 @@ EOF;
    */
   public function testBreak() {
     /** @var BreakStatementNode $break */
-    $break = $this->parseSnippet('break;', '\Pharborist\BreakStatementNode');
+    $break = $this->parseSnippet('break;', '\Pharborist\ControlStructures\BreakStatementNode');
     $this->assertNull($break->getLevel());
 
-    $break = $this->parseSnippet('break 1;', '\Pharborist\BreakStatementNode');
+    $break = $this->parseSnippet('break 1;', '\Pharborist\ControlStructures\BreakStatementNode');
     $this->assertInstanceOf('\Pharborist\IntegerNode', $break->getLevel());
     $this->assertEquals('1', $break->getLevel()->getText());
 
-    $break = $this->parseSnippet('break(1);', '\Pharborist\BreakStatementNode');
-    $this->assertInstanceOf('\Pharborist\BreakStatementNode', $break);
+    $break = $this->parseSnippet('break(1);', '\Pharborist\ControlStructures\BreakStatementNode');
     $this->assertInstanceOf('\Pharborist\IntegerNode', $break->getLevel());
     $this->assertEquals('1', $break->getLevel()->getText());
 
-    $break = $this->parseSnippet('break (2);', '\Pharborist\BreakStatementNode');
+    $break = $this->parseSnippet('break (2);', '\Pharborist\ControlStructures\BreakStatementNode');
     $this->assertInstanceOf('\Pharborist\IntegerNode', $break->getLevel());
     $this->assertEquals('2', $break->getLevel()->getText());
   }
@@ -1602,18 +1615,18 @@ EOF;
    */
   public function testContinue() {
     /** @var ContinueStatementNode $continue */
-    $continue = $this->parseSnippet('continue;', '\Pharborist\ContinueStatementNode');
+    $continue = $this->parseSnippet('continue;', '\Pharborist\ControlStructures\ContinueStatementNode');
     $this->assertNull($continue->getLevel());
 
-    $continue = $this->parseSnippet('continue 1;', '\Pharborist\ContinueStatementNode');
+    $continue = $this->parseSnippet('continue 1;', '\Pharborist\ControlStructures\ContinueStatementNode');
     $this->assertInstanceOf('\Pharborist\IntegerNode', $continue->getLevel());
     $this->assertEquals('1', $continue->getLevel()->getText());
 
-    $continue = $this->parseSnippet('continue(1);', '\Pharborist\ContinueStatementNode');
+    $continue = $this->parseSnippet('continue(1);', '\Pharborist\ControlStructures\ContinueStatementNode');
     $this->assertInstanceOf('\Pharborist\IntegerNode', $continue->getLevel());
     $this->assertEquals('1', $continue->getLevel()->getText());
 
-    $continue = $this->parseSnippet('continue (2);', '\Pharborist\ContinueStatementNode');
+    $continue = $this->parseSnippet('continue (2);', '\Pharborist\ControlStructures\ContinueStatementNode');
     $this->assertInstanceOf('\Pharborist\IntegerNode', $continue->getLevel());
     $this->assertEquals('2', $continue->getLevel()->getText());
   }
@@ -1657,11 +1670,11 @@ EOF;
     $tree = $this->parseSource($source);
     /** @var GotoLabelNode $goto_label */
     $goto_label = $tree->firstChild()->next();
-    $this->assertInstanceOf('\Pharborist\GotoLabelNode', $goto_label);
+    $this->assertInstanceOf('\Pharborist\ControlStructures\GotoLabelNode', $goto_label);
     $this->assertEquals('loop', $goto_label->getLabel()->getText());
     /** @var GotoStatementNode $goto_statement */
     $goto_statement = $tree->lastChild();
-    $this->assertInstanceOf('\Pharborist\GotoStatementNode', $goto_statement);
+    $this->assertInstanceOf('\Pharborist\ControlStructures\GotoStatementNode', $goto_statement);
     $this->assertEquals('loop', $goto_statement->getLabel()->getText());
   }
 
@@ -1670,10 +1683,10 @@ EOF;
    */
   public function testReturn() {
     /** @var ReturnStatementNode $return_statement */
-    $return_statement = $this->parseSnippet('return;', '\Pharborist\ReturnStatementNode');
+    $return_statement = $this->parseSnippet('return;', '\Pharborist\ControlStructures\ReturnStatementNode');
     $this->assertNull($return_statement->getExpression());
 
-    $return_statement = $this->parseSnippet('return $done;', '\Pharborist\ReturnStatementNode');
+    $return_statement = $this->parseSnippet('return $done;', '\Pharborist\ControlStructures\ReturnStatementNode');
     $this->assertEquals('$done', $return_statement->getExpression());
   }
 
@@ -1719,16 +1732,16 @@ EOF;
    */
   public function testIncludes() {
     /** @var ImportNode $import */
-    $import = $this->parseExpression('include expr()', '\Pharborist\IncludeNode');
+    $import = $this->parseExpression('include expr()', '\Pharborist\ControlStructures\IncludeNode');
     $this->assertEquals('expr()', $import->getExpression()->getText());
 
-    $import = $this->parseExpression('include_once expr()', '\Pharborist\IncludeOnceNode');
+    $import = $this->parseExpression('include_once expr()', '\Pharborist\ControlStructures\IncludeOnceNode');
     $this->assertEquals('expr()', $import->getExpression()->getText());
 
-    $import = $this->parseExpression('require expr()', '\Pharborist\RequireNode');
+    $import = $this->parseExpression('require expr()', '\Pharborist\ControlStructures\RequireNode');
     $this->assertEquals('expr()', $import->getExpression()->getText());
 
-    $import = $this->parseExpression('require_once expr()', '\Pharborist\RequireOnceNode');
+    $import = $this->parseExpression('require_once expr()', '\Pharborist\ControlStructures\RequireOnceNode');
     $this->assertEquals('expr()', $import->getExpression()->getText());
   }
 
@@ -1768,13 +1781,13 @@ EOF;
    */
   public function testExit() {
     /** @var ExitNode $exit */
-    $exit = $this->parseExpression('exit', '\Pharborist\ExitNode');
+    $exit = $this->parseExpression('exit', '\Pharborist\ControlStructures\ExitNode');
     $this->assertNull($exit->getExpression());
 
-    $exit = $this->parseExpression('exit()', '\Pharborist\ExitNode');
+    $exit = $this->parseExpression('exit()', '\Pharborist\ControlStructures\ExitNode');
     $this->assertNull($exit->getExpression());
 
-    $exit = $this->parseExpression('exit($status)', '\Pharborist\ExitNode');
+    $exit = $this->parseExpression('exit($status)', '\Pharborist\ControlStructures\ExitNode');
     $this->assertEquals('$status', $exit->getExpression()->getText());
   }
 

@@ -1,5 +1,9 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\ControlStructures;
+
+use Pharborist\StatementNode;
+use Pharborist\Parser;
+use Pharborist\ExpressionNode;
 
 /**
  * A return statement.

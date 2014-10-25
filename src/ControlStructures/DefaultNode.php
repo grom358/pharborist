@@ -1,5 +1,8 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\ControlStructures;
+
+use Pharborist\StatementNode;
+use Pharborist\StatementBlockNode;
 
 /**
  * A default statement in switch control structure.

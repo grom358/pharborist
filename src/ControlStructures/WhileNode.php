@@ -1,10 +1,14 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\ControlStructures;
+
+use Pharborist\Node;
+use Pharborist\StatementNode;
+use Pharborist\ExpressionNode;
 
 /**
- * do-while control structure.
+ * while control structure.
  */
-class DoWhileNode extends StatementNode {
+class WhileNode extends StatementNode {
   /**
    * @var ExpressionNode
    */

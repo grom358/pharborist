@@ -1,5 +1,5 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\ControlStructures;
 
 /**
  * An `include_once` statement.

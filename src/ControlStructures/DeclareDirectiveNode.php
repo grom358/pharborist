@@ -1,5 +1,9 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\ControlStructures;
+
+use Pharborist\ParentNode;
+use Pharborist\ExpressionNode;
+use Pharborist\TokenNode;
 
 /**
  * A declare directive.

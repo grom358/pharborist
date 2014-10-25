@@ -1,5 +1,8 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\ControlStructures;
+
+use Pharborist\Node;
+use Pharborist\StatementNode;
 
 /**
  * foreach control structure.

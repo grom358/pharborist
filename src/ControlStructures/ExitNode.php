@@ -1,10 +1,13 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\ControlStructures;
+
+use Pharborist\ParentNode;
+use Pharborist\ExpressionNode;
 
 /**
- * An include(_once) or require(_once) expression.
+ * An exit.
  */
-abstract class ImportNode extends ParentNode implements ExpressionNode {
+class ExitNode extends ParentNode implements ExpressionNode {
   /**
    * @var ExpressionNode
    */

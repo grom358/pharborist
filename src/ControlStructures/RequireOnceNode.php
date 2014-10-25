@@ -1,5 +1,5 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\ControlStructures;
 
 /**
  * A require_once.

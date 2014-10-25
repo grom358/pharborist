@@ -2,6 +2,8 @@
 
 namespace Pharborist;
 
+use Pharborist\ControlStructures\ReturnStatementNode;
+
 class ReturnStatementNodeTest extends \PHPUnit_Framework_TestCase {
   public function testCreate() {
     $ret = ReturnStatementNode::create(TrueNode::create());

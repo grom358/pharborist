@@ -2,6 +2,8 @@
 
 namespace Pharborist;
 
+use Pharborist\Variables\VariableNode;
+
 class VariableNodeTest extends \PHPUnit_Framework_TestCase {
   public function testGetName() {
     $var = new VariableNode(T_VARIABLE, '$form');

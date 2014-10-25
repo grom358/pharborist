@@ -91,7 +91,7 @@ EOF;
     $var = Parser::parseExpression('$a');
     $method_call->appendArgument($var);
     $arg = $method_call->getArguments()[0];
-    $this->assertInstanceOf('\Pharborist\VariableNode', $arg);
+    $this->assertInstanceOf('\Pharborist\Variables\VariableNode', $arg);
     $this->assertEquals('$a', $arg->getText());
   }
 
@@ -104,7 +104,7 @@ EOF;
     $var = Parser::parseExpression('$a');
     $method_call->appendArgument($var);
     $arg = $method_call->getArguments()[0];
-    $this->assertInstanceOf('\Pharborist\VariableNode', $arg);
+    $this->assertInstanceOf('\Pharborist\Variables\VariableNode', $arg);
     $this->assertEquals('$a', $arg->getText());
   }
 

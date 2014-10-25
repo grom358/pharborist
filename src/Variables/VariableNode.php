@@ -1,7 +1,8 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Variables;
 
 use Pharborist\Functions\LexicalVariableNode;
+use Pharborist\TokenNode;
 
 /**
  * A basic variable.

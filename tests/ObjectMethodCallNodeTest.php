@@ -10,7 +10,7 @@ class ObjectMethodCallNodeTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testGetObject() {
-    $this->assertInstanceOf('Pharborist\VariableNode', $this->call->getObject());
+    $this->assertInstanceOf('Pharborist\Variables\VariableNode', $this->call->getObject());
     $this->assertEquals('mulder', $this->call->getObject()->getName());
   }
 

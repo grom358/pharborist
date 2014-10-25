@@ -2,7 +2,7 @@
 namespace Pharborist\Functions;
 
 use Pharborist\NameNode;
-use Pharborist\VariableExpressionNode;
+use Pharborist\Variables\VariableExpressionNode;
 
 /**
  * A function call.

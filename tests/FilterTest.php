@@ -13,9 +13,9 @@ function a() {}
 class B {}
 END;
     $doc = Parser::parseSource($doc);
-    $stuff = $doc->find(Filter::isInstanceOf('\Pharborist\VariableNode', '\Pharborist\Functions\FunctionDeclarationNode', '\Pharborist\ClassNode'));
+    $stuff = $doc->find(Filter::isInstanceOf('\Pharborist\Variables\VariableNode', '\Pharborist\Functions\FunctionDeclarationNode', '\Pharborist\ClassNode'));
     $this->assertCount(3, $stuff);
-    $this->assertInstanceOf('\Pharborist\VariableNode', $stuff[0]);
+    $this->assertInstanceOf('\Pharborist\Variables\VariableNode', $stuff[0]);
     $this->assertEquals('$foo', $stuff[0]);
     $this->assertInstanceOf('\Pharborist\Functions\FunctionDeclarationNode', $stuff[1]);
     $this->assertEquals('function a() {}', $stuff[1]);

@@ -1,5 +1,8 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Variables;
+
+use Pharborist\ExpressionNode;
+use Pharborist\ParentNode;
 
 /**
  * A compound variable.

@@ -4,7 +4,7 @@ namespace Pharborist\Exceptions;
 use Pharborist\ParentNode;
 use Pharborist\NameNode;
 use Pharborist\StatementBlockNode;
-use Pharborist\VariableNode;
+use Pharborist\Variables\VariableNode;
 
 /**
  * A catch in a try control structure.

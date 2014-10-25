@@ -9,7 +9,7 @@ use Pharborist\Node;
 use Pharborist\ParentNode;
 use Pharborist\Token;
 use Pharborist\TokenNode;
-use Pharborist\VariableNode;
+use Pharborist\Variables\VariableNode;
 
 /**
  * A function parameter.
@@ -216,7 +216,7 @@ class ParameterNode extends ParentNode {
     if ($rewrite) {
       $this
         ->getFunction()
-        ->find(Filter::isInstanceOf('Pharborist\VariableNode'))
+        ->find(Filter::isInstanceOf('\Pharborist\Variables\VariableNode'))
         ->filter(function(VariableNode $node) use ($original_name) {
           return $node->getText() === '$' . $original_name;
         })
@@ -242,7 +242,7 @@ class ParameterNode extends ParentNode {
   public function setValue($node) {
     if ($node === NULL) {
       if (isset($this->value)) {
-        $this->value->previousUntil(Filter::isInstanceOf('\Pharborist\VariableNode'))->remove();
+        $this->value->previousUntil(Filter::isInstanceOf('\Pharborist\Variables\VariableNode'))->remove();
         $this->value->remove();
       }
     }

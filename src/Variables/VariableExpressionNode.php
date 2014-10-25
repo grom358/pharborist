@@ -1,5 +1,7 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Variables;
+
+use Pharborist\ExpressionNode;
 
 /**
  * Nodes that represent a variable in an expression.

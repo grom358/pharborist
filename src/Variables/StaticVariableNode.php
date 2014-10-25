@@ -1,5 +1,9 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Variables;
+
+use Pharborist\ExpressionNode;
+use Pharborist\Node;
+use Pharborist\ParentNode;
 
 /**
  * A static variable declaration.

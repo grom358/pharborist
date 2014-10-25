@@ -1,5 +1,9 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Variables;
+
+use Pharborist\ParentNode;
+use Pharborist\Variables\VariableExpressionNode;
+use Pharborist\Node;
 
 /**
  * A variable variable.

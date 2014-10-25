@@ -16,7 +16,7 @@ class BinaryOperationNodeTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testGetLeftOperand() {
-    $this->assertInstanceOf('Pharborist\VariableNode', $this->op->getLeftOperand());
+    $this->assertInstanceOf('Pharborist\Variables\VariableNode', $this->op->getLeftOperand());
     $this->assertEquals('doAliensExist', $this->op->getLeftOperand()->getName());
   }
 

@@ -17,6 +17,10 @@ use Pharborist\Functions\ListNode;
 use Pharborist\Operator\BinaryOperationNode;
 use Pharborist\Operator\TernaryOperationNode;
 use Pharborist\Operator\UnaryOperationNode;
+use Pharborist\Variables\CompoundVariableNode;
+use Pharborist\Variables\GlobalStatementNode;
+use Pharborist\Variables\StaticVariableStatementNode;
+use Pharborist\Variables\VariableVariableNode;
 
 /**
  * Tests Phaborist\Parser.
@@ -987,10 +991,10 @@ EOF';
    * Test variable.
    */
   public function testVariable() {
-    $this->parseVariable('$a', '\Pharborist\VariableNode');
+    $this->parseVariable('$a', '\Pharborist\Variables\VariableNode');
 
     /** @var CompoundVariableNode $compound_var */
-    $compound_var = $this->parseVariable('${$a}', '\Pharborist\CompoundVariableNode');
+    $compound_var = $this->parseVariable('${$a}', '\Pharborist\Variables\CompoundVariableNode');
     $this->assertEquals('$a', $compound_var->getExpression()->getText());
 
     /** @var ArrayLookupNode $array_lookup */
@@ -1003,7 +1007,7 @@ EOF';
     $this->assertEquals('0', $array_lookup->getKey()->getText());
 
     /** @var VariableVariableNode $var_var */
-    $var_var = $this->parseVariable('$$a', '\Pharborist\VariableVariableNode');
+    $var_var = $this->parseVariable('$$a', '\Pharborist\Variables\VariableVariableNode');
     $this->assertEquals('$a', $var_var->getVariable()->getText());
 
     /** @var ClassMemberLookupNode $class_member_lookup */
@@ -1113,10 +1117,10 @@ EOF';
    * Test expression.
    */
   public function testExpression() {
-    $this->parseExpression('$a', '\Pharborist\VariableNode');
+    $this->parseExpression('$a', '\Pharborist\Variables\VariableNode');
 
     /** @var CompoundVariableNode $compound_var */
-    $compound_var = $this->parseExpression('${$a}', '\Pharborist\CompoundVariableNode');
+    $compound_var = $this->parseExpression('${$a}', '\Pharborist\Variables\CompoundVariableNode');
     $this->assertEquals('$a', $compound_var->getExpression()->getText());
 
     /** @var ArrayLookupNode $array_lookup */
@@ -1129,7 +1133,7 @@ EOF';
     $this->assertEquals('0', $array_lookup->getKey()->getText());
 
     /** @var VariableVariableNode $var_var */
-    $var_var = $this->parseExpression('$$a', '\Pharborist\VariableVariableNode');
+    $var_var = $this->parseExpression('$$a', '\Pharborist\Variables\VariableVariableNode');
     $this->assertEquals('$a', $var_var->getVariable()->getText());
 
     /** @var ClassMemberLookupNode $class_member_lookup */
@@ -1434,7 +1438,7 @@ EOF';
    */
   public function testStaticVariableList() {
     /** @var StaticVariableStatementNode $static_var_stmt */
-    $static_var_stmt = $this->parseSnippet('/** static vars */ static $a, $b = 1;', '\Pharborist\StaticVariableStatementNode');
+    $static_var_stmt = $this->parseSnippet('/** static vars */ static $a, $b = 1;', '\Pharborist\Variables\StaticVariableStatementNode');
     $this->assertEquals('/** static vars */', $static_var_stmt->getDocComment()->getText());
     $static_vars = $static_var_stmt->getVariables();
     $this->assertEquals('$a', $static_vars[0]->getText());
@@ -1622,7 +1626,7 @@ EOF;
 global $a, $$b, ${expr()};
 EOF;
     /** @var GlobalStatementNode $global_statement */
-    $global_statement = $this->parseSnippet($snippet, '\Pharborist\GlobalStatementNode');
+    $global_statement = $this->parseSnippet($snippet, '\Pharborist\Variables\GlobalStatementNode');
     $variables = $global_statement->getVariables();
     $this->assertEquals('$a', $variables[0]->getText());
     $this->assertEquals('$$b', $variables[1]->getText());

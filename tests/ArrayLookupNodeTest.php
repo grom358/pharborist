@@ -39,7 +39,7 @@ class ArrayLookupNodeTest extends \PHPUnit_Framework_TestCase {
     $lookup = Parser::parseExpression('$foo["bar"]["baz"][0]');
     $this->assertInstanceOf('\Pharborist\ArrayLookupNode', $lookup);
     $root = $lookup->getRoot();
-    $this->assertInstanceOf('\Pharborist\VariableNode', $root);
+    $this->assertInstanceOf('\Pharborist\Variables\VariableNode', $root);
     $this->assertEquals('$foo', $root->getText());
 
     $lookup = Parser::parseExpression('foo()["bar"]');

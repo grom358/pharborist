@@ -1,6 +1,8 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Variables\VariableExpressionNode;
+
 /**
  * An object property access, e.g. `$object->property`.
  */

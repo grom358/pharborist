@@ -2,6 +2,7 @@
 namespace Pharborist;
 
 use Pharborist\Functions\CallNode;
+use Pharborist\Variables\VariableExpressionNode;
 
 /**
  * A call to a static class method, e.g. `MyClass::classMethod()`

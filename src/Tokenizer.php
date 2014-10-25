@@ -1,5 +1,6 @@
 <?php
 namespace Pharborist;
+
 use Pharborist\Constants\ClassMagicConstantNode;
 use Pharborist\Constants\DirMagicConstantNode;
 use Pharborist\Constants\FileMagicConstantNode;
@@ -8,6 +9,7 @@ use Pharborist\Constants\LineMagicConstantNode;
 use Pharborist\Constants\MethodMagicConstantNode;
 use Pharborist\Constants\NamespaceMagicConstantNode;
 use Pharborist\Constants\TraitMagicConstantNode;
+use Pharborist\Variables\VariableNode;
 
 /**
  * Convert PHP source into an array of tokens.

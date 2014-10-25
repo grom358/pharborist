@@ -1,5 +1,8 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Variables;
+
+use Pharborist\CommaListNode;
+use Pharborist\StatementNode;
 
 /**
  * A global statement, e.g. `global $a, $b`

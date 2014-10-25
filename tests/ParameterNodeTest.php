@@ -24,7 +24,7 @@ class ParameterNodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertTrue($parameter->isRequired());
 
     $parameter->setName('b', TRUE);
-    $variable_name = $function->find(Filter::isInstanceOf('Pharborist\VariableNode'))[0]->getText();
+    $variable_name = $function->find(Filter::isInstanceOf('Pharborist\Variables\VariableNode'))[0]->getText();
     $this->assertEquals('$b', $variable_name);
   }
 }

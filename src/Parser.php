@@ -19,6 +19,11 @@ use Pharborist\Functions\IssetNode;
 use Pharborist\Functions\ListNode;
 use Pharborist\Functions\ParameterNode;
 use Pharborist\Functions\UnsetNode;
+use Pharborist\Variables\CompoundVariableNode;
+use Pharborist\Variables\GlobalStatementNode;
+use Pharborist\Variables\StaticVariableNode;
+use Pharborist\Variables\StaticVariableStatementNode;
+use Pharborist\Variables\VariableVariableNode;
 
 /**
  * Parses PHP tokens into syntax tree.

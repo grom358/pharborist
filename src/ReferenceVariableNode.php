@@ -2,6 +2,7 @@
 namespace Pharborist;
 
 use Pharborist\Functions\LexicalVariableNode;
+use Pharborist\Variables\VariableNode;
 
 /**
  * A reference variable.

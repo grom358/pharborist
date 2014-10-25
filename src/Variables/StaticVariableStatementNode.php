@@ -1,5 +1,9 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Variables;
+
+use Pharborist\StatementNode;
+use Pharborist\DocCommentTrait;
+use Pharborist\CommaListNode;
 
 /**
  * A static variable statement.

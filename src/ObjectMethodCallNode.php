@@ -2,6 +2,7 @@
 namespace Pharborist;
 
 use Pharborist\Functions\CallNode;
+use Pharborist\Variables\VariableExpressionNode;
 
 /**
  * An object method call, e.g. `$object->method()`

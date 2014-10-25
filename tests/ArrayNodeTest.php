@@ -96,4 +96,10 @@ class ArrayNodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertInstanceOf('\Pharborist\ArrayNode', $values[2]);
     $this->assertSame(['a','b','c'], array_map([$this, 'toScalar'], $values[2]->getValues()->toArray()));
   }
+
+  public function testMultidimensional() {
+    /** @var ArrayNode $array */
+    $array = Parser::parseExpression('array("foo", "k" => "baz", 2 => array("nested"))');
+    $this->assertTrue($array->isMultidimensional());
+  }
 }

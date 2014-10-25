@@ -66,6 +66,7 @@ use Pharborist\Objects\TraitPrecedenceNode;
 use Pharborist\Objects\TraitUseNode;
 use Pharborist\Variables\CompoundVariableNode;
 use Pharborist\Variables\GlobalStatementNode;
+use Pharborist\Variables\ReferenceVariableNode;
 use Pharborist\Variables\StaticVariableNode;
 use Pharborist\Variables\StaticVariableStatementNode;
 use Pharborist\Variables\VariableVariableNode;

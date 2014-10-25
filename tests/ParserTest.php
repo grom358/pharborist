@@ -50,6 +50,7 @@ use Pharborist\Operator\TernaryOperationNode;
 use Pharborist\Operator\UnaryOperationNode;
 use Pharborist\Variables\CompoundVariableNode;
 use Pharborist\Variables\GlobalStatementNode;
+use Pharborist\Variables\ReferenceVariableNode;
 use Pharborist\Variables\StaticVariableStatementNode;
 use Pharborist\Variables\VariableVariableNode;
 
@@ -542,7 +543,7 @@ EOF;
     $this->assertEquals('$k', $foreach->getKey()->getText());
     /** @var ReferenceVariableNode $value */
     $value = $foreach->getValue();
-    $this->assertInstanceOf('\Pharborist\ReferenceVariableNode', $value);
+    $this->assertInstanceOf('\Pharborist\Variables\ReferenceVariableNode', $value);
     $this->assertEquals('&$v', $value->getText());
     $this->assertEquals('$v', $value->getVariable()->getText());
     $this->assertEquals('body();', $foreach->getBody()->getText());

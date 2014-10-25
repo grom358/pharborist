@@ -1,8 +1,9 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Variables;
 
+use Pharborist\ExpressionNode;
 use Pharborist\Functions\LexicalVariableNode;
-use Pharborist\Variables\VariableNode;
+use Pharborist\ParentNode;
 
 /**
  * A reference variable.

@@ -23,4 +23,14 @@ class ObjectMethodCallNodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('skinner', $this->call->getMethodName());
     $this->assertEquals('$mulder->skinner()', $this->call->getText());
   }
+
+  public function testGetPreviousCall() {
+    $call = Parser::parseSnippet('\Drupal::database()->insert("razmatazz");')->firstChild();
+    $this->assertInstanceOf('\Pharborist\ObjectMethodCallNode', $call);
+    $this->assertInstanceOf('\Pharborist\ClassMethodCallNode', $call->getPreviousCall());
+
+    $call = Parser::parseSnippet('$raz->matazz();')->firstChild();
+    $this->assertInstanceOf('\Pharborist\ObjectMethodCallNode', $call);
+    $this->assertNull($call->getPreviousCall());
+  }
 }

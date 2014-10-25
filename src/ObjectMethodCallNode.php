@@ -70,11 +70,15 @@ class ObjectMethodCallNode extends CallNode implements VariableExpressionNode {
    * If this is a chained method call (e.g., foo()->bar()->baz()), returns
    * the previous call in the chain.
    *
-   * @return \Pharborist\Functions\CallNode
+   * @return \Pharborist\Functions\CallNode|NULL
+   *   The previous call in the chain or NULL if there is none.
    */
   public function getPreviousCall() {
     if ($this->object instanceof CallNode) {
       return $this->object;
+    }
+    else {
+      return NULL;
     }
   }
 }

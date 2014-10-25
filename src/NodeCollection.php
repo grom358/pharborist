@@ -19,12 +19,18 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
    */
   protected static function sortUnique($nodes) {
     $sort = [];
+    $detached = [];
     foreach ($nodes as $node) {
       $key = $node->sortKey();
-      $sort[$key] = $node;
+      if ($key[0] === '~') {
+        $detached[] = $node;
+      }
+      else {
+        $sort[$key] = $node;
+      }
     }
     ksort($sort);
-    return array_values($sort);
+    return array_merge(array_values($sort), $detached);
   }
 
   public function __construct($nodes = [], $sort = TRUE) {

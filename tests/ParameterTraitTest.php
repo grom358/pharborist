@@ -53,6 +53,9 @@ class ParameterTraitTest extends \PHPUnit_Framework_TestCase {
     Parser::parseSnippet('function foo($bar) {}')->hasParameter(1);
   }
 
+  /**
+   * @requires PHP 5.6
+   */
   public function testIsVariadic() {
     $doc = <<<'END'
 <?php

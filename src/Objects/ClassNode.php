@@ -203,6 +203,11 @@ class ClassNode extends SingleInheritanceNode {
    * Creates a new property in this class.
    *
    * @see ClassMemberNode::create
+   *
+   * @param string $name
+   * @param ExpressionNode $value
+   * @param string $visibility
+   *
    * @return $this
    */
   public function createProperty($name, ExpressionNode $value = NULL, $visibility = 'public') {

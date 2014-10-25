@@ -1,7 +1,6 @@
 <?php
 namespace Pharborist\Functions;
 
-use Pharborist\SplatNode;
 use Pharborist\Filter;
 use Pharborist\NodeCollection;
 use Pharborist\CommaListNode;

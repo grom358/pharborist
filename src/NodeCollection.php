@@ -53,6 +53,10 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
 
   /**
    * Implements \ArrayAccess::offsetExists().
+   *
+   * @param integer $offset
+   *
+   * @return boolean
    */
   public function offsetExists($offset) {
     return isset($this->nodes[$offset]);
@@ -60,6 +64,10 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
 
   /**
    * Implements \ArrayAccess::offsetGet().
+   *
+   * @param integer $offset
+   *
+   * @return Node
    */
   public function offsetGet($offset) {
     return $this->nodes[$offset];
@@ -67,6 +75,11 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
 
   /**
    * Implements \ArrayAccess::offsetSet().
+   *
+   * @param integer $offset
+   * @param Node $value
+   *
+   * @throws \BadMethodCallException
    */
   public function offsetSet($offset, $value) {
     throw new \BadMethodCallException('NodeCollection offsetSet not supported');
@@ -74,6 +87,10 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
 
   /**
    * Implements \ArrayAccess::offsetUnset().
+   *
+   * @param integer $offset
+   *
+   * @throws \BadMethodCallException
    */
   public function offsetUnset($offset) {
     throw new \BadMethodCallException('NodeCollection offsetUnset not supported');

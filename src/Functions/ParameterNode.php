@@ -1,7 +1,6 @@
 <?php
 namespace Pharborist\Functions;
 
-use Pharborist\Objects\ClassMethodNode;
 use Pharborist\ExpressionNode;
 use Pharborist\Filter;
 use Pharborist\Namespaces\NameNode;

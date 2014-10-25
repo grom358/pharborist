@@ -397,6 +397,7 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
     $keys = array_keys($children);
     $this->head = empty($children) ? NULL : $children[$keys[0]];
     $this->tail = $this->head;
+    /** @var Node $prev */
     $prev = NULL;
     foreach ($children as $key => $child) {
       if (!is_int($key)) {

@@ -2,7 +2,6 @@
 namespace Pharborist\Constants;
 
 use Pharborist\ParentNode;
-use Pharborist\Namespaces\NameNode;
 use Pharborist\ExpressionNode;
 use Pharborist\TokenNode;
 

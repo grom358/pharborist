@@ -115,6 +115,8 @@ class CommentNode extends HiddenNode {
         }
       case self::BLOCK:
         return trim(substr($this->text, 2, -2));
+      default:
+        throw new \LogicException("Unhandled comment type in CommentNode::getCommentText()");
     }
   }
 

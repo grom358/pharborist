@@ -19,6 +19,9 @@ class SourcePosition {
 
   /**
    * Constructor.
+   *
+   * @param integer $line_no
+   * @param integer $col_no
    */
   public function __construct($line_no, $col_no) {
     $this->lineNo = $line_no;

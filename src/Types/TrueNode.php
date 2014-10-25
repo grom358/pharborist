@@ -12,6 +12,11 @@ use Pharborist\Settings;
  */
 class TrueNode extends BooleanNode {
   /**
+   * Create a new TrueNode.
+   *
+   * @param boolean $boolean
+   *   Parameter is ignored.
+   *
    * @return TrueNode
    */
   public static function create($boolean = TRUE) {

@@ -14,6 +14,9 @@ class FalseNode extends BooleanNode {
   /**
    * Creates a new FalseNode.
    *
+   * @param boolean $boolean
+   *   Parameter is ignored.
+   *
    * @return FalseNode
    */
   public static function create($boolean = FALSE) {

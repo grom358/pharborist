@@ -106,6 +106,8 @@ class ClassMemberNode extends ParentNode {
   /**
    * @see \Pharborist\ClassMemberListNode::setStatic()
    *
+   * @param boolean $is_static
+   *
    * @return $this
    */
   public function setStatic($is_static) {
@@ -124,6 +126,8 @@ class ClassMemberNode extends ParentNode {
 
   /**
    * @see \Pharborist\VisibilityTrait::setVisibility()
+   *
+   * @param boolean $visibility
    *
    * @return $this
    */

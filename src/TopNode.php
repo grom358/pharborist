@@ -68,6 +68,8 @@ class TopNode extends StatementBlockNode {
   /**
    * Returns the name of every namespace in this document.
    *
+   * @param boolean $absolute
+   *
    * @return string[]
    */
   public function getNamespaceNames($absolute = FALSE) {

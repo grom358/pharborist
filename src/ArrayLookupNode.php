@@ -109,7 +109,7 @@ class ArrayLookupNode extends ParentNode implements VariableExpressionNode {
     if (!$this->hasScalarKeys()) {
       throw new \DomainException('Cannot extract non-scalar keys from array lookup ' . $this);
     }
-    return array_map(function(Node $key) { return $key->toValue(); }, $this->getKeys());
+    return array_map(function(ScalarNode $key) { return $key->toValue(); }, $this->getKeys());
   }
 
   /**

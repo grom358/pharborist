@@ -46,6 +46,7 @@ class ObjectPropertyNode extends ParentNode implements VariableExpressionNode {
     if ($root_property instanceof TokenNode && $root_property->getType() === T_STRING) {
       return $root_property->getText();
     }
+    return NULL;
   }
 
   /**

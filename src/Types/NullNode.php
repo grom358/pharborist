@@ -10,6 +10,11 @@ use Pharborist\Settings;
  */
 class NullNode extends ConstantNode implements ScalarNode {
   /**
+   * Create a new NullNode.
+   *
+   * @param string $name
+   *   Parameter is ignored.
+   *
    * @return NullNode
    */
   public static function create($name = 'null') {

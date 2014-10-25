@@ -1,7 +1,7 @@
 <?php
 namespace Pharborist;
 
-use Pharborist\Operator\BinaryOperationNode;
+use Pharborist\Operators\BinaryOperationNode;
 
 class BinaryOperationNodeTest extends \PHPUnit_Framework_TestCase {
   /** @var BinaryOperationNode $op */
@@ -12,7 +12,7 @@ class BinaryOperationNodeTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testInstanceOf() {
-    $this->assertInstanceOf('Pharborist\Operator\AssignNode', $this->op);
+    $this->assertInstanceOf('Pharborist\Operators\AssignNode', $this->op);
   }
 
   public function testGetLeftOperand() {

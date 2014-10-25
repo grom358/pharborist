@@ -102,17 +102,15 @@ class ArrayNode extends ParentNode implements ExpressionNode {
     if (is_scalar($key)) {
       return $keys
         ->filter(Filter::isInstanceOf('\Pharborist\ScalarNode'))
-        ->filter(function(ScalarNode $node) use ($key) {
+        ->is(function(ScalarNode $node) use ($key) {
           return $node->toValue() === $key;
-        })
-        ->count() > 0;
+        });
     }
     else {
       return $keys
-        ->filter(function(ExpressionNode $expr) use ($key) {
+        ->is(function(ExpressionNode $expr) use ($key) {
           return $expr->getText() === $key->getText();
-        })
-        ->count() > 0;
+        });
     }
   }
 

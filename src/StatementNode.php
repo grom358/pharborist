@@ -69,4 +69,28 @@ abstract class StatementNode extends ParentNode {
     }
     return $this;
   }
+
+  public function indent($indent, $level = 0) {
+    $start_indent = FALSE;
+    $child = $this->head;
+    while ($child) {
+      $next = $child->next;
+      if (!($child instanceof HiddenNode)) {
+        $start_indent = TRUE;
+      }
+      if ($start_indent) {
+        if ($next instanceof TokenNode && $next->getType() === ')') {
+          $child->indent($indent, $level);
+        }
+        else {
+          $child->indent($indent, $level + 1);
+        }
+      }
+      else {
+        $child->indent($indent, $level);
+      }
+      $child = $next;
+    }
+    return $this;
+  }
 }

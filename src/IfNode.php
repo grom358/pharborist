@@ -16,6 +16,11 @@ class IfNode extends StatementNode {
   protected $then;
 
   /**
+   * @var TokenNode
+   */
+  protected $elseKeyword;
+
+  /**
    * @var Node
    */
   protected $else;
@@ -46,5 +51,23 @@ class IfNode extends StatementNode {
    */
   public function getElse() {
     return $this->else;
+  }
+
+  public function indent($indent, $level = 0) {
+    parent::indent($indent, $level);
+    foreach ($this->getElseIfs() as $else_if) {
+      $else_if_keyword = $else_if->firstToken();
+      $prev = $else_if_keyword->previousToken();
+      if ($prev instanceof WhitespaceNode) {
+        $prev->indent($indent, $level);
+      }
+    }
+    if ($this->elseKeyword) {
+      $prev = $this->elseKeyword->previousToken();
+      if ($prev instanceof WhitespaceNode) {
+        $prev->indent($indent, $level);
+      }
+    }
+    return $this;
   }
 }

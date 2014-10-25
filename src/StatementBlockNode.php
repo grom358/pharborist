@@ -23,31 +23,16 @@ class StatementBlockNode extends ParentNode {
     return $matches;
   }
 
-  /**
-   * Add indent to each statement.
-   *
-   * @param string $whitespace
-   *   Additional whitespace to add.
-   */
-  public function addIndent($whitespace) {
-    /** @var WhitespaceNode $wsNode */
-    foreach ($this->children(Filter::isInstanceOf('\Pharborist\WhitespaceNode'))->slice(0, -1) as $wsNode) {
-      $text = $wsNode->getText();
-      $wsNode->setText($text . $whitespace);
+  public function indent($indent, $level = 0) {
+    $child = $this->head;
+    while ($child) {
+      $next = $child->next;
+      if ($next === $this->tail && $next instanceof TokenNode && $next->getType() === '}') {
+        $level--;
+      }
+      $child->indent($indent, $level);
+      $child = $next;
     }
-  }
-
-  /**
-   * Set indent on each statement.
-   *
-   * @param string $whitespace
-   *   Whitespace for indent.
-   */
-  public function setIndent($whitespace) {
-    /** @var WhitespaceNode $wsNode */
-    foreach ($this->children(Filter::isInstanceOf('\Pharborist\WhitespaceNode'))->slice(0, -1) as $wsNode) {
-      $text = str_repeat(Settings::get('formatter.nl'), $wsNode->getNewlineCount()) . $whitespace;
-      $wsNode->setText($text);
-    }
+    return $this;
   }
 }

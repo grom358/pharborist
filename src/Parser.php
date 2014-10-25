@@ -27,6 +27,7 @@ use Pharborist\ControlStructures\ReturnStatementNode;
 use Pharborist\ControlStructures\SwitchNode;
 use Pharborist\ControlStructures\WhileNode;
 use Pharborist\Exceptions\CatchNode;
+use Pharborist\Exceptions\ThrowStatementNode;
 use Pharborist\Exceptions\TryCatchNode;
 use Pharborist\Functions\AnonymousFunctionNode;
 use Pharborist\Functions\CallbackCallNode;

@@ -17,6 +17,7 @@ use Pharborist\ControlStructures\ImportNode;
 use Pharborist\ControlStructures\ReturnStatementNode;
 use Pharborist\ControlStructures\SwitchNode;
 use Pharborist\ControlStructures\WhileNode;
+use Pharborist\Exceptions\ThrowStatementNode;
 use Pharborist\Exceptions\TryCatchNode;
 use Pharborist\Functions\AnonymousFunctionNode;
 use Pharborist\Functions\CallbackCallNode;
@@ -1741,7 +1742,7 @@ EOF;
    */
   public function testThrow() {
     /** @var ThrowStatementNode $throw */
-    $throw = $this->parseSnippet('throw $e;', '\Pharborist\ThrowStatementNode');
+    $throw = $this->parseSnippet('throw $e;', '\Pharborist\Exceptions\ThrowStatementNode');
     $this->assertEquals('$e', $throw->getExpression()->getText());
   }
 

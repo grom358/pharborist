@@ -1,5 +1,8 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Exceptions;
+
+use Pharborist\StatementNode;
+use Pharborist\ExpressionNode;
 
 /**
  * A throw statement.

@@ -1,5 +1,7 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Generators;
+
+use Pharborist\StatementNode;
 
 /**
  * A yield statement.

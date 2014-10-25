@@ -41,6 +41,8 @@ use Pharborist\Functions\IssetNode;
 use Pharborist\Functions\ListNode;
 use Pharborist\Functions\ParameterNode;
 use Pharborist\Functions\UnsetNode;
+use Pharborist\Generators\YieldNode;
+use Pharborist\Generators\YieldStatementNode;
 use Pharborist\Namespaces\NameNode;
 use Pharborist\Namespaces\NamespaceNode;
 use Pharborist\Namespaces\UseDeclarationBlockNode;

@@ -1,5 +1,9 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\Generators;
+
+use Pharborist\ParentNode;
+use Pharborist\Node;
+use Pharborist\ExpressionNode;
 
 /**
  * A yield expression.

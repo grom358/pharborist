@@ -33,4 +33,19 @@ class ArrayLookupNodeTest extends \PHPUnit_Framework_TestCase {
   public function testExtractNonScalarKeys() {
     Parser::parseExpression('$foo[$bar][baz()][30]')->extractKeys();
   }
+
+  public function testGetRoot() {
+    /** @var ArrayLookupNode $lookup */
+    $lookup = Parser::parseExpression('$foo["bar"]["baz"][0]');
+    $this->assertInstanceOf('\Pharborist\ArrayLookupNode', $lookup);
+    $root = $lookup->getRoot();
+    $this->assertInstanceOf('\Pharborist\VariableNode', $root);
+    $this->assertEquals('$foo', $root->getText());
+
+    $lookup = Parser::parseExpression('foo()["bar"]');
+    $this->assertInstanceOf('\Pharborist\ArrayLookupNode', $lookup);
+    $root = $lookup->getRoot();
+    $this->assertInstanceOf('\Pharborist\Functions\FunctionCallNode', $root);
+    $this->assertEquals('foo', $root->getName()->getText());
+  }
 }

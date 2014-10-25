@@ -1,5 +1,9 @@
 <?php
-namespace Pharborist;
+namespace Pharborist\ControlStructures;
+
+use Pharborist\Node;
+use Pharborist\StatementNode;
+use Pharborist\ExpressionNode;
 
 /**
  * An if control structure.
@@ -38,7 +42,7 @@ class IfNode extends StatementNode {
    * @return ElseIfNode[]
    */
   public function getElseIfs() {
-    return $this->childrenByInstance('\Pharborist\ElseIfNode');
+    return $this->childrenByInstance('\Pharborist\ControlStructures\ElseIfNode');
   }
 
   /**

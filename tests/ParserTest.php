@@ -3,6 +3,8 @@ namespace Pharborist;
 
 use Pharborist\Constants\ConstantDeclarationStatementNode;
 use Pharborist\Constants\ConstantNode;
+use Pharborist\ControlStructures\IfNode;
+use Pharborist\ControlStructures\WhileNode;
 use Pharborist\Functions\AnonymousFunctionNode;
 use Pharborist\Functions\CallbackCallNode;
 use Pharborist\Functions\DefineNode;
@@ -454,7 +456,7 @@ elseif ($another_condition) {
 else { do_else(); }
 EOF;
     /** @var IfNode $if */
-    $if = $this->parseSnippet($snippet, '\Pharborist\IfNode');
+    $if = $this->parseSnippet($snippet, '\Pharborist\ControlStructures\IfNode');
     $this->assertEquals('$condition', $if->getCondition()->getText());
     $this->assertEquals('{ then(); }', $if->getThen()->getText());
     $else_ifs = $if->getElseIfs();
@@ -481,7 +483,7 @@ else:
 endif;
 EOF;
     /** @var IfNode $if */
-    $if = $this->parseSnippet($snippet, '\Pharborist\IfNode');
+    $if = $this->parseSnippet($snippet, '\Pharborist\ControlStructures\IfNode');
     $this->assertEquals('$condition', $if->getCondition()->getText());
     $this->assertEquals('then();', $if->getThen()->getText());
     $else_ifs = $if->getElseIfs();
@@ -561,7 +563,7 @@ while ($cond)
   body();
 EOF;
     /** @var WhileNode $while */
-    $while = $this->parseSnippet($snippet, '\Pharborist\WhileNode');
+    $while = $this->parseSnippet($snippet, '\Pharborist\ControlStructures\WhileNode');
     $this->assertEquals('$cond', $while->getCondition()->getText());
     $this->assertEquals('body();', $while->getBody()->getText());
   }
@@ -576,7 +578,7 @@ while ($cond):
 endwhile;
 EOF;
     /** @var WhileNode $while */
-    $while = $this->parseSnippet($snippet, '\Pharborist\WhileNode');
+    $while = $this->parseSnippet($snippet, '\Pharborist\ControlStructures\WhileNode');
     $this->assertEquals('$cond', $while->getCondition()->getText());
     $this->assertEquals('body();', $while->getBody()->getText());
   }

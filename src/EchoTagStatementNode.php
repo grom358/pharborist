@@ -20,7 +20,7 @@ class EchoTagStatementNode extends StatementNode {
   }
 
   /**
-   * @return ExpressionNode[]
+   * @return NodeCollection|ExpressionNode[]
    */
   public function getExpressions() {
     return $this->expressions->getItems();

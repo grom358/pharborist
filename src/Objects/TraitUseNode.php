@@ -3,6 +3,7 @@ namespace Pharborist\Objects;
 
 use Pharborist\CommaListNode;
 use Pharborist\Namespaces\NameNode;
+use Pharborist\NodeCollection;
 use Pharborist\StatementBlockNode;
 
 /**
@@ -20,7 +21,7 @@ class TraitUseNode extends ClassStatementNode {
   protected $adaptations;
 
   /**
-   * @return NameNode[]
+   * @return NodeCollection|NameNode[]
    */
   public function getTraits() {
     return $this->traits->getItems();

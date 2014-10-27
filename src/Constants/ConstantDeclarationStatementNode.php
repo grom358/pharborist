@@ -1,6 +1,7 @@
 <?php
 namespace Pharborist\Constants;
 
+use Pharborist\NodeCollection;
 use Pharborist\Objects\ClassStatementNode;
 use Pharborist\DocCommentTrait;
 use Pharborist\Objects\InterfaceStatementNode;
@@ -24,7 +25,7 @@ class ConstantDeclarationStatementNode extends ClassStatementNode implements Int
   }
 
   /**
-   * @return ConstantDeclarationNode[]
+   * @return NodeCollection|ConstantDeclarationNode[]
    */
   public function getDeclarations() {
     return $this->declarations->getItems();

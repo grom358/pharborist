@@ -4,6 +4,7 @@ namespace Pharborist\Functions;
 use Pharborist\CommaListNode;
 use Pharborist\ExpressionNode;
 use Pharborist\Node;
+use Pharborist\NodeCollection;
 use Pharborist\ParentNode;
 use Pharborist\StatementBlockNode;
 use Pharborist\TokenNode;
@@ -37,7 +38,7 @@ class AnonymousFunctionNode extends ParentNode implements ExpressionNode {
   }
 
   /**
-   * @return LexicalVariableNode[]
+   * @return NodeCollection|LexicalVariableNode[]
    */
   public function getLexicalVariables() {
     return $this->lexicalVariables->getItems();

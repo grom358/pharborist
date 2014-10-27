@@ -1,6 +1,7 @@
 <?php
 namespace Pharborist\Objects;
 
+use Pharborist\NodeCollection;
 use Pharborist\TokenNode;
 use Pharborist\Namespaces\NameNode;
 use Pharborist\StatementNode;
@@ -37,7 +38,7 @@ class InterfaceNode extends StatementNode {
   }
 
   /**
-   * @return NameNode[]
+   * @return NodeCollection|NameNode[]
    */
   public function getExtends() {
     return $this->extends->getItems();

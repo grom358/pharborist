@@ -22,7 +22,7 @@ trait ParameterTrait {
   }
 
   /**
-   * @return ParameterNode[]
+   * @return NodeCollection|ParameterNode[]
    */
   public function getParameters() {
     return $this->parameters->getItems();

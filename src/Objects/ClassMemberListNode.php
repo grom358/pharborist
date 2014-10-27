@@ -1,6 +1,7 @@
 <?php
 namespace Pharborist\Objects;
 
+use Pharborist\NodeCollection;
 use Pharborist\TokenNode;
 use Pharborist\Parser;
 use Pharborist\DocCommentTrait;
@@ -89,7 +90,7 @@ class ClassMemberListNode extends ClassStatementNode {
   }
 
   /**
-   * @return ClassMemberNode[]
+   * @return NodeCollection|ClassMemberNode[]
    */
   public function getMembers() {
     return $this->members->getItems();

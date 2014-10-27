@@ -3,6 +3,7 @@ namespace Pharborist\Objects;
 
 use Pharborist\CommaListNode;
 use Pharborist\Namespaces\NameNode;
+use Pharborist\NodeCollection;
 
 /**
  * A trait precedence declaration.
@@ -28,7 +29,7 @@ class TraitPrecedenceNode extends TraitAdaptationStatementNode {
   }
 
   /**
-   * @return \Pharborist\Namespaces\NameNode[]
+   * @return NodeCollection|NameNode[]
    */
   public function getTraitNames() {
     return $this->traitNames->getItems();

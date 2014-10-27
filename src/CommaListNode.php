@@ -9,7 +9,7 @@ use Pharborist\Types\ArrayNode;
  */
 class CommaListNode extends ParentNode {
   /**
-   * @return Node[]
+   * @return NodeCollection
    */
   public function getItems() {
     $items = [];
@@ -26,7 +26,7 @@ class CommaListNode extends ParentNode {
       }
       $child = $child->next;
     }
-    return $items;
+    return new NodeCollection($items, FALSE);
   }
 
   /**
@@ -66,8 +66,7 @@ class CommaListNode extends ParentNode {
    * @return $this
    */
   public function prependItem(Node $item) {
-    $items = $this->getItems();
-    if (empty($items)) {
+    if ($this->getItems()->isEmpty()) {
       $this->append($item);
     }
     else {
@@ -87,8 +86,7 @@ class CommaListNode extends ParentNode {
    * @return $this
    */
   public function appendItem(Node $item) {
-    $items = $this->getItems();
-    if (empty($items)) {
+    if ($this->getItems()->isEmpty()) {
       $this->append($item);
     }
     else {
@@ -112,7 +110,7 @@ class CommaListNode extends ParentNode {
    */
   public function insertItem(Node $item, $index) {
     $items = $this->getItems();
-    if (empty($items)) {
+    if ($items->isEmpty()) {
       if ($index !== 0) {
         throw new \OutOfBoundsException('index out of bounds');
       }
@@ -157,10 +155,10 @@ class CommaListNode extends ParentNode {
       $is_last = $index === count($items) - 1;
     }
     else {
-      $items = $this->getItems();
       if ($item->parent() !== $this) {
         throw new \InvalidArgumentException('invalid item');
       }
+      $items = $this->getItems();
       $last_index = count($items) - 1;
       $last_item = $items[$last_index];
       $is_last = $last_item === $item;
@@ -202,7 +200,7 @@ class CommaListNode extends ParentNode {
    */
   public function pop() {
     $items = $this->getItems();
-    if (empty($items)) {
+    if ($items->isEmpty()) {
       return NULL;
     }
     if (count($items) === 1) {
@@ -232,7 +230,7 @@ class CommaListNode extends ParentNode {
    */
   public function shift() {
     $items = $this->getItems();
-    if (empty($items)) {
+    if ($items->isEmpty()) {
       return NULL;
     }
     if (count($items) === 1) {

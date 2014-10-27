@@ -151,7 +151,7 @@ class ClassNode extends SingleInheritanceNode {
     $properties = [];
     /** @var ClassMemberListNode $node */
     foreach ($this->statements->children(Filter::isInstanceOf('\Pharborist\Objects\ClassMemberListNode')) as $node) {
-      $properties = array_merge($properties, $node->getMembers());
+      $properties = array_merge($properties, $node->getMembers()->toArray());
     }
     return new NodeCollection($properties);
   }

@@ -13,39 +13,47 @@ class ArgumentTraitTest extends \PHPUnit_Framework_TestCase {
     $this->assertCount(0, $call->getArguments());
 
     $call->appendArgument(1)->appendArgument('hohoho');
-    $this->assertCount(2, $call->getArguments());
-    $this->assertInstanceOf('\Pharborist\Types\IntegerNode', $call->getArgumentList()->getItem(0));
-    $this->assertInstanceof('\Pharborist\Types\StringNode', $call->getArgumentList()->getItem(1));
+    $arguments = $call->getArguments();
+    $this->assertCount(2, $arguments);
+    $this->assertInstanceOf('\Pharborist\Types\IntegerNode', $arguments[0]);
+    $this->assertInstanceof('\Pharborist\Types\StringNode', $arguments[1]);
 
     $pi = FloatNode::fromValue(3.141);
     $call->appendArgument($pi);
-    $this->assertSame($pi, $call->getArgumentList()->getItem(2));
+    $this->assertSame($pi, $call->getArguments()->get(2));
   }
 
   public function testPrependArgument() {
+    /** @var \Pharborist\Functions\FunctionCallNode $call */
     $call = Parser::parseExpression('foo()');
 
     $call->prependArgument('wozwoz');
-    $this->assertCount(1, $call->getArguments());
-    $this->assertInstanceOf('\Pharborist\Types\StringNode', $call->getArgumentList()->getItem(0));
+    $arguments = $call->getArguments();
+    $this->assertCount(1, $arguments);
+    $this->assertInstanceOf('\Pharborist\Types\StringNode', $arguments[0]);
 
     $bazbaz = StringNode::fromValue('bazbaz');
     $call->prependArgument($bazbaz);
-    $this->assertCount(2, $call->getArguments());
-    $this->assertSame($bazbaz, $call->getArgumentList()->getItem(0));
+    $arguments = $call->getArguments();
+    $this->assertCount(2, $arguments);
+    $this->assertSame($bazbaz, $arguments[0]);
   }
 
   /**
    * @expectedException \InvalidArgumentException
    */
   public function testPrependInvalidArgument() {
-    Parser::parseExpression('foo()')->prependArgument(NULL);
+    /** @var \Pharborist\Functions\FunctionCallNode $call */
+    $call = Parser::parseExpression('foo()');
+    $call->prependArgument(NULL);
   }
 
   /**
    * @expectedException \InvalidArgumentException
    */
   public function testAppendInvalidArgument() {
-    Parser::parseExpression('foo()')->appendArgument(NULL);
+    /** @var \Pharborist\Functions\FunctionCallNode $call */
+    $call = Parser::parseExpression('foo()');
+    $call->appendArgument(NULL);
   }
 }

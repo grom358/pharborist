@@ -4,6 +4,7 @@ namespace Pharborist\Functions;
 use Pharborist\ExpressionNode;
 use Pharborist\CommaListNode;
 use Pharborist\Node;
+use Pharborist\NodeCollection;
 
 /**
  * Trait for nodes that have arguments. For example, function calls.
@@ -22,7 +23,7 @@ trait ArgumentTrait {
   }
 
   /**
-   * @return ExpressionNode[]
+   * @return NodeCollection|ExpressionNode[]
    */
   public function getArguments() {
     return $this->arguments->getItems();

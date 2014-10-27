@@ -149,13 +149,15 @@ class CommaListNodeTest extends \PHPUnit_Framework_TestCase {
     $list->appendItem(Node::fromValue(30));
     $array = $list->toArrayNode();
     $this->assertInstanceOf('\Pharborist\Types\ArrayNode', $array);
-    $this->assertCount(3, $array->getElements());
-    $this->assertInstanceOf('\Pharborist\Types\StringNode', $array->getElementList()->getItem(0));
-    $this->assertEquals('foo', $array->getElementList()->getItem(0)->toValue());
-    $this->assertInstanceOf('\Pharborist\Types\StringNode', $array->getElementList()->getItem(1));
-    $this->assertEquals('baz', $array->getElementList()->getItem(1)->toValue());
-    $this->assertInstanceOf('\Pharborist\Types\IntegerNode', $array->getElementList()->getItem(2));
-    $this->assertEquals(30, $array->getElementList()->getItem(2)->toValue());
+    /** @var \PHarborist\Types\ScalarNode[] $elements */
+    $elements = $array->getElements();
+    $this->assertCount(3, $elements);
+    $this->assertInstanceOf('\Pharborist\Types\StringNode', $elements[0]);
+    $this->assertEquals('foo', $elements[0]->toValue());
+    $this->assertInstanceOf('\Pharborist\Types\StringNode', $elements[1]);
+    $this->assertEquals('baz', $elements[1]->toValue());
+    $this->assertInstanceOf('\Pharborist\Types\IntegerNode', $elements[2]);
+    $this->assertEquals(30, $elements[2]->toValue());
     $this->assertEquals("['foo', 'baz', 30]", $array->getText());
   }
 }

@@ -2,6 +2,7 @@
 namespace Pharborist\Namespaces;
 
 use Pharborist\CommaListNode;
+use Pharborist\NodeCollection;
 use Pharborist\StatementNode;
 use Pharborist\TokenNode;
 
@@ -126,7 +127,7 @@ class UseDeclarationStatementNode extends StatementNode {
   }
 
   /**
-   * @return UseDeclarationNode[]
+   * @return NodeCollection|UseDeclarationNode[]
    */
   public function getDeclarations() {
     return $this->declarations->getItems();

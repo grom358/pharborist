@@ -6,6 +6,7 @@ use Pharborist\DocCommentTrait;
 use Pharborist\Filter;
 use Pharborist\Functions\FunctionDeclarationNode;
 use Pharborist\Namespaces\NameNode;
+use Pharborist\NodeCollection;
 use Pharborist\Settings;
 use Pharborist\StatementBlockNode;
 use Pharborist\StatementNode;
@@ -108,7 +109,7 @@ abstract class SingleInheritanceNode extends StatementNode {
   }
 
   /**
-   * @return NameNode[]
+   * @return NodeCollection|NameNode[]
    */
   public function getImplements() {
     return $this->implements->getItems();

@@ -2,6 +2,7 @@
 namespace Pharborist\ControlStructures;
 
 use Pharborist\Node;
+use Pharborist\NodeCollection;
 use Pharborist\StatementNode;
 use Pharborist\CommaListNode;
 
@@ -27,7 +28,7 @@ class DeclareNode extends StatementNode {
   }
 
   /**
-   * @return DeclareDirectiveNode[]
+   * @return NodeCollection|DeclareDirectiveNode[]
    */
   public function getDirectives() {
     return $this->directives->getItems();

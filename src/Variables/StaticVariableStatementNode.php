@@ -1,6 +1,7 @@
 <?php
 namespace Pharborist\Variables;
 
+use Pharborist\NodeCollection;
 use Pharborist\StatementNode;
 use Pharborist\DocCommentTrait;
 use Pharborist\CommaListNode;
@@ -26,7 +27,7 @@ class StaticVariableStatementNode extends StatementNode {
   }
 
   /**
-   * @return StaticVariableNode[]
+   * @return NodeCollection|StaticVariableNode[]
    */
   public function getVariables() {
     return $this->variables->getItems();

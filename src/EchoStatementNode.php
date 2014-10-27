@@ -20,7 +20,7 @@ class EchoStatementNode extends StatementNode {
   /**
    * Return the expressions being echoed.
    *
-   * @return ExpressionNode[]
+   * @return NodeCollection|ExpressionNode[]
    */
   public function getExpressions() {
     return $this->expressions->getItems();

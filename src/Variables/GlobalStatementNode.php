@@ -2,6 +2,7 @@
 namespace Pharborist\Variables;
 
 use Pharborist\CommaListNode;
+use Pharborist\NodeCollection;
 use Pharborist\StatementNode;
 
 /**
@@ -21,7 +22,7 @@ class GlobalStatementNode extends StatementNode {
   }
 
   /**
-   * @return VariableExpressionNode[]
+   * @return NodeCollection|VariableExpressionNode[]
    */
   public function getVariables() {
     return $this->variables->getItems();

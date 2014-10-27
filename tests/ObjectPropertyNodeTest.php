@@ -16,7 +16,7 @@ class ObjectPropertyNodeTest extends \PHPUnit_Framework_TestCase {
   }
 
   /**
-   * @depends testRootProperty
+   * @depends testGetRootProperty
    */
   public function testGetPropertyName() {
     /** @var ObjectPropertyNode $property */

@@ -252,7 +252,7 @@ trait ParameterTrait {
    */
   public function isVariadic() {
     $parameters = $this->getParameters();
-    $last_parameter = end($parameters);
+    $last_parameter = $parameters[count($parameters) - 1];
     // In a variadic function, the last parameter is the only one which is
     // allowed to be variadic.
     return $last_parameter->getVariadic() !== NULL;

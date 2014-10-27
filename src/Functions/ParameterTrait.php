@@ -22,10 +22,11 @@ trait ParameterTrait {
   }
 
   /**
-   * @return NodeCollection|ParameterNode[]
+   * @return ParameterNodeCollection
    */
   public function getParameters() {
-    return $this->parameters->getItems();
+    $parameters = $this->parameters->getItems()->toArray();
+    return new ParameterNodeCollection($parameters, FALSE);
   }
 
   /**
@@ -34,7 +35,7 @@ trait ParameterTrait {
   public function getParameterNames() {
     return array_map(function(ParameterNode $parameter) {
       return $parameter->getName();
-    }, $this->getParameters());
+    }, $this->getParameters()->toArray());
   }
 
   /**
@@ -139,7 +140,8 @@ trait ParameterTrait {
    */
   public function getParameterByName($name) {
     $name = ltrim($name, '$');
-    foreach ($this->getParameters() as $parameter) {
+    /** @var ParameterNode $parameter */
+    foreach ($this->getParameters()->reverse() as $parameter) {
       if ($parameter->getName() === $name) {
         return $parameter;
       }
@@ -195,7 +197,7 @@ trait ParameterTrait {
    * @return boolean
    */
   public function hasRequiredParameter($parameter, $type = NULL) {
-    return $this->hasParameter($parameter, $type, TRUE) && $this->getParameterByName($parameter)->isRequired();
+    return $this->hasParameter($parameter, $type) && $this->getParameterByName($parameter)->isRequired();
   }
 
   /**
@@ -210,7 +212,7 @@ trait ParameterTrait {
    * @return boolean
    */
   public function hasOptionalParameter($parameter, $type = NULL) {
-    return $this->hasParameter($parameter, $type, FALSE) && $this->getParameterByName($parameter)->isOptional();
+    return $this->hasParameter($parameter, $type) && $this->getParameterByName($parameter)->isOptional();
   }
 
   /**

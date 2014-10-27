@@ -30,6 +30,19 @@ class ParameterTraitTest extends \PHPUnit_Framework_TestCase {
     $this->assertFalse($function->hasOptionalParameter('a', 'stdClass'));
   }
 
+  public function testGetParameters() {
+    /** @var \Pharborist\Functions\FunctionDeclarationNode $function */
+    $function = Parser::parseSnippet('function foo($a, $a = 1, $b, $c) {}');
+    $parameters = $function->getParameters();
+    $a = $parameters['a'];
+    $this->assertEquals('$a = 1', $a->getText());
+    $this->assertEquals('$a', $parameters[0]);
+    $this->assertTrue(isset($parameters[2]));
+    $this->assertTrue(isset($parameters['b']));
+    $this->assertEquals('$b', $parameters['b']);
+    $this->assertEquals('$c', $parameters[3]);
+  }
+
   /**
    * @depends testHasParameter
    */

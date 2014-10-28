@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Pharborist : A PHP library to query and transform source code via tree operations.">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Pharborist</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/grom358/pharborist">View on GitHub</a>
+
+          <h1 id="project_title">Pharborist</h1>
+          <h2 id="project_tagline">A PHP library to query and transform source code via tree operations.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/grom358/pharborist/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/grom358/pharborist/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="pharborist" class="anchor" href="#pharborist"><span class="octicon octicon-link"></span></a>pharborist</h1>
+
+<p><img src="./docs/logo_128px.png" alt="Pharborist logo" title="Pharborist logo"></p>
+
+<p>A PHP library to query and transform PHP source code via tree operations.</p>
+
+<h1>
+<a name="roadmap" class="anchor" href="#roadmap"><span class="octicon octicon-link"></span></a>Roadmap</h1>
+
+<ul>
+<li>Tests with 100% code coverage</li>
+<li>Integration with a third party library (suggestions welcomed) for extracting PHPDoc comments</li>
+<li>API to ease querying and transforming of the syntax tree</li>
+<li>Build a PHP source code formatter using the library</li>
+<li>Build a PHP code check using the library</li>
+</ul>
+
+<p>Below is an example of how the API might look once its more developed:</p>
+
+<div class="highlight highlight-php"><pre><span class="c1">// Add use declaration if it does not already exist. Use UtilityString alias if conflict</span>
+<span class="nv">$alias</span> <span class="o">=</span> <span class="nv">$tree</span><span class="o">-&gt;</span><span class="na">ensureUseDeclaration</span><span class="p">(</span><span class="s1">'Drupal\Component\Utility\String'</span><span class="p">,</span> <span class="s1">'UtilityString'</span><span class="p">);</span>
+<span class="c1">// Find all calls to check_plain and rename them to use String::checkPlain</span>
+<span class="nv">$function_calls</span> <span class="o">=</span> <span class="nv">$tree</span><span class="o">-&gt;</span><span class="na">find</span><span class="p">(</span><span class="nx">Filter</span><span class="o">::</span><span class="na">functionCall</span><span class="p">(</span><span class="s1">'check_plain'</span><span class="p">));</span>
+<span class="k">foreach</span> <span class="p">(</span><span class="nv">$function_calls</span> <span class="k">as</span> <span class="nv">$call</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nv">$class_method_call</span> <span class="o">=</span> <span class="nx">ClassMethodCallNode</span><span class="o">::</span><span class="na">create</span><span class="p">(</span><span class="nv">$alias</span><span class="p">,</span> <span class="s1">'check_plain'</span><span class="p">,</span> <span class="nv">$call</span><span class="o">-&gt;</span><span class="na">getArgumentList</span><span class="p">());</span>
+  <span class="nv">$call</span><span class="o">-&gt;</span><span class="na">replaceWith</span><span class="p">(</span><span class="nv">$class_method_call</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<h1>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h1>
+
+<div class="highlight highlight-php"><pre><span class="k">require_once</span> <span class="s1">'vendor/autoload.php'</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">Pharborist\Parser</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Pharborist\Namespaces\NamespaceNode</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Pharborist\Filter</span><span class="p">;</span>
+
+<span class="nv">$tree</span> <span class="o">=</span> <span class="nx">Parser</span><span class="o">::</span><span class="na">parseFile</span><span class="p">(</span><span class="nv">$filename</span><span class="p">);</span>
+
+<span class="c1">// check there only one namespace declaration</span>
+<span class="nv">$namespaces</span> <span class="o">=</span> <span class="nv">$tree</span><span class="o">-&gt;</span><span class="na">children</span><span class="p">(</span><span class="nx">Filter</span><span class="o">::</span><span class="na">isInstanceOf</span><span class="p">(</span><span class="s1">'\Pharborist\Namespaces\NamespaceNode'</span><span class="p">));</span>
+<span class="k">if</span> <span class="p">(</span><span class="nv">$namespaces</span><span class="o">-&gt;</span><span class="na">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">die</span><span class="p">(</span><span class="s1">'More then one namespace at line '</span> <span class="o">.</span> <span class="nv">$namespaces</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-&gt;</span><span class="na">getSourcePosition</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">getLineNumber</span><span class="p">()</span> <span class="o">.</span> <span class="nx">PHP_EOL</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<p><a href="https://travis-ci.org/grom358/pharborist"><img src="https://travis-ci.org/grom358/pharborist.png?branch=master" alt="Build Status"></a></p>
+
+<h1>
+<a name="api" class="anchor" href="#api"><span class="octicon octicon-link"></span></a>API</h1>
+
+<p>Pharborist's API is documented at <a href="http://www.phenaproxima.net/pharborist">http://www.phenaproxima.net/pharborist</a>. Pharborist
+is still under heavy development, so it changes fairly frequently.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Pharborist maintained by <a href="https://github.com/grom358">grom358</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>

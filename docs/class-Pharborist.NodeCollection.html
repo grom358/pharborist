@@ -1,0 +1,2088 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="generator" content="ApiGen 3.0.0">
+
+	<title>Class Pharborist\NodeCollection | Pharborist</title>
+
+	<link rel="stylesheet" href="resources/style.css?247950731">
+
+</head>
+
+<body>
+<div id="left">
+	<div id="menu">
+		<a href="index.html" title="Overview"><span>Overview</span></a>
+
+
+		<div id="groups">
+			<h3>Namespaces</h3>
+			<ul>
+				<li class="active"><a href="namespace-Pharborist.html">Pharborist<span></span></a>
+						<ul>
+				<li><a href="namespace-Pharborist.Constants.html">Constants</a>
+						</li>
+				<li><a href="namespace-Pharborist.ControlStructures.html">ControlStructures</a>
+						</li>
+				<li><a href="namespace-Pharborist.Exceptions.html">Exceptions</a>
+						</li>
+				<li><a href="namespace-Pharborist.Functions.html">Functions</a>
+						</li>
+				<li><a href="namespace-Pharborist.Generators.html">Generators</a>
+						</li>
+				<li><a href="namespace-Pharborist.Namespaces.html">Namespaces</a>
+						</li>
+				<li><a href="namespace-Pharborist.Objects.html">Objects</a>
+						</li>
+				<li><a href="namespace-Pharborist.Operators.html">Operators</a>
+						</li>
+				<li><a href="namespace-Pharborist.Types.html">Types</a>
+						</li>
+				<li><a href="namespace-Pharborist.Variables.html">Variables</a>
+						</li>
+							</ul></li>
+				<li><a href="namespace-PHP.html">PHP</a>
+						</li>
+			</ul>
+		</div>
+
+		<hr>
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li><a href="class-Pharborist.ArrayLookupNode.html">ArrayLookupNode</a></li>
+				<li><a href="class-Pharborist.BacktickNode.html">BacktickNode</a></li>
+				<li><a href="class-Pharborist.BlankStatementNode.html">BlankStatementNode</a></li>
+				<li><a href="class-Pharborist.CommaListNode.html">CommaListNode</a></li>
+				<li><a href="class-Pharborist.CommentNode.html">CommentNode</a></li>
+				<li><a href="class-Pharborist.DocCommentNode.html">DocCommentNode</a></li>
+				<li><a href="class-Pharborist.EchoStatementNode.html">EchoStatementNode</a></li>
+				<li><a href="class-Pharborist.EchoTagStatementNode.html">EchoTagStatementNode</a></li>
+				<li><a href="class-Pharborist.ExpressionStatementNode.html">ExpressionStatementNode</a></li>
+				<li><a href="class-Pharborist.Filter.html">Filter</a></li>
+				<li><a href="class-Pharborist.LineCommentBlockNode.html">LineCommentBlockNode</a></li>
+				<li><a href="class-Pharborist.Node.html">Node</a></li>
+				<li class="active"><a href="class-Pharborist.NodeCollection.html">NodeCollection</a></li>
+				<li><a href="class-Pharborist.OperatorFactory.html">OperatorFactory</a></li>
+				<li><a href="class-Pharborist.ParenthesisNode.html">ParenthesisNode</a></li>
+				<li><a href="class-Pharborist.ParentNode.html">ParentNode</a></li>
+				<li><a href="class-Pharborist.PartialNode.html">PartialNode</a></li>
+				<li><a href="class-Pharborist.Settings.html">Settings</a></li>
+				<li><a href="class-Pharborist.SourcePosition.html">SourcePosition</a></li>
+				<li><a href="class-Pharborist.SplatNode.html">SplatNode</a></li>
+				<li><a href="class-Pharborist.StatementBlockNode.html">StatementBlockNode</a></li>
+				<li><a href="class-Pharborist.StatementNode.html">StatementNode</a></li>
+				<li><a href="class-Pharborist.TemplateNode.html">TemplateNode</a></li>
+				<li><a href="class-Pharborist.Token.html">Token</a></li>
+				<li><a href="class-Pharborist.TokenIterator.html">TokenIterator</a></li>
+				<li><a href="class-Pharborist.Tokenizer.html">Tokenizer</a></li>
+				<li><a href="class-Pharborist.TokenNode.html">TokenNode</a></li>
+				<li><a href="class-Pharborist.TopNode.html">TopNode</a></li>
+				<li><a href="class-Pharborist.UnsetStatementNode.html">UnsetStatementNode</a></li>
+				<li><a href="class-Pharborist.WhitespaceNode.html">WhitespaceNode</a></li>
+			</ul>
+
+			<h3>Interfaces</h3>
+			<ul>
+				<li><a href="class-Pharborist.ExpressionNode.html">ExpressionNode</a></li>
+				<li><a href="class-Pharborist.NodeInterface.html">NodeInterface</a></li>
+				<li><a href="class-Pharborist.ParentNodeInterface.html">ParentNodeInterface</a></li>
+			</ul>
+
+			<h3>Traits</h3>
+			<ul>
+				<li><a href="class-Pharborist.DocCommentTrait.html">DocCommentTrait</a></li>
+				<li><a href="class-Pharborist.UncommentTrait.html">UncommentTrait</a></li>
+			</ul>
+
+			<h3>Exceptions</h3>
+			<ul>
+				<li><a href="class-Pharborist.ParserException.html">ParserException</a></li>
+			</ul>
+
+
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+<div id="rightInner">
+	<form id="search">
+		<input type="hidden" name="cx" value="">
+		<input type="hidden" name="ie" value="UTF-8">
+		<input type="text" name="q" class="text" placeholder="Search">
+	</form>
+
+	<div id="navigation">
+		<ul>
+			<li>
+				<a href="index.html" title="Overview"><span>Overview</span></a>
+			</li>
+			<li>
+				<a href="namespace-Pharborist.html" title="Summary of Pharborist"><span>Namespace</span></a>
+			</li>
+			<li class="active">
+<span>Class</span>			</li>
+		</ul>
+		<ul>
+			<li>
+				<a href="tree.html" title="Tree view of classes, interfaces, traits and exceptions"><span>Tree</span></a>
+			</li>
+		</ul>
+		<ul>
+		</ul>
+	</div>
+
+<div id="content" class="class">
+	<h1>Class NodeCollection</h1>
+
+
+	<div class="description">
+	<p>A set of matched nodes.</p>
+
+<p>jQuery like wrapper around Node[] to support Traversing and Manipulation.</p>
+
+	</div>
+
+	<dl class="tree">
+		<dd style="padding-left:0px">
+<b><span>Pharborist\NodeCollection</span></b>			
+			 implements 
+				<a href="class-IteratorAggregate.html"><span>IteratorAggregate</span></a>, 
+			
+				<a href="class-Countable.html"><span>Countable</span></a>, 
+			
+				<a href="class-ArrayAccess.html"><span>ArrayAccess</span></a>
+			
+			
+		</dd>
+	</dl>
+
+
+	<div>
+		<h4>Direct known subclasses</h4>
+			<a href="class-Pharborist.Functions.ParameterNodeCollection.html">Pharborist\Functions\ParameterNodeCollection</a>
+	</div>
+
+
+
+
+
+
+	<div class="info">
+		
+		
+		<b>Namespace:</b> Pharborist<br>
+		
+
+		<b>Located at</b> <a href="source-class-Pharborist.NodeCollection.html#4-659" title="Go to source code">NodeCollection.php</a><br>
+	</div>
+
+
+
+	<table class="summary methods" id="methods">
+	<caption>Methods summary</caption>
+	<tr data-order="__construct" id="___construct">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#___construct">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#36-38" title="Go to source code">__construct</a>( <span>mixed <var>$nodes</var> = <span class="line">1: </span>[]</span>, <span>mixed <var>$sort</var> = <span class="line">1: </span><span class="php-keyword1">TRUE</span></span> )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getIterator" id="_getIterator">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getIterator">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#40-45" title="Go to source code">getIterator</a>( )</code>
+
+		<div class="description short">
+			<p>Implements \IteratorAggregate::getIterator().</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Implements \IteratorAggregate::getIterator().</p>
+
+
+
+
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-IteratorAggregate.html#_getIterator">IteratorAggregate::getIterator()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="count" id="_count">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_count">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#47-52" title="Go to source code">count</a>( )</code>
+
+		<div class="description short">
+			<p>Implements \Countable::count().</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Implements \Countable::count().</p>
+
+
+
+
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Countable.html#_count">Countable::count()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="offsetExists" id="_offsetExists">
+
+		<td class="attributes"><code>
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_offsetExists">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#54-63" title="Go to source code">offsetExists</a>( <span>integer <var>$offset</var></span> )</code>
+
+		<div class="description short">
+			<p>Implements \ArrayAccess::offsetExists().</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Implements \ArrayAccess::offsetExists().</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$offset</var></dt>
+					<dd>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br><p>boolean</p>
+<br>
+				</div>
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-ArrayAccess.html#_offsetExists">ArrayAccess::offsetExists()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="offsetGet" id="_offsetGet">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_offsetGet">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#65-74" title="Go to source code">offsetGet</a>( <span>integer <var>$offset</var></span> )</code>
+
+		<div class="description short">
+			<p>Implements \ArrayAccess::offsetGet().</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Implements \ArrayAccess::offsetGet().</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$offset</var></dt>
+					<dd>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code></code><br><p>Node</p>
+<br>
+				</div>
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-ArrayAccess.html#_offsetGet">ArrayAccess::offsetGet()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="offsetSet" id="_offsetSet">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_offsetSet">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#76-86" title="Go to source code">offsetSet</a>( <span>integer <var>$offset</var></span>, <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code> <var>$value</var></span> )</code>
+
+		<div class="description short">
+			<p>Implements \ArrayAccess::offsetSet().</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Implements \ArrayAccess::offsetSet().</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$offset</var></dt>
+					<dd>
+</dd>
+					<dt><var>$value</var></dt>
+					<dd>
+</dd>
+				</dl></div>
+
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-BadMethodCallException.html">BadMethodCallException</a></code></code><br><p>\BadMethodCallException</p>
+<br>
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-ArrayAccess.html#_offsetSet">ArrayAccess::offsetSet()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="offsetUnset" id="_offsetUnset">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_offsetUnset">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#88-97" title="Go to source code">offsetUnset</a>( <span>integer <var>$offset</var></span> )</code>
+
+		<div class="description short">
+			<p>Implements \ArrayAccess::offsetUnset().</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Implements \ArrayAccess::offsetUnset().</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$offset</var></dt>
+					<dd>
+</dd>
+				</dl></div>
+
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-BadMethodCallException.html">BadMethodCallException</a></code></code><br><p>\BadMethodCallException</p>
+<br>
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-ArrayAccess.html#_offsetUnset">ArrayAccess::offsetUnset()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="isEmpty" id="_isEmpty">
+
+		<td class="attributes"><code>
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_isEmpty">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#100-107" title="Go to source code">isEmpty</a>( )</code>
+
+		<div class="description short">
+			<p>Returns if the collection is empty.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Returns if the collection is empty.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br><p>boolean</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="reverse" id="_reverse">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_reverse">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#109-115" title="Go to source code">reverse</a>( )</code>
+
+		<div class="description short">
+			<p>Get collection in reverse order</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Get collection in reverse order</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code></code><br><p>Node[]</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="slice" id="_slice">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_slice">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#117-147" title="Go to source code">slice</a>( <span>integer <var>$start_index</var></span>, <span>integer <var>$end_index</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
+
+		<div class="description short">
+			<p>Reduce the set of matched nodes to a subset specified by a range.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Reduce the set of matched nodes to a subset specified by a range.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$start_index</var></dt>
+					<dd>
+</dd>
+					<dt><var>$end_index</var></dt>
+					<dd>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code></code><br><p>NodeCollection</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="map" id="_map">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_map">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#149-160" title="Go to source code">map</a>( <span>callable <var>$callback</var></span> )</code>
+
+		<div class="description short">
+			<p>Creates a new collection by applying a callback to each node in the matched
+set, like jQuery's .map().</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Creates a new collection by applying a callback to each node in the matched
+set, like jQuery's .map().</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$callback</var></dt>
+					<dd>&lt;p&gt;The callback to apply, receiving the current node in the set.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code></code><br><p>NodeCollection</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="reduce" id="_reduce">
+
+		<td class="attributes"><code>
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_reduce">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#162-177" title="Go to source code">reduce</a>( <span>callable <var>$callback</var></span>, <span>mixed <var>$initial</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
+
+		<div class="description short">
+			<p>Iteratively reduce the collection to a single value using a callback.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Iteratively reduce the collection to a single value using a callback.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$callback</var></dt>
+					<dd>&lt;p&gt;Callback function that receives the return value of the previous
+  iteration and the current node in the set being processed.&lt;/p&gt;
+</dd>
+					<dt><var>$initial</var></dt>
+					<dd>&lt;p&gt;The initial value for first iteration, or final result in case
+  of empty collection.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br><p>Returns the resulting value.</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="toArray" id="_toArray">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_toArray">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#179-187" title="Go to source code">toArray</a>( )</code>
+
+		<div class="description short">
+			<p>Returns the raw array of nodes, like jQuery's get() called with no
+arguments.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Returns the raw array of nodes, like jQuery's get() called with no
+arguments.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code></code><br><p>Node[]</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="get" id="_get">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_get">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#189-199" title="Go to source code">get</a>( <span>integer <var>$index</var></span> )</code>
+
+		<div class="description short">
+			<p>Get the element at index.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Get the element at index.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$index</var></dt>
+					<dd>&lt;p&gt;Index of element to get.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code></code><br><p>Node</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="index" id="_index">
+
+		<td class="attributes"><code>
+			 public 
+			integer
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_index">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#201-217" title="Go to source code">index</a>( <span>callable <var>$callback</var></span> )</code>
+
+		<div class="description short">
+			<p>Index of first element that is matched by callback.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Index of first element that is matched by callback.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$callback</var></dt>
+					<dd>&lt;p&gt;Callback to test for node match.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>integer</code><br><p>Index of first element that is matched by callback.</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="is" id="_is">
+
+		<td class="attributes"><code>
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_is">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#219-235" title="Go to source code">is</a>( <span>callable <var>$callback</var></span> )</code>
+
+		<div class="description short">
+			<p>Test is any element in collection matches.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Test is any element in collection matches.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$callback</var></dt>
+					<dd>&lt;p&gt;Callback to test for node match.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br><p>TRUE if any element in set of nodes matches.</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="parent" id="_parent">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_parent">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#237-251" title="Go to source code">parent</a>( <span>callable <var>$callback</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
+
+		<div class="description short">
+			<p>Get the parent of each node in the current set of matched nodes,
+optionally filtered by a callback.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Get the parent of each node in the current set of matched nodes,
+optionally filtered by a callback.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$callback</var></dt>
+					<dd>&lt;p&gt;An optional callback to filter by.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code></code><br><p>NodeCollection</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="parents" id="_parents">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_parents">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#253-265" title="Go to source code">parents</a>( <span>callable <var>$callback</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
+
+		<div class="description short">
+			<p>Get the ancestors of each node in the current set of matched nodes,
+optionally filtered by a callback.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Get the ancestors of each node in the current set of matched nodes,
+optionally filtered by a callback.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$callback</var></dt>
+					<dd>&lt;p&gt;An optional callback to filter by.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code></code><br><p>NodeCollection</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="parentsUntil" id="_parentsUntil">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_parentsUntil">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#267-280" title="Go to source code">parentsUntil</a>( <span>callable <var>$callback</var></span>, <span>boolean <var>$inclusive</var> = <span class="line">1: </span><span class="php-keyword1">FALSE</span></span> )</code>
+
+		<div class="description short">
+			<p>Get ancestors of each node in the current set of matched nodes,
+up to the node matched by callback.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Get ancestors of each node in the current set of matched nodes,
+up to the node matched by callback.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$callback</var></dt>
+					<dd>&lt;p&gt;Callback to test for match.&lt;/p&gt;
+</dd>
+					<dt><var>$inclusive</var></dt>
+					<dd>&lt;p&gt;TRUE to include the node matched by callback.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code></code><br><p>NodeCollection</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="closest" id="_closest">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_closest">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#282-297" title="Go to source code">closest</a>( <span>callable <var>$callback</var></span> )</code>
+
+		<div class="description short">
+			<p>For each node in the collection, get the first node matched by the
+callback by testing this node and traversing up through its ancestors in
+the tree.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>For each node in the collection, get the first node matched by the
+callback by testing this node and traversing up through its ancestors in
+the tree.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$callback</var></dt>
+					<dd>&lt;p&gt;Callback to test for match.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code></code><br><p>Node</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="children" id="_children">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_children">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#299-312" title="Go to source code">children</a>( <span>callable <var>$callback</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
+
+		<div class="description short">
+			<p>Get the immediate children of each node in the set of matched nodes.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Get the immediate children of each node in the set of matched nodes.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$callback</var></dt>
+					<dd>&lt;p&gt;An optional callback to filter by.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code></code><br><p>NodeCollection</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="clear" id="_clear">
+
+		<td class="attributes"><code>
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_clear">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#314-326" title="Go to source code">clear</a>( )</code>
+
+		<div class="description short">
+			<p>Remove all child nodes of the set of matched elements.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Remove all child nodes of the set of matched elements.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br><p>$this</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="previous" id="_previous">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_previous">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#328-343" title="Go to source code">previous</a>( <span>callable <var>$callback</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
+
+		<div class="description short">
+			<p>Get the immediately preceding sibling of each node in the set of matched
+nodes. If a callback is provided, it retrieves the next sibling only if
+the callback returns TRUE.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Get the immediately preceding sibling of each node in the set of matched
+nodes. If a callback is provided, it retrieves the next sibling only if
+the callback returns TRUE.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$callback</var></dt>
+					<dd>&lt;p&gt;An optional callback to filter by.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code></code><br><p>NodeCollection</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="previousAll" id="_previousAll">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_previousAll">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#345-357" title="Go to source code">previousAll</a>( <span>callable <var>$callback</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
+
+		<div class="description short">
+			<p>Get all preceding siblings of each node in the set of matched nodes,
+optionally filtered by a callback.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Get all preceding siblings of each node in the set of matched nodes,
+optionally filtered by a callback.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$callback</var></dt>
+					<dd>&lt;p&gt;An optional callback to filter by.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code></code><br><p>NodeCollection</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="previousUntil" id="_previousUntil">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_previousUntil">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#359-372" title="Go to source code">previousUntil</a>( <span>callable <var>$callback</var></span>, <span>boolean <var>$inclusive</var> = <span class="line">1: </span><span class="php-keyword1">FALSE</span></span> )</code>
+
+		<div class="description short">
+			<p>Get all preceding siblings of each node up to the node matched by the
+callback.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Get all preceding siblings of each node up to the node matched by the
+callback.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$callback</var></dt>
+					<dd>&lt;p&gt;Callback to test for match.&lt;/p&gt;
+</dd>
+					<dt><var>$inclusive</var></dt>
+					<dd>&lt;p&gt;TRUE to include the node matched by callback.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code></code><br><p>NodeCollection</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="next" id="_next">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_next">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#374-389" title="Go to source code">next</a>( <span>callable <var>$callback</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
+
+		<div class="description short">
+			<p>Get the immediately following sibling of each node in the set of matched
+nodes. If a callback is provided, it retrieves the next sibling only if
+the callback returns TRUE.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Get the immediately following sibling of each node in the set of matched
+nodes. If a callback is provided, it retrieves the next sibling only if
+the callback returns TRUE.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$callback</var></dt>
+					<dd>&lt;p&gt;An optional callback to filter by.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code></code><br><p>NodeCollection</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="nextAll" id="_nextAll">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_nextAll">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#391-403" title="Go to source code">nextAll</a>( <span>callable <var>$callback</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
+
+		<div class="description short">
+			<p>Get all following siblings of each node in the set of matched nodes,
+optionally filtered by a callback.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Get all following siblings of each node in the set of matched nodes,
+optionally filtered by a callback.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$callback</var></dt>
+					<dd>&lt;p&gt;An optional callback to filter by.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code></code><br><p>NodeCollection</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="nextUntil" id="_nextUntil">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_nextUntil">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#405-418" title="Go to source code">nextUntil</a>( <span>callable <var>$callback</var></span>, <span>boolean <var>$inclusive</var> = <span class="line">1: </span><span class="php-keyword1">FALSE</span></span> )</code>
+
+		<div class="description short">
+			<p>Get all following siblings of each node up to the node matched by the
+callback.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Get all following siblings of each node up to the node matched by the
+callback.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$callback</var></dt>
+					<dd>&lt;p&gt;Callback to test for match.&lt;/p&gt;
+</dd>
+					<dt><var>$inclusive</var></dt>
+					<dd>&lt;p&gt;TRUE to include the node matched by callback.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code></code><br><p>NodeCollection</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="siblings" id="_siblings">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_siblings">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#420-432" title="Go to source code">siblings</a>( <span>callable <var>$callback</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
+
+		<div class="description short">
+			<p>Get the siblings of each node in the set of matched nodes,
+optionally filtered by a callback.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Get the siblings of each node in the set of matched nodes,
+optionally filtered by a callback.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$callback</var></dt>
+					<dd>&lt;p&gt;An optional callback to filter by.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code></code><br><p>NodeCollection</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="find" id="_find">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_find">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#434-448" title="Go to source code">find</a>( <span>callable <var>$callback</var></span> )</code>
+
+		<div class="description short">
+			<p>Get the descendants of each node in the current set of matched nodes,
+filtered by callback.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Get the descendants of each node in the current set of matched nodes,
+filtered by callback.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$callback</var></dt>
+					<dd>&lt;p&gt;Callback to filter by.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code></code><br><p>NodeCollection</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="filter" id="_filter">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_filter">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#450-463" title="Go to source code">filter</a>( <span>callable <var>$callback</var></span> )</code>
+
+		<div class="description short">
+			<p>Reduce the set of matched nodes to those that pass the callback filter.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Reduce the set of matched nodes to those that pass the callback filter.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$callback</var></dt>
+					<dd>&lt;p&gt;Callback to test for match.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code></code><br><p>NodeCollection</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="not" id="_not">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_not">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#465-478" title="Go to source code">not</a>( <span>callable <var>$callback</var></span> )</code>
+
+		<div class="description short">
+			<p>Remove nodes from the set of matched nodes.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Remove nodes from the set of matched nodes.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$callback</var></dt>
+					<dd>&lt;p&gt;Callback to test for match.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code></code><br><p>NodeCollection</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="has" id="_has">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_has">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#480-494" title="Go to source code">has</a>( <span>callable <var>$callback</var></span> )</code>
+
+		<div class="description short">
+			<p>Reduce the set of matched nodes to those that have a descendant that
+match.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Reduce the set of matched nodes to those that have a descendant that
+match.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$callback</var></dt>
+					<dd>&lt;p&gt;Callback to test for match.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code></code><br><p>NodeCollection</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="first" id="_first">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_first">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#496-505" title="Go to source code">first</a>( )</code>
+
+		<div class="description short">
+			<p>Reduce the set of matched nodes to the first in the set.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Reduce the set of matched nodes to the first in the set.</p>
+
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="last" id="_last">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_last">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#507-516" title="Go to source code">last</a>( )</code>
+
+		<div class="description short">
+			<p>Reduce the set of matched nodes to the last in the set.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Reduce the set of matched nodes to the last in the set.</p>
+
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="insertBefore" id="_insertBefore">
+
+		<td class="attributes"><code>
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_insertBefore">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#518-528" title="Go to source code">insertBefore</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>|<code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code>|<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code> <var>$targets</var></span> )</code>
+
+		<div class="description short">
+			<p>Insert every node in the set of matched nodes before the targets.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Insert every node in the set of matched nodes before the targets.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$targets</var></dt>
+					<dd>&lt;p&gt;Nodes to insert before.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br><p>$this</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="before" id="_before">
+
+		<td class="attributes"><code>
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_before">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#530-540" title="Go to source code">before</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>|<code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code>|<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code> <var>$nodes</var></span> )</code>
+
+		<div class="description short">
+			<p>Insert nodes before each node in the set of matched nodes.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Insert nodes before each node in the set of matched nodes.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$nodes</var></dt>
+					<dd>&lt;p&gt;Nodes to insert.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br><p>$this</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="insertAfter" id="_insertAfter">
+
+		<td class="attributes"><code>
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_insertAfter">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#542-552" title="Go to source code">insertAfter</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>|<code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code>|<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code> <var>$targets</var></span> )</code>
+
+		<div class="description short">
+			<p>Insert every node in the set of matched nodes after the targets.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Insert every node in the set of matched nodes after the targets.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$targets</var></dt>
+					<dd>&lt;p&gt;Nodes to insert after.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br><p>$this</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="after" id="_after">
+
+		<td class="attributes"><code>
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_after">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#554-564" title="Go to source code">after</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>|<code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code>|<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code> <var>$nodes</var></span> )</code>
+
+		<div class="description short">
+			<p>Insert nodes after each node in the set of matched nodes.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Insert nodes after each node in the set of matched nodes.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$nodes</var></dt>
+					<dd>&lt;p&gt;Nodes to insert.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br><p>$this</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="remove" id="_remove">
+
+		<td class="attributes"><code>
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_remove">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#566-575" title="Go to source code">remove</a>( )</code>
+
+		<div class="description short">
+			<p>Remove the set of matched nodes from the tree.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Remove the set of matched nodes from the tree.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br><p>$this</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="replaceWith" id="_replaceWith">
+
+		<td class="attributes"><code>
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_replaceWith">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#577-596" title="Go to source code">replaceWith</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>|<code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code>|<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code> <var>$nodes</var></span> )</code>
+
+		<div class="description short">
+			<p>Replace each node in the set of matched nodes with the provided new nodes
+and return the set of nodes that was removed.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Replace each node in the set of matched nodes with the provided new nodes
+and return the set of nodes that was removed.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$nodes</var></dt>
+					<dd>&lt;p&gt;Replacement nodes.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br><p>$this</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="replaceAll" id="_replaceAll">
+
+		<td class="attributes"><code>
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_replaceAll">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#598-616" title="Go to source code">replaceAll</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>|<code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code>|<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code> <var>$targets</var></span> )</code>
+
+		<div class="description short">
+			<p>Replace each target node with the set of matched nodes.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Replace each target node with the set of matched nodes.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$targets</var></dt>
+					<dd>&lt;p&gt;Targets to replace.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br><p>$this</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="add" id="_add">
+
+		<td class="attributes"><code>
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_add">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#618-639" title="Go to source code">add</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>|<code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code>|<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code> <var>$nodes</var></span> )</code>
+
+		<div class="description short">
+			<p>Add nodes to this collection.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Add nodes to this collection.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$nodes</var></dt>
+					<dd>&lt;p&gt;Nodes to add to collection.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br><p>$this</p>
+<br>
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-InvalidArgumentException.html">InvalidArgumentException</a></code></code><br><p>\InvalidArgumentException</p>
+<br>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="each" id="_each">
+
+		<td class="attributes"><code>
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_each">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#641-650" title="Go to source code">each</a>( <span>callable <var>$callback</var></span> )</code>
+
+		<div class="description short">
+			<p>Apply callback on each element in the node collection.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Apply callback on each element in the node collection.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$callback</var></dt>
+					<dd>&lt;p&gt;Callback to apply on each element.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br><p>$this</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="__clone" id="___clone">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#___clone">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#652-658" title="Go to source code">__clone</a>( )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+	<div id="footer">
+		Pharborist API documentation generated by <a href="http://apigen.org">ApiGen 3.0.0</a>
+	</div>
+</div>
+</div>
+<script src="resources/combined.js?4281059210"></script>
+<script src="elementlist.js?1795876126"></script>
+</body>
+</html>

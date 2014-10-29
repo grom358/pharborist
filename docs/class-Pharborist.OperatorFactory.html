@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="generator" content="ApiGen 3.0.0">
+
+	<title>Class Pharborist\OperatorFactory | Pharborist</title>
+
+	<link rel="stylesheet" href="resources/style.css?247950731">
+
+</head>
+
+<body>
+<div id="left">
+	<div id="menu">
+		<a href="index.html" title="Overview"><span>Overview</span></a>
+
+
+		<div id="groups">
+			<h3>Namespaces</h3>
+			<ul>
+				<li class="active"><a href="namespace-Pharborist.html">Pharborist<span></span></a>
+						<ul>
+				<li><a href="namespace-Pharborist.Constants.html">Constants</a>
+						</li>
+				<li><a href="namespace-Pharborist.ControlStructures.html">ControlStructures</a>
+						</li>
+				<li><a href="namespace-Pharborist.Exceptions.html">Exceptions</a>
+						</li>
+				<li><a href="namespace-Pharborist.Functions.html">Functions</a>
+						</li>
+				<li><a href="namespace-Pharborist.Generators.html">Generators</a>
+						</li>
+				<li><a href="namespace-Pharborist.Namespaces.html">Namespaces</a>
+						</li>
+				<li><a href="namespace-Pharborist.Objects.html">Objects</a>
+						</li>
+				<li><a href="namespace-Pharborist.Operators.html">Operators</a>
+						</li>
+				<li><a href="namespace-Pharborist.Types.html">Types</a>
+						</li>
+				<li><a href="namespace-Pharborist.Variables.html">Variables</a>
+						</li>
+							</ul></li>
+				<li><a href="namespace-PHP.html">PHP</a>
+						</li>
+			</ul>
+		</div>
+
+		<hr>
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li><a href="class-Pharborist.ArrayLookupNode.html">ArrayLookupNode</a></li>
+				<li><a href="class-Pharborist.BacktickNode.html">BacktickNode</a></li>
+				<li><a href="class-Pharborist.BlankStatementNode.html">BlankStatementNode</a></li>
+				<li><a href="class-Pharborist.CommaListNode.html">CommaListNode</a></li>
+				<li><a href="class-Pharborist.CommentNode.html">CommentNode</a></li>
+				<li><a href="class-Pharborist.DocCommentNode.html">DocCommentNode</a></li>
+				<li><a href="class-Pharborist.EchoStatementNode.html">EchoStatementNode</a></li>
+				<li><a href="class-Pharborist.EchoTagStatementNode.html">EchoTagStatementNode</a></li>
+				<li><a href="class-Pharborist.ExpressionStatementNode.html">ExpressionStatementNode</a></li>
+				<li><a href="class-Pharborist.Filter.html">Filter</a></li>
+				<li><a href="class-Pharborist.LineCommentBlockNode.html">LineCommentBlockNode</a></li>
+				<li><a href="class-Pharborist.Node.html">Node</a></li>
+				<li><a href="class-Pharborist.NodeCollection.html">NodeCollection</a></li>
+				<li class="active"><a href="class-Pharborist.OperatorFactory.html">OperatorFactory</a></li>
+				<li><a href="class-Pharborist.ParenthesisNode.html">ParenthesisNode</a></li>
+				<li><a href="class-Pharborist.ParentNode.html">ParentNode</a></li>
+				<li><a href="class-Pharborist.PartialNode.html">PartialNode</a></li>
+				<li><a href="class-Pharborist.Settings.html">Settings</a></li>
+				<li><a href="class-Pharborist.SourcePosition.html">SourcePosition</a></li>
+				<li><a href="class-Pharborist.SplatNode.html">SplatNode</a></li>
+				<li><a href="class-Pharborist.StatementBlockNode.html">StatementBlockNode</a></li>
+				<li><a href="class-Pharborist.StatementNode.html">StatementNode</a></li>
+				<li><a href="class-Pharborist.TemplateNode.html">TemplateNode</a></li>
+				<li><a href="class-Pharborist.Token.html">Token</a></li>
+				<li><a href="class-Pharborist.TokenIterator.html">TokenIterator</a></li>
+				<li><a href="class-Pharborist.Tokenizer.html">Tokenizer</a></li>
+				<li><a href="class-Pharborist.TokenNode.html">TokenNode</a></li>
+				<li><a href="class-Pharborist.TopNode.html">TopNode</a></li>
+				<li><a href="class-Pharborist.UnsetStatementNode.html">UnsetStatementNode</a></li>
+				<li><a href="class-Pharborist.WhitespaceNode.html">WhitespaceNode</a></li>
+			</ul>
+
+			<h3>Interfaces</h3>
+			<ul>
+				<li><a href="class-Pharborist.ExpressionNode.html">ExpressionNode</a></li>
+				<li><a href="class-Pharborist.NodeInterface.html">NodeInterface</a></li>
+				<li><a href="class-Pharborist.ParentNodeInterface.html">ParentNodeInterface</a></li>
+			</ul>
+
+			<h3>Traits</h3>
+			<ul>
+				<li><a href="class-Pharborist.DocCommentTrait.html">DocCommentTrait</a></li>
+				<li><a href="class-Pharborist.UncommentTrait.html">UncommentTrait</a></li>
+			</ul>
+
+			<h3>Exceptions</h3>
+			<ul>
+				<li><a href="class-Pharborist.ParserException.html">ParserException</a></li>
+			</ul>
+
+
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+<div id="rightInner">
+	<form id="search">
+		<input type="hidden" name="cx" value="">
+		<input type="hidden" name="ie" value="UTF-8">
+		<input type="text" name="q" class="text" placeholder="Search">
+	</form>
+
+	<div id="navigation">
+		<ul>
+			<li>
+				<a href="index.html" title="Overview"><span>Overview</span></a>
+			</li>
+			<li>
+				<a href="namespace-Pharborist.html" title="Summary of Pharborist"><span>Namespace</span></a>
+			</li>
+			<li class="active">
+<span>Class</span>			</li>
+		</ul>
+		<ul>
+			<li>
+				<a href="tree.html" title="Tree view of classes, interfaces, traits and exceptions"><span>Tree</span></a>
+			</li>
+		</ul>
+		<ul>
+		</ul>
+	</div>
+
+<div id="content" class="class">
+	<h1>Class OperatorFactory</h1>
+
+
+	<div class="description">
+	<p>An Operator factory.</p>
+
+<p>Factory for building OperatorNode and also creating Operator for use in
+ExpressionParser.</p>
+
+	</div>
+
+
+
+
+
+
+
+
+
+	<div class="info">
+		
+		
+		<b>Namespace:</b> Pharborist<br>
+		
+
+		<b>Located at</b> <a href="source-class-Pharborist.OperatorFactory.html#10-212" title="Go to source code">OperatorFactory.php</a><br>
+	</div>
+
+
+
+	<table class="summary methods" id="methods">
+	<caption>Methods summary</caption>
+	<tr data-order="createOperator" id="_createOperator">
+
+		<td class="attributes"><code>
+			 public static
+			Operator
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_createOperator">#</a>
+		<code><a href="source-class-Pharborist.OperatorFactory.html#78-101" title="Go to source code">createOperator</a>( <span>integer|string <var>$token_type</var></span>, <span>boolean <var>$static_only</var> = <span class="line">1: </span><span class="php-keyword1">FALSE</span></span> )</code>
+
+		<div class="description short">
+			<p>Create an OperatorNode for the given token type.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Create an OperatorNode for the given token type.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$token_type</var></dt>
+					<dd>
+</dd>
+					<dt><var>$static_only</var></dt>
+					<dd>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>Operator</code><br><p>Operator</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="createElvisOperator" id="_createElvisOperator">
+
+		<td class="attributes"><code>
+			 public static
+			Operator
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_createElvisOperator">#</a>
+		<code><a href="source-class-Pharborist.OperatorFactory.html#103-119" title="Go to source code">createElvisOperator</a>( <span>Pharborist\Operator <var>$question_operator</var></span>, <span><code><a href="class-Pharborist.PartialNode.html">Pharborist\PartialNode</a></code> <var>$colon_node</var></span> )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$question_operator</var></dt>
+					<dd>
+</dd>
+					<dt><var>$colon_node</var></dt>
+					<dd>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>Operator</code><br><p>Operator</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="createAssignReferenceOperator" id="_createAssignReferenceOperator">
+
+		<td class="attributes"><code>
+			 public static
+			Operator
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_createAssignReferenceOperator">#</a>
+		<code><a href="source-class-Pharborist.OperatorFactory.html#121-136" title="Go to source code">createAssignReferenceOperator</a>( <span>Pharborist\Operator <var>$assign_operator</var></span>, <span><code><a href="class-Pharborist.PartialNode.html">Pharborist\PartialNode</a></code> <var>$by_ref_node</var></span> )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$assign_operator</var></dt>
+					<dd>
+</dd>
+					<dt><var>$by_ref_node</var></dt>
+					<dd>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>Operator</code><br><p>Operator</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="createUnaryOperatorNode" id="_createUnaryOperatorNode">
+
+		<td class="attributes"><code>
+			 public static
+			<code><a href="class-Pharborist.Operators.UnaryOperationNode.html">Pharborist\Operators\UnaryOperationNode</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_createUnaryOperatorNode">#</a>
+		<code><a href="source-class-Pharborist.OperatorFactory.html#138-150" title="Go to source code">createUnaryOperatorNode</a>( <span>Pharborist\Operator <var>$operator</var></span>, <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code> <var>$operand</var></span> )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$operator</var></dt>
+					<dd>
+</dd>
+					<dt><var>$operand</var></dt>
+					<dd>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.Operators.UnaryOperationNode.html">Pharborist\Operators\UnaryOperationNode</a></code></code><br><p>UnaryOperationNode</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="createBinaryOperatorNode" id="_createBinaryOperatorNode">
+
+		<td class="attributes"><code>
+			 public static
+			<code><a href="class-Pharborist.Operators.BinaryOperationNode.html">Pharborist\Operators\BinaryOperationNode</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_createBinaryOperatorNode">#</a>
+		<code><a href="source-class-Pharborist.OperatorFactory.html#152-166" title="Go to source code">createBinaryOperatorNode</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code> <var>$left</var></span>, <span>Pharborist\Operator <var>$operator</var></span>, <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code> <var>$right</var></span> )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$left</var></dt>
+					<dd>
+</dd>
+					<dt><var>$operator</var></dt>
+					<dd>
+</dd>
+					<dt><var>$right</var></dt>
+					<dd>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.Operators.BinaryOperationNode.html">Pharborist\Operators\BinaryOperationNode</a></code></code><br><p>BinaryOperationNode</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="createPostfixOperatorNode" id="_createPostfixOperatorNode">
+
+		<td class="attributes"><code>
+			 public static
+			<code><a href="class-Pharborist.Operators.PostDecrementNode.html">Pharborist\Operators\PostDecrementNode</a></code>|<code><a href="class-Pharborist.Operators.PostIncrementNode.html">Pharborist\Operators\PostIncrementNode</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_createPostfixOperatorNode">#</a>
+		<code><a href="source-class-Pharborist.OperatorFactory.html#168-187" title="Go to source code">createPostfixOperatorNode</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code> <var>$operand</var></span>, <span>Pharborist\Operator <var>$operator</var></span> )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$operand</var></dt>
+					<dd>
+</dd>
+					<dt><var>$operator</var></dt>
+					<dd>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.Operators.PostDecrementNode.html">Pharborist\Operators\PostDecrementNode</a></code>|<code><a href="class-Pharborist.Operators.PostIncrementNode.html">Pharborist\Operators\PostIncrementNode</a></code></code><br><p>PostDecrementNode|PostIncrementNode</p>
+<br>
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.ParserException.html">Pharborist\ParserException</a></code></code><br><p>ParserException</p>
+<br>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="createTernaryOperatorNode" id="_createTernaryOperatorNode">
+
+		<td class="attributes"><code>
+			 public static
+			<code><a href="class-Pharborist.Operators.TernaryOperationNode.html">Pharborist\Operators\TernaryOperationNode</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_createTernaryOperatorNode">#</a>
+		<code><a href="source-class-Pharborist.OperatorFactory.html#189-211" title="Go to source code">createTernaryOperatorNode</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code> <var>$condition</var></span>, <span>Pharborist\Operator <var>$operator</var></span>, <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code> <var>$then</var></span>, <span><code><a href="class-Pharborist.ParentNode.html">Pharborist\ParentNode</a></code> <var>$colon</var></span>, <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code> <var>$else</var></span> )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$condition</var></dt>
+					<dd>
+</dd>
+					<dt><var>$operator</var></dt>
+					<dd>
+</dd>
+					<dt><var>$then</var></dt>
+					<dd>
+</dd>
+					<dt><var>$colon</var></dt>
+					<dd>
+</dd>
+					<dt><var>$else</var></dt>
+					<dd>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.Operators.TernaryOperationNode.html">Pharborist\Operators\TernaryOperationNode</a></code></code><br><p>TernaryOperationNode</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+	<div id="footer">
+		Pharborist API documentation generated by <a href="http://apigen.org">ApiGen 3.0.0</a>
+	</div>
+</div>
+</div>
+<script src="resources/combined.js?4281059210"></script>
+<script src="elementlist.js?1795876126"></script>
+</body>
+</html>

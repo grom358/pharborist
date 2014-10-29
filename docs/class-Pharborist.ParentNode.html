@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="generator" content="ApiGen 3.0.0">
+
+	<title>Class Pharborist\ParentNode | Pharborist</title>
+
+	<link rel="stylesheet" href="resources/style.css?247950731">
+
+</head>
+
+<body>
+<div id="left">
+	<div id="menu">
+		<a href="index.html" title="Overview"><span>Overview</span></a>
+
+
+		<div id="groups">
+			<h3>Namespaces</h3>
+			<ul>
+				<li class="active"><a href="namespace-Pharborist.html">Pharborist<span></span></a>
+						<ul>
+				<li><a href="namespace-Pharborist.Constants.html">Constants</a>
+						</li>
+				<li><a href="namespace-Pharborist.ControlStructures.html">ControlStructures</a>
+						</li>
+				<li><a href="namespace-Pharborist.Exceptions.html">Exceptions</a>
+						</li>
+				<li><a href="namespace-Pharborist.Functions.html">Functions</a>
+						</li>
+				<li><a href="namespace-Pharborist.Generators.html">Generators</a>
+						</li>
+				<li><a href="namespace-Pharborist.Namespaces.html">Namespaces</a>
+						</li>
+				<li><a href="namespace-Pharborist.Objects.html">Objects</a>
+						</li>
+				<li><a href="namespace-Pharborist.Operators.html">Operators</a>
+						</li>
+				<li><a href="namespace-Pharborist.Types.html">Types</a>
+						</li>
+				<li><a href="namespace-Pharborist.Variables.html">Variables</a>
+						</li>
+							</ul></li>
+				<li><a href="namespace-PHP.html">PHP</a>
+						</li>
+			</ul>
+		</div>
+
+		<hr>
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li><a href="class-Pharborist.ArrayLookupNode.html">ArrayLookupNode</a></li>
+				<li><a href="class-Pharborist.BacktickNode.html">BacktickNode</a></li>
+				<li><a href="class-Pharborist.BlankStatementNode.html">BlankStatementNode</a></li>
+				<li><a href="class-Pharborist.CommaListNode.html">CommaListNode</a></li>
+				<li><a href="class-Pharborist.CommentNode.html">CommentNode</a></li>
+				<li><a href="class-Pharborist.DocCommentNode.html">DocCommentNode</a></li>
+				<li><a href="class-Pharborist.EchoStatementNode.html">EchoStatementNode</a></li>
+				<li><a href="class-Pharborist.EchoTagStatementNode.html">EchoTagStatementNode</a></li>
+				<li><a href="class-Pharborist.ExpressionStatementNode.html">ExpressionStatementNode</a></li>
+				<li><a href="class-Pharborist.Filter.html">Filter</a></li>
+				<li><a href="class-Pharborist.LineCommentBlockNode.html">LineCommentBlockNode</a></li>
+				<li><a href="class-Pharborist.Node.html">Node</a></li>
+				<li><a href="class-Pharborist.NodeCollection.html">NodeCollection</a></li>
+				<li><a href="class-Pharborist.OperatorFactory.html">OperatorFactory</a></li>
+				<li><a href="class-Pharborist.ParenthesisNode.html">ParenthesisNode</a></li>
+				<li class="active"><a href="class-Pharborist.ParentNode.html">ParentNode</a></li>
+				<li><a href="class-Pharborist.PartialNode.html">PartialNode</a></li>
+				<li><a href="class-Pharborist.Settings.html">Settings</a></li>
+				<li><a href="class-Pharborist.SourcePosition.html">SourcePosition</a></li>
+				<li><a href="class-Pharborist.SplatNode.html">SplatNode</a></li>
+				<li><a href="class-Pharborist.StatementBlockNode.html">StatementBlockNode</a></li>
+				<li><a href="class-Pharborist.StatementNode.html">StatementNode</a></li>
+				<li><a href="class-Pharborist.TemplateNode.html">TemplateNode</a></li>
+				<li><a href="class-Pharborist.Token.html">Token</a></li>
+				<li><a href="class-Pharborist.TokenIterator.html">TokenIterator</a></li>
+				<li><a href="class-Pharborist.Tokenizer.html">Tokenizer</a></li>
+				<li><a href="class-Pharborist.TokenNode.html">TokenNode</a></li>
+				<li><a href="class-Pharborist.TopNode.html">TopNode</a></li>
+				<li><a href="class-Pharborist.UnsetStatementNode.html">UnsetStatementNode</a></li>
+				<li><a href="class-Pharborist.WhitespaceNode.html">WhitespaceNode</a></li>
+			</ul>
+
+			<h3>Interfaces</h3>
+			<ul>
+				<li><a href="class-Pharborist.ExpressionNode.html">ExpressionNode</a></li>
+				<li><a href="class-Pharborist.NodeInterface.html">NodeInterface</a></li>
+				<li><a href="class-Pharborist.ParentNodeInterface.html">ParentNodeInterface</a></li>
+			</ul>
+
+			<h3>Traits</h3>
+			<ul>
+				<li><a href="class-Pharborist.DocCommentTrait.html">DocCommentTrait</a></li>
+				<li><a href="class-Pharborist.UncommentTrait.html">UncommentTrait</a></li>
+			</ul>
+
+			<h3>Exceptions</h3>
+			<ul>
+				<li><a href="class-Pharborist.ParserException.html">ParserException</a></li>
+			</ul>
+
+
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+<div id="rightInner">
+	<form id="search">
+		<input type="hidden" name="cx" value="">
+		<input type="hidden" name="ie" value="UTF-8">
+		<input type="text" name="q" class="text" placeholder="Search">
+	</form>
+
+	<div id="navigation">
+		<ul>
+			<li>
+				<a href="index.html" title="Overview"><span>Overview</span></a>
+			</li>
+			<li>
+				<a href="namespace-Pharborist.html" title="Summary of Pharborist"><span>Namespace</span></a>
+			</li>
+			<li class="active">
+<span>Class</span>			</li>
+		</ul>
+		<ul>
+			<li>
+				<a href="tree.html" title="Tree view of classes, interfaces, traits and exceptions"><span>Tree</span></a>
+			</li>
+		</ul>
+		<ul>
+		</ul>
+	</div>
+
+<div id="content" class="class">
+	<h1>Class ParentNode</h1>
+
+
+	<div class="description">
+	<p>A node that has children.</p>
+
+	</div>
+
+	<dl class="tree">
+		<dd style="padding-left:0px">
+			<a href="class-Pharborist.Node.html"><span>Pharborist\Node</span></a>
+			
+			 implements 
+				<a href="class-Pharborist.NodeInterface.html"><span>Pharborist\NodeInterface</span></a>
+			
+			
+		</dd>
+		<dd style="padding-left:30px">
+			<img src="resources/inherit.png" alt="Extended by">
+<b><span>Pharborist\ParentNode</span></b>			
+			 implements 
+				<a href="class-Pharborist.ParentNodeInterface.html"><span>Pharborist\ParentNodeInterface</span></a>
+			
+			
+		</dd>
+	</dl>
+
+
+	<div>
+		<h4>Direct known subclasses</h4>
+			<a href="class-Pharborist.ArrayLookupNode.html">Pharborist\ArrayLookupNode</a>, 
+			<a href="class-Pharborist.BacktickNode.html">Pharborist\BacktickNode</a>, 
+			<a href="class-Pharborist.Exceptions.CatchNode.html">Pharborist\Exceptions\CatchNode</a>, 
+			<a href="class-Pharborist.Functions.AnonymousFunctionNode.html">Pharborist\Functions\AnonymousFunctionNode</a>, 
+			<a href="class-Pharborist.Functions.CallNode.html">Pharborist\Functions\CallNode</a>, 
+			<a href="class-Pharborist.Functions.ParameterNode.html">Pharborist\Functions\ParameterNode</a>, 
+			<a href="class-Pharborist.Generators.YieldNode.html">Pharborist\Generators\YieldNode</a>, 
+			<a href="class-Pharborist.LineCommentBlockNode.html">Pharborist\LineCommentBlockNode</a>, 
+			<a href="class-Pharborist.Namespaces.NameNode.html">Pharborist\Namespaces\NameNode</a>, 
+			<a href="class-Pharborist.Namespaces.UseDeclarationNode.html">Pharborist\Namespaces\UseDeclarationNode</a>, 
+			<a href="class-Pharborist.Objects.ClassConstantLookupNode.html">Pharborist\Objects\ClassConstantLookupNode</a>, 
+			<a href="class-Pharborist.Objects.ClassMemberLookupNode.html">Pharborist\Objects\ClassMemberLookupNode</a>, 
+			<a href="class-Pharborist.CommaListNode.html">Pharborist\CommaListNode</a>, 
+			<a href="class-Pharborist.Objects.ClassMemberNode.html">Pharborist\Objects\ClassMemberNode</a>, 
+			<a href="class-Pharborist.Objects.ClassNameScalarNode.html">Pharborist\Objects\ClassNameScalarNode</a>, 
+			<a href="class-Pharborist.Objects.NameExpressionNode.html">Pharborist\Objects\NameExpressionNode</a>, 
+			<a href="class-Pharborist.Objects.NewNode.html">Pharborist\Objects\NewNode</a>, 
+			<a href="class-Pharborist.Objects.ObjectPropertyNode.html">Pharborist\Objects\ObjectPropertyNode</a>, 
+			<a href="class-Pharborist.Objects.TraitMethodReferenceNode.html">Pharborist\Objects\TraitMethodReferenceNode</a>, 
+			<a href="class-Pharborist.Operators.BinaryOperationNode.html">Pharborist\Operators\BinaryOperationNode</a>, 
+			<a href="class-Pharborist.Operators.TernaryOperationNode.html">Pharborist\Operators\TernaryOperationNode</a>, 
+			<a href="class-Pharborist.Operators.UnaryOperationNode.html">Pharborist\Operators\UnaryOperationNode</a>, 
+			<a href="class-Pharborist.ParenthesisNode.html">Pharborist\ParenthesisNode</a>, 
+			<a href="class-Pharborist.Constants.ConstantDeclarationNode.html">Pharborist\Constants\ConstantDeclarationNode</a>, 
+			<a href="class-Pharborist.PartialNode.html">Pharborist\PartialNode</a>, 
+			<a href="class-Pharborist.SplatNode.html">Pharborist\SplatNode</a>, 
+			<a href="class-Pharborist.StatementBlockNode.html">Pharborist\StatementBlockNode</a>, 
+			<a href="class-Pharborist.StatementNode.html">Pharborist\StatementNode</a>, 
+			<a href="class-Pharborist.TemplateNode.html">Pharborist\TemplateNode</a>, 
+			<a href="class-Pharborist.Types.ArrayNode.html">Pharborist\Types\ArrayNode</a>, 
+			<a href="class-Pharborist.Types.ArrayPairNode.html">Pharborist\Types\ArrayPairNode</a>, 
+			<a href="class-Pharborist.Types.HeredocNode.html">Pharborist\Types\HeredocNode</a>, 
+			<a href="class-Pharborist.Types.InterpolatedStringNode.html">Pharborist\Types\InterpolatedStringNode</a>, 
+			<a href="class-Pharborist.Types.StringVariableNode.html">Pharborist\Types\StringVariableNode</a>, 
+			<a href="class-Pharborist.Constants.ConstantNode.html">Pharborist\Constants\ConstantNode</a>, 
+			<a href="class-Pharborist.Variables.CompoundVariableNode.html">Pharborist\Variables\CompoundVariableNode</a>, 
+			<a href="class-Pharborist.Variables.ReferenceVariableNode.html">Pharborist\Variables\ReferenceVariableNode</a>, 
+			<a href="class-Pharborist.Variables.StaticVariableNode.html">Pharborist\Variables\StaticVariableNode</a>, 
+			<a href="class-Pharborist.Variables.VariableVariableNode.html">Pharborist\Variables\VariableVariableNode</a>, 
+			<a href="class-Pharborist.ControlStructures.DeclareDirectiveNode.html">Pharborist\ControlStructures\DeclareDirectiveNode</a>, 
+			<a href="class-Pharborist.ControlStructures.ElseIfNode.html">Pharborist\ControlStructures\ElseIfNode</a>, 
+			<a href="class-Pharborist.ControlStructures.ExitNode.html">Pharborist\ControlStructures\ExitNode</a>, 
+			<a href="class-Pharborist.ControlStructures.GotoLabelNode.html">Pharborist\ControlStructures\GotoLabelNode</a>, 
+			<a href="class-Pharborist.ControlStructures.ImportNode.html">Pharborist\ControlStructures\ImportNode</a>
+	</div>
+
+	<div>
+		<h4>Indirect known subclasses</h4>
+			<a href="class-Pharborist.BlankStatementNode.html">Pharborist\BlankStatementNode</a>, 
+			<a href="class-Pharborist.Constants.ConstantDeclarationStatementNode.html">Pharborist\Constants\ConstantDeclarationStatementNode</a>, 
+			<a href="class-Pharborist.ControlStructures.GotoStatementNode.html">Pharborist\ControlStructures\GotoStatementNode</a>, 
+			<a href="class-Pharborist.Operators.PostIncrementNode.html">Pharborist\Operators\PostIncrementNode</a>, 
+			<a href="class-Pharborist.Operators.PowerAssignNode.html">Pharborist\Operators\PowerAssignNode</a>, 
+			<a href="class-Pharborist.Operators.PowerNode.html">Pharborist\Operators\PowerNode</a>, 
+			<a href="class-Pharborist.Operators.PreDecrementNode.html">Pharborist\Operators\PreDecrementNode</a>, 
+			<a href="class-Pharborist.Operators.PreIncrementNode.html">Pharborist\Operators\PreIncrementNode</a>, 
+			<a href="class-Pharborist.Operators.PrintNode.html">Pharborist\Operators\PrintNode</a>, 
+			<a href="class-Pharborist.Operators.StringCastNode.html">Pharborist\Operators\StringCastNode</a>, 
+			<a href="class-Pharborist.Operators.SubtractAssignNode.html">Pharborist\Operators\SubtractAssignNode</a>, 
+			<a href="class-Pharborist.Operators.SubtractNode.html">Pharborist\Operators\SubtractNode</a>, 
+			<a href="class-Pharborist.Operators.SuppressWarningNode.html">Pharborist\Operators\SuppressWarningNode</a>, 
+			<a href="class-Pharborist.ControlStructures.IfNode.html">Pharborist\ControlStructures\IfNode</a>, 
+			<a href="class-Pharborist.Operators.UnsetCastNode.html">Pharborist\Operators\UnsetCastNode</a>, 
+			<a href="class-Pharborist.TopNode.html">Pharborist\TopNode</a>, 
+			<a href="class-Pharborist.Types.BooleanNode.html">Pharborist\Types\BooleanNode</a>, 
+			<a href="class-Pharborist.Types.FalseNode.html">Pharborist\Types\FalseNode</a>, 
+			<a href="class-Pharborist.Types.NullNode.html">Pharborist\Types\NullNode</a>, 
+			<a href="class-Pharborist.Types.TrueNode.html">Pharborist\Types\TrueNode</a>, 
+			<a href="class-Pharborist.UnsetStatementNode.html">Pharborist\UnsetStatementNode</a>, 
+			<a href="class-Pharborist.Variables.GlobalStatementNode.html">Pharborist\Variables\GlobalStatementNode</a>, 
+			<a href="class-Pharborist.Variables.StaticVariableStatementNode.html">Pharborist\Variables\StaticVariableStatementNode</a>, 
+			<a href="class-Pharborist.ControlStructures.IncludeNode.html">Pharborist\ControlStructures\IncludeNode</a>, 
+			<a href="class-Pharborist.ControlStructures.IncludeOnceNode.html">Pharborist\ControlStructures\IncludeOnceNode</a>, 
+			<a href="class-Pharborist.ControlStructures.RequireNode.html">Pharborist\ControlStructures\RequireNode</a>, 
+			<a href="class-Pharborist.ControlStructures.RequireOnceNode.html">Pharborist\ControlStructures\RequireOnceNode</a>, 
+			<a href="class-Pharborist.ControlStructures.ReturnStatementNode.html">Pharborist\ControlStructures\ReturnStatementNode</a>, 
+			<a href="class-Pharborist.ControlStructures.SwitchNode.html">Pharborist\ControlStructures\SwitchNode</a>, 
+			<a href="class-Pharborist.ControlStructures.WhileNode.html">Pharborist\ControlStructures\WhileNode</a>, 
+			<a href="class-Pharborist.EchoStatementNode.html">Pharborist\EchoStatementNode</a>, 
+			<a href="class-Pharborist.ControlStructures.BreakStatementNode.html">Pharborist\ControlStructures\BreakStatementNode</a>, 
+			<a href="class-Pharborist.EchoTagStatementNode.html">Pharborist\EchoTagStatementNode</a>, 
+			<a href="class-Pharborist.Exceptions.ThrowStatementNode.html">Pharborist\Exceptions\ThrowStatementNode</a>, 
+			<a href="class-Pharborist.Exceptions.TryCatchNode.html">Pharborist\Exceptions\TryCatchNode</a>, 
+			<a href="class-Pharborist.ExpressionStatementNode.html">Pharborist\ExpressionStatementNode</a>, 
+			<a href="class-Pharborist.Functions.CallbackCallNode.html">Pharborist\Functions\CallbackCallNode</a>, 
+			<a href="class-Pharborist.Functions.DefineNode.html">Pharborist\Functions\DefineNode</a>, 
+			<a href="class-Pharborist.Functions.EmptyNode.html">Pharborist\Functions\EmptyNode</a>, 
+			<a href="class-Pharborist.Functions.EvalNode.html">Pharborist\Functions\EvalNode</a>, 
+			<a href="class-Pharborist.Functions.FunctionCallNode.html">Pharborist\Functions\FunctionCallNode</a>, 
+			<a href="class-Pharborist.Functions.FunctionDeclarationNode.html">Pharborist\Functions\FunctionDeclarationNode</a>, 
+			<a href="class-Pharborist.ControlStructures.CaseNode.html">Pharborist\ControlStructures\CaseNode</a>, 
+			<a href="class-Pharborist.Functions.HaltCompilerNode.html">Pharborist\Functions\HaltCompilerNode</a>, 
+			<a href="class-Pharborist.Functions.IssetNode.html">Pharborist\Functions\IssetNode</a>, 
+			<a href="class-Pharborist.Functions.ListNode.html">Pharborist\Functions\ListNode</a>, 
+			<a href="class-Pharborist.Functions.UnsetNode.html">Pharborist\Functions\UnsetNode</a>, 
+			<a href="class-Pharborist.Generators.YieldStatementNode.html">Pharborist\Generators\YieldStatementNode</a>, 
+			<a href="class-Pharborist.Namespaces.NamespaceNode.html">Pharborist\Namespaces\NamespaceNode</a>, 
+			<a href="class-Pharborist.Namespaces.UseDeclarationBlockNode.html">Pharborist\Namespaces\UseDeclarationBlockNode</a>, 
+			<a href="class-Pharborist.Namespaces.UseDeclarationStatementNode.html">Pharborist\Namespaces\UseDeclarationStatementNode</a>, 
+			<a href="class-Pharborist.Objects.ClassMemberListNode.html">Pharborist\Objects\ClassMemberListNode</a>, 
+			<a href="class-Pharborist.Objects.ClassMethodCallNode.html">Pharborist\Objects\ClassMethodCallNode</a>, 
+			<a href="class-Pharborist.ControlStructures.ContinueStatementNode.html">Pharborist\ControlStructures\ContinueStatementNode</a>, 
+			<a href="class-Pharborist.Objects.ClassMethodNode.html">Pharborist\Objects\ClassMethodNode</a>, 
+			<a href="class-Pharborist.Objects.ClassNode.html">Pharborist\Objects\ClassNode</a>, 
+			<a href="class-Pharborist.Objects.ClassStatementNode.html">Pharborist\Objects\ClassStatementNode</a>, 
+			<a href="class-Pharborist.Objects.InterfaceMethodNode.html">Pharborist\Objects\InterfaceMethodNode</a>, 
+			<a href="class-Pharborist.Objects.InterfaceNode.html">Pharborist\Objects\InterfaceNode</a>, 
+			<a href="class-Pharborist.Objects.ObjectMethodCallNode.html">Pharborist\Objects\ObjectMethodCallNode</a>, 
+			<a href="class-Pharborist.Objects.SingleInheritanceNode.html">Pharborist\Objects\SingleInheritanceNode</a>, 
+			<a href="class-Pharborist.Objects.TraitAdaptationStatementNode.html">Pharborist\Objects\TraitAdaptationStatementNode</a>, 
+			<a href="class-Pharborist.Objects.TraitAliasNode.html">Pharborist\Objects\TraitAliasNode</a>, 
+			<a href="class-Pharborist.Objects.TraitNode.html">Pharborist\Objects\TraitNode</a>, 
+			<a href="class-Pharborist.ControlStructures.DeclareNode.html">Pharborist\ControlStructures\DeclareNode</a>, 
+			<a href="class-Pharborist.Objects.TraitPrecedenceNode.html">Pharborist\Objects\TraitPrecedenceNode</a>, 
+			<a href="class-Pharborist.Objects.TraitUseNode.html">Pharborist\Objects\TraitUseNode</a>, 
+			<a href="class-Pharborist.Operators.AddAssignNode.html">Pharborist\Operators\AddAssignNode</a>, 
+			<a href="class-Pharborist.Operators.AddNode.html">Pharborist\Operators\AddNode</a>, 
+			<a href="class-Pharborist.Operators.ArrayCastNode.html">Pharborist\Operators\ArrayCastNode</a>, 
+			<a href="class-Pharborist.Operators.AssignNode.html">Pharborist\Operators\AssignNode</a>, 
+			<a href="class-Pharborist.Operators.AssignReferenceNode.html">Pharborist\Operators\AssignReferenceNode</a>, 
+			<a href="class-Pharborist.Operators.BitwiseAndAssignNode.html">Pharborist\Operators\BitwiseAndAssignNode</a>, 
+			<a href="class-Pharborist.Operators.BitwiseAndNode.html">Pharborist\Operators\BitwiseAndNode</a>, 
+			<a href="class-Pharborist.Operators.BitwiseNotNode.html">Pharborist\Operators\BitwiseNotNode</a>, 
+			<a href="class-Pharborist.ControlStructures.DefaultNode.html">Pharborist\ControlStructures\DefaultNode</a>, 
+			<a href="class-Pharborist.Operators.BitwiseOrAssignNode.html">Pharborist\Operators\BitwiseOrAssignNode</a>, 
+			<a href="class-Pharborist.Operators.BitwiseOrNode.html">Pharborist\Operators\BitwiseOrNode</a>, 
+			<a href="class-Pharborist.Operators.BitwiseShiftLeftAssignNode.html">Pharborist\Operators\BitwiseShiftLeftAssignNode</a>, 
+			<a href="class-Pharborist.Operators.BitwiseShiftLeftNode.html">Pharborist\Operators\BitwiseShiftLeftNode</a>, 
+			<a href="class-Pharborist.Operators.BitwiseShiftRightAssignNode.html">Pharborist\Operators\BitwiseShiftRightAssignNode</a>, 
+			<a href="class-Pharborist.Operators.BitwiseShiftRightNode.html">Pharborist\Operators\BitwiseShiftRightNode</a>, 
+			<a href="class-Pharborist.Operators.BitwiseXorAssignNode.html">Pharborist\Operators\BitwiseXorAssignNode</a>, 
+			<a href="class-Pharborist.Operators.BitwiseXorNode.html">Pharborist\Operators\BitwiseXorNode</a>, 
+			<a href="class-Pharborist.Operators.BooleanAndNode.html">Pharborist\Operators\BooleanAndNode</a>, 
+			<a href="class-Pharborist.Operators.BooleanCastNode.html">Pharborist\Operators\BooleanCastNode</a>, 
+			<a href="class-Pharborist.ControlStructures.DoWhileNode.html">Pharborist\ControlStructures\DoWhileNode</a>, 
+			<a href="class-Pharborist.Operators.BooleanNotNode.html">Pharborist\Operators\BooleanNotNode</a>, 
+			<a href="class-Pharborist.Operators.BooleanOrNode.html">Pharborist\Operators\BooleanOrNode</a>, 
+			<a href="class-Pharborist.Operators.CloneNode.html">Pharborist\Operators\CloneNode</a>, 
+			<a href="class-Pharborist.Operators.ConcatAssignNode.html">Pharborist\Operators\ConcatAssignNode</a>, 
+			<a href="class-Pharborist.Operators.ConcatNode.html">Pharborist\Operators\ConcatNode</a>, 
+			<a href="class-Pharborist.Operators.DivideAssignNode.html">Pharborist\Operators\DivideAssignNode</a>, 
+			<a href="class-Pharborist.Operators.DivideNode.html">Pharborist\Operators\DivideNode</a>, 
+			<a href="class-Pharborist.Operators.ElvisNode.html">Pharborist\Operators\ElvisNode</a>, 
+			<a href="class-Pharborist.Operators.EqualNode.html">Pharborist\Operators\EqualNode</a>, 
+			<a href="class-Pharborist.Operators.FloatCastNode.html">Pharborist\Operators\FloatCastNode</a>, 
+			<a href="class-Pharborist.ControlStructures.ForeachNode.html">Pharborist\ControlStructures\ForeachNode</a>, 
+			<a href="class-Pharborist.Operators.GreaterThanNode.html">Pharborist\Operators\GreaterThanNode</a>, 
+			<a href="class-Pharborist.Operators.GreaterThanOrEqualToNode.html">Pharborist\Operators\GreaterThanOrEqualToNode</a>, 
+			<a href="class-Pharborist.Operators.IdenticalNode.html">Pharborist\Operators\IdenticalNode</a>, 
+			<a href="class-Pharborist.Operators.InstanceOfNode.html">Pharborist\Operators\InstanceOfNode</a>, 
+			<a href="class-Pharborist.Operators.IntegerCastNode.html">Pharborist\Operators\IntegerCastNode</a>, 
+			<a href="class-Pharborist.Operators.LessThanNode.html">Pharborist\Operators\LessThanNode</a>, 
+			<a href="class-Pharborist.Operators.LessThanOrEqualToNode.html">Pharborist\Operators\LessThanOrEqualToNode</a>, 
+			<a href="class-Pharborist.Operators.LogicalAndNode.html">Pharborist\Operators\LogicalAndNode</a>, 
+			<a href="class-Pharborist.Operators.LogicalOrNode.html">Pharborist\Operators\LogicalOrNode</a>, 
+			<a href="class-Pharborist.Operators.LogicalXorNode.html">Pharborist\Operators\LogicalXorNode</a>, 
+			<a href="class-Pharborist.ControlStructures.ForNode.html">Pharborist\ControlStructures\ForNode</a>, 
+			<a href="class-Pharborist.Operators.ModulusAssignNode.html">Pharborist\Operators\ModulusAssignNode</a>, 
+			<a href="class-Pharborist.Operators.ModulusNode.html">Pharborist\Operators\ModulusNode</a>, 
+			<a href="class-Pharborist.Operators.MultiplyAssignNode.html">Pharborist\Operators\MultiplyAssignNode</a>, 
+			<a href="class-Pharborist.Operators.MultiplyNode.html">Pharborist\Operators\MultiplyNode</a>, 
+			<a href="class-Pharborist.Operators.NegateNode.html">Pharborist\Operators\NegateNode</a>, 
+			<a href="class-Pharborist.Operators.NotEqualNode.html">Pharborist\Operators\NotEqualNode</a>, 
+			<a href="class-Pharborist.Operators.NotIdenticalNode.html">Pharborist\Operators\NotIdenticalNode</a>, 
+			<a href="class-Pharborist.Operators.ObjectCastNode.html">Pharborist\Operators\ObjectCastNode</a>, 
+			<a href="class-Pharborist.Operators.PlusNode.html">Pharborist\Operators\PlusNode</a>, 
+			<a href="class-Pharborist.Operators.PostDecrementNode.html">Pharborist\Operators\PostDecrementNode</a>
+	</div>
+
+
+
+
+
+	<div class="info">
+		<b>Abstract</b><br>
+		
+		<b>Namespace:</b> Pharborist<br>
+		
+
+		<b>Located at</b> <a href="source-class-Pharborist.ParentNode.html#4-451" title="Go to source code">ParentNode.php</a><br>
+	</div>
+
+
+
+	<table class="summary methods" id="methods">
+	<caption>Methods summary</caption>
+	<tr data-order="isEmpty" id="_isEmpty">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_isEmpty">#</a>
+		<code><a href="source-class-Pharborist.ParentNode.html#34-36" title="Go to source code">isEmpty</a>( )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="childCount" id="_childCount">
+
+		<td class="attributes"><code>
+			 public 
+			integer
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_childCount">#</a>
+		<code><a href="source-class-Pharborist.ParentNode.html#38-40" title="Go to source code">childCount</a>( )</code>
+
+		<div class="description short">
+			<p>Get the number of children.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Get the number of children.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>integer</code><br><p>int</p>
+<br>
+				</div>
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Pharborist.ParentNodeInterface.html#_childCount">Pharborist\ParentNodeInterface::childCount()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="firstChild" id="_firstChild">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_firstChild">#</a>
+		<code><a href="source-class-Pharborist.ParentNode.html#42-44" title="Go to source code">firstChild</a>( )</code>
+
+		<div class="description short">
+			<p>Return the first child.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Return the first child.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code></code><br><p>Node</p>
+<br>
+				</div>
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Pharborist.ParentNodeInterface.html#_firstChild">Pharborist\ParentNodeInterface::firstChild()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="lastChild" id="_lastChild">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_lastChild">#</a>
+		<code><a href="source-class-Pharborist.ParentNode.html#46-48" title="Go to source code">lastChild</a>( )</code>
+
+		<div class="description short">
+			<p>Return the last child.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Return the last child.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code></code><br><p>Node</p>
+<br>
+				</div>
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Pharborist.ParentNodeInterface.html#_lastChild">Pharborist\ParentNodeInterface::lastChild()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="children" id="_children">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_children">#</a>
+		<code><a href="source-class-Pharborist.ParentNode.html#67-77" title="Go to source code">children</a>( <span>callable <var>$callback</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
+
+		<div class="description short">
+			<p>Get the immediate children of this node.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Get the immediate children of this node.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$callback</var></dt>
+					<dd>&lt;p&gt;An optional callback to filter by.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code></code><br><p>NodeCollection</p>
+<br>
+				</div>
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Pharborist.ParentNodeInterface.html#_children">Pharborist\ParentNodeInterface::children()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="clear" id="_clear">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_clear">#</a>
+		<code><a href="source-class-Pharborist.ParentNode.html#79-81" title="Go to source code">clear</a>( )</code>
+
+		<div class="description short">
+			<p>Remove all child nodes.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Remove all child nodes.</p>
+
+
+
+
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Pharborist.ParentNodeInterface.html#_clear">Pharborist\ParentNodeInterface::clear()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="prepend" id="_prepend">
+
+		<td class="attributes"><code>
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_prepend">#</a>
+		<code><a href="source-class-Pharborist.ParentNode.html#112-130" title="Go to source code">prepend</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>|<code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code>|<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code> <var>$nodes</var></span> )</code>
+
+		<div class="description short">
+			<p>Prepend nodes to this node.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Prepend nodes to this node.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$nodes</var></dt>
+					<dd>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br><p>$this</p>
+<br>
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-InvalidArgumentException.html">InvalidArgumentException</a></code></code><br><p>\InvalidArgumentException</p>
+<br>
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Pharborist.ParentNodeInterface.html#_prepend">Pharborist\ParentNodeInterface::prepend()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="addChild" id="_addChild">
+
+		<td class="attributes"><code>
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_addChild">#</a>
+		<code><a href="source-class-Pharborist.ParentNode.html#148-163" title="Go to source code">addChild</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code> <var>$node</var></span>, <span>string <var>$property_name</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
+
+		<div class="description short">
+			<p>Add a child to node.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Add a child to node.</p>
+
+<p>Internal use only, used by parser when building a node.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$node</var></dt>
+					<dd>
+</dd>
+					<dt><var>$property_name</var></dt>
+					<dd>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br><p>$this</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="addChildren" id="_addChildren">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_addChildren">#</a>
+		<code><a href="source-class-Pharborist.ParentNode.html#165-176" title="Go to source code">addChildren</a>( <span>array <var>$children</var></span> )</code>
+
+		<div class="description short">
+			<p>Add children to node.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Add children to node.</p>
+
+<p>Internal use only, used by parser when building a node.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$children</var></dt>
+					<dd>
+</dd>
+				</dl></div>
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="mergeNode" id="_mergeNode">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_mergeNode">#</a>
+		<code><a href="source-class-Pharborist.ParentNode.html#178-192" title="Go to source code">mergeNode</a>( <span><code><a href="class-Pharborist.ParentNode.html">Pharborist\ParentNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			<p>Merge another parent node into this node.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Merge another parent node into this node.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$node</var></dt>
+					<dd>
+</dd>
+				</dl></div>
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="append" id="_append">
+
+		<td class="attributes"><code>
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_append">#</a>
+		<code><a href="source-class-Pharborist.ParentNode.html#194-207" title="Go to source code">append</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>|<code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code>|<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code> <var>$nodes</var></span> )</code>
+
+		<div class="description short">
+			<p>Append nodes to this node.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Append nodes to this node.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$nodes</var></dt>
+					<dd>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br><p>$this</p>
+<br>
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-InvalidArgumentException.html">InvalidArgumentException</a></code></code><br><p>\InvalidArgumentException</p>
+<br>
+				</div>
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Pharborist.ParentNodeInterface.html#_append">Pharborist\ParentNodeInterface::append()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="firstToken" id="_firstToken">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.TokenNode.html">Pharborist\TokenNode</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_firstToken">#</a>
+		<code><a href="source-class-Pharborist.ParentNode.html#318-328" title="Go to source code">firstToken</a>( )</code>
+
+		<div class="description short">
+			<p>Get the first (i.e. leftmost leaf) token.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Get the first (i.e. leftmost leaf) token.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.TokenNode.html">Pharborist\TokenNode</a></code></code><br><p>TokenNode</p>
+<br>
+				</div>
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Pharborist.ParentNodeInterface.html#_firstToken">Pharborist\ParentNodeInterface::firstToken()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="lastToken" id="_lastToken">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.TokenNode.html">Pharborist\TokenNode</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_lastToken">#</a>
+		<code><a href="source-class-Pharborist.ParentNode.html#330-340" title="Go to source code">lastToken</a>( )</code>
+
+		<div class="description short">
+			<p>Get the last (i.e. rightmost leaf) token.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Get the last (i.e. rightmost leaf) token.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.TokenNode.html">Pharborist\TokenNode</a></code></code><br><p>TokenNode</p>
+<br>
+				</div>
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Pharborist.ParentNodeInterface.html#_lastToken">Pharborist\ParentNodeInterface::lastToken()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="has" id="_has">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_has">#</a>
+		<code><a href="source-class-Pharborist.ParentNode.html#342-354" title="Go to source code">has</a>( <span>callable <var>$callback</var></span> )</code>
+
+		<div class="description short">
+			<p>Test if the node has a descendant that matches.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Test if the node has a descendant that matches.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$callback</var></dt>
+					<dd>&lt;p&gt;Callback to test for match.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code></code><br><p>NodeCollection</p>
+<br>
+				</div>
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Pharborist.ParentNodeInterface.html#_has">Pharborist\ParentNodeInterface::has()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="find" id="_find">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_find">#</a>
+		<code><a href="source-class-Pharborist.ParentNode.html#356-369" title="Go to source code">find</a>( <span>callable <var>$callback</var></span> )</code>
+
+		<div class="description short">
+			<p>Find descendants that pass filter callback.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Find descendants that pass filter callback.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$callback</var></dt>
+					<dd>&lt;p&gt;Callback to filter by.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code></code><br><p>NodeCollection</p>
+<br>
+				</div>
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Pharborist.ParentNodeInterface.html#_find">Pharborist\ParentNodeInterface::find()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getSourcePosition" id="_getSourcePosition">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.SourcePosition.html">Pharborist\SourcePosition</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getSourcePosition">#</a>
+		<code><a href="source-class-Pharborist.ParentNode.html#371-377" title="Go to source code">getSourcePosition</a>( )</code>
+
+		<div class="description short">
+			<p>Get the source position of the node.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Get the source position of the node.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.SourcePosition.html">Pharborist\SourcePosition</a></code></code><br><p>SourcePosition</p>
+<br>
+				</div>
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Pharborist.NodeInterface.html#_getSourcePosition">Pharborist\NodeInterface::getSourcePosition()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="__clone" id="___clone">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#___clone">#</a>
+		<code><a href="source-class-Pharborist.ParentNode.html#379-414" title="Go to source code">__clone</a>( )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+				<h4>Overrides</h4>
+				<div class="list"><code><a href="class-Pharborist.Node.html#___clone">Pharborist\Node::__clone()</a></code></div>
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getText" id="_getText">
+
+		<td class="attributes"><code>
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getText">#</a>
+		<code><a href="source-class-Pharborist.ParentNode.html#416-424" title="Go to source code">getText</a>( )</code>
+
+		<div class="description short">
+			<p>Convert the node into PHP source code.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Convert the node into PHP source code.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br><p>string</p>
+<br>
+				</div>
+
+
+
+
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Pharborist.NodeInterface.html#_getText">Pharborist\NodeInterface::getText()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="__toString" id="___toString">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#___toString">#</a>
+		<code><a href="source-class-Pharborist.ParentNode.html#426-428" title="Go to source code">__toString</a>( )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getTree" id="_getTree">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getTree">#</a>
+		<code><a href="source-class-Pharborist.ParentNode.html#430-450" title="Go to source code">getTree</a>( )</code>
+
+		<div class="description short">
+			<p>Convert tree into array.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Convert tree into array.</p>
+
+<p>Useful for viewing the tree structure.</p>
+
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	</table>
+
+	<table class="summary inherited">
+	<caption>Methods inherited from <a href="class-Pharborist.Node.html#methods">Pharborist\Node</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-Pharborist.Node.html#_after">after()</a>, 
+			<a href="class-Pharborist.Node.html#_appendTo">appendTo()</a>, 
+			<a href="class-Pharborist.Node.html#_before">before()</a>, 
+			<a href="class-Pharborist.Node.html#_closest">closest()</a>, 
+			<a href="class-Pharborist.Node.html#_fromValue">fromValue()</a>, 
+			<a href="class-Pharborist.Node.html#_getLogicalBlock">getLogicalBlock()</a>, 
+			<a href="class-Pharborist.Node.html#_getStatement">getStatement()</a>, 
+			<a href="class-Pharborist.Node.html#_index">index()</a>, 
+			<a href="class-Pharborist.Node.html#_insertAfter">insertAfter()</a>, 
+			<a href="class-Pharborist.Node.html#_insertBefore">insertBefore()</a>, 
+			<a href="class-Pharborist.Node.html#_is">is()</a>, 
+			<a href="class-Pharborist.Node.html#_isAllOf">isAllOf()</a>, 
+			<a href="class-Pharborist.Node.html#_isAnyOf">isAnyOf()</a>, 
+			<a href="class-Pharborist.Node.html#_next">next()</a>, 
+			<a href="class-Pharborist.Node.html#_nextAll">nextAll()</a>, 
+			<a href="class-Pharborist.Node.html#_nextUntil">nextUntil()</a>, 
+			<a href="class-Pharborist.Node.html#_parent">parent()</a>, 
+			<a href="class-Pharborist.Node.html#_parents">parents()</a>, 
+			<a href="class-Pharborist.Node.html#_parentsUntil">parentsUntil()</a>, 
+			<a href="class-Pharborist.Node.html#_prependTo">prependTo()</a>, 
+			<a href="class-Pharborist.Node.html#_previous">previous()</a>, 
+			<a href="class-Pharborist.Node.html#_previousAll">previousAll()</a>, 
+			<a href="class-Pharborist.Node.html#_previousUntil">previousUntil()</a>, 
+			<a href="class-Pharborist.Node.html#_remove">remove()</a>, 
+			<a href="class-Pharborist.Node.html#_replaceAll">replaceAll()</a>, 
+			<a href="class-Pharborist.Node.html#_replaceWith">replaceWith()</a>, 
+			<a href="class-Pharborist.Node.html#_siblings">siblings()</a>, 
+			<a href="class-Pharborist.Node.html#_sortKey">sortKey()</a>, 
+			<a href="class-Pharborist.Node.html#_swapWith">swapWith()</a>
+		</code></td>
+	</tr>
+	</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+	<div id="footer">
+		Pharborist API documentation generated by <a href="http://apigen.org">ApiGen 3.0.0</a>
+	</div>
+</div>
+</div>
+<script src="resources/combined.js?4281059210"></script>
+<script src="elementlist.js?1795876126"></script>
+</body>
+</html>

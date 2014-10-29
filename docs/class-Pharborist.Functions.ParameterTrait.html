@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="generator" content="ApiGen 3.0.0">
+
+	<title>Trait Pharborist\Functions\ParameterTrait | Pharborist</title>
+
+	<link rel="stylesheet" href="resources/style.css?247950731">
+
+</head>
+
+<body>
+<div id="left">
+	<div id="menu">
+		<a href="index.html" title="Overview"><span>Overview</span></a>
+
+
+		<div id="groups">
+			<h3>Namespaces</h3>
+			<ul>
+				<li class="active"><a href="namespace-Pharborist.html">Pharborist<span></span></a>
+						<ul>
+				<li><a href="namespace-Pharborist.Constants.html">Constants</a>
+						</li>
+				<li><a href="namespace-Pharborist.ControlStructures.html">ControlStructures</a>
+						</li>
+				<li><a href="namespace-Pharborist.Exceptions.html">Exceptions</a>
+						</li>
+				<li class="active"><a href="namespace-Pharborist.Functions.html">Functions</a>
+						</li>
+				<li><a href="namespace-Pharborist.Generators.html">Generators</a>
+						</li>
+				<li><a href="namespace-Pharborist.Namespaces.html">Namespaces</a>
+						</li>
+				<li><a href="namespace-Pharborist.Objects.html">Objects</a>
+						</li>
+				<li><a href="namespace-Pharborist.Operators.html">Operators</a>
+						</li>
+				<li><a href="namespace-Pharborist.Types.html">Types</a>
+						</li>
+				<li><a href="namespace-Pharborist.Variables.html">Variables</a>
+						</li>
+							</ul></li>
+				<li><a href="namespace-PHP.html">PHP</a>
+						</li>
+			</ul>
+		</div>
+
+		<hr>
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li><a href="class-Pharborist.Functions.AnonymousFunctionNode.html">AnonymousFunctionNode</a></li>
+				<li><a href="class-Pharborist.Functions.CallbackCallNode.html">CallbackCallNode</a></li>
+				<li><a href="class-Pharborist.Functions.CallNode.html">CallNode</a></li>
+				<li><a href="class-Pharborist.Functions.DefineNode.html">DefineNode</a></li>
+				<li><a href="class-Pharborist.Functions.EmptyNode.html">EmptyNode</a></li>
+				<li><a href="class-Pharborist.Functions.EvalNode.html">EvalNode</a></li>
+				<li><a href="class-Pharborist.Functions.FunctionCallNode.html">FunctionCallNode</a></li>
+				<li><a href="class-Pharborist.Functions.FunctionDeclarationNode.html">FunctionDeclarationNode</a></li>
+				<li><a href="class-Pharborist.Functions.HaltCompilerNode.html">HaltCompilerNode</a></li>
+				<li><a href="class-Pharborist.Functions.IssetNode.html">IssetNode</a></li>
+				<li><a href="class-Pharborist.Functions.ListNode.html">ListNode</a></li>
+				<li><a href="class-Pharborist.Functions.ParameterNode.html">ParameterNode</a></li>
+				<li><a href="class-Pharborist.Functions.ParameterNodeCollection.html">ParameterNodeCollection</a></li>
+				<li><a href="class-Pharborist.Functions.UnsetNode.html">UnsetNode</a></li>
+			</ul>
+
+			<h3>Interfaces</h3>
+			<ul>
+				<li><a href="class-Pharborist.Functions.LexicalVariableNode.html">LexicalVariableNode</a></li>
+			</ul>
+
+			<h3>Traits</h3>
+			<ul>
+				<li><a href="class-Pharborist.Functions.ArgumentTrait.html">ArgumentTrait</a></li>
+				<li><a href="class-Pharborist.Functions.FunctionTrait.html">FunctionTrait</a></li>
+				<li class="active"><a href="class-Pharborist.Functions.ParameterTrait.html">ParameterTrait</a></li>
+			</ul>
+
+
+
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+<div id="rightInner">
+	<form id="search">
+		<input type="hidden" name="cx" value="">
+		<input type="hidden" name="ie" value="UTF-8">
+		<input type="text" name="q" class="text" placeholder="Search">
+	</form>
+
+	<div id="navigation">
+		<ul>
+			<li>
+				<a href="index.html" title="Overview"><span>Overview</span></a>
+			</li>
+			<li>
+				<a href="namespace-Pharborist.Functions.html" title="Summary of Pharborist\Functions"><span>Namespace</span></a>
+			</li>
+			<li class="active">
+<span>Class</span>			</li>
+		</ul>
+		<ul>
+			<li>
+				<a href="tree.html" title="Tree view of classes, interfaces, traits and exceptions"><span>Tree</span></a>
+			</li>
+		</ul>
+		<ul>
+		</ul>
+	</div>
+
+<div id="content" class="class">
+	<h1>Trait ParameterTrait</h1>
+
+
+	<div class="description">
+	<p>Trait for nodes that have parameters. For example, function declarations.</p>
+
+	</div>
+
+
+
+
+
+
+
+	<div>
+		<h4>Direct Known Users</h4>
+			<a href="class-Pharborist.Functions.AnonymousFunctionNode.html">Pharborist\Functions\AnonymousFunctionNode</a>, 
+			<a href="class-Pharborist.Functions.FunctionTrait.html">Pharborist\Functions\FunctionTrait</a>
+	</div>
+
+
+	<div class="info">
+		
+		
+		<b>Namespace:</b> Pharborist\Functions<br>
+		
+
+		<b>Located at</b> <a href="source-class-Pharborist.Functions.ParameterTrait.html#8-262" title="Go to source code">Functions/ParameterTrait.php</a><br>
+	</div>
+
+
+
+	<table class="summary methods" id="methods">
+	<caption>Methods summary</caption>
+	<tr data-order="getParameterList" id="_getParameterList">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.CommaListNode.html">Pharborist\CommaListNode</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getParameterList">#</a>
+		<code><a href="source-class-Pharborist.Functions.ParameterTrait.html#17-22" title="Go to source code">getParameterList</a>( )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.CommaListNode.html">Pharborist\CommaListNode</a></code></code><br><p>CommaListNode</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getParameters" id="_getParameters">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.Functions.ParameterNodeCollection.html">Pharborist\Functions\ParameterNodeCollection</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getParameters">#</a>
+		<code><a href="source-class-Pharborist.Functions.ParameterTrait.html#24-30" title="Go to source code">getParameters</a>( )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.Functions.ParameterNodeCollection.html">Pharborist\Functions\ParameterNodeCollection</a></code></code><br><p>ParameterNodeCollection</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getParameterNames" id="_getParameterNames">
+
+		<td class="attributes"><code>
+			 public 
+			string[]
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getParameterNames">#</a>
+		<code><a href="source-class-Pharborist.Functions.ParameterTrait.html#32-39" title="Go to source code">getParameterNames</a>( )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string[]</code><br><p>string[]</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="prependParameter" id="_prependParameter">
+
+		<td class="attributes"><code>
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_prependParameter">#</a>
+		<code><a href="source-class-Pharborist.Functions.ParameterTrait.html#41-48" title="Go to source code">prependParameter</a>( <span><code><a href="class-Pharborist.Functions.ParameterNode.html">Pharborist\Functions\ParameterNode</a></code> <var>$parameter</var></span> )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$parameter</var></dt>
+					<dd>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br><p>$this</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="appendParameter" id="_appendParameter">
+
+		<td class="attributes"><code>
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_appendParameter">#</a>
+		<code><a href="source-class-Pharborist.Functions.ParameterTrait.html#50-71" title="Go to source code">appendParameter</a>( <span><code><a href="class-Pharborist.Functions.ParameterNode.html">Pharborist\Functions\ParameterNode</a></code>|callable <var>$parameter</var></span> )</code>
+
+		<div class="description short">
+			<p>Appends a parameter.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Appends a parameter.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$parameter</var></dt>
+					<dd>&lt;p&gt;Either an existing parameter node, or a callable which will return
+ the parameter to append. The callable will receive $this as its
+ only argument.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br><p>$this</p>
+<br>
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-InvalidArgumentException.html">InvalidArgumentException</a></code></code><br><p>\InvalidArgumentException</p>
+<br>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="insertParameter" id="_insertParameter">
+
+		<td class="attributes"><code>
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_insertParameter">#</a>
+		<code><a href="source-class-Pharborist.Functions.ParameterTrait.html#73-85" title="Go to source code">insertParameter</a>( <span><code><a href="class-Pharborist.Functions.ParameterNode.html">Pharborist\Functions\ParameterNode</a></code> <var>$parameter</var></span>, <span>integer <var>$index</var></span> )</code>
+
+		<div class="description short">
+			<p>Insert parameter before parameter at index.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Insert parameter before parameter at index.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$parameter</var></dt>
+					<dd>
+</dd>
+					<dt><var>$index</var></dt>
+					<dd>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br><p>$this</p>
+<br>
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-OutOfBoundsException.html">OutOfBoundsException</a></code></code><br><p>Index out of bounds.</p>
+<br>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="clearParameters" id="_clearParameters">
+
+		<td class="attributes"><code>
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_clearParameters">#</a>
+		<code><a href="source-class-Pharborist.Functions.ParameterTrait.html#87-95" title="Go to source code">clearParameters</a>( )</code>
+
+		<div class="description short">
+			<p>Remove all parameters.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Remove all parameters.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br><p>$this</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getParameter" id="_getParameter">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.Functions.ParameterNode.html">Pharborist\Functions\ParameterNode</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getParameter">#</a>
+		<code><a href="source-class-Pharborist.Functions.ParameterTrait.html#97-118" title="Go to source code">getParameter</a>( <span>mixed <var>$key</var></span> )</code>
+
+		<div class="description short">
+			<p>Gets a parameter by name or index.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Gets a parameter by name or index.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$key</var></dt>
+					<dd>&lt;p&gt;The parameter's name (without leading $) or position in the
+ parameter list.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.Functions.ParameterNode.html">Pharborist\Functions\ParameterNode</a></code></code><br><p>ParameterNode</p>
+<br>
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-InvalidArgumentException.html">InvalidArgumentException</a></code></code><br><p>if the key is not a string or integer.</p>
+<br>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getParameterAtIndex" id="_getParameterAtIndex">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.Functions.ParameterNode.html">Pharborist\Functions\ParameterNode</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getParameterAtIndex">#</a>
+		<code><a href="source-class-Pharborist.Functions.ParameterTrait.html#120-129" title="Go to source code">getParameterAtIndex</a>( <span>integer <var>$index</var></span> )</code>
+
+		<div class="description short">
+			<p>Gets a parameter by its position in the parameter list.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Gets a parameter by its position in the parameter list.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$index</var></dt>
+					<dd>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.Functions.ParameterNode.html">Pharborist\Functions\ParameterNode</a></code></code><br><p>ParameterNode</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getParameterByName" id="_getParameterByName">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.Functions.ParameterNode.html">Pharborist\Functions\ParameterNode</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getParameterByName">#</a>
+		<code><a href="source-class-Pharborist.Functions.ParameterTrait.html#131-150" title="Go to source code">getParameterByName</a>( <span>string <var>$name</var></span> )</code>
+
+		<div class="description short">
+			<p>Gets a parameter by its name.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Gets a parameter by its name.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$name</var></dt>
+					<dd>&lt;p&gt;The parameter name with or without leading $.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.Functions.ParameterNode.html">Pharborist\Functions\ParameterNode</a></code></code><br><p>ParameterNode</p>
+<br>
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-UnexpectedValueException.html">UnexpectedValueException</a></code></code><br><p>if the named parameter doesn't exist.</p>
+<br>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="hasParameter" id="_hasParameter">
+
+		<td class="attributes"><code>
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_hasParameter">#</a>
+		<code><a href="source-class-Pharborist.Functions.ParameterTrait.html#152-186" title="Go to source code">hasParameter</a>( <span>mixed <var>$parameter</var></span>, <span>string <var>$type</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
+
+		<div class="description short">
+			<p>Checks if the function/method has a certain parameter.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Checks if the function/method has a certain parameter.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$parameter</var></dt>
+					<dd>&lt;p&gt;Either the parameter name (with or without the $), or a ParameterNode.&lt;/p&gt;
+</dd>
+					<dt><var>$type</var></dt>
+					<dd>&lt;p&gt;Optional type hint to check as well.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br><p>boolean</p>
+<br>
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-InvalidArgumentException.html">InvalidArgumentException</a></code></code><br><p>if $parameter is neither a string or
+a ParameterNode.</p>
+<br>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="hasRequiredParameter" id="_hasRequiredParameter">
+
+		<td class="attributes"><code>
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_hasRequiredParameter">#</a>
+		<code><a href="source-class-Pharborist.Functions.ParameterTrait.html#188-201" title="Go to source code">hasRequiredParameter</a>( <span>mixed <var>$parameter</var></span>, <span>string <var>$type</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
+
+		<div class="description short">
+			<p>Checks if the function/method has a specific required parameter.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Checks if the function/method has a specific required parameter.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$parameter</var></dt>
+					<dd>&lt;p&gt;Either the name of the parameter (with or without leading $), or a
+ ParameterNode.&lt;/p&gt;
+</dd>
+					<dt><var>$type</var></dt>
+					<dd>&lt;p&gt;Optional type hint to check.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br><p>boolean</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="hasOptionalParameter" id="_hasOptionalParameter">
+
+		<td class="attributes"><code>
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_hasOptionalParameter">#</a>
+		<code><a href="source-class-Pharborist.Functions.ParameterTrait.html#203-216" title="Go to source code">hasOptionalParameter</a>( <span>mixed <var>$parameter</var></span>, <span>string <var>$type</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
+
+		<div class="description short">
+			<p>Checks if the function/method has a specific optional parameter.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Checks if the function/method has a specific optional parameter.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$parameter</var></dt>
+					<dd>&lt;p&gt;Either the name of the parameter (with or without leading $), or a
+ ParameterNode.&lt;/p&gt;
+</dd>
+					<dt><var>$type</var></dt>
+					<dd>&lt;p&gt;Optional type hint to check.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br><p>boolean</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="hasRequiredParameters" id="_hasRequiredParameters">
+
+		<td class="attributes"><code>
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_hasRequiredParameters">#</a>
+		<code><a href="source-class-Pharborist.Functions.ParameterTrait.html#218-223" title="Go to source code">hasRequiredParameters</a>( )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br><p>boolean</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getRequiredParameters" id="_getRequiredParameters">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getRequiredParameters">#</a>
+		<code><a href="source-class-Pharborist.Functions.ParameterTrait.html#225-235" title="Go to source code">getRequiredParameters</a>( )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code></code><br><p>NodeCollection</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getOptionalParameters" id="_getOptionalParameters">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getOptionalParameters">#</a>
+		<code><a href="source-class-Pharborist.Functions.ParameterTrait.html#237-247" title="Go to source code">getOptionalParameters</a>( )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code></code><br><p>NodeCollection</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="isVariadic" id="_isVariadic">
+
+		<td class="attributes"><code>
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_isVariadic">#</a>
+		<code><a href="source-class-Pharborist.Functions.ParameterTrait.html#249-261" title="Go to source code">isVariadic</a>( )</code>
+
+		<div class="description short">
+			<p>Returns if the final parameter is variadic (PHP 5.6+), as in:
+<code>function foobaz($a, $b, ...$c)</code></p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Returns if the final parameter is variadic (PHP 5.6+), as in:
+<code>function foobaz($a, $b, ...$c)</code></p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br><p>boolean</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+	<div id="footer">
+		Pharborist API documentation generated by <a href="http://apigen.org">ApiGen 3.0.0</a>
+	</div>
+</div>
+</div>
+<script src="resources/combined.js?4281059210"></script>
+<script src="elementlist.js?1795876126"></script>
+</body>
+</html>

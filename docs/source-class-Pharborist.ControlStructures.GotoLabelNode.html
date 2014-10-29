@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="generator" content="ApiGen 3.0.0">
+	<meta name="robots" content="noindex">
+
+	<title>File ControlStructures/GotoLabelNode.php | Pharborist</title>
+
+	<link rel="stylesheet" href="resources/style.css?247950731">
+
+</head>
+
+<body>
+<div id="left">
+	<div id="menu">
+		<a href="index.html" title="Overview"><span>Overview</span></a>
+
+
+		<div id="groups">
+			<h3>Namespaces</h3>
+			<ul>
+				<li class="active"><a href="namespace-Pharborist.html">Pharborist<span></span></a>
+						<ul>
+				<li><a href="namespace-Pharborist.Constants.html">Constants</a>
+						</li>
+				<li class="active"><a href="namespace-Pharborist.ControlStructures.html">ControlStructures</a>
+						</li>
+				<li><a href="namespace-Pharborist.Exceptions.html">Exceptions</a>
+						</li>
+				<li><a href="namespace-Pharborist.Functions.html">Functions</a>
+						</li>
+				<li><a href="namespace-Pharborist.Generators.html">Generators</a>
+						</li>
+				<li><a href="namespace-Pharborist.Namespaces.html">Namespaces</a>
+						</li>
+				<li><a href="namespace-Pharborist.Objects.html">Objects</a>
+						</li>
+				<li><a href="namespace-Pharborist.Operators.html">Operators</a>
+						</li>
+				<li><a href="namespace-Pharborist.Types.html">Types</a>
+						</li>
+				<li><a href="namespace-Pharborist.Variables.html">Variables</a>
+						</li>
+							</ul></li>
+				<li><a href="namespace-PHP.html">PHP</a>
+						</li>
+			</ul>
+		</div>
+
+		<hr>
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li><a href="class-Pharborist.ControlStructures.BreakStatementNode.html">BreakStatementNode</a></li>
+				<li><a href="class-Pharborist.ControlStructures.CaseNode.html">CaseNode</a></li>
+				<li><a href="class-Pharborist.ControlStructures.ContinueStatementNode.html">ContinueStatementNode</a></li>
+				<li><a href="class-Pharborist.ControlStructures.DeclareDirectiveNode.html">DeclareDirectiveNode</a></li>
+				<li><a href="class-Pharborist.ControlStructures.DeclareNode.html">DeclareNode</a></li>
+				<li><a href="class-Pharborist.ControlStructures.DefaultNode.html">DefaultNode</a></li>
+				<li><a href="class-Pharborist.ControlStructures.DoWhileNode.html">DoWhileNode</a></li>
+				<li><a href="class-Pharborist.ControlStructures.ElseIfNode.html">ElseIfNode</a></li>
+				<li><a href="class-Pharborist.ControlStructures.ExitNode.html">ExitNode</a></li>
+				<li><a href="class-Pharborist.ControlStructures.ForeachNode.html">ForeachNode</a></li>
+				<li><a href="class-Pharborist.ControlStructures.ForNode.html">ForNode</a></li>
+				<li class="active"><a href="class-Pharborist.ControlStructures.GotoLabelNode.html">GotoLabelNode</a></li>
+				<li><a href="class-Pharborist.ControlStructures.GotoStatementNode.html">GotoStatementNode</a></li>
+				<li><a href="class-Pharborist.ControlStructures.IfNode.html">IfNode</a></li>
+				<li><a href="class-Pharborist.ControlStructures.ImportNode.html">ImportNode</a></li>
+				<li><a href="class-Pharborist.ControlStructures.IncludeNode.html">IncludeNode</a></li>
+				<li><a href="class-Pharborist.ControlStructures.IncludeOnceNode.html">IncludeOnceNode</a></li>
+				<li><a href="class-Pharborist.ControlStructures.RequireNode.html">RequireNode</a></li>
+				<li><a href="class-Pharborist.ControlStructures.RequireOnceNode.html">RequireOnceNode</a></li>
+				<li><a href="class-Pharborist.ControlStructures.ReturnStatementNode.html">ReturnStatementNode</a></li>
+				<li><a href="class-Pharborist.ControlStructures.SwitchNode.html">SwitchNode</a></li>
+				<li><a href="class-Pharborist.ControlStructures.WhileNode.html">WhileNode</a></li>
+			</ul>
+
+
+
+
+
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+<div id="rightInner">
+	<form id="search">
+		<input type="hidden" name="cx" value="">
+		<input type="hidden" name="ie" value="UTF-8">
+		<input type="text" name="q" class="text" placeholder="Search">
+	</form>
+
+	<div id="navigation">
+		<ul>
+			<li>
+				<a href="index.html" title="Overview"><span>Overview</span></a>
+			</li>
+			<li>
+				<a href="namespace-Pharborist.ControlStructures.html" title="Summary of Pharborist\ControlStructures"><span>Namespace</span></a>
+			</li>
+			<li>
+				<a href="class-Pharborist.ControlStructures.GotoLabelNode.html" title="Summary of Pharborist\ControlStructures\GotoLabelNode"><span>Class</span></a>
+			</li>
+		</ul>
+		<ul>
+			<li>
+				<a href="tree.html" title="Tree view of classes, interfaces, traits and exceptions"><span>Tree</span></a>
+			</li>
+		</ul>
+		<ul>
+		</ul>
+	</div>
+
+<pre><code><span id="1" class="l"><a class="l" href="#1"> 1: </a><span class="xlang">&lt;?php</span>
+</span><span id="2" class="l"><a class="l" href="#2"> 2: </a><span class="php-keyword1">namespace</span> Pharborist\ControlStructures;
+</span><span id="3" class="l"><a class="l" href="#3"> 3: </a>
+</span><span id="4" class="l"><a class="l" href="#4"> 4: </a><span class="php-keyword1">use</span> Pharborist\ParentNode;
+</span><span id="5" class="l"><a class="l" href="#5"> 5: </a><span class="php-keyword1">use</span> Pharborist\TokenNode;
+</span><span id="6" class="l"><a class="l" href="#6"> 6: </a>
+</span><span id="7" class="l"><a class="l" href="#7"> 7: </a><span class="php-comment">/**
+</span></span><span id="8" class="l"><a class="l" href="#8"> 8: </a><span class="php-comment"> * A goto label.
+</span></span><span id="9" class="l"><a class="l" href="#9"> 9: </a><span class="php-comment"> */</span>
+</span><span id="10" class="l"><a class="l" href="#10">10: </a><span class="php-keyword1">class</span> <a id="GotoLabelNode" href="#GotoLabelNode">GotoLabelNode</a> <span class="php-keyword1">extends</span> ParentNode {
+</span><span id="11" class="l"><a class="l" href="#11">11: </a>  <span class="php-comment">/**
+</span></span><span id="12" class="l"><a class="l" href="#12">12: </a><span class="php-comment">   * @var TokenNode
+</span></span><span id="13" class="l"><a class="l" href="#13">13: </a><span class="php-comment">   */</span>
+</span><span id="14" class="l"><a class="l" href="#14">14: </a>  <span class="php-keyword1">protected</span> <span class="php-var"><a id="$label" href="#$label">$label</a></span>;
+</span><span id="15" class="l"><a class="l" href="#15">15: </a>
+</span><span id="16" class="l"><a class="l" href="#16">16: </a>  <span class="php-comment">/**
+</span></span><span id="17" class="l"><a class="l" href="#17">17: </a><span class="php-comment">   * @return TokenNode
+</span></span><span id="18" class="l"><a class="l" href="#18">18: </a><span class="php-comment">   */</span>
+</span><span id="19" class="l"><a class="l" href="#19">19: </a>  <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_getLabel" href="#_getLabel">getLabel</a>() {
+</span><span id="20" class="l"><a class="l" href="#20">20: </a>    <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;label;
+</span><span id="21" class="l"><a class="l" href="#21">21: </a>  }
+</span><span id="22" class="l"><a class="l" href="#22">22: </a>}
+</span><span id="23" class="l"><a class="l" href="#23">23: </a></span></code></pre>
+
+	<div id="footer">
+		Pharborist API documentation generated by <a href="http://apigen.org">ApiGen 3.0.0</a>
+	</div>
+</div>
+</div>
+<script src="resources/combined.js?4281059210"></script>
+<script src="elementlist.js?1795876126"></script>
+</body>
+</html>

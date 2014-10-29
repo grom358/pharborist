@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="generator" content="ApiGen 3.0.0">
+
+	<title>Trait Pharborist\Functions\ArgumentTrait | Pharborist</title>
+
+	<link rel="stylesheet" href="resources/style.css?247950731">
+
+</head>
+
+<body>
+<div id="left">
+	<div id="menu">
+		<a href="index.html" title="Overview"><span>Overview</span></a>
+
+
+		<div id="groups">
+			<h3>Namespaces</h3>
+			<ul>
+				<li class="active"><a href="namespace-Pharborist.html">Pharborist<span></span></a>
+						<ul>
+				<li><a href="namespace-Pharborist.Constants.html">Constants</a>
+						</li>
+				<li><a href="namespace-Pharborist.ControlStructures.html">ControlStructures</a>
+						</li>
+				<li><a href="namespace-Pharborist.Exceptions.html">Exceptions</a>
+						</li>
+				<li class="active"><a href="namespace-Pharborist.Functions.html">Functions</a>
+						</li>
+				<li><a href="namespace-Pharborist.Generators.html">Generators</a>
+						</li>
+				<li><a href="namespace-Pharborist.Namespaces.html">Namespaces</a>
+						</li>
+				<li><a href="namespace-Pharborist.Objects.html">Objects</a>
+						</li>
+				<li><a href="namespace-Pharborist.Operators.html">Operators</a>
+						</li>
+				<li><a href="namespace-Pharborist.Types.html">Types</a>
+						</li>
+				<li><a href="namespace-Pharborist.Variables.html">Variables</a>
+						</li>
+							</ul></li>
+				<li><a href="namespace-PHP.html">PHP</a>
+						</li>
+			</ul>
+		</div>
+
+		<hr>
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li><a href="class-Pharborist.Functions.AnonymousFunctionNode.html">AnonymousFunctionNode</a></li>
+				<li><a href="class-Pharborist.Functions.CallbackCallNode.html">CallbackCallNode</a></li>
+				<li><a href="class-Pharborist.Functions.CallNode.html">CallNode</a></li>
+				<li><a href="class-Pharborist.Functions.DefineNode.html">DefineNode</a></li>
+				<li><a href="class-Pharborist.Functions.EmptyNode.html">EmptyNode</a></li>
+				<li><a href="class-Pharborist.Functions.EvalNode.html">EvalNode</a></li>
+				<li><a href="class-Pharborist.Functions.FunctionCallNode.html">FunctionCallNode</a></li>
+				<li><a href="class-Pharborist.Functions.FunctionDeclarationNode.html">FunctionDeclarationNode</a></li>
+				<li><a href="class-Pharborist.Functions.HaltCompilerNode.html">HaltCompilerNode</a></li>
+				<li><a href="class-Pharborist.Functions.IssetNode.html">IssetNode</a></li>
+				<li><a href="class-Pharborist.Functions.ListNode.html">ListNode</a></li>
+				<li><a href="class-Pharborist.Functions.ParameterNode.html">ParameterNode</a></li>
+				<li><a href="class-Pharborist.Functions.ParameterNodeCollection.html">ParameterNodeCollection</a></li>
+				<li><a href="class-Pharborist.Functions.UnsetNode.html">UnsetNode</a></li>
+			</ul>
+
+			<h3>Interfaces</h3>
+			<ul>
+				<li><a href="class-Pharborist.Functions.LexicalVariableNode.html">LexicalVariableNode</a></li>
+			</ul>
+
+			<h3>Traits</h3>
+			<ul>
+				<li class="active"><a href="class-Pharborist.Functions.ArgumentTrait.html">ArgumentTrait</a></li>
+				<li><a href="class-Pharborist.Functions.FunctionTrait.html">FunctionTrait</a></li>
+				<li><a href="class-Pharborist.Functions.ParameterTrait.html">ParameterTrait</a></li>
+			</ul>
+
+
+
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+<div id="rightInner">
+	<form id="search">
+		<input type="hidden" name="cx" value="">
+		<input type="hidden" name="ie" value="UTF-8">
+		<input type="text" name="q" class="text" placeholder="Search">
+	</form>
+
+	<div id="navigation">
+		<ul>
+			<li>
+				<a href="index.html" title="Overview"><span>Overview</span></a>
+			</li>
+			<li>
+				<a href="namespace-Pharborist.Functions.html" title="Summary of Pharborist\Functions"><span>Namespace</span></a>
+			</li>
+			<li class="active">
+<span>Class</span>			</li>
+		</ul>
+		<ul>
+			<li>
+				<a href="tree.html" title="Tree view of classes, interfaces, traits and exceptions"><span>Tree</span></a>
+			</li>
+		</ul>
+		<ul>
+		</ul>
+	</div>
+
+<div id="content" class="class">
+	<h1>Trait ArgumentTrait</h1>
+
+
+	<div class="description">
+	<p>Trait for nodes that have arguments. For example, function calls.</p>
+
+	</div>
+
+
+
+
+
+
+
+	<div>
+		<h4>Direct Known Users</h4>
+			<a href="class-Pharborist.Functions.CallNode.html">Pharborist\Functions\CallNode</a>, 
+			<a href="class-Pharborist.Objects.NewNode.html">Pharborist\Objects\NewNode</a>
+	</div>
+
+	<div>
+		<h4>Indirect Known Users</h4>
+			<a href="class-Pharborist.Functions.CallbackCallNode.html">Pharborist\Functions\CallbackCallNode</a>, 
+			<a href="class-Pharborist.Functions.DefineNode.html">Pharborist\Functions\DefineNode</a>, 
+			<a href="class-Pharborist.Objects.ObjectMethodCallNode.html">Pharborist\Objects\ObjectMethodCallNode</a>, 
+			<a href="class-Pharborist.Functions.EmptyNode.html">Pharborist\Functions\EmptyNode</a>, 
+			<a href="class-Pharborist.Functions.EvalNode.html">Pharborist\Functions\EvalNode</a>, 
+			<a href="class-Pharborist.Functions.FunctionCallNode.html">Pharborist\Functions\FunctionCallNode</a>, 
+			<a href="class-Pharborist.Functions.HaltCompilerNode.html">Pharborist\Functions\HaltCompilerNode</a>, 
+			<a href="class-Pharborist.Functions.IssetNode.html">Pharborist\Functions\IssetNode</a>, 
+			<a href="class-Pharborist.Functions.ListNode.html">Pharborist\Functions\ListNode</a>, 
+			<a href="class-Pharborist.Functions.UnsetNode.html">Pharborist\Functions\UnsetNode</a>, 
+			<a href="class-Pharborist.Objects.ClassMethodCallNode.html">Pharborist\Objects\ClassMethodCallNode</a>
+	</div>
+
+	<div class="info">
+		
+		
+		<b>Namespace:</b> Pharborist\Functions<br>
+		
+
+		<b>Located at</b> <a href="source-class-Pharborist.Functions.ArgumentTrait.html#9-103" title="Go to source code">Functions/ArgumentTrait.php</a><br>
+	</div>
+
+
+
+	<table class="summary methods" id="methods">
+	<caption>Methods summary</caption>
+	<tr data-order="getArgumentList" id="_getArgumentList">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.CommaListNode.html">Pharborist\CommaListNode</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getArgumentList">#</a>
+		<code><a href="source-class-Pharborist.Functions.ArgumentTrait.html#18-23" title="Go to source code">getArgumentList</a>( )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.CommaListNode.html">Pharborist\CommaListNode</a></code></code><br><p>CommaListNode</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getArguments" id="_getArguments">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>|<code><a href="class-Pharborist.ExpressionNode.html">Pharborist\ExpressionNode</a>[]</code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getArguments">#</a>
+		<code><a href="source-class-Pharborist.Functions.ArgumentTrait.html#25-30" title="Go to source code">getArguments</a>( )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>|<code><a href="class-Pharborist.ExpressionNode.html">Pharborist\ExpressionNode</a>[]</code></code><br><p>NodeCollection|ExpressionNode[]</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="appendArgument" id="_appendArgument">
+
+		<td class="attributes"><code>
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_appendArgument">#</a>
+		<code><a href="source-class-Pharborist.Functions.ArgumentTrait.html#32-54" title="Go to source code">appendArgument</a>( <span>mixed <var>$argument</var></span> )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$argument</var></dt>
+					<dd>&lt;p&gt;The argument to prepend. Can be an ExpressionNode or a scalar value,
+ which will be converted to an expression.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br><p>$this</p>
+<br>
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-InvalidArgumentException.html">InvalidArgumentException</a></code></code><br><p>\InvalidArgumentException</p>
+<br>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="prependArgument" id="_prependArgument">
+
+		<td class="attributes"><code>
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_prependArgument">#</a>
+		<code><a href="source-class-Pharborist.Functions.ArgumentTrait.html#56-78" title="Go to source code">prependArgument</a>( <span>mixed <var>$argument</var></span> )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$argument</var></dt>
+					<dd>&lt;p&gt;The argument to prepend. Can be an ExpressionNode or a scalar value,
+ which will be converted to an expression.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br><p>$this</p>
+<br>
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-InvalidArgumentException.html">InvalidArgumentException</a></code></code><br><p>\InvalidArgumentException</p>
+<br>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="insertArgument" id="_insertArgument">
+
+		<td class="attributes"><code>
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_insertArgument">#</a>
+		<code><a href="source-class-Pharborist.Functions.ArgumentTrait.html#80-92" title="Go to source code">insertArgument</a>( <span><code><a href="class-Pharborist.ExpressionNode.html">Pharborist\ExpressionNode</a></code> <var>$argument</var></span>, <span>integer <var>$index</var></span> )</code>
+
+		<div class="description short">
+			<p>Insert argument before argument at index.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Insert argument before argument at index.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$argument</var></dt>
+					<dd>
+</dd>
+					<dt><var>$index</var></dt>
+					<dd>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br><p>$this</p>
+<br>
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-OutOfBoundsException.html">OutOfBoundsException</a></code></code><br><p>Index out of bounds.</p>
+<br>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="clearArguments" id="_clearArguments">
+
+		<td class="attributes"><code>
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_clearArguments">#</a>
+		<code><a href="source-class-Pharborist.Functions.ArgumentTrait.html#94-102" title="Go to source code">clearArguments</a>( )</code>
+
+		<div class="description short">
+			<p>Remove all arguments.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Remove all arguments.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br><p>$this</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+	<div id="footer">
+		Pharborist API documentation generated by <a href="http://apigen.org">ApiGen 3.0.0</a>
+	</div>
+</div>
+</div>
+<script src="resources/combined.js?4281059210"></script>
+<script src="elementlist.js?1795876126"></script>
+</body>
+</html>

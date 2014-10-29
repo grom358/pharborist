@@ -42,7 +42,3 @@ if ($namespaces->count() > 1) {
 }
 ```
 [![Build Status](https://travis-ci.org/grom358/pharborist.png?branch=master)](https://travis-ci.org/grom358/pharborist)
-
-# API
-Pharborist's API is documented at http://www.phenaproxima.net/pharborist. Pharborist
-is still under heavy development, so it changes fairly frequently.

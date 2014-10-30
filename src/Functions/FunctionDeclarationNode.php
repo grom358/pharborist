@@ -1,6 +1,8 @@
 <?php
 namespace Pharborist\Functions;
 
+use Pharborist\Filters\FilterFactoryInterface;
+use Pharborist\Filters\FunctionDeclarationFilter;
 use Pharborist\Objects\ClassMethodNode;
 use Pharborist\Objects\ClassNode;
 use Pharborist\Namespaces\NameNode;
@@ -13,7 +15,7 @@ use Pharborist\TokenNode;
 /**
  * A function declaration.
  */
-class FunctionDeclarationNode extends StatementNode {
+class FunctionDeclarationNode extends StatementNode implements FilterFactoryInterface {
   use FunctionTrait;
 
   /**
@@ -86,5 +88,9 @@ class FunctionDeclarationNode extends StatementNode {
     if ($node instanceof TokenNode && $node->getType() === '&') {
       $this->reference = $node;
     }
+  }
+
+  public static function createFilter(Node $origin = NULL) {
+    return new FunctionDeclarationFilter($origin ?: $this);
   }
 }

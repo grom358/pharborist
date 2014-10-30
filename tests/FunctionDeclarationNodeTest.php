@@ -12,4 +12,9 @@ class FunctionDeclarationNodeTest extends \PHPUnit_Framework_TestCase {
     $func->cloneAsMethodOf($class);
     $this->assertTrue($class->hasMethod('sing_goofy_song'));
   }
+
+  public function testCreateFilter() {
+    $func = Parser::parseSnippet('function foo() {}');
+    $this->assertInstanceOf('\Pharborist\Filters\FunctionDeclarationFilter', $func->filter());
+  }
 }

@@ -8,12 +8,36 @@ use Pharborist\ParentNodeInterface;
 abstract class FilterBase implements FilterInterface {
 
   /**
+   * @var callable[]
+   */
+  protected $callbacks = [];
+
+  /**
+   * @var string[]
+   */
+  protected $nodeTypes = [];
+
+  /**
    * @var \Pharborist\Node
    */
   protected $origin;
 
   public function __construct(Node $origin = NULL) {
     $this->origin = $origin;
+
+    // Create the node_type callback, formerly known as the isInstanceOf filter.
+    $this->callbacks['node_type'] = function(Node $node) {
+      return in_array(get_class($node), $this->nodeTypes);
+    };
+  }
+
+  public function __invoke() {
+    foreach ($this->callbacks as $callback) {
+      if (! $callback($this)) {
+        return FALSE;
+      }
+    }
+    return TRUE;
   }
 
   /**

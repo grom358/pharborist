@@ -2,7 +2,7 @@
 namespace Pharborist\Functions;
 
 use Pharborist\Filters\FilterFactoryInterface;
-use Pharborist\Filters\FunctionDeclarationFilter;
+use Pharborist\Filters\FunctionFilter;
 use Pharborist\Objects\ClassMethodNode;
 use Pharborist\Objects\ClassNode;
 use Pharborist\Namespaces\NameNode;
@@ -91,6 +91,6 @@ class FunctionDeclarationNode extends StatementNode implements FilterFactoryInte
   }
 
   public static function createFilter(Node $origin = NULL) {
-    return new FunctionDeclarationFilter($origin ?: $this);
+    return new FunctionFilter($origin ?: $this);
   }
 }

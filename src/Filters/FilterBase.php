@@ -5,7 +5,7 @@ namespace Pharborist\Filters;
 use Pharborist\Node;
 use Pharborist\ParentNodeInterface;
 
-abstract class FilterBase implements Filter {
+abstract class FilterBase implements FilterInterface {
 
   /**
    * @var \Pharborist\Node
@@ -16,121 +16,83 @@ abstract class FilterBase implements Filter {
     $this->origin = $origin;
   }
 
-  public function isMatch() {
-    if (isset($this->origin)) {
-      return $this($this->origin);
+  /**
+   * @return \Pharborist\Node
+   */
+  protected function ensureOrigin() {
+    if ($this->origin) {
+      return $this->origin;
     }
     else {
       throw new \BadMethodCallException();
     }
+  }
+
+  /**
+   * @return \Pharborist\ParentNodeInterface
+   */
+  protected function ensureOriginIsParent() {
+    if ($this->origin instanceof ParentNodeInterface) {
+      return $this->origin;
+    }
+    else {
+      throw new \BadMethodCallException();
+    }
+  }
+
+  public function isMatch() {
+    return $this->ensureOrigin()->is($this);
   }
 
   public function hasMatch() {
-    if ($this->origin instanceof ParentNodeInterface) {
-      return $this->origin->has($this);
-    }
-    else {
-      throw new \BadMethodCallException();
-    }
+    return $this->ensureOriginIsParent()->has($this);
+  }
+
+  public function children() {
+    return $this->ensureOriginIsParent()->children($this);
   }
 
   public function find() {
-    if ($this->origin instanceof ParentNodeInterface) {
-      return $this->origin->find($this);
-    }
-    else {
-      throw new \BadMethodCallException();
-    }
+    return $this->ensureOriginIsParent()->find($this);
   }
 
-  public function matchChildren() {
-    if ($this->origin instanceof ParentNodeInterface) {
-      return $this->origin->children($this);
-    }
-    else {
-      throw new \BadMethodCallException();
-    }
+  public function parentIsMatch() {
+    $parent = $this->ensureOrigin()->parent();
+    return isset($parent) ? $parent->is($this) : FALSE;
   }
 
-  public function matchParent() {
-    if (isset($this->origin)) {
-      return $this($this->origin->parent());
-    }
-    else {
-      throw new \BadMethodCallException();
-    }
+  public function parents() {
+    return $this->ensureOrigin()->parents($this);
   }
 
-  public function matchParents() {
-    if (isset($this->origin)) {
-      return $this->origin->parents($this);
-    }
-    else {
-      throw new \BadMethodCallException();
-    }
+  public function siblings() {
+    return $this->ensureOrigin()->siblings($this);
   }
 
-  public function matchSiblings() {
-    if (isset($this->origin)) {
-      return $this->origin->siblings($this);
-    }
-    else {
-      throw new \BadMethodCallException();
-    }
+  public function previousIsMatch() {
+    $previous = $this->ensureOrigin()->previous();
+    return isset($previous) ? $previous->is($this) : FALSE;
   }
 
-  public function matchPrevious() {
-    if (isset($this->origin)) {
-      return $this($this->origin->previous());
-    }
-    else {
-      throw new \BadMethodCallException();
-    }
+  public function previousAll() {
+    return $this->ensureOrigin()->previousAll($this);
   }
 
-  public function matchPreviousUntil(callable $until, $inclusive = FALSE) {
-    if (isset($this->origin)) {
-      return $this->origin->previousUntil($until, $inclusive)->filter($this);
-    }
-    else {
-      throw new \BadMethodCallException();
-    }
+  public function previousUntil(callable $until, $inclusive = TRUE) {
+    return $this->ensureOrigin()->previousUntil($until, $inclusive)->filter($this);
   }
 
-  public function matchPreviousAll() {
-    if (isset($this->origin)) {
-      return $this->origin->previousAll($this);
-    }
-    else {
-      throw new \BadMethodCallException();
-    }
+  public function nextIsMatch() {
+    $next = $this->ensureOrigin()->next();
+    return isset($next) ? $next->is($this) : FALSE;
   }
 
-  public function matchNext() {
-    if (isset($this->origin)) {
-      return $this($this->origin->next());
-    }
-    else {
-      throw new \BadMethodCallException();
-    }
+  public function nextAll() {
+    return $this->ensureOrigin()->nextAll($this);
   }
 
-  public function matchNextUntil(callable $until, $inclusive = FALSE) {
-    if (isset($this->origin)) {
-      return $this->origin->nextUntil($until, $inclusive)->filter($this);
-    }
-    else {
-      throw new \BadMethodCallException();
-    }
-  }
-
-  public function matchNextAll() {
-    if (isset($this->origin)) {
-      return $this->origin->nextAll($this);
-    }
-    else {
-      throw new \BadMethodCallException();
-    }
+  public function nextUntil(callable $until, $inclusive = TRUE) {
+    return $this->ensureOrigin()->nextUntil($until, $inclusive)->filter($this);
   }
 
 }

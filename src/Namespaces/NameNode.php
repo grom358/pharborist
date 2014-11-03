@@ -38,6 +38,16 @@ class NameNode extends ParentNode {
   }
 
   /**
+   * Get the namespace that owns this name.
+   *
+   * @return NamespaceNode
+   *   The namespace that owns this node.
+   */
+  public function getNamespace() {
+    return $this->closest(Filter::isInstanceOf('\Pharborist\Namespaces\NamespaceNode'));
+  }
+
+  /**
    * @return string
    */
   public function getBasePath() {
@@ -182,6 +192,10 @@ class NameNode extends ParentNode {
     return $this->getBasePath() . $name;
   }
 
+  /**
+   * @return string
+   *   The absolute namespace path.
+   */
   public function getAbsolutePath() {
     /** @var TokenNode[] $parts */
     $info = $this->getPathInfo();

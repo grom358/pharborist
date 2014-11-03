@@ -5,13 +5,13 @@ use Pharborist\CommaListNode;
 use Pharborist\DocCommentTrait;
 use Pharborist\Filter;
 use Pharborist\Functions\FunctionDeclarationNode;
+use Pharborist\Namespaces\IdentifierNameTrait;
 use Pharborist\Namespaces\NameNode;
 use Pharborist\NodeCollection;
 use Pharborist\Settings;
 use Pharborist\StatementBlockNode;
 use Pharborist\StatementNode;
 use Pharborist\Token;
-use Pharborist\TokenNode;
 use Pharborist\WhitespaceNode;
 
 /**
@@ -22,11 +22,7 @@ use Pharborist\WhitespaceNode;
  */
 abstract class SingleInheritanceNode extends StatementNode {
   use DocCommentTrait;
-
-  /**
-   * @var \Pharborist\Namespaces\NameNode
-   */
-  protected $name;
+  use IdentifierNameTrait;
 
   /**
    * @var \Pharborist\Namespaces\NameNode
@@ -42,27 +38,6 @@ abstract class SingleInheritanceNode extends StatementNode {
    * @var StatementBlockNode
    */
   protected $statements;
-
-  /**
-   * @return \Pharborist\Namespaces\NameNode
-   */
-  public function getName() {
-    return $this->name;
-  }
-
-  /**
-   * Set the name of the declared class.
-   *
-   * @param string $name
-   *   New name of class.
-   * @return $this
-   */
-  public function setName($name) {
-    /** @var TokenNode $class_name */
-    $class_name = $this->name->firstChild();
-    $class_name->setText($name);
-    return $this;
-  }
 
   /**
    * @return NameNode

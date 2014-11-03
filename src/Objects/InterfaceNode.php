@@ -1,8 +1,8 @@
 <?php
 namespace Pharborist\Objects;
 
+use Pharborist\Namespaces\IdentifierNameTrait;
 use Pharborist\NodeCollection;
-use Pharborist\TokenNode;
 use Pharborist\Namespaces\NameNode;
 use Pharborist\StatementNode;
 use Pharborist\DocCommentTrait;
@@ -13,12 +13,8 @@ use Pharborist\StatementBlockNode;
  * An interface declaration.
  */
 class InterfaceNode extends StatementNode {
+  use IdentifierNameTrait;
   use DocCommentTrait;
-
-  /**
-   * @var TokenNode
-   */
-  protected $name;
 
   /**
    * @var CommaListNode
@@ -29,13 +25,6 @@ class InterfaceNode extends StatementNode {
    * @var StatementBlockNode
    */
   protected $statements;
-
-  /**
-   * @return TokenNode
-   */
-  public function getName() {
-    return $this->name;
-  }
 
   /**
    * @return NodeCollection|NameNode[]

@@ -107,6 +107,15 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
   }
 
   /**
+   * Returns if the collection is not empty.
+   *
+   * @return boolean
+   */
+  public function isNotEmpty() {
+    return $this->count() > 0;
+  }
+
+  /**
    * Get collection in reverse order
    * @return Node[]
    */
@@ -207,7 +216,7 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
    * @return int
    *   Index of first element that is matched by callback.
    */
-  public function index(callable $callback) {
+  public function indexOf(callable $callback) {
     foreach ($this->nodes as $i => $node) {
       if ($callback($node)) {
         return $i;

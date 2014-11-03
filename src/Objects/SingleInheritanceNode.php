@@ -3,15 +3,16 @@ namespace Pharborist\Objects;
 
 use Pharborist\CommaListNode;
 use Pharborist\DocCommentTrait;
+use Pharborist\ExpressionNode;
 use Pharborist\Filter;
 use Pharborist\Functions\FunctionDeclarationNode;
+use Pharborist\Namespaces\IdentifierNameTrait;
 use Pharborist\Namespaces\NameNode;
 use Pharborist\NodeCollection;
 use Pharborist\Settings;
 use Pharborist\StatementBlockNode;
 use Pharborist\StatementNode;
 use Pharborist\Token;
-use Pharborist\TokenNode;
 use Pharborist\WhitespaceNode;
 
 /**
@@ -22,11 +23,7 @@ use Pharborist\WhitespaceNode;
  */
 abstract class SingleInheritanceNode extends StatementNode {
   use DocCommentTrait;
-
-  /**
-   * @var \Pharborist\Namespaces\NameNode
-   */
-  protected $name;
+  use IdentifierNameTrait;
 
   /**
    * @var \Pharborist\Namespaces\NameNode
@@ -42,27 +39,6 @@ abstract class SingleInheritanceNode extends StatementNode {
    * @var StatementBlockNode
    */
   protected $statements;
-
-  /**
-   * @return \Pharborist\Namespaces\NameNode
-   */
-  public function getName() {
-    return $this->name;
-  }
-
-  /**
-   * Set the name of the declared class.
-   *
-   * @param string $name
-   *   New name of class.
-   * @return $this
-   */
-  public function setName($name) {
-    /** @var TokenNode $class_name */
-    $class_name = $this->name->firstChild();
-    $class_name->setText($name);
-    return $this;
-  }
 
   /**
    * @return NameNode
@@ -184,10 +160,154 @@ abstract class SingleInheritanceNode extends StatementNode {
   }
 
   /**
-   * @return ClassStatementNode[]
+   * @return NodeCollection|ClassStatementNode[]
    */
   public function getStatements() {
     return $this->statements->getStatements();
+  }
+
+  /**
+   * Adds a method to a class/trait.
+   *
+   * @param \Pharborist\Functions\FunctionDeclarationNode|\Pharborist\Objects\ClassMethodNode|string $method
+   *  The method to append. Can either be an existing method, a function (which
+   *  will be converted to a public method), or a string (a new public method
+   *  will be created with that name).
+   *
+   * @return $this
+   */
+  public function appendMethod($method) {
+    if ($method instanceof FunctionDeclarationNode) {
+      $method = ClassMethodNode::fromFunction($method);
+    }
+    elseif (is_string($method)) {
+      $method = ClassMethodNode::create($method);
+    }
+    $nl = Settings::get('formatter.nl');
+    $indent = Settings::get('formatter.indent');
+    $this->statements->append([
+      WhitespaceNode::create($nl . $indent),
+      $method,
+      WhitespaceNode::create($nl),
+    ]);
+    return $this;
+  }
+
+  /**
+   * Returns if the class/trait has the named property, regardless of
+   * visibility.
+   *
+   * @param string $name
+   *  The property name, with or without a leading $.
+   *
+   * @return boolean
+   */
+  public function hasProperty($name) {
+    return in_array(ltrim($name, '$'), $this->getPropertyNames());
+  }
+
+  /**
+   * Returns the names of all class/trait properties, regardless of visibility.
+   *
+   * @return string[]
+   */
+  public function getPropertyNames() {
+    return array_map(function (ClassMemberNode $property) {
+      return ltrim($property->getName(), '$');
+    }, $this->getAllProperties()->toArray());
+  }
+
+  /**
+   * @return \Pharborist\NodeCollection
+   */
+  public function getAllProperties() {
+    $properties = [];
+    /** @var ClassMemberListNode $node */
+    foreach ($this->statements->children(Filter::isInstanceOf('\Pharborist\Objects\ClassMemberListNode')) as $node) {
+      $properties = array_merge($properties, $node->getMembers()->toArray());
+    }
+    return new NodeCollection($properties, FALSE);
+  }
+
+  /**
+   * Returns if the class has the named method, regardless of visibility.
+   *
+   * @param string $name
+   *  The method name.
+   *
+   * @return boolean
+   */
+  public function hasMethod($name) {
+    return in_array($name, $this->getMethodNames());
+  }
+
+  /**
+   * Returns the names of all class methods, regardless of visibility.
+   *
+   * @return string[]
+   */
+  public function getMethodNames() {
+    return array_map(function (ClassMethodNode $node) {
+      return $node->getName()->getText();
+    }, $this->getAllMethods()->toArray());
+  }
+
+  /**
+   * @return \Pharborist\NodeCollection
+   */
+  public function getAllMethods() {
+    return $this->statements->children(Filter::isInstanceOf('\Pharborist\Objects\ClassMethodNode'));
+  }
+
+  /**
+   * Returns a property by name, if it exists.
+   *
+   * @param string $name
+   *  The property name, with or without the $.
+   *
+   * @return ClassMemberNode|NULL
+   */
+  public function getProperty($name) {
+    $name = ltrim($name, '$');
+
+    $properties = $this
+      ->getAllProperties()
+      ->filter(function (ClassMemberNode $property) use ($name) {
+        return ltrim($property->getName(), '$') === $name;
+      });
+    return $properties->isEmpty() ? NULL : $properties[0];
+  }
+
+  /**
+   * Returns a method by name, if it exists.
+   *
+   * @param string $name
+   *  The method name.
+   *
+   * @return ClassMethodNode|NULL
+   */
+  public function getMethod($name) {
+    $methods = $this
+      ->getAllMethods()
+      ->filter(function (ClassMethodNode $method) use ($name) {
+        return $method->getName()->getText() === $name;
+      });
+    return $methods->isEmpty() ? NULL : $methods[0];
+  }
+
+  /**
+   * Creates a new property in this class.
+   *
+   * @see ClassMemberNode::create
+   *
+   * @param string $name
+   * @param ExpressionNode $value
+   * @param string $visibility
+   *
+   * @return $this
+   */
+  public function createProperty($name, ExpressionNode $value = NULL, $visibility = 'public') {
+    return $this->appendProperty(ClassMemberNode::create($name, $value, $visibility));
   }
 
   /**
@@ -216,33 +336,6 @@ abstract class SingleInheritanceNode extends StatementNode {
         $property
       ]);
     }
-    return $this;
-  }
-
-  /**
-   * Adds a method to a class.
-   *
-   * @param \Pharborist\Functions\FunctionDeclarationNode|\Pharborist\Objects\ClassMethodNode|string $method
-   *  The method to append. Can either be an existing method, a function (which
-   *  will be converted to a public method), or a string (a new public method
-   *  will be created with that name).
-   *
-   * @return $this
-   */
-  public function appendMethod($method) {
-    if ($method instanceof FunctionDeclarationNode) {
-      $method = ClassMethodNode::fromFunction($method);
-    }
-    elseif (is_string($method)) {
-      $method = ClassMethodNode::create($method);
-    }
-    $nl = Settings::get('formatter.nl');
-    $indent = Settings::get('formatter.indent');
-    $this->statements->append([
-      WhitespaceNode::create($nl . $indent),
-      $method,
-      WhitespaceNode::create($nl),
-    ]);
     return $this;
   }
 }

@@ -143,7 +143,7 @@ interface NodeInterface {
 
   /**
    * Replace this node with another node.
-   * @param Node|Node[]|NodeCollection $node Replacement node.
+   * @param Node|Node[]|NodeCollection|callable $node Replacement node.
    * @return $this
    */
   public function replaceWith($node);
@@ -175,4 +175,16 @@ interface NodeInterface {
    * @return $this
    */
   public function appendTo($targets);
+
+  /**
+   * Returns the root node if this node belongs to one.
+   *
+   * @return RootNode|NULL
+   */
+  public function getRoot();
+
+  /**
+   * Returns TRUE if this node belongs to a root node.
+   */
+  public function hasRoot();
 }

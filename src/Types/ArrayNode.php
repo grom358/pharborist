@@ -186,6 +186,7 @@ class ArrayNode extends ParentNode implements ExpressionNode {
   public static function create($elements) {
     /** @var ArrayNode $node */
     $node = Parser::parseExpression('[]');
+    /** @var \Pharborist\Node $element */
     foreach ($elements as $element) {
       $node->getElementList()->appendItem($element);
     }

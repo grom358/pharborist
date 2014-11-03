@@ -30,6 +30,7 @@ use Pharborist\Exceptions\ThrowStatementNode;
 use Pharborist\Exceptions\TryCatchNode;
 use Pharborist\Functions\AnonymousFunctionNode;
 use Pharborist\Functions\CallbackCallNode;
+use Pharborist\Functions\CallNode;
 use Pharborist\Functions\DefineNode;
 use Pharborist\Functions\EmptyNode;
 use Pharborist\Functions\EvalNode;
@@ -129,7 +130,7 @@ class Parser {
 
   /**
    * The root node of the syntax tree.
-   * @var TopNode
+   * @var RootNode
    */
   private $top;
 
@@ -175,13 +176,13 @@ class Parser {
   /**
    * Build a syntax tree from the token iterator.
    * @param TokenIterator $iterator
-   * @return TopNode Root node of the tree
+   * @return RootNode Root node of the tree
    */
   public function buildTree(TokenIterator $iterator) {
     $this->iterator = $iterator;
     $this->current = $this->iterator->current();
     $this->currentType = $this->current ? $this->current->getType() : NULL;
-    $top = new TopNode();
+    $top = new RootNode();
     $this->top = $top;
     if ($this->currentType && $this->currentType !== T_OPEN_TAG) {
       $node = new TemplateNode();
@@ -198,7 +199,7 @@ class Parser {
   /**
    * Parse a file and return the parsed tree
    * @param string $filename Path to file
-   * @return TopNode|bool
+   * @return RootNode|bool
    *   The top-level node of the parsed tree or FALSE if the file contents
    *   could not be read.
    */
@@ -213,7 +214,7 @@ class Parser {
   /**
    * Parse PHP source code and return the parsed tree.
    * @param string $source PHP source code
-   * @return TopNode
+   * @return RootNode
    *   The top-level node of the parsed tree
    */
   public static function parseSource($source) {
@@ -355,7 +356,7 @@ class Parser {
     }
   }
 
-  private function endStatement(Node $node) {
+  private function endStatement(ParentNode $node) {
     if ($this->currentType === T_CLOSE_TAG) {
       // http://php.net/manual/en/language.basic-syntax.instruction-separation.php
       // The closing tag of a block of PHP code automatically implies a
@@ -2053,7 +2054,7 @@ class Parser {
 
   /**
    * Parse function call parameter list.
-   * @param NewNode|FunctionCallNode|ClassMethodCallNode|ObjectMethodCallNode $node
+   * @param NewNode|CallNode $node
    */
   private function functionCallParameterList($node) {
     $arguments = new CommaListNode();

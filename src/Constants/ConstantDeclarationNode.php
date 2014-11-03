@@ -1,30 +1,20 @@
 <?php
 namespace Pharborist\Constants;
 
+use Pharborist\Namespaces\IdentifierNameTrait;
 use Pharborist\ParentNode;
 use Pharborist\ExpressionNode;
-use Pharborist\TokenNode;
 
 /**
  * Constant declaration.
  */
 class ConstantDeclarationNode extends ParentNode {
-  /**
-   * @var TokenNode
-   */
-  protected $name;
+  use IdentifierNameTrait;
 
   /**
    * @var ExpressionNode
    */
   protected $value;
-
-  /**
-   * @return \Pharborist\Namespaces\NameNode
-   */
-  public function getName() {
-    return $this->name;
-  }
 
   /**
    * @return ExpressionNode

@@ -32,8 +32,10 @@ class ArrayLookupNode extends ParentNode implements VariableExpressionNode {
    */
   public static function create(ExpressionNode $array, ExpressionNode $key) {
     $node = new static();
+    /** @var Node $array */
     $node->addChild($array, 'array');
     $node->addChild(Token::openBracket());
+    /** @var Node $key */
     $node->addChild($key, 'key');
     $node->addChild(Token::closeBracket());
     return $node;

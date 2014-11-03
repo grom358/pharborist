@@ -428,7 +428,7 @@ abstract class Node implements NodeInterface {
    * @return string
    */
   public function sortKey() {
-    if ($this instanceof TopNode) {
+    if ($this instanceof RootNode) {
       return spl_object_hash($this);
     }
     if (!$this->parent) {
@@ -506,11 +506,11 @@ abstract class Node implements NodeInterface {
    * control structure (if statement, for loop, case statement, etc.), a
    * function, a class definition, or the whole syntax tree.
    *
-   * @return StatementBlockNode|TopNode|NULL
+   * @return StatementBlockNode|RootNode|NULL
    */
   public function getLogicalBlock() {
     return $this->closest(function(Node $node) {
-      return $node instanceof StatementBlockNode || $node instanceof TopNode;
+      return $node instanceof StatementBlockNode || $node instanceof RootNode;
     });
   }
 
@@ -560,6 +560,15 @@ abstract class Node implements NodeInterface {
    */
   public function getStatement() {
     return $this->closest(Filter::isInstanceOf('\Pharborist\StatementNode'));
+  }
+
+  public function getRoot() {
+    return $this->closest(Filter::isInstanceOf('\Pharborist\RootNode'));
+  }
+
+  public function hasRoot() {
+    return $this->getRoot() !== NULL;
+
   }
 
   public function __clone() {

@@ -1,6 +1,11 @@
 <?php
 namespace Pharborist\Namespaces;
 
+use Pharborist\Constants\ConstantDeclarationNode;
+use Pharborist\Functions\FunctionDeclarationNode;
+use Pharborist\Objects\ClassNode;
+use Pharborist\Objects\InterfaceNode;
+use Pharborist\Objects\TraitNode;
 use Pharborist\Parser;
 use Pharborist\StatementNode;
 use Pharborist\DocCommentTrait;
@@ -70,5 +75,17 @@ class NamespaceNode extends StatementNode {
    */
   public function getBody() {
     return $this->body;
+  }
+
+  /**
+   * Determine if the node belongs to this namespace.
+   *
+   * @param ClassNode|InterfaceNode|TraitNode|FunctionDeclarationNode|ConstantDeclarationNode $node
+   *   Node to test if owned by namespace.
+   *
+   * @return bool
+   */
+  public function owns($node) {
+    return $this === $node->getName()->getNamespace();
   }
 }

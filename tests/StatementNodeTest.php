@@ -58,7 +58,7 @@ Verboten in Drupal 8.
 This is a haiku.
 END;
     // The <?php tag is there because the comment will be an immediate child
-    // of the TopNode, not part of the original statement.
+    // of the RootNode, not part of the original statement.
     $expected = <<<END
 <?php // variable_get()
 // Verboten in Drupal 8.

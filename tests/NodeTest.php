@@ -554,4 +554,19 @@ END;
     $this->assertEquals('return foo();', $foo->getText());
     $this->assertSame($function, $function->getStatement());
   }
+
+  public function testRoot() {
+    $source = <<<END
+<?php
+test();
+END;
+    $tree = Parser::parseSource($source);
+    $node = $tree->firstChild()->next();
+    $this->assertTrue($node->hasRoot());
+    $this->assertSame($tree, $node->getRoot());
+
+    $node = $this->createNode('orphan');
+    $this->assertFalse($node->hasRoot());
+    $this->assertNull($node->getRoot());
+  }
 }

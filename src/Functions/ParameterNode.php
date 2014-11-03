@@ -247,6 +247,7 @@ class ParameterNode extends ParentNode {
     }
     else {
       if (isset($this->value)) {
+        /** @var Node $node */
         $this->value->replaceWith($node);
       }
       else {

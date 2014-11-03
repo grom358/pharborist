@@ -5,10 +5,7 @@ namespace Pharborist;
  * A block of statements.
  */
 class StatementBlockNode extends ParentNode {
-  /**
-   * @return StatementNode[]
-   */
-  public function getStatements() {
+  protected function _getStatements() {
     $matches = [];
     $child = $this->head;
     while ($child) {
@@ -16,10 +13,17 @@ class StatementBlockNode extends ParentNode {
         $matches[] = $child;
       }
       elseif ($child instanceof StatementBlockNode) {
-        $matches = array_merge($matches, $child->getStatements());
+        $matches = array_merge($matches, $child->_getStatements());
       }
       $child = $child->next;
     }
     return $matches;
+  }
+
+  /**
+   * @return NodeCollection|StatementNode[]
+   */
+  public function getStatements() {
+    return new NodeCollection($this->_getStatements(), FALSE);
   }
 }

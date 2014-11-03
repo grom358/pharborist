@@ -61,16 +61,6 @@ class ClassMethodNode extends ClassStatementNode {
   }
 
   /**
-   * Remove the visibility modifier.
-   */
-  protected function removeVisibility() {
-    // Remove whitespace after visibility keyword.
-    $this->visibility->next()->remove();
-    // Remove visibility keyword.
-    $this->visibility->remove();
-  }
-
-  /**
    * Returns the `abstract` keyword from the method declaration.
    *
    * @return TokenNode

@@ -2,11 +2,12 @@
 namespace Pharborist\Functions;
 
 use Pharborist\DocCommentTrait;
-use Pharborist\Namespaces\NameNode;
+use Pharborist\Namespaces\IdentifierNameTrait;
 use Pharborist\Token;
 use Pharborist\TokenNode;
 
 trait FunctionTrait {
+  use IdentifierNameTrait;
   use ParameterTrait;
   use DocCommentTrait;
 
@@ -14,11 +15,6 @@ trait FunctionTrait {
    * @var TokenNode
    */
   protected $reference;
-
-  /**
-   * @var \Pharborist\Namespaces\NameNode
-   */
-  protected $name;
 
   /**
    * @return TokenNode
@@ -42,26 +38,6 @@ trait FunctionTrait {
         $this->reference->remove();
       }
     }
-    return $this;
-  }
-
-  /**
-   * @return NameNode
-   */
-  public function getName() {
-    return $this->name;
-  }
-
-  /**
-   * @param string|NameNode $name
-   * @return $this
-   */
-  public function setName($name) {
-    if (is_string($name)) {
-      $name = NameNode::create($name);
-    }
-    $this->name->replaceWith($name);
-    $this->name = $name;
     return $this;
   }
 }

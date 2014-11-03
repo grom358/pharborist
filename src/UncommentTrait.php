@@ -12,6 +12,7 @@ trait UncommentTrait {
    * @return Node
    */
   public function uncomment() {
+    /** @var CommentNode|LineCommentBlockNode $this */
     return Parser::parseSnippet($this->getCommentText());
   }
 }

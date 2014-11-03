@@ -143,7 +143,7 @@ interface NodeInterface {
 
   /**
    * Replace this node with another node.
-   * @param Node|Node[]|NodeCollection $node Replacement node.
+   * @param Node|Node[]|NodeCollection|callable $node Replacement node.
    * @return $this
    */
   public function replaceWith($node);

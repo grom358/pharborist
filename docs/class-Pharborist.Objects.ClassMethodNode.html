@@ -188,7 +188,7 @@
 		<b>Namespace:</b> Pharborist\Objects<br>
 		
 
-		<b>Located at</b> <a href="source-class-Pharborist.Objects.ClassMethodNode.html#13-192" title="Go to source code">Objects/ClassMethodNode.php</a><br>
+		<b>Located at</b> <a href="source-class-Pharborist.Objects.ClassMethodNode.html#13-182" title="Go to source code">Objects/ClassMethodNode.php</a><br>
 	</div>
 
 
@@ -290,7 +290,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getAbstract">#</a>
-		<code><a href="source-class-Pharborist.Objects.ClassMethodNode.html#73-80" title="Go to source code">getAbstract</a>( )</code>
+		<code><a href="source-class-Pharborist.Objects.ClassMethodNode.html#63-70" title="Go to source code">getAbstract</a>( )</code>
 
 		<div class="description short">
 			<p>Returns the <code>abstract</code> keyword from the method declaration.</p>
@@ -326,7 +326,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setAbstract">#</a>
-		<code><a href="source-class-Pharborist.Objects.ClassMethodNode.html#82-119" title="Go to source code">setAbstract</a>( <span>boolean <var>$is_abstract</var></span> )</code>
+		<code><a href="source-class-Pharborist.Objects.ClassMethodNode.html#72-109" title="Go to source code">setAbstract</a>( <span>boolean <var>$is_abstract</var></span> )</code>
 
 		<div class="description short">
 			
@@ -368,7 +368,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getFinal">#</a>
-		<code><a href="source-class-Pharborist.Objects.ClassMethodNode.html#121-128" title="Go to source code">getFinal</a>( )</code>
+		<code><a href="source-class-Pharborist.Objects.ClassMethodNode.html#111-118" title="Go to source code">getFinal</a>( )</code>
 
 		<div class="description short">
 			<p>Returns the <code>final</code> keyword from the method declaration.</p>
@@ -404,7 +404,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setFinal">#</a>
-		<code><a href="source-class-Pharborist.Objects.ClassMethodNode.html#130-154" title="Go to source code">setFinal</a>( <span>boolean <var>$is_final</var></span> )</code>
+		<code><a href="source-class-Pharborist.Objects.ClassMethodNode.html#120-144" title="Go to source code">setFinal</a>( <span>boolean <var>$is_final</var></span> )</code>
 
 		<div class="description short">
 			
@@ -446,7 +446,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getBody">#</a>
-		<code><a href="source-class-Pharborist.Objects.ClassMethodNode.html#156-161" title="Go to source code">getBody</a>( )</code>
+		<code><a href="source-class-Pharborist.Objects.ClassMethodNode.html#146-151" title="Go to source code">getBody</a>( )</code>
 
 		<div class="description short">
 			
@@ -482,7 +482,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getFullyQualifiedName">#</a>
-		<code><a href="source-class-Pharborist.Objects.ClassMethodNode.html#163-170" title="Go to source code">getFullyQualifiedName</a>( )</code>
+		<code><a href="source-class-Pharborist.Objects.ClassMethodNode.html#153-160" title="Go to source code">getFullyQualifiedName</a>( )</code>
 
 		<div class="description short">
 			<p>Gets the fully qualified name of the method, e.g. \My\Namespaced\Class::foo.</p>
@@ -556,7 +556,9 @@
 			<a href="class-Pharborist.Node.html#_closest">closest()</a>, 
 			<a href="class-Pharborist.Node.html#_fromValue">fromValue()</a>, 
 			<a href="class-Pharborist.Node.html#_getLogicalBlock">getLogicalBlock()</a>, 
+			<a href="class-Pharborist.Node.html#_getRoot">getRoot()</a>, 
 			<a href="class-Pharborist.Node.html#_getStatement">getStatement()</a>, 
+			<a href="class-Pharborist.Node.html#_hasRoot">hasRoot()</a>, 
 			<a href="class-Pharborist.Node.html#_index">index()</a>, 
 			<a href="class-Pharborist.Node.html#_insertAfter">insertAfter()</a>, 
 			<a href="class-Pharborist.Node.html#_insertBefore">insertBefore()</a>, 
@@ -605,10 +607,19 @@
 	<caption>Methods used from <a href="class-Pharborist.Functions.FunctionTrait.html#methods">Pharborist\Functions\FunctionTrait</a></caption>
 	<tr>
 		<td><code>
-			<a href="class-Pharborist.Functions.FunctionTrait.html#_getName">()</a>, 
 			<a href="class-Pharborist.Functions.FunctionTrait.html#_getReference">()</a>, 
-			<a href="class-Pharborist.Functions.FunctionTrait.html#_setName">()</a>, 
 			<a href="class-Pharborist.Functions.FunctionTrait.html#_setReference">()</a>
+		</code></td>
+	</tr>
+	</table>
+	<table class="summary used">
+	<caption>Methods used from <a href="class-Pharborist.Namespaces.IdentifierNameTrait.html#methods">Pharborist\Namespaces\IdentifierNameTrait</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-Pharborist.Namespaces.IdentifierNameTrait.html#_getName">()</a>, 
+			<a href="class-Pharborist.Namespaces.IdentifierNameTrait.html#_getNamespace">()</a>, 
+			<a href="class-Pharborist.Namespaces.IdentifierNameTrait.html#_inNamespace">()</a>, 
+			<a href="class-Pharborist.Namespaces.IdentifierNameTrait.html#_setName">()</a>
 		</code></td>
 	</tr>
 	</table>
@@ -670,6 +681,6 @@
 </div>
 </div>
 <script src="resources/combined.js?4281059210"></script>
-<script src="elementlist.js?1795876126"></script>
+<script src="elementlist.js?1599783550"></script>
 </body>
 </html>

@@ -163,6 +163,8 @@
 <b><span>Pharborist\Objects\InterfaceNode</span></b>			
 			
 			 uses 
+				<a href="class-Pharborist.Namespaces.IdentifierNameTrait.html"><span>Pharborist\Namespaces\IdentifierNameTrait</span></a>, 
+			
 				<a href="class-Pharborist.DocCommentTrait.html"><span>Pharborist\DocCommentTrait</span></a>
 			
 		</dd>
@@ -181,49 +183,13 @@
 		<b>Namespace:</b> Pharborist\Objects<br>
 		
 
-		<b>Located at</b> <a href="source-class-Pharborist.Objects.InterfaceNode.html#12-53" title="Go to source code">Objects/InterfaceNode.php</a><br>
+		<b>Located at</b> <a href="source-class-Pharborist.Objects.InterfaceNode.html#12-49" title="Go to source code">Objects/InterfaceNode.php</a><br>
 	</div>
 
 
 
 	<table class="summary methods" id="methods">
 	<caption>Methods summary</caption>
-	<tr data-order="getName" id="_getName">
-
-		<td class="attributes"><code>
-			 public 
-			<code><a href="class-Pharborist.TokenNode.html">Pharborist\TokenNode</a></code>
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_getName">#</a>
-		<code><a href="source-class-Pharborist.Objects.InterfaceNode.html#33-38" title="Go to source code">getName</a>( )</code>
-
-		<div class="description short">
-			
-
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code><code><a href="class-Pharborist.TokenNode.html">Pharborist\TokenNode</a></code></code><br><p>TokenNode</p>
-<br>
-				</div>
-
-
-
-
-		</div>
-		</div></td>
-	</tr>
 	<tr data-order="getExtends" id="_getExtends">
 
 		<td class="attributes"><code>
@@ -235,7 +201,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getExtends">#</a>
-		<code><a href="source-class-Pharborist.Objects.InterfaceNode.html#40-45" title="Go to source code">getExtends</a>( )</code>
+		<code><a href="source-class-Pharborist.Objects.InterfaceNode.html#29-34" title="Go to source code">getExtends</a>( )</code>
 
 		<div class="description short">
 			
@@ -260,18 +226,18 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="getStatements" id="_getStatements">
+	<tr data-order="getBody" id="_getBody">
 
 		<td class="attributes"><code>
 			 public 
-			<code><a href="class-Pharborist.Objects.InterfaceStatementNode.html">Pharborist\Objects\InterfaceStatementNode</a>[]</code>
+			<code><a href="class-Pharborist.StatementBlockNode.html">Pharborist\StatementBlockNode</a></code>
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_getStatements">#</a>
-		<code><a href="source-class-Pharborist.Objects.InterfaceNode.html#47-52" title="Go to source code">getStatements</a>( )</code>
+		<a class="anchor" href="#_getBody">#</a>
+		<code><a href="source-class-Pharborist.Objects.InterfaceNode.html#36-41" title="Go to source code">getBody</a>( )</code>
 
 		<div class="description short">
 			
@@ -286,7 +252,43 @@
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code><code><a href="class-Pharborist.Objects.InterfaceStatementNode.html">Pharborist\Objects\InterfaceStatementNode</a>[]</code></code><br><p>InterfaceStatementNode[]</p>
+					<code><code><a href="class-Pharborist.StatementBlockNode.html">Pharborist\StatementBlockNode</a></code></code><br><p>StatementBlockNode</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getStatements" id="_getStatements">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>|<code><a href="class-Pharborist.Objects.InterfaceStatementNode.html">Pharborist\Objects\InterfaceStatementNode</a>[]</code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getStatements">#</a>
+		<code><a href="source-class-Pharborist.Objects.InterfaceNode.html#43-48" title="Go to source code">getStatements</a>( )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>|<code><a href="class-Pharborist.Objects.InterfaceStatementNode.html">Pharborist\Objects\InterfaceStatementNode</a>[]</code></code><br><p>NodeCollection|InterfaceStatementNode[]</p>
 <br>
 				</div>
 
@@ -345,7 +347,9 @@
 			<a href="class-Pharborist.Node.html#_closest">closest()</a>, 
 			<a href="class-Pharborist.Node.html#_fromValue">fromValue()</a>, 
 			<a href="class-Pharborist.Node.html#_getLogicalBlock">getLogicalBlock()</a>, 
+			<a href="class-Pharborist.Node.html#_getRoot">getRoot()</a>, 
 			<a href="class-Pharborist.Node.html#_getStatement">getStatement()</a>, 
+			<a href="class-Pharborist.Node.html#_hasRoot">hasRoot()</a>, 
 			<a href="class-Pharborist.Node.html#_index">index()</a>, 
 			<a href="class-Pharborist.Node.html#_insertAfter">insertAfter()</a>, 
 			<a href="class-Pharborist.Node.html#_insertBefore">insertBefore()</a>, 
@@ -372,6 +376,17 @@
 	</tr>
 	</table>
 
+	<table class="summary used">
+	<caption>Methods used from <a href="class-Pharborist.Namespaces.IdentifierNameTrait.html#methods">Pharborist\Namespaces\IdentifierNameTrait</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-Pharborist.Namespaces.IdentifierNameTrait.html#_getName">()</a>, 
+			<a href="class-Pharborist.Namespaces.IdentifierNameTrait.html#_getNamespace">()</a>, 
+			<a href="class-Pharborist.Namespaces.IdentifierNameTrait.html#_inNamespace">()</a>, 
+			<a href="class-Pharborist.Namespaces.IdentifierNameTrait.html#_setName">()</a>
+		</code></td>
+	</tr>
+	</table>
 	<table class="summary used">
 	<caption>Methods used from <a href="class-Pharborist.DocCommentTrait.html#methods">Pharborist\DocCommentTrait</a></caption>
 	<tr>
@@ -406,6 +421,6 @@
 </div>
 </div>
 <script src="resources/combined.js?4281059210"></script>
-<script src="elementlist.js?1795876126"></script>
+<script src="elementlist.js?1599783550"></script>
 </body>
 </html>

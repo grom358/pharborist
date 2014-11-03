@@ -70,6 +70,7 @@
 				<li><a href="class-Pharborist.ParenthesisNode.html">ParenthesisNode</a></li>
 				<li><a href="class-Pharborist.ParentNode.html">ParentNode</a></li>
 				<li><a href="class-Pharborist.PartialNode.html">PartialNode</a></li>
+				<li><a href="class-Pharborist.RootNode.html">RootNode</a></li>
 				<li><a href="class-Pharborist.Settings.html">Settings</a></li>
 				<li><a href="class-Pharborist.SourcePosition.html">SourcePosition</a></li>
 				<li><a href="class-Pharborist.SplatNode.html">SplatNode</a></li>
@@ -80,7 +81,6 @@
 				<li><a href="class-Pharborist.TokenIterator.html">TokenIterator</a></li>
 				<li><a href="class-Pharborist.Tokenizer.html">Tokenizer</a></li>
 				<li><a href="class-Pharborist.TokenNode.html">TokenNode</a></li>
-				<li><a href="class-Pharborist.TopNode.html">TopNode</a></li>
 				<li><a href="class-Pharborist.UnsetStatementNode.html">UnsetStatementNode</a></li>
 				<li><a href="class-Pharborist.WhitespaceNode.html">WhitespaceNode</a></li>
 			</ul>
@@ -190,7 +190,7 @@
 		<b>Namespace:</b> Pharborist<br>
 		
 
-		<b>Located at</b> <a href="source-class-Pharborist.ArrayLookupNode.html#7-126" title="Go to source code">ArrayLookupNode.php</a><br>
+		<b>Located at</b> <a href="source-class-Pharborist.ArrayLookupNode.html#7-128" title="Go to source code">ArrayLookupNode.php</a><br>
 	</div>
 
 
@@ -208,7 +208,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_create">#</a>
-		<code><a href="source-class-Pharborist.ArrayLookupNode.html#23-40" title="Go to source code">create</a>( <span><code><a href="class-Pharborist.ExpressionNode.html">Pharborist\ExpressionNode</a></code> <var>$array</var></span>, <span><code><a href="class-Pharborist.ExpressionNode.html">Pharborist\ExpressionNode</a></code> <var>$key</var></span> )</code>
+		<code><a href="source-class-Pharborist.ArrayLookupNode.html#23-42" title="Go to source code">create</a>( <span><code><a href="class-Pharborist.ExpressionNode.html">Pharborist\ExpressionNode</a></code> <var>$array</var></span>, <span><code><a href="class-Pharborist.ExpressionNode.html">Pharborist\ExpressionNode</a></code> <var>$key</var></span> )</code>
 
 		<div class="description short">
 			<p>Creates a new array lookup.</p>
@@ -253,7 +253,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getArray">#</a>
-		<code><a href="source-class-Pharborist.ArrayLookupNode.html#42-47" title="Go to source code">getArray</a>( )</code>
+		<code><a href="source-class-Pharborist.ArrayLookupNode.html#44-49" title="Go to source code">getArray</a>( )</code>
 
 		<div class="description short">
 			
@@ -289,7 +289,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getKeys">#</a>
-		<code><a href="source-class-Pharborist.ArrayLookupNode.html#49-58" title="Go to source code">getKeys</a>( )</code>
+		<code><a href="source-class-Pharborist.ArrayLookupNode.html#51-60" title="Go to source code">getKeys</a>( )</code>
 
 		<div class="description short">
 			
@@ -325,7 +325,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getKey">#</a>
-		<code><a href="source-class-Pharborist.ArrayLookupNode.html#60-83" title="Go to source code">getKey</a>( <span>integer <var>$index</var> = <span class="line">1: </span><span class="php-num">0</span></span> )</code>
+		<code><a href="source-class-Pharborist.ArrayLookupNode.html#62-85" title="Go to source code">getKey</a>( <span>integer <var>$index</var> = <span class="line">1: </span><span class="php-num">0</span></span> )</code>
 
 		<div class="description short">
 			<p>Returns a specific key in the lookup.</p>
@@ -374,7 +374,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hasScalarKeys">#</a>
-		<code><a href="source-class-Pharborist.ArrayLookupNode.html#85-98" title="Go to source code">hasScalarKeys</a>( )</code>
+		<code><a href="source-class-Pharborist.ArrayLookupNode.html#87-100" title="Go to source code">hasScalarKeys</a>( )</code>
 
 		<div class="description short">
 			<p>Returns TRUE if all keys in the lookup are scalar. So a lookup like
@@ -412,7 +412,7 @@ $foo['bar']['baz'][0] will be TRUE, but $foo[$bar]['baz'][0] won't.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_extractKeys">#</a>
-		<code><a href="source-class-Pharborist.ArrayLookupNode.html#100-113" title="Go to source code">extractKeys</a>( )</code>
+		<code><a href="source-class-Pharborist.ArrayLookupNode.html#102-115" title="Go to source code">extractKeys</a>( )</code>
 
 		<div class="description short">
 			<p>Returns every key in the lookup. For example, $foo['bar']['baz'][5] will
@@ -455,7 +455,7 @@ return ['bar', 'baz', 5].</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getRoot">#</a>
-		<code><a href="source-class-Pharborist.ArrayLookupNode.html#115-125" title="Go to source code">getRoot</a>( )</code>
+		<code><a href="source-class-Pharborist.ArrayLookupNode.html#117-127" title="Go to source code">getRoot</a>( )</code>
 
 		<div class="description short">
 			<p>Returns the root of the lookup.</p>
@@ -479,7 +479,11 @@ this method will return a VariableNode for $foo.</p>
 
 
 
+				<h4>Overrides</h4>
+				<div class="list"><code><a href="class-Pharborist.Node.html#_getRoot">Pharborist\Node::getRoot()</a></code></div>
 
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Pharborist.NodeInterface.html#_getRoot">Pharborist\NodeInterface::getRoot()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -523,6 +527,7 @@ this method will return a VariableNode for $foo.</p>
 			<a href="class-Pharborist.Node.html#_fromValue">fromValue()</a>, 
 			<a href="class-Pharborist.Node.html#_getLogicalBlock">getLogicalBlock()</a>, 
 			<a href="class-Pharborist.Node.html#_getStatement">getStatement()</a>, 
+			<a href="class-Pharborist.Node.html#_hasRoot">hasRoot()</a>, 
 			<a href="class-Pharborist.Node.html#_index">index()</a>, 
 			<a href="class-Pharborist.Node.html#_insertAfter">insertAfter()</a>, 
 			<a href="class-Pharborist.Node.html#_insertBefore">insertBefore()</a>, 
@@ -573,6 +578,6 @@ this method will return a VariableNode for $foo.</p>
 </div>
 </div>
 <script src="resources/combined.js?4281059210"></script>
-<script src="elementlist.js?1795876126"></script>
+<script src="elementlist.js?1599783550"></script>
 </body>
 </html>

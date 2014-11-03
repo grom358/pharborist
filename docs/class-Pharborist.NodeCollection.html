@@ -70,6 +70,7 @@
 				<li><a href="class-Pharborist.ParenthesisNode.html">ParenthesisNode</a></li>
 				<li><a href="class-Pharborist.ParentNode.html">ParentNode</a></li>
 				<li><a href="class-Pharborist.PartialNode.html">PartialNode</a></li>
+				<li><a href="class-Pharborist.RootNode.html">RootNode</a></li>
 				<li><a href="class-Pharborist.Settings.html">Settings</a></li>
 				<li><a href="class-Pharborist.SourcePosition.html">SourcePosition</a></li>
 				<li><a href="class-Pharborist.SplatNode.html">SplatNode</a></li>
@@ -80,7 +81,6 @@
 				<li><a href="class-Pharborist.TokenIterator.html">TokenIterator</a></li>
 				<li><a href="class-Pharborist.Tokenizer.html">Tokenizer</a></li>
 				<li><a href="class-Pharborist.TokenNode.html">TokenNode</a></li>
-				<li><a href="class-Pharborist.TopNode.html">TopNode</a></li>
 				<li><a href="class-Pharborist.UnsetStatementNode.html">UnsetStatementNode</a></li>
 				<li><a href="class-Pharborist.WhitespaceNode.html">WhitespaceNode</a></li>
 			</ul>
@@ -180,7 +180,7 @@
 		<b>Namespace:</b> Pharborist<br>
 		
 
-		<b>Located at</b> <a href="source-class-Pharborist.NodeCollection.html#4-659" title="Go to source code">NodeCollection.php</a><br>
+		<b>Located at</b> <a href="source-class-Pharborist.NodeCollection.html#4-668" title="Go to source code">NodeCollection.php</a><br>
 	</div>
 
 
@@ -499,6 +499,42 @@
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="isNotEmpty" id="_isNotEmpty">
+
+		<td class="attributes"><code>
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_isNotEmpty">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#109-116" title="Go to source code">isNotEmpty</a>( )</code>
+
+		<div class="description short">
+			<p>Returns if the collection is not empty.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Returns if the collection is not empty.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br><p>boolean</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="reverse" id="_reverse">
 
 		<td class="attributes"><code>
@@ -510,7 +546,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_reverse">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#109-115" title="Go to source code">reverse</a>( )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#118-124" title="Go to source code">reverse</a>( )</code>
 
 		<div class="description short">
 			<p>Get collection in reverse order</p>
@@ -546,7 +582,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_slice">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#117-147" title="Go to source code">slice</a>( <span>integer <var>$start_index</var></span>, <span>integer <var>$end_index</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#126-156" title="Go to source code">slice</a>( <span>integer <var>$start_index</var></span>, <span>integer <var>$end_index</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
 
 		<div class="description short">
 			<p>Reduce the set of matched nodes to a subset specified by a range.</p>
@@ -591,7 +627,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_map">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#149-160" title="Go to source code">map</a>( <span>callable <var>$callback</var></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#158-169" title="Go to source code">map</a>( <span>callable <var>$callback</var></span> )</code>
 
 		<div class="description short">
 			<p>Creates a new collection by applying a callback to each node in the matched
@@ -635,7 +671,7 @@ set, like jQuery's .map().</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_reduce">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#162-177" title="Go to source code">reduce</a>( <span>callable <var>$callback</var></span>, <span>mixed <var>$initial</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#171-186" title="Go to source code">reduce</a>( <span>callable <var>$callback</var></span>, <span>mixed <var>$initial</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
 
 		<div class="description short">
 			<p>Iteratively reduce the collection to a single value using a callback.</p>
@@ -682,7 +718,7 @@ set, like jQuery's .map().</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_toArray">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#179-187" title="Go to source code">toArray</a>( )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#188-196" title="Go to source code">toArray</a>( )</code>
 
 		<div class="description short">
 			<p>Returns the raw array of nodes, like jQuery's get() called with no
@@ -720,7 +756,7 @@ arguments.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_get">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#189-199" title="Go to source code">get</a>( <span>integer <var>$index</var></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#198-208" title="Go to source code">get</a>( <span>integer <var>$index</var></span> )</code>
 
 		<div class="description short">
 			<p>Get the element at index.</p>
@@ -751,7 +787,7 @@ arguments.</p>
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="index" id="_index">
+	<tr data-order="indexOf" id="_indexOf">
 
 		<td class="attributes"><code>
 			 public 
@@ -761,8 +797,8 @@ arguments.</p>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_index">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#201-217" title="Go to source code">index</a>( <span>callable <var>$callback</var></span> )</code>
+		<a class="anchor" href="#_indexOf">#</a>
+		<code><a href="source-class-Pharborist.NodeCollection.html#210-226" title="Go to source code">indexOf</a>( <span>callable <var>$callback</var></span> )</code>
 
 		<div class="description short">
 			<p>Index of first element that is matched by callback.</p>
@@ -804,7 +840,7 @@ arguments.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_is">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#219-235" title="Go to source code">is</a>( <span>callable <var>$callback</var></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#228-244" title="Go to source code">is</a>( <span>callable <var>$callback</var></span> )</code>
 
 		<div class="description short">
 			<p>Test is any element in collection matches.</p>
@@ -846,7 +882,7 @@ arguments.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_parent">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#237-251" title="Go to source code">parent</a>( <span>callable <var>$callback</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#246-260" title="Go to source code">parent</a>( <span>callable <var>$callback</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
 
 		<div class="description short">
 			<p>Get the parent of each node in the current set of matched nodes,
@@ -890,7 +926,7 @@ optionally filtered by a callback.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_parents">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#253-265" title="Go to source code">parents</a>( <span>callable <var>$callback</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#262-274" title="Go to source code">parents</a>( <span>callable <var>$callback</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
 
 		<div class="description short">
 			<p>Get the ancestors of each node in the current set of matched nodes,
@@ -934,7 +970,7 @@ optionally filtered by a callback.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_parentsUntil">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#267-280" title="Go to source code">parentsUntil</a>( <span>callable <var>$callback</var></span>, <span>boolean <var>$inclusive</var> = <span class="line">1: </span><span class="php-keyword1">FALSE</span></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#276-289" title="Go to source code">parentsUntil</a>( <span>callable <var>$callback</var></span>, <span>boolean <var>$inclusive</var> = <span class="line">1: </span><span class="php-keyword1">FALSE</span></span> )</code>
 
 		<div class="description short">
 			<p>Get ancestors of each node in the current set of matched nodes,
@@ -981,7 +1017,7 @@ up to the node matched by callback.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_closest">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#282-297" title="Go to source code">closest</a>( <span>callable <var>$callback</var></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#291-306" title="Go to source code">closest</a>( <span>callable <var>$callback</var></span> )</code>
 
 		<div class="description short">
 			<p>For each node in the collection, get the first node matched by the
@@ -1027,7 +1063,7 @@ the tree.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_children">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#299-312" title="Go to source code">children</a>( <span>callable <var>$callback</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#308-321" title="Go to source code">children</a>( <span>callable <var>$callback</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
 
 		<div class="description short">
 			<p>Get the immediate children of each node in the set of matched nodes.</p>
@@ -1069,7 +1105,7 @@ the tree.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_clear">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#314-326" title="Go to source code">clear</a>( )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#323-335" title="Go to source code">clear</a>( )</code>
 
 		<div class="description short">
 			<p>Remove all child nodes of the set of matched elements.</p>
@@ -1105,7 +1141,7 @@ the tree.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_previous">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#328-343" title="Go to source code">previous</a>( <span>callable <var>$callback</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#337-352" title="Go to source code">previous</a>( <span>callable <var>$callback</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
 
 		<div class="description short">
 			<p>Get the immediately preceding sibling of each node in the set of matched
@@ -1151,7 +1187,7 @@ the callback returns TRUE.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_previousAll">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#345-357" title="Go to source code">previousAll</a>( <span>callable <var>$callback</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#354-366" title="Go to source code">previousAll</a>( <span>callable <var>$callback</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
 
 		<div class="description short">
 			<p>Get all preceding siblings of each node in the set of matched nodes,
@@ -1195,7 +1231,7 @@ optionally filtered by a callback.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_previousUntil">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#359-372" title="Go to source code">previousUntil</a>( <span>callable <var>$callback</var></span>, <span>boolean <var>$inclusive</var> = <span class="line">1: </span><span class="php-keyword1">FALSE</span></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#368-381" title="Go to source code">previousUntil</a>( <span>callable <var>$callback</var></span>, <span>boolean <var>$inclusive</var> = <span class="line">1: </span><span class="php-keyword1">FALSE</span></span> )</code>
 
 		<div class="description short">
 			<p>Get all preceding siblings of each node up to the node matched by the
@@ -1242,7 +1278,7 @@ callback.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_next">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#374-389" title="Go to source code">next</a>( <span>callable <var>$callback</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#383-398" title="Go to source code">next</a>( <span>callable <var>$callback</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
 
 		<div class="description short">
 			<p>Get the immediately following sibling of each node in the set of matched
@@ -1288,7 +1324,7 @@ the callback returns TRUE.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_nextAll">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#391-403" title="Go to source code">nextAll</a>( <span>callable <var>$callback</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#400-412" title="Go to source code">nextAll</a>( <span>callable <var>$callback</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
 
 		<div class="description short">
 			<p>Get all following siblings of each node in the set of matched nodes,
@@ -1332,7 +1368,7 @@ optionally filtered by a callback.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_nextUntil">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#405-418" title="Go to source code">nextUntil</a>( <span>callable <var>$callback</var></span>, <span>boolean <var>$inclusive</var> = <span class="line">1: </span><span class="php-keyword1">FALSE</span></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#414-427" title="Go to source code">nextUntil</a>( <span>callable <var>$callback</var></span>, <span>boolean <var>$inclusive</var> = <span class="line">1: </span><span class="php-keyword1">FALSE</span></span> )</code>
 
 		<div class="description short">
 			<p>Get all following siblings of each node up to the node matched by the
@@ -1379,7 +1415,7 @@ callback.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_siblings">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#420-432" title="Go to source code">siblings</a>( <span>callable <var>$callback</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#429-441" title="Go to source code">siblings</a>( <span>callable <var>$callback</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
 
 		<div class="description short">
 			<p>Get the siblings of each node in the set of matched nodes,
@@ -1423,7 +1459,7 @@ optionally filtered by a callback.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_find">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#434-448" title="Go to source code">find</a>( <span>callable <var>$callback</var></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#443-457" title="Go to source code">find</a>( <span>callable <var>$callback</var></span> )</code>
 
 		<div class="description short">
 			<p>Get the descendants of each node in the current set of matched nodes,
@@ -1467,7 +1503,7 @@ filtered by callback.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_filter">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#450-463" title="Go to source code">filter</a>( <span>callable <var>$callback</var></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#459-472" title="Go to source code">filter</a>( <span>callable <var>$callback</var></span> )</code>
 
 		<div class="description short">
 			<p>Reduce the set of matched nodes to those that pass the callback filter.</p>
@@ -1509,7 +1545,7 @@ filtered by callback.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_not">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#465-478" title="Go to source code">not</a>( <span>callable <var>$callback</var></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#474-487" title="Go to source code">not</a>( <span>callable <var>$callback</var></span> )</code>
 
 		<div class="description short">
 			<p>Remove nodes from the set of matched nodes.</p>
@@ -1551,7 +1587,7 @@ filtered by callback.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_has">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#480-494" title="Go to source code">has</a>( <span>callable <var>$callback</var></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#489-503" title="Go to source code">has</a>( <span>callable <var>$callback</var></span> )</code>
 
 		<div class="description short">
 			<p>Reduce the set of matched nodes to those that have a descendant that
@@ -1595,7 +1631,7 @@ match.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_first">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#496-505" title="Go to source code">first</a>( )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#505-514" title="Go to source code">first</a>( )</code>
 
 		<div class="description short">
 			<p>Reduce the set of matched nodes to the first in the set.</p>
@@ -1626,7 +1662,7 @@ match.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_last">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#507-516" title="Go to source code">last</a>( )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#516-525" title="Go to source code">last</a>( )</code>
 
 		<div class="description short">
 			<p>Reduce the set of matched nodes to the last in the set.</p>
@@ -1657,7 +1693,7 @@ match.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_insertBefore">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#518-528" title="Go to source code">insertBefore</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>|<code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code>|<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code> <var>$targets</var></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#527-537" title="Go to source code">insertBefore</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>|<code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code>|<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code> <var>$targets</var></span> )</code>
 
 		<div class="description short">
 			<p>Insert every node in the set of matched nodes before the targets.</p>
@@ -1699,7 +1735,7 @@ match.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_before">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#530-540" title="Go to source code">before</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>|<code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code>|<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code> <var>$nodes</var></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#539-549" title="Go to source code">before</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>|<code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code>|<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code> <var>$nodes</var></span> )</code>
 
 		<div class="description short">
 			<p>Insert nodes before each node in the set of matched nodes.</p>
@@ -1741,7 +1777,7 @@ match.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_insertAfter">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#542-552" title="Go to source code">insertAfter</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>|<code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code>|<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code> <var>$targets</var></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#551-561" title="Go to source code">insertAfter</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>|<code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code>|<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code> <var>$targets</var></span> )</code>
 
 		<div class="description short">
 			<p>Insert every node in the set of matched nodes after the targets.</p>
@@ -1783,7 +1819,7 @@ match.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_after">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#554-564" title="Go to source code">after</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>|<code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code>|<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code> <var>$nodes</var></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#563-573" title="Go to source code">after</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>|<code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code>|<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code> <var>$nodes</var></span> )</code>
 
 		<div class="description short">
 			<p>Insert nodes after each node in the set of matched nodes.</p>
@@ -1825,7 +1861,7 @@ match.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_remove">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#566-575" title="Go to source code">remove</a>( )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#575-584" title="Go to source code">remove</a>( )</code>
 
 		<div class="description short">
 			<p>Remove the set of matched nodes from the tree.</p>
@@ -1861,7 +1897,7 @@ match.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_replaceWith">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#577-596" title="Go to source code">replaceWith</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>|<code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code>|<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code> <var>$nodes</var></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#586-605" title="Go to source code">replaceWith</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>|<code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code>|<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code> <var>$nodes</var></span> )</code>
 
 		<div class="description short">
 			<p>Replace each node in the set of matched nodes with the provided new nodes
@@ -1905,7 +1941,7 @@ and return the set of nodes that was removed.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_replaceAll">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#598-616" title="Go to source code">replaceAll</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>|<code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code>|<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code> <var>$targets</var></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#607-625" title="Go to source code">replaceAll</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>|<code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code>|<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code> <var>$targets</var></span> )</code>
 
 		<div class="description short">
 			<p>Replace each target node with the set of matched nodes.</p>
@@ -1947,7 +1983,7 @@ and return the set of nodes that was removed.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_add">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#618-639" title="Go to source code">add</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>|<code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code>|<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code> <var>$nodes</var></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#627-648" title="Go to source code">add</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>|<code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code>|<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code> <var>$nodes</var></span> )</code>
 
 		<div class="description short">
 			<p>Add nodes to this collection.</p>
@@ -1994,7 +2030,7 @@ and return the set of nodes that was removed.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_each">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#641-650" title="Go to source code">each</a>( <span>callable <var>$callback</var></span> )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#650-659" title="Go to source code">each</a>( <span>callable <var>$callback</var></span> )</code>
 
 		<div class="description short">
 			<p>Apply callback on each element in the node collection.</p>
@@ -2036,7 +2072,7 @@ and return the set of nodes that was removed.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#___clone">#</a>
-		<code><a href="source-class-Pharborist.NodeCollection.html#652-658" title="Go to source code">__clone</a>( )</code>
+		<code><a href="source-class-Pharborist.NodeCollection.html#661-667" title="Go to source code">__clone</a>( )</code>
 
 		<div class="description short">
 			
@@ -2083,6 +2119,6 @@ and return the set of nodes that was removed.</p>
 </div>
 </div>
 <script src="resources/combined.js?4281059210"></script>
-<script src="elementlist.js?1795876126"></script>
+<script src="elementlist.js?1599783550"></script>
 </body>
 </html>

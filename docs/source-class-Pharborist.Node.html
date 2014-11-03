@@ -71,6 +71,7 @@
 				<li><a href="class-Pharborist.ParenthesisNode.html">ParenthesisNode</a></li>
 				<li><a href="class-Pharborist.ParentNode.html">ParentNode</a></li>
 				<li><a href="class-Pharborist.PartialNode.html">PartialNode</a></li>
+				<li><a href="class-Pharborist.RootNode.html">RootNode</a></li>
 				<li><a href="class-Pharborist.Settings.html">Settings</a></li>
 				<li><a href="class-Pharborist.SourcePosition.html">SourcePosition</a></li>
 				<li><a href="class-Pharborist.SplatNode.html">SplatNode</a></li>
@@ -81,7 +82,6 @@
 				<li><a href="class-Pharborist.TokenIterator.html">TokenIterator</a></li>
 				<li><a href="class-Pharborist.Tokenizer.html">Tokenizer</a></li>
 				<li><a href="class-Pharborist.TokenNode.html">TokenNode</a></li>
-				<li><a href="class-Pharborist.TopNode.html">TopNode</a></li>
 				<li><a href="class-Pharborist.UnsetStatementNode.html">UnsetStatementNode</a></li>
 				<li><a href="class-Pharborist.WhitespaceNode.html">WhitespaceNode</a></li>
 			</ul>
@@ -570,7 +570,7 @@
 </span></span><span id="428" class="l"><a class="l" href="#428">428: </a><span class="php-comment">   * @return string
 </span></span><span id="429" class="l"><a class="l" href="#429">429: </a><span class="php-comment">   */</span>
 </span><span id="430" class="l"><a class="l" href="#430">430: </a>  <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_sortKey" href="#_sortKey">sortKey</a>() {
-</span><span id="431" class="l"><a class="l" href="#431">431: </a>    <span class="php-keyword1">if</span> (<span class="php-var">$this</span> <span class="php-keyword1">instanceof</span> TopNode) {
+</span><span id="431" class="l"><a class="l" href="#431">431: </a>    <span class="php-keyword1">if</span> (<span class="php-var">$this</span> <span class="php-keyword1">instanceof</span> RootNode) {
 </span><span id="432" class="l"><a class="l" href="#432">432: </a>      <span class="php-keyword1">return</span> <span class="php-keyword2">spl_object_hash</span>(<span class="php-var">$this</span>);
 </span><span id="433" class="l"><a class="l" href="#433">433: </a>    }
 </span><span id="434" class="l"><a class="l" href="#434">434: </a>    <span class="php-keyword1">if</span> (!<span class="php-var">$this</span>-&gt;parent) {
@@ -648,11 +648,11 @@
 </span></span><span id="506" class="l"><a class="l" href="#506">506: </a><span class="php-comment">   * control structure (if statement, for loop, case statement, etc.), a
 </span></span><span id="507" class="l"><a class="l" href="#507">507: </a><span class="php-comment">   * function, a class definition, or the whole syntax tree.
 </span></span><span id="508" class="l"><a class="l" href="#508">508: </a><span class="php-comment">   *
-</span></span><span id="509" class="l"><a class="l" href="#509">509: </a><span class="php-comment">   * @return StatementBlockNode|TopNode|NULL
+</span></span><span id="509" class="l"><a class="l" href="#509">509: </a><span class="php-comment">   * @return StatementBlockNode|RootNode|NULL
 </span></span><span id="510" class="l"><a class="l" href="#510">510: </a><span class="php-comment">   */</span>
 </span><span id="511" class="l"><a class="l" href="#511">511: </a>  <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_getLogicalBlock" href="#_getLogicalBlock">getLogicalBlock</a>() {
 </span><span id="512" class="l"><a class="l" href="#512">512: </a>    <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;closest(<span class="php-keyword1">function</span>(Node <span class="php-var">$node</span>) {
-</span><span id="513" class="l"><a class="l" href="#513">513: </a>      <span class="php-keyword1">return</span> <span class="php-var">$node</span> <span class="php-keyword1">instanceof</span> StatementBlockNode || <span class="php-var">$node</span> <span class="php-keyword1">instanceof</span> TopNode;
+</span><span id="513" class="l"><a class="l" href="#513">513: </a>      <span class="php-keyword1">return</span> <span class="php-var">$node</span> <span class="php-keyword1">instanceof</span> StatementBlockNode || <span class="php-var">$node</span> <span class="php-keyword1">instanceof</span> RootNode;
 </span><span id="514" class="l"><a class="l" href="#514">514: </a>    });
 </span><span id="515" class="l"><a class="l" href="#515">515: </a>  }
 </span><span id="516" class="l"><a class="l" href="#516">516: </a>
@@ -704,14 +704,23 @@
 </span><span id="562" class="l"><a class="l" href="#562">562: </a>    <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;closest(Filter::isInstanceOf(<span class="php-quote">'\Pharborist\StatementNode'</span>));
 </span><span id="563" class="l"><a class="l" href="#563">563: </a>  }
 </span><span id="564" class="l"><a class="l" href="#564">564: </a>
-</span><span id="565" class="l"><a class="l" href="#565">565: </a>  <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="___clone" href="#___clone">__clone</a>() {
-</span><span id="566" class="l"><a class="l" href="#566">566: </a>    <span class="php-comment">// Clone does not belong to any parent.</span>
-</span><span id="567" class="l"><a class="l" href="#567">567: </a>    <span class="php-var">$this</span>-&gt;parent = <span class="php-keyword1">NULL</span>;
-</span><span id="568" class="l"><a class="l" href="#568">568: </a>    <span class="php-var">$this</span>-&gt;previous = <span class="php-keyword1">NULL</span>;
-</span><span id="569" class="l"><a class="l" href="#569">569: </a>    <span class="php-var">$this</span>-&gt;<span class="php-keyword2">next</span> = <span class="php-keyword1">NULL</span>;
-</span><span id="570" class="l"><a class="l" href="#570">570: </a>  }
-</span><span id="571" class="l"><a class="l" href="#571">571: </a>}
-</span><span id="572" class="l"><a class="l" href="#572">572: </a></span></code></pre>
+</span><span id="565" class="l"><a class="l" href="#565">565: </a>  <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_getRoot" href="#_getRoot">getRoot</a>() {
+</span><span id="566" class="l"><a class="l" href="#566">566: </a>    <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;closest(Filter::isInstanceOf(<span class="php-quote">'\Pharborist\RootNode'</span>));
+</span><span id="567" class="l"><a class="l" href="#567">567: </a>  }
+</span><span id="568" class="l"><a class="l" href="#568">568: </a>
+</span><span id="569" class="l"><a class="l" href="#569">569: </a>  <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_hasRoot" href="#_hasRoot">hasRoot</a>() {
+</span><span id="570" class="l"><a class="l" href="#570">570: </a>    <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;getRoot() !== <span class="php-keyword1">NULL</span>;
+</span><span id="571" class="l"><a class="l" href="#571">571: </a>
+</span><span id="572" class="l"><a class="l" href="#572">572: </a>  }
+</span><span id="573" class="l"><a class="l" href="#573">573: </a>
+</span><span id="574" class="l"><a class="l" href="#574">574: </a>  <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="___clone" href="#___clone">__clone</a>() {
+</span><span id="575" class="l"><a class="l" href="#575">575: </a>    <span class="php-comment">// Clone does not belong to any parent.</span>
+</span><span id="576" class="l"><a class="l" href="#576">576: </a>    <span class="php-var">$this</span>-&gt;parent = <span class="php-keyword1">NULL</span>;
+</span><span id="577" class="l"><a class="l" href="#577">577: </a>    <span class="php-var">$this</span>-&gt;previous = <span class="php-keyword1">NULL</span>;
+</span><span id="578" class="l"><a class="l" href="#578">578: </a>    <span class="php-var">$this</span>-&gt;<span class="php-keyword2">next</span> = <span class="php-keyword1">NULL</span>;
+</span><span id="579" class="l"><a class="l" href="#579">579: </a>  }
+</span><span id="580" class="l"><a class="l" href="#580">580: </a>}
+</span><span id="581" class="l"><a class="l" href="#581">581: </a></span></code></pre>
 
 	<div id="footer">
 		Pharborist API documentation generated by <a href="http://apigen.org">ApiGen 3.0.0</a>
@@ -719,6 +728,6 @@
 </div>
 </div>
 <script src="resources/combined.js?4281059210"></script>
-<script src="elementlist.js?1795876126"></script>
+<script src="elementlist.js?1599783550"></script>
 </body>
 </html>

@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta name="generator" content="ApiGen 3.0.0">
 
-	<title>Class Pharborist\TopNode | Pharborist</title>
+	<title>Class Pharborist\RootNode | Pharborist</title>
 
 	<link rel="stylesheet" href="resources/style.css?247950731">
 
@@ -70,6 +70,7 @@
 				<li><a href="class-Pharborist.ParenthesisNode.html">ParenthesisNode</a></li>
 				<li><a href="class-Pharborist.ParentNode.html">ParentNode</a></li>
 				<li><a href="class-Pharborist.PartialNode.html">PartialNode</a></li>
+				<li class="active"><a href="class-Pharborist.RootNode.html">RootNode</a></li>
 				<li><a href="class-Pharborist.Settings.html">Settings</a></li>
 				<li><a href="class-Pharborist.SourcePosition.html">SourcePosition</a></li>
 				<li><a href="class-Pharborist.SplatNode.html">SplatNode</a></li>
@@ -80,7 +81,6 @@
 				<li><a href="class-Pharborist.TokenIterator.html">TokenIterator</a></li>
 				<li><a href="class-Pharborist.Tokenizer.html">Tokenizer</a></li>
 				<li><a href="class-Pharborist.TokenNode.html">TokenNode</a></li>
-				<li class="active"><a href="class-Pharborist.TopNode.html">TopNode</a></li>
 				<li><a href="class-Pharborist.UnsetStatementNode.html">UnsetStatementNode</a></li>
 				<li><a href="class-Pharborist.WhitespaceNode.html">WhitespaceNode</a></li>
 			</ul>
@@ -139,7 +139,7 @@
 	</div>
 
 <div id="content" class="class">
-	<h1>Class TopNode</h1>
+	<h1>Class RootNode</h1>
 
 
 	<div class="description">
@@ -174,7 +174,7 @@
 		</dd>
 		<dd style="padding-left:90px">
 			<img src="resources/inherit.png" alt="Extended by">
-<b><span>Pharborist\TopNode</span></b>			
+<b><span>Pharborist\RootNode</span></b>			
 			
 			
 		</dd>
@@ -193,7 +193,7 @@
 		<b>Namespace:</b> Pharborist<br>
 		
 
-		<b>Located at</b> <a href="source-class-Pharborist.TopNode.html#6-82" title="Go to source code">TopNode.php</a><br>
+		<b>Located at</b> <a href="source-class-Pharborist.RootNode.html#6-80" title="Go to source code">RootNode.php</a><br>
 	</div>
 
 
@@ -211,7 +211,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_create">#</a>
-		<code><a href="source-class-Pharborist.TopNode.html#10-27" title="Go to source code">create</a>( <span>string|null <var>$ns</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
+		<code><a href="source-class-Pharborist.RootNode.html#10-25" title="Go to source code">create</a>( <span>string|null <var>$ns</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span> )</code>
 
 		<div class="description short">
 			<p>Creates a new, blank PHP source file.</p>
@@ -253,7 +253,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hasNamespace">#</a>
-		<code><a href="source-class-Pharborist.TopNode.html#29-39" title="Go to source code">hasNamespace</a>( <span>string <var>$ns</var></span> )</code>
+		<code><a href="source-class-Pharborist.RootNode.html#27-37" title="Go to source code">hasNamespace</a>( <span>string <var>$ns</var></span> )</code>
 
 		<div class="description short">
 			<p>Returns if this document contains a particular namespace.</p>
@@ -295,7 +295,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getNamespaces">#</a>
-		<code><a href="source-class-Pharborist.TopNode.html#41-48" title="Go to source code">getNamespaces</a>( )</code>
+		<code><a href="source-class-Pharborist.RootNode.html#39-46" title="Go to source code">getNamespaces</a>( )</code>
 
 		<div class="description short">
 			<p>Returns every namespace in this document.</p>
@@ -331,7 +331,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getNamespace">#</a>
-		<code><a href="source-class-Pharborist.TopNode.html#50-66" title="Go to source code">getNamespace</a>( <span>string <var>$ns</var></span> )</code>
+		<code><a href="source-class-Pharborist.RootNode.html#48-64" title="Go to source code">getNamespace</a>( <span>string <var>$ns</var></span> )</code>
 
 		<div class="description short">
 			<p>Returns a particular namespace, if it exists.</p>
@@ -373,7 +373,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getNamespaceNames">#</a>
-		<code><a href="source-class-Pharborist.TopNode.html#68-81" title="Go to source code">getNamespaceNames</a>( <span>boolean <var>$absolute</var> = <span class="line">1: </span><span class="php-keyword1">FALSE</span></span> )</code>
+		<code><a href="source-class-Pharborist.RootNode.html#66-79" title="Go to source code">getNamespaceNames</a>( <span>boolean <var>$absolute</var> = <span class="line">1: </span><span class="php-keyword1">FALSE</span></span> )</code>
 
 		<div class="description short">
 			<p>Returns the name of every namespace in this document.</p>
@@ -451,7 +451,9 @@
 			<a href="class-Pharborist.Node.html#_closest">closest()</a>, 
 			<a href="class-Pharborist.Node.html#_fromValue">fromValue()</a>, 
 			<a href="class-Pharborist.Node.html#_getLogicalBlock">getLogicalBlock()</a>, 
+			<a href="class-Pharborist.Node.html#_getRoot">getRoot()</a>, 
 			<a href="class-Pharborist.Node.html#_getStatement">getStatement()</a>, 
+			<a href="class-Pharborist.Node.html#_hasRoot">hasRoot()</a>, 
 			<a href="class-Pharborist.Node.html#_index">index()</a>, 
 			<a href="class-Pharborist.Node.html#_insertAfter">insertAfter()</a>, 
 			<a href="class-Pharborist.Node.html#_insertBefore">insertBefore()</a>, 
@@ -502,6 +504,6 @@
 </div>
 </div>
 <script src="resources/combined.js?4281059210"></script>
-<script src="elementlist.js?1795876126"></script>
+<script src="elementlist.js?1599783550"></script>
 </body>
 </html>

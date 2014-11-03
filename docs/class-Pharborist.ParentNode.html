@@ -70,6 +70,7 @@
 				<li><a href="class-Pharborist.ParenthesisNode.html">ParenthesisNode</a></li>
 				<li class="active"><a href="class-Pharborist.ParentNode.html">ParentNode</a></li>
 				<li><a href="class-Pharborist.PartialNode.html">PartialNode</a></li>
+				<li><a href="class-Pharborist.RootNode.html">RootNode</a></li>
 				<li><a href="class-Pharborist.Settings.html">Settings</a></li>
 				<li><a href="class-Pharborist.SourcePosition.html">SourcePosition</a></li>
 				<li><a href="class-Pharborist.SplatNode.html">SplatNode</a></li>
@@ -80,7 +81,6 @@
 				<li><a href="class-Pharborist.TokenIterator.html">TokenIterator</a></li>
 				<li><a href="class-Pharborist.Tokenizer.html">Tokenizer</a></li>
 				<li><a href="class-Pharborist.TokenNode.html">TokenNode</a></li>
-				<li><a href="class-Pharborist.TopNode.html">TopNode</a></li>
 				<li><a href="class-Pharborist.UnsetStatementNode.html">UnsetStatementNode</a></li>
 				<li><a href="class-Pharborist.WhitespaceNode.html">WhitespaceNode</a></li>
 			</ul>
@@ -232,7 +232,7 @@
 			<a href="class-Pharborist.Operators.SuppressWarningNode.html">Pharborist\Operators\SuppressWarningNode</a>, 
 			<a href="class-Pharborist.ControlStructures.IfNode.html">Pharborist\ControlStructures\IfNode</a>, 
 			<a href="class-Pharborist.Operators.UnsetCastNode.html">Pharborist\Operators\UnsetCastNode</a>, 
-			<a href="class-Pharborist.TopNode.html">Pharborist\TopNode</a>, 
+			<a href="class-Pharborist.RootNode.html">Pharborist\RootNode</a>, 
 			<a href="class-Pharborist.Types.BooleanNode.html">Pharborist\Types\BooleanNode</a>, 
 			<a href="class-Pharborist.Types.FalseNode.html">Pharborist\Types\FalseNode</a>, 
 			<a href="class-Pharborist.Types.NullNode.html">Pharborist\Types\NullNode</a>, 
@@ -348,7 +348,7 @@
 		<b>Namespace:</b> Pharborist<br>
 		
 
-		<b>Located at</b> <a href="source-class-Pharborist.ParentNode.html#4-451" title="Go to source code">ParentNode.php</a><br>
+		<b>Located at</b> <a href="source-class-Pharborist.ParentNode.html#4-455" title="Go to source code">ParentNode.php</a><br>
 	</div>
 
 
@@ -929,7 +929,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_find">#</a>
-		<code><a href="source-class-Pharborist.ParentNode.html#356-369" title="Go to source code">find</a>( <span>callable <var>$callback</var></span> )</code>
+		<code><a href="source-class-Pharborist.ParentNode.html#369-373" title="Go to source code">find</a>( <span>callable <var>$callback</var></span> )</code>
 
 		<div class="description short">
 			<p>Find descendants that pass filter callback.</p>
@@ -973,7 +973,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getSourcePosition">#</a>
-		<code><a href="source-class-Pharborist.ParentNode.html#371-377" title="Go to source code">getSourcePosition</a>( )</code>
+		<code><a href="source-class-Pharborist.ParentNode.html#375-381" title="Go to source code">getSourcePosition</a>( )</code>
 
 		<div class="description short">
 			<p>Get the source position of the node.</p>
@@ -1011,7 +1011,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#___clone">#</a>
-		<code><a href="source-class-Pharborist.ParentNode.html#379-414" title="Go to source code">__clone</a>( )</code>
+		<code><a href="source-class-Pharborist.ParentNode.html#383-418" title="Go to source code">__clone</a>( )</code>
 
 		<div class="description short">
 			
@@ -1044,7 +1044,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getText">#</a>
-		<code><a href="source-class-Pharborist.ParentNode.html#416-424" title="Go to source code">getText</a>( )</code>
+		<code><a href="source-class-Pharborist.ParentNode.html#420-428" title="Go to source code">getText</a>( )</code>
 
 		<div class="description short">
 			<p>Convert the node into PHP source code.</p>
@@ -1082,7 +1082,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#___toString">#</a>
-		<code><a href="source-class-Pharborist.ParentNode.html#426-428" title="Go to source code">__toString</a>( )</code>
+		<code><a href="source-class-Pharborist.ParentNode.html#430-432" title="Go to source code">__toString</a>( )</code>
 
 		<div class="description short">
 			
@@ -1113,7 +1113,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getTree">#</a>
-		<code><a href="source-class-Pharborist.ParentNode.html#430-450" title="Go to source code">getTree</a>( )</code>
+		<code><a href="source-class-Pharborist.ParentNode.html#434-454" title="Go to source code">getTree</a>( )</code>
 
 		<div class="description short">
 			<p>Convert tree into array.</p>
@@ -1147,7 +1147,9 @@
 			<a href="class-Pharborist.Node.html#_closest">closest()</a>, 
 			<a href="class-Pharborist.Node.html#_fromValue">fromValue()</a>, 
 			<a href="class-Pharborist.Node.html#_getLogicalBlock">getLogicalBlock()</a>, 
+			<a href="class-Pharborist.Node.html#_getRoot">getRoot()</a>, 
 			<a href="class-Pharborist.Node.html#_getStatement">getStatement()</a>, 
+			<a href="class-Pharborist.Node.html#_hasRoot">hasRoot()</a>, 
 			<a href="class-Pharborist.Node.html#_index">index()</a>, 
 			<a href="class-Pharborist.Node.html#_insertAfter">insertAfter()</a>, 
 			<a href="class-Pharborist.Node.html#_insertBefore">insertBefore()</a>, 
@@ -1198,6 +1200,6 @@
 </div>
 </div>
 <script src="resources/combined.js?4281059210"></script>
-<script src="elementlist.js?1795876126"></script>
+<script src="elementlist.js?1599783550"></script>
 </body>
 </html>

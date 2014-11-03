@@ -70,6 +70,7 @@
 				<li><a href="class-Pharborist.ParenthesisNode.html">ParenthesisNode</a></li>
 				<li><a href="class-Pharborist.ParentNode.html">ParentNode</a></li>
 				<li><a href="class-Pharborist.PartialNode.html">PartialNode</a></li>
+				<li><a href="class-Pharborist.RootNode.html">RootNode</a></li>
 				<li><a href="class-Pharborist.Settings.html">Settings</a></li>
 				<li><a href="class-Pharborist.SourcePosition.html">SourcePosition</a></li>
 				<li><a href="class-Pharborist.SplatNode.html">SplatNode</a></li>
@@ -80,7 +81,6 @@
 				<li><a href="class-Pharborist.TokenIterator.html">TokenIterator</a></li>
 				<li><a href="class-Pharborist.Tokenizer.html">Tokenizer</a></li>
 				<li><a href="class-Pharborist.TokenNode.html">TokenNode</a></li>
-				<li><a href="class-Pharborist.TopNode.html">TopNode</a></li>
 				<li><a href="class-Pharborist.UnsetStatementNode.html">UnsetStatementNode</a></li>
 				<li><a href="class-Pharborist.WhitespaceNode.html">WhitespaceNode</a></li>
 			</ul>
@@ -228,12 +228,12 @@ indicate they support the Node API.</p>
 			<a href="class-Pharborist.ParenthesisNode.html">Pharborist\ParenthesisNode</a>, 
 			<a href="class-Pharborist.ParentNode.html">Pharborist\ParentNode</a>, 
 			<a href="class-Pharborist.PartialNode.html">Pharborist\PartialNode</a>, 
+			<a href="class-Pharborist.RootNode.html">Pharborist\RootNode</a>, 
 			<a href="class-Pharborist.SplatNode.html">Pharborist\SplatNode</a>, 
 			<a href="class-Pharborist.StatementBlockNode.html">Pharborist\StatementBlockNode</a>, 
 			<a href="class-Pharborist.StatementNode.html">Pharborist\StatementNode</a>, 
 			<a href="class-Pharborist.TemplateNode.html">Pharborist\TemplateNode</a>, 
 			<a href="class-Pharborist.TokenNode.html">Pharborist\TokenNode</a>, 
-			<a href="class-Pharborist.TopNode.html">Pharborist\TopNode</a>, 
 			<a href="class-Pharborist.ControlStructures.BreakStatementNode.html">Pharborist\ControlStructures\BreakStatementNode</a>, 
 			<a href="class-Pharborist.Types.ArrayNode.html">Pharborist\Types\ArrayNode</a>, 
 			<a href="class-Pharborist.Types.ArrayPairNode.html">Pharborist\Types\ArrayPairNode</a>, 
@@ -358,7 +358,7 @@ indicate they support the Node API.</p>
 		<b>Namespace:</b> Pharborist<br>
 		
 
-		<b>Located at</b> <a href="source-class-Pharborist.NodeInterface.html#4-178" title="Go to source code">NodeInterface.php</a><br>
+		<b>Located at</b> <a href="source-class-Pharborist.NodeInterface.html#4-190" title="Go to source code">NodeInterface.php</a><br>
 	</div>
 
 
@@ -1161,7 +1161,7 @@ traversing up through its ancestors in the tree.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_replaceWith">#</a>
-		<code><a href="source-class-Pharborist.NodeInterface.html#144-149" title="Go to source code">replaceWith</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>|<code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code>|<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code> <var>$node</var></span> )</code>
+		<code><a href="source-class-Pharborist.NodeInterface.html#144-149" title="Go to source code">replaceWith</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code>|<code><a href="class-Pharborist.Node.html">Pharborist\Node</a>[]</code>|<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>|callable <var>$node</var></span> )</code>
 
 		<div class="description short">
 			<p>Replace this node with another node.</p>
@@ -1360,6 +1360,73 @@ traversing up through its ancestors in the tree.</p>
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="getRoot" id="_getRoot">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.RootNode.html">Pharborist\RootNode</a></code>|null
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getRoot">#</a>
+		<code><a href="source-class-Pharborist.NodeInterface.html#179-184" title="Go to source code">getRoot</a>( )</code>
+
+		<div class="description short">
+			<p>Returns the root node if this node belongs to one.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Returns the root node if this node belongs to one.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.RootNode.html">Pharborist\RootNode</a></code>|null</code><br><p>RootNode|NULL</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="hasRoot" id="_hasRoot">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_hasRoot">#</a>
+		<code><a href="source-class-Pharborist.NodeInterface.html#186-189" title="Go to source code">hasRoot</a>( )</code>
+
+		<div class="description short">
+			<p>Returns TRUE if this node belongs to a root node.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Returns TRUE if this node belongs to a root node.</p>
+
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	</table>
 
 
@@ -1387,6 +1454,6 @@ traversing up through its ancestors in the tree.</p>
 </div>
 </div>
 <script src="resources/combined.js?4281059210"></script>
-<script src="elementlist.js?1795876126"></script>
+<script src="elementlist.js?1599783550"></script>
 </body>
 </html>

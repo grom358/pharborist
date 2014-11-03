@@ -61,6 +61,10 @@
 			</ul>
 
 
+			<h3>Traits</h3>
+			<ul>
+				<li><a href="class-Pharborist.Namespaces.IdentifierNameTrait.html">IdentifierNameTrait</a></li>
+			</ul>
 
 
 
@@ -176,7 +180,7 @@ a descendant of that NamespaceNode.</p>
 				<b>See:</b>
 				<p>\Pharborist\NameNode</p>
 <br>
-		<b>Located at</b> <a href="source-class-Pharborist.Namespaces.NamespaceNode.html#9-74" title="Go to source code">Namespaces/NamespaceNode.php</a><br>
+		<b>Located at</b> <a href="source-class-Pharborist.Namespaces.NamespaceNode.html#14-91" title="Go to source code">Namespaces/NamespaceNode.php</a><br>
 	</div>
 
 
@@ -194,7 +198,7 @@ a descendant of that NamespaceNode.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_create">#</a>
-		<code><a href="source-class-Pharborist.Namespaces.NamespaceNode.html#36-49" title="Go to source code">create</a>( <span><code><a href="class-Pharborist.Namespaces.NameNode.html">Pharborist\Namespaces\NameNode</a></code>|string <var>$name</var></span> )</code>
+		<code><a href="source-class-Pharborist.Namespaces.NamespaceNode.html#41-54" title="Go to source code">create</a>( <span><code><a href="class-Pharborist.Namespaces.NameNode.html">Pharborist\Namespaces\NameNode</a></code>|string <var>$name</var></span> )</code>
 
 		<div class="description short">
 			<p>Create namespace declaration.</p>
@@ -236,7 +240,7 @@ a descendant of that NamespaceNode.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getName">#</a>
-		<code><a href="source-class-Pharborist.Namespaces.NamespaceNode.html#61-66" title="Go to source code">getName</a>( )</code>
+		<code><a href="source-class-Pharborist.Namespaces.NamespaceNode.html#66-71" title="Go to source code">getName</a>( )</code>
 
 		<div class="description short">
 			
@@ -272,7 +276,7 @@ a descendant of that NamespaceNode.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getBody">#</a>
-		<code><a href="source-class-Pharborist.Namespaces.NamespaceNode.html#68-73" title="Go to source code">getBody</a>( )</code>
+		<code><a href="source-class-Pharborist.Namespaces.NamespaceNode.html#73-78" title="Go to source code">getBody</a>( )</code>
 
 		<div class="description short">
 			
@@ -288,6 +292,48 @@ a descendant of that NamespaceNode.</p>
 				<h4>Returns</h4>
 				<div class="list">
 					<code><code><a href="class-Pharborist.StatementBlockNode.html">Pharborist\StatementBlockNode</a></code></code><br><p>StatementBlockNode</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="owns" id="_owns">
+
+		<td class="attributes"><code>
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_owns">#</a>
+		<code><a href="source-class-Pharborist.Namespaces.NamespaceNode.html#80-90" title="Go to source code">owns</a>( <span><code><a href="class-Pharborist.Objects.ClassNode.html">Pharborist\Objects\ClassNode</a></code>|<code><a href="class-Pharborist.Objects.InterfaceNode.html">Pharborist\Objects\InterfaceNode</a></code>|<code><a href="class-Pharborist.Objects.TraitNode.html">Pharborist\Objects\TraitNode</a></code>|<code><a href="class-Pharborist.Functions.FunctionDeclarationNode.html">Pharborist\Functions\FunctionDeclarationNode</a></code>|<code><a href="class-Pharborist.Constants.ConstantDeclarationNode.html">Pharborist\Constants\ConstantDeclarationNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			<p>Determine if the node belongs to this namespace.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Determine if the node belongs to this namespace.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$node</var></dt>
+					<dd>&lt;p&gt;Node to test if owned by namespace.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br><p>bool</p>
 <br>
 				</div>
 
@@ -346,7 +392,9 @@ a descendant of that NamespaceNode.</p>
 			<a href="class-Pharborist.Node.html#_closest">closest()</a>, 
 			<a href="class-Pharborist.Node.html#_fromValue">fromValue()</a>, 
 			<a href="class-Pharborist.Node.html#_getLogicalBlock">getLogicalBlock()</a>, 
+			<a href="class-Pharborist.Node.html#_getRoot">getRoot()</a>, 
 			<a href="class-Pharborist.Node.html#_getStatement">getStatement()</a>, 
+			<a href="class-Pharborist.Node.html#_hasRoot">hasRoot()</a>, 
 			<a href="class-Pharborist.Node.html#_index">index()</a>, 
 			<a href="class-Pharborist.Node.html#_insertAfter">insertAfter()</a>, 
 			<a href="class-Pharborist.Node.html#_insertBefore">insertBefore()</a>, 
@@ -407,6 +455,6 @@ a descendant of that NamespaceNode.</p>
 </div>
 </div>
 <script src="resources/combined.js?4281059210"></script>
-<script src="elementlist.js?1795876126"></script>
+<script src="elementlist.js?1599783550"></script>
 </body>
 </html>

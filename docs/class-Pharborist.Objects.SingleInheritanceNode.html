@@ -163,7 +163,9 @@
 <b><span>Pharborist\Objects\SingleInheritanceNode</span></b>			
 			
 			 uses 
-				<a href="class-Pharborist.DocCommentTrait.html"><span>Pharborist\DocCommentTrait</span></a>
+				<a href="class-Pharborist.DocCommentTrait.html"><span>Pharborist\DocCommentTrait</span></a>, 
+			
+				<a href="class-Pharborist.Namespaces.IdentifierNameTrait.html"><span>Pharborist\Namespaces\IdentifierNameTrait</span></a>
 			
 		</dd>
 	</dl>
@@ -190,91 +192,13 @@
 				<code><code><a href="class-Pharborist.Objects.ClassNode.html">Pharborist\Objects\ClassNode</a></code></code><br>
 				<b>See:</b>
 				<code><code><a href="class-Pharborist.Objects.TraitNode.html">Pharborist\Objects\TraitNode</a></code></code><br>
-		<b>Located at</b> <a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#17-248" title="Go to source code">Objects/SingleInheritanceNode.php</a><br>
+		<b>Located at</b> <a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#18-341" title="Go to source code">Objects/SingleInheritanceNode.php</a><br>
 	</div>
 
 
 
 	<table class="summary methods" id="methods">
 	<caption>Methods summary</caption>
-	<tr data-order="getName" id="_getName">
-
-		<td class="attributes"><code>
-			 public 
-			<code><a href="class-Pharborist.Namespaces.NameNode.html">Pharborist\Namespaces\NameNode</a></code>
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_getName">#</a>
-		<code><a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#46-51" title="Go to source code">getName</a>( )</code>
-
-		<div class="description short">
-			
-
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code><code><a href="class-Pharborist.Namespaces.NameNode.html">Pharborist\Namespaces\NameNode</a></code></code><br><p>\Pharborist\Namespaces\NameNode</p>
-<br>
-				</div>
-
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="setName" id="_setName">
-
-		<td class="attributes"><code>
-			 public 
-			mixed
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_setName">#</a>
-		<code><a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#53-65" title="Go to source code">setName</a>( <span>string <var>$name</var></span> )</code>
-
-		<div class="description short">
-			<p>Set the name of the declared class.</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Set the name of the declared class.</p>
-
-
-
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$name</var></dt>
-					<dd>&lt;p&gt;New name of class.&lt;/p&gt;
-</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>mixed</code><br><p>$this</p>
-<br>
-				</div>
-
-
-
-
-		</div>
-		</div></td>
-	</tr>
 	<tr data-order="getExtends" id="_getExtends">
 
 		<td class="attributes"><code>
@@ -286,7 +210,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getExtends">#</a>
-		<code><a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#67-72" title="Go to source code">getExtends</a>( )</code>
+		<code><a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#43-48" title="Go to source code">getExtends</a>( )</code>
 
 		<div class="description short">
 			
@@ -322,7 +246,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setExtends">#</a>
-		<code><a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#74-109" title="Go to source code">setExtends</a>( <span>string|<code><a href="class-Pharborist.Namespaces.NameNode.html">Pharborist\Namespaces\NameNode</a></code> <var>$extends</var></span> )</code>
+		<code><a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#50-85" title="Go to source code">setExtends</a>( <span>string|<code><a href="class-Pharborist.Namespaces.NameNode.html">Pharborist\Namespaces\NameNode</a></code> <var>$extends</var></span> )</code>
 
 		<div class="description short">
 			
@@ -364,7 +288,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getImplements">#</a>
-		<code><a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#111-116" title="Go to source code">getImplements</a>( )</code>
+		<code><a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#87-92" title="Go to source code">getImplements</a>( )</code>
 
 		<div class="description short">
 			
@@ -400,7 +324,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setImplements">#</a>
-		<code><a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#118-177" title="Go to source code">setImplements</a>( <span>string|<code><a href="class-Pharborist.Namespaces.NameNode.html">Pharborist\Namespaces\NameNode</a></code>|<code><a href="class-Pharborist.CommaListNode.html">Pharborist\CommaListNode</a></code>|array|null <var>$implements</var></span> )</code>
+		<code><a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#94-153" title="Go to source code">setImplements</a>( <span>string|<code><a href="class-Pharborist.Namespaces.NameNode.html">Pharborist\Namespaces\NameNode</a></code>|<code><a href="class-Pharborist.CommaListNode.html">Pharborist\CommaListNode</a></code>|array|null <var>$implements</var></span> )</code>
 
 		<div class="description short">
 			
@@ -447,7 +371,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getBody">#</a>
-		<code><a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#179-184" title="Go to source code">getBody</a>( )</code>
+		<code><a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#155-160" title="Go to source code">getBody</a>( )</code>
 
 		<div class="description short">
 			
@@ -476,14 +400,14 @@
 
 		<td class="attributes"><code>
 			 public 
-			<code><a href="class-Pharborist.Objects.ClassStatementNode.html">Pharborist\Objects\ClassStatementNode</a>[]</code>
+			<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>|<code><a href="class-Pharborist.Objects.ClassStatementNode.html">Pharborist\Objects\ClassStatementNode</a>[]</code>
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getStatements">#</a>
-		<code><a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#186-191" title="Go to source code">getStatements</a>( )</code>
+		<code><a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#162-167" title="Go to source code">getStatements</a>( )</code>
 
 		<div class="description short">
 			
@@ -498,49 +422,7 @@
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code><code><a href="class-Pharborist.Objects.ClassStatementNode.html">Pharborist\Objects\ClassStatementNode</a>[]</code></code><br><p>ClassStatementNode[]</p>
-<br>
-				</div>
-
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="appendProperty" id="_appendProperty">
-
-		<td class="attributes"><code>
-			 public 
-			mixed
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_appendProperty">#</a>
-		<code><a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#193-220" title="Go to source code">appendProperty</a>( <span>string|<code><a href="class-Pharborist.Objects.ClassMemberListNode.html">Pharborist\Objects\ClassMemberListNode</a></code> <var>$property</var></span> )</code>
-
-		<div class="description short">
-			<p>Add property to class.</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Add property to class.</p>
-
-
-
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$property</var></dt>
-					<dd>
-</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>mixed</code><br><p>$this</p>
+					<code><code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>|<code><a href="class-Pharborist.Objects.ClassStatementNode.html">Pharborist\Objects\ClassStatementNode</a>[]</code></code><br><p>NodeCollection|ClassStatementNode[]</p>
 <br>
 				</div>
 
@@ -561,15 +443,15 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_appendMethod">#</a>
-		<code><a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#222-247" title="Go to source code">appendMethod</a>( <span><code><a href="class-Pharborist.Functions.FunctionDeclarationNode.html">Pharborist\Functions\FunctionDeclarationNode</a></code>|<code><a href="class-Pharborist.Objects.ClassMethodNode.html">Pharborist\Objects\ClassMethodNode</a></code>|string <var>$method</var></span> )</code>
+		<code><a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#169-194" title="Go to source code">appendMethod</a>( <span><code><a href="class-Pharborist.Functions.FunctionDeclarationNode.html">Pharborist\Functions\FunctionDeclarationNode</a></code>|<code><a href="class-Pharborist.Objects.ClassMethodNode.html">Pharborist\Objects\ClassMethodNode</a></code>|string <var>$method</var></span> )</code>
 
 		<div class="description short">
-			<p>Adds a method to a class.</p>
+			<p>Adds a method to a class/trait.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Adds a method to a class.</p>
+			<p>Adds a method to a class/trait.</p>
 
 
 
@@ -579,6 +461,414 @@
 					<dd>&lt;p&gt;The method to append. Can either be an existing method, a function (which
  will be converted to a public method), or a string (a new public method
  will be created with that name).&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br><p>$this</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="hasProperty" id="_hasProperty">
+
+		<td class="attributes"><code>
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_hasProperty">#</a>
+		<code><a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#196-207" title="Go to source code">hasProperty</a>( <span>string <var>$name</var></span> )</code>
+
+		<div class="description short">
+			<p>Returns if the class/trait has the named property, regardless of
+visibility.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Returns if the class/trait has the named property, regardless of
+visibility.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$name</var></dt>
+					<dd>&lt;p&gt;The property name, with or without a leading $.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br><p>boolean</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getPropertyNames" id="_getPropertyNames">
+
+		<td class="attributes"><code>
+			 public 
+			string[]
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getPropertyNames">#</a>
+		<code><a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#209-218" title="Go to source code">getPropertyNames</a>( )</code>
+
+		<div class="description short">
+			<p>Returns the names of all class/trait properties, regardless of visibility.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Returns the names of all class/trait properties, regardless of visibility.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string[]</code><br><p>string[]</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getAllProperties" id="_getAllProperties">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getAllProperties">#</a>
+		<code><a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#220-230" title="Go to source code">getAllProperties</a>( )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code></code><br><p>\Pharborist\NodeCollection</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="hasMethod" id="_hasMethod">
+
+		<td class="attributes"><code>
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_hasMethod">#</a>
+		<code><a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#232-242" title="Go to source code">hasMethod</a>( <span>string <var>$name</var></span> )</code>
+
+		<div class="description short">
+			<p>Returns if the class has the named method, regardless of visibility.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Returns if the class has the named method, regardless of visibility.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$name</var></dt>
+					<dd>&lt;p&gt;The method name.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br><p>boolean</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getMethodNames" id="_getMethodNames">
+
+		<td class="attributes"><code>
+			 public 
+			string[]
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getMethodNames">#</a>
+		<code><a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#244-253" title="Go to source code">getMethodNames</a>( )</code>
+
+		<div class="description short">
+			<p>Returns the names of all class methods, regardless of visibility.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Returns the names of all class methods, regardless of visibility.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string[]</code><br><p>string[]</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getAllMethods" id="_getAllMethods">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getAllMethods">#</a>
+		<code><a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#255-260" title="Go to source code">getAllMethods</a>( )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.NodeCollection.html">Pharborist\NodeCollection</a></code></code><br><p>\Pharborist\NodeCollection</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getProperty" id="_getProperty">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.Objects.ClassMemberNode.html">Pharborist\Objects\ClassMemberNode</a></code>|null
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getProperty">#</a>
+		<code><a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#262-279" title="Go to source code">getProperty</a>( <span>string <var>$name</var></span> )</code>
+
+		<div class="description short">
+			<p>Returns a property by name, if it exists.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Returns a property by name, if it exists.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$name</var></dt>
+					<dd>&lt;p&gt;The property name, with or without the $.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.Objects.ClassMemberNode.html">Pharborist\Objects\ClassMemberNode</a></code>|null</code><br><p>ClassMemberNode|NULL</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getMethod" id="_getMethod">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-Pharborist.Objects.ClassMethodNode.html">Pharborist\Objects\ClassMethodNode</a></code>|null
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getMethod">#</a>
+		<code><a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#281-296" title="Go to source code">getMethod</a>( <span>string <var>$name</var></span> )</code>
+
+		<div class="description short">
+			<p>Returns a method by name, if it exists.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Returns a method by name, if it exists.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$name</var></dt>
+					<dd>&lt;p&gt;The method name.&lt;/p&gt;
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-Pharborist.Objects.ClassMethodNode.html">Pharborist\Objects\ClassMethodNode</a></code>|null</code><br><p>ClassMethodNode|NULL</p>
+<br>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="createProperty" id="_createProperty">
+
+		<td class="attributes"><code>
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_createProperty">#</a>
+		<code><a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#298-311" title="Go to source code">createProperty</a>( <span>string <var>$name</var></span>, <span><code><a href="class-Pharborist.ExpressionNode.html">Pharborist\ExpressionNode</a></code> <var>$value</var> = <span class="line">1: </span><span class="php-keyword1">NULL</span></span>, <span>string <var>$visibility</var> = <span class="line">1: </span><span class="php-quote">'public'</span></span> )</code>
+
+		<div class="description short">
+			<p>Creates a new property in this class.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Creates a new property in this class.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$name</var></dt>
+					<dd>
+</dd>
+					<dt><var>$value</var></dt>
+					<dd>
+</dd>
+					<dt><var>$visibility</var></dt>
+					<dd>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br><p>$this</p>
+<br>
+				</div>
+
+
+				<h4>See</h4>
+				<div class="list">
+						<code><code><a href="class-Pharborist.Objects.ClassMemberNode.html#_create">Pharborist\Objects\ClassMemberNode::create()</a></code></code><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="appendProperty" id="_appendProperty">
+
+		<td class="attributes"><code>
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_appendProperty">#</a>
+		<code><a href="source-class-Pharborist.Objects.SingleInheritanceNode.html#313-340" title="Go to source code">appendProperty</a>( <span>string|<code><a href="class-Pharborist.Objects.ClassMemberListNode.html">Pharborist\Objects\ClassMemberListNode</a></code> <var>$property</var></span> )</code>
+
+		<div class="description short">
+			<p>Add property to class.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Add property to class.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$property</var></dt>
+					<dd>
 </dd>
 				</dl></div>
 
@@ -643,7 +933,9 @@
 			<a href="class-Pharborist.Node.html#_closest">closest()</a>, 
 			<a href="class-Pharborist.Node.html#_fromValue">fromValue()</a>, 
 			<a href="class-Pharborist.Node.html#_getLogicalBlock">getLogicalBlock()</a>, 
+			<a href="class-Pharborist.Node.html#_getRoot">getRoot()</a>, 
 			<a href="class-Pharborist.Node.html#_getStatement">getStatement()</a>, 
+			<a href="class-Pharborist.Node.html#_hasRoot">hasRoot()</a>, 
 			<a href="class-Pharborist.Node.html#_index">index()</a>, 
 			<a href="class-Pharborist.Node.html#_insertAfter">insertAfter()</a>, 
 			<a href="class-Pharborist.Node.html#_insertBefore">insertBefore()</a>, 
@@ -680,6 +972,17 @@
 		</code></td>
 	</tr>
 	</table>
+	<table class="summary used">
+	<caption>Methods used from <a href="class-Pharborist.Namespaces.IdentifierNameTrait.html#methods">Pharborist\Namespaces\IdentifierNameTrait</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-Pharborist.Namespaces.IdentifierNameTrait.html#_getName">()</a>, 
+			<a href="class-Pharborist.Namespaces.IdentifierNameTrait.html#_getNamespace">()</a>, 
+			<a href="class-Pharborist.Namespaces.IdentifierNameTrait.html#_inNamespace">()</a>, 
+			<a href="class-Pharborist.Namespaces.IdentifierNameTrait.html#_setName">()</a>
+		</code></td>
+	</tr>
+	</table>
 
 
 
@@ -704,6 +1007,6 @@
 </div>
 </div>
 <script src="resources/combined.js?4281059210"></script>
-<script src="elementlist.js?1795876126"></script>
+<script src="elementlist.js?1599783550"></script>
 </body>
 </html>

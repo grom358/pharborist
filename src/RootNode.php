@@ -19,9 +19,7 @@ class RootNode extends StatementBlockNode {
     $node = new RootNode();
     $node->addChild(Token::openTag());
     if (is_string($ns) && $ns) {
-      $ns = NamespaceNode::create($ns)->appendTo($node);
-      WhitespaceNode::create("\n")->insertBefore($ns);
-      WhitespaceNode::create("\n")->insertAfter($ns);
+      NamespaceNode::create($ns)->appendTo($node)->after(Token::newline());
     }
     return $node;
   }

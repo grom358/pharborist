@@ -698,6 +698,10 @@ class Token {
     return new TokenNode(T_NEW, 'new');
   }
 
+  public static function newline() {
+    return Token::whitespace("\n");
+  }
+
   public static function not() {
     return new TokenNode('!', '!');
   }
@@ -771,7 +775,7 @@ class Token {
   }
 
   public static function space() {
-    return new WhitespaceNode(T_WHITESPACE, ' ');
+    return Token::whitespace(' ');
   }
 
   public static function _static() {

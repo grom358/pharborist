@@ -8,7 +8,7 @@ class RootNodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals("<?php\n", $doc->getText());
 
     $doc = RootNode::create('Pharborist\Test');
-    $this->assertEquals("<?php\n\nnamespace Pharborist\\Test;\n", $doc->getText());
+    $this->assertEquals("<?php\nnamespace Pharborist\\Test;\n", $doc->getText());
 
     $ns = $doc->children(Filter::isInstanceOf('\Pharborist\Namespaces\NamespaceNode'))[0];
     $this->assertEquals('\Pharborist\Test', $ns->getName()->getAbsolutePath());

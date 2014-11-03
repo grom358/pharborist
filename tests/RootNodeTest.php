@@ -2,12 +2,12 @@
 
 namespace Pharborist;
 
-class TopNodeTest extends \PHPUnit_Framework_TestCase {
+class RootNodeTest extends \PHPUnit_Framework_TestCase {
   public function testCreate() {
-    $doc = TopNode::create();
+    $doc = RootNode::create();
     $this->assertEquals("<?php\n", $doc->getText());
 
-    $doc = TopNode::create('Pharborist\Test');
+    $doc = RootNode::create('Pharborist\Test');
     $this->assertEquals("<?php\n\nnamespace Pharborist\\Test;\n", $doc->getText());
 
     $ns = $doc->children(Filter::isInstanceOf('\Pharborist\Namespaces\NamespaceNode'))[0];
@@ -15,7 +15,7 @@ class TopNodeTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testNSHelpers() {
-    $doc = TopNode::create('Pharborist');
+    $doc = RootNode::create('Pharborist');
 
     $this->assertTrue($doc->hasNamespace('Pharborist'));
     $this->assertFalse($doc->hasNamespace('\Drupal'));

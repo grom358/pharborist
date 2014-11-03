@@ -22,7 +22,7 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testParent() {
-    $top = new TopNode();
+    $top = new RootNode();
     $parent_one = $this->createParentNode();
     $one = $this->createNode();
     $parent_one->append($one);
@@ -44,7 +44,7 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testParents() {
-    $top = new TopNode();
+    $top = new RootNode();
     $parent_one = $this->createParentNode();
     $one = $this->createNode();
     $parent_one->append($one);
@@ -62,7 +62,7 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testParentsUntil() {
-    $top = new TopNode();
+    $top = new RootNode();
     $parent_one = $this->createParentNode();
     $one = $this->createNode();
     $parent_one->append($one);
@@ -73,7 +73,7 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
     $top->append($parent_two);
     $collection = new NodeCollection([$one, $two]);
     $parents = $collection->parentsUntil(function(Node $node) {
-      return $node instanceof TopNode;
+      return $node instanceof RootNode;
     });
     $this->assertCount(2, $parents);
     $this->assertSame($parent_one, $parents[0]);
@@ -81,7 +81,7 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testClosest() {
-    $top = new TopNode();
+    $top = new RootNode();
     $parent_one = $this->createParentNode();
     $one = $this->createNode();
     $parent_one->append($one);
@@ -100,7 +100,7 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testPrevious() {
-    $top = new TopNode();
+    $top = new RootNode();
     $parent_one = $this->createParentNode();
     $first = $this->createNode();
     $parent_one->append($first);
@@ -121,7 +121,7 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testPreviousAll() {
-    $top = new TopNode();
+    $top = new RootNode();
     $parent_one = $this->createParentNode();
     $parent_one->appendTo($top);
     $one = $this->createNode();
@@ -148,7 +148,7 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testPreviousUntil() {
-    $top = new TopNode();
+    $top = new RootNode();
     $parent_one = $this->createParentNode();
     $parent_one->appendTo($top);
     $one = $this->createNode();
@@ -175,7 +175,7 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testNext() {
-    $top = new TopNode();
+    $top = new RootNode();
     $parent_one = $this->createParentNode();
     $one = $this->createNode();
     $parent_one->append($one);
@@ -196,7 +196,7 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testNextAll() {
-    $top = new TopNode();
+    $top = new RootNode();
     $parent_one = $this->createParentNode();
     $parent_one->appendTo($top);
     $one = $this->createNode();
@@ -223,7 +223,7 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testNextUntil() {
-    $top = new TopNode();
+    $top = new RootNode();
     $parent_one = $this->createParentNode();
     $parent_one->appendTo($top);
     $one = $this->createNode();
@@ -250,7 +250,7 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testSiblings() {
-    $top = new TopNode();
+    $top = new RootNode();
     $parent_one = $this->createParentNode();
     $parent_one->appendTo($top);
     $one = $this->createNode();
@@ -277,7 +277,7 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testFind() {
-    $top = new TopNode();
+    $top = new RootNode();
     $parent_one = $this->createParentNode();
     $one = $this->createNode();
     $parent_one->append($one);
@@ -296,7 +296,7 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testHas() {
-    $top = new TopNode();
+    $top = new RootNode();
     $parent_one = $this->createParentNode();
     $one = $this->createNode();
     $parent_one->append($one);
@@ -336,7 +336,7 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testInsertBefore() {
-    $top = new TopNode();
+    $top = new RootNode();
     $pivot = $this->createNode();
     $top->append($pivot);
     $test = $this->createNode();
@@ -346,7 +346,7 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testBefore() {
-    $top = new TopNode();
+    $top = new RootNode();
     $pivot = $this->createNode();
     $top->append($pivot);
     $test = $this->createNode();
@@ -356,7 +356,7 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testInsertAfter() {
-    $top = new TopNode();
+    $top = new RootNode();
     $pivot = $this->createNode();
     $top->append($pivot);
     $test = $this->createNode();
@@ -366,7 +366,7 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testAfter() {
-    $top = new TopNode();
+    $top = new RootNode();
     $pivot = $this->createNode();
     $top->append($pivot);
     $test = $this->createNode();
@@ -376,7 +376,7 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testRemove() {
-    $top = new TopNode();
+    $top = new RootNode();
     $parent_one = $this->createParentNode();
     $parent_one->appendTo($top);
     $one = $this->createNode();
@@ -396,7 +396,7 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testReplaceWith() {
-    $top = new TopNode();
+    $top = new RootNode();
     $parent_one = $this->createParentNode();
     $parent_one->name = 'parent_one';
     $parent_one->appendTo($top);
@@ -420,7 +420,7 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testReplaceAll() {
-    $top = new TopNode();
+    $top = new RootNode();
     $parent_one = $this->createParentNode();
     $parent_one->appendTo($top);
     $one = $this->createNode();
@@ -444,7 +444,7 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testAdd() {
-    $top = new TopNode();
+    $top = new RootNode();
     $first = $this->createNode();
     $first->appendTo($top);
     $second = $this->createNode();
@@ -470,7 +470,7 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testExists() {
-    $top = new TopNode();
+    $top = new RootNode();
     $first = $this->createNode();
     $first->appendTo($top);
     $collection = new NodeCollection([$first], FALSE);
@@ -481,7 +481,7 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
    * @expectedException \BadMethodCallException
    */
   public function testSet() {
-    $top = new TopNode();
+    $top = new RootNode();
     $first = $this->createNode();
     $first->appendTo($top);
     $collection = new NodeCollection([$first], FALSE);
@@ -493,7 +493,7 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
    * @expectedException \BadMethodCallException
    */
   public function testUnset() {
-    $top = new TopNode();
+    $top = new RootNode();
     $first = $this->createNode();
     $first->appendTo($top);
     $collection = new NodeCollection([$first], FALSE);
@@ -501,7 +501,7 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testSlice() {
-    $top = new TopNode();
+    $top = new RootNode();
     $nodes = [];
     for ($i = 0; $i < 5; $i++) {
       $node = $this->createNode();
@@ -530,7 +530,7 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testMap() {
-    $top = new TopNode();
+    $top = new RootNode();
     $parent_one = $this->createParentNode();
     $parent_one->appendTo($top);
     $one = $this->createNode();

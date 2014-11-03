@@ -6,7 +6,7 @@ use Pharborist\Namespaces\NamespaceNode;
 /**
  * The root node of any Pharborist syntax tree.
  */
-class TopNode extends StatementBlockNode {
+class RootNode extends StatementBlockNode {
   /**
    * Creates a new, blank PHP source file.
    *
@@ -16,7 +16,7 @@ class TopNode extends StatementBlockNode {
    * @return static
    */
   public static function create($ns = NULL) {
-    $node = new TopNode();
+    $node = new RootNode();
     $node->addChild(Token::openTag());
     if (is_string($ns) && $ns) {
       $ns = NamespaceNode::create($ns)->appendTo($node);

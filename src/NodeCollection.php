@@ -107,6 +107,15 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
   }
 
   /**
+   * Returns if the collection is not empty.
+   *
+   * @return boolean
+   */
+  public function isNotEmpty() {
+    return $this->count() > 0;
+  }
+
+  /**
    * Get collection in reverse order
    * @return Node[]
    */

@@ -253,7 +253,7 @@ abstract class SingleInheritanceNode extends StatementNode {
   }
 
   /**
-   * @return \Pharborist\NodeCollection
+   * @return NodeCollection|ClassMethodNode[]
    */
   public function getAllMethods() {
     return $this->statements->children(Filter::isInstanceOf('\Pharborist\Objects\ClassMethodNode'));

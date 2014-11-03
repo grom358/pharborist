@@ -3,6 +3,8 @@ namespace Pharborist\Namespaces;
 
 use Pharborist\Filter;
 use Pharborist\Functions\FunctionCallNode;
+use Pharborist\Objects\ClassMethodNode;
+use Pharborist\Objects\InterfaceMethodNode;
 use Pharborist\ParentNode;
 use Pharborist\Token;
 use Pharborist\TokenNode;
@@ -55,7 +57,7 @@ class NameNode extends ParentNode {
       return '\\';
     }
     /** @var NamespaceNode $namespace */
-    $namespace = $this->closest(Filter::isInstanceOf('\Pharborist\Namespaces\NamespaceNode'));
+    $namespace = $this->getNamespace();
     if (!$namespace) {
       return '\\';
     }
@@ -172,7 +174,7 @@ class NameNode extends ParentNode {
     if ($this->parent() instanceof NamespaceNode) {
       return '\\' . $name;
     }
-    $namespace = $this->closest(Filter::isInstanceOf('\Pharborist\Namespaces\NamespaceNode'));
+    $namespace = $this->getNamespace();
     if (!$namespace) {
       return '\\' . $name;
     }

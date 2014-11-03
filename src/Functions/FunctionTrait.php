@@ -2,12 +2,10 @@
 namespace Pharborist\Functions;
 
 use Pharborist\DocCommentTrait;
-use Pharborist\Namespaces\IdentifierNameTrait;
 use Pharborist\Token;
 use Pharborist\TokenNode;
 
 trait FunctionTrait {
-  use IdentifierNameTrait;
   use ParameterTrait;
   use DocCommentTrait;
 
@@ -30,6 +28,7 @@ trait FunctionTrait {
   public function setReference($is_reference) {
     if ($is_reference) {
       if (!isset($this->reference)) {
+        /** @var \Pharborist\Functions\FunctionDeclarationNode|\Pharborist\Objects\ClassMethodNode|\Pharborist\Objects\InterfaceMethodNode $this */
         $this->name->before(Token::reference());
       }
     }

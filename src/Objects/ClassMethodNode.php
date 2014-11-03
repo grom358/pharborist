@@ -156,7 +156,9 @@ class ClassMethodNode extends ClassStatementNode {
    * @return string
    */
   public function getFullyQualifiedName() {
-    return $this->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode'))->getName()->getAbsolutePath() . '::' . $this->getName();
+    /** @var ClassNode $class_node */
+    $class_node = $this->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode'));
+    return $class_node->getName()->getAbsolutePath() . '::' . $this->getName()->getText();
   }
 
   protected function childInserted(Node $node) {

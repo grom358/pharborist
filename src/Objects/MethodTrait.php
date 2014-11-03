@@ -40,7 +40,7 @@ trait MethodTrait {
     if (is_string($name)) {
       $name = Token::identifier($name);
     }
-    $this->name = $name;
+    $this->name->replaceWith($name);
     return $this;
   }
 

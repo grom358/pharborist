@@ -175,4 +175,16 @@ interface NodeInterface {
    * @return $this
    */
   public function appendTo($targets);
+
+  /**
+   * Returns the root node if this node belongs to one.
+   *
+   * @return RootNode|NULL
+   */
+  public function getRoot();
+
+  /**
+   * Returns TRUE if this node belongs to a root node.
+   */
+  public function hasRoot();
 }

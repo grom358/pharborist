@@ -562,6 +562,15 @@ abstract class Node implements NodeInterface {
     return $this->closest(Filter::isInstanceOf('\Pharborist\StatementNode'));
   }
 
+  public function getRoot() {
+    return $this->closest(Filter::isInstanceOf('\Pharborist\RootNode'));
+  }
+
+  public function hasRoot() {
+    return $this->getRoot() !== NULL;
+
+  }
+
   public function __clone() {
     // Clone does not belong to any parent.
     $this->parent = NULL;

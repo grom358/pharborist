@@ -571,8 +571,8 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
     $second = Token::identifier('world');
     $not_found = Token::identifier('notfound');
     $collection = new NodeCollection([$first, $second], FALSE);
-    $this->assertEquals(0, $collection->index(Filter::is($first)));
-    $this->assertEquals(1, $collection->index(Filter::is($second)));
-    $this->assertEquals(-1, $collection->index(Filter::is($not_found)));
+    $this->assertEquals(0, $collection->indexOf(Filter::is($first)));
+    $this->assertEquals(1, $collection->indexOf(Filter::is($second)));
+    $this->assertEquals(-1, $collection->indexOf(Filter::is($not_found)));
   }
 }

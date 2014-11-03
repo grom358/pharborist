@@ -207,7 +207,7 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
    * @return int
    *   Index of first element that is matched by callback.
    */
-  public function index(callable $callback) {
+  public function indexOf(callable $callback) {
     foreach ($this->nodes as $i => $node) {
       if ($callback($node)) {
         return $i;

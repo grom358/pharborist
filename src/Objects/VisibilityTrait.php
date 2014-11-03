@@ -18,7 +18,7 @@ trait VisibilityTrait {
   }
 
   /**
-   * @param TokenNode $visibility
+   * @param string|integer|TokenNode|NULL $visibility
    * @return $this
    */
   public function setVisibility($visibility) {
@@ -40,6 +40,7 @@ trait VisibilityTrait {
         $this->visibility->replaceWith($visibility);
       }
       else {
+        /** @var \Pharborist\ParentNode $this */
         $this->prepend([
           $visibility,
           Token::space(),
@@ -48,5 +49,15 @@ trait VisibilityTrait {
       }
     }
     return $this;
+  }
+
+  /**
+   * Remove the visibility modifier.
+   */
+  protected function removeVisibility() {
+    // Remove whitespace after visibility keyword.
+    $this->visibility->next()->remove();
+    // Remove visibility keyword.
+    $this->visibility->remove();
   }
 }

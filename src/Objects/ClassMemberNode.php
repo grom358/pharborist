@@ -5,6 +5,7 @@ use Pharborist\ExpressionNode;
 use Pharborist\Node;
 use Pharborist\ParentNode;
 use Pharborist\Parser;
+use Pharborist\TokenNode;
 
 /**
  * A single class member in a ClassMemberListNode.
@@ -127,7 +128,7 @@ class ClassMemberNode extends ParentNode {
   /**
    * @see \Pharborist\VisibilityTrait::setVisibility()
    *
-   * @param boolean $visibility
+   * @param string|integer|TokenNode|NULL $visibility
    *
    * @return $this
    */

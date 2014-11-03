@@ -39,6 +39,7 @@ abstract class UnaryOperationNode extends ParentNode implements ExpressionNode {
    * @return $this
    */
   public function setOperand(ExpressionNode $operand) {
+    /** @var \Pharborist\Node $operand */
     $this->operand->replaceWith($operand);
     return $this;
   }

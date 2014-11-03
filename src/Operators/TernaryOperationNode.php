@@ -38,6 +38,7 @@ class TernaryOperationNode extends ParentNode implements ExpressionNode {
    * @return $this
    */
   public function setCondition(ExpressionNode $condition) {
+    /** @var \Pharborist\Node $condition */
     $this->condition->replaceWith($condition);
     return $this;
   }
@@ -55,6 +56,7 @@ class TernaryOperationNode extends ParentNode implements ExpressionNode {
    * @return $this
    */
   public function setThen(ExpressionNode $then) {
+    /** @var \Pharborist\Node $then */
     $this->then->replaceWith($then);
     return $this;
   }
@@ -72,6 +74,7 @@ class TernaryOperationNode extends ParentNode implements ExpressionNode {
    * @return $this
    */
   public function setElse(ExpressionNode $else) {
+    /** @var \Pharborist\Node $else */
     $this->condition->replaceWith($else);
     return $this;
   }

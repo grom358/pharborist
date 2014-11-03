@@ -44,6 +44,7 @@ trait ArgumentTrait {
     }
 
     if ($argument instanceof ExpressionNode) {
+      /** @var Node $argument */
       $this->arguments->appendItem($argument);
     }
     else {
@@ -68,6 +69,7 @@ trait ArgumentTrait {
     }
 
     if ($argument instanceof ExpressionNode) {
+      /** @var Node $argument */
       $this->arguments->prependItem($argument);
     }
     else {
@@ -87,6 +89,7 @@ trait ArgumentTrait {
    * @return $this
    */
   public function insertArgument(ExpressionNode $argument, $index) {
+    /** @var Node $argument */
     $this->arguments->insertItem($argument, $index);
     return $this;
   }

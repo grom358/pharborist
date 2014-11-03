@@ -21,6 +21,7 @@ class BooleanNotNode extends UnaryOperationNode {
   public static function fromExpression(ExpressionNode $expr) {
     $not = new static();
     $not->addChild(Token::not(), 'operator');
+    /** @var \Pharborist\Node $expr */
     $not->addChild($expr->remove(), 'operand');
     return $not;
   }

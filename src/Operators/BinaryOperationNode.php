@@ -36,6 +36,7 @@ abstract class BinaryOperationNode extends ParentNode implements ExpressionNode 
    * @return $this
    */
   public function setLeftOperand(ExpressionNode $operand) {
+    /** @var Node $operand */
     $this->left->replaceWith($operand);
     return $this;
   }
@@ -59,6 +60,7 @@ abstract class BinaryOperationNode extends ParentNode implements ExpressionNode 
    * @return $this
    */
   public function setRightOperand(ExpressionNode $operand) {
+    /** @var Node $operand */
     $this->right->replaceWith($operand);
     return $this;
   }

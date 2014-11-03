@@ -30,7 +30,9 @@ class UseDeclarationNode extends ParentNode {
   protected $alias;
 
   public static function create($import) {
-    return Parser::parseSnippet('use ' . $import . ';')->firstChild();
+    /** @var UseDeclarationBlockNode $use_declaration_block_node */
+    $use_declaration_block_node = Parser::parseSnippet('use ' . $import . ';');
+    return $use_declaration_block_node->firstChild();
   }
 
   /**

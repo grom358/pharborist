@@ -3,7 +3,6 @@ namespace Pharborist\Functions;
 
 use Pharborist\DocCommentTrait;
 use Pharborist\Namespaces\IdentifierNameTrait;
-use Pharborist\Namespaces\NameNode;
 use Pharborist\Token;
 use Pharborist\TokenNode;
 

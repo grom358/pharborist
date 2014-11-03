@@ -34,7 +34,14 @@ class InterfaceNode extends StatementNode {
   }
 
   /**
-   * @return InterfaceStatementNode[]
+   * @return StatementBlockNode
+   */
+  public function getBody() {
+    return $this->statements;
+  }
+
+  /**
+   * @return NodeCollection|InterfaceStatementNode[]
    */
   public function getStatements() {
     return $this->statements->getStatements();

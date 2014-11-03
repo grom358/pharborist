@@ -159,7 +159,7 @@ abstract class SingleInheritanceNode extends StatementNode {
   }
 
   /**
-   * @return ClassStatementNode[]
+   * @return NodeCollection|ClassStatementNode[]
    */
   public function getStatements() {
     return $this->statements->getStatements();

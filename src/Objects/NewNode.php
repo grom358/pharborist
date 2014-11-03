@@ -16,14 +16,14 @@ class NewNode extends ParentNode implements ExpressionNode {
   use ArgumentTrait;
 
   /**
-   * @var \Pharborist\Namespaces\NameNode
+   * @var NameNode
    */
   protected $className;
 
   /**
    * Returns the name of the instantiated class.
    *
-   * @return \Pharborist\Namespaces\NameNode
+   * @return NameNode
    */
   public function getClassName() {
     return $this->className;

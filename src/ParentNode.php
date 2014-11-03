@@ -353,19 +353,23 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
     return FALSE;
   }
 
-  public function find(callable $callback) {
-    $matches = [];
+  private function _find(&$matches, callable $callback) {
     $child = $this->head;
     while ($child) {
       if ($callback($child)) {
         $matches[] = $child;
       }
       if ($child instanceof ParentNode) {
-        $matches = array_merge($matches, $child->find($callback)->toArray());
+        $child->_find($matches, $callback);
       }
       $child = $child->next;
     }
-    return new NodeCollection($matches);
+  }
+
+  public function find(callable $callback) {
+    $matches = [];
+    $this->_find($matches, $callback);
+    return new NodeCollection($matches, FALSE);
   }
 
   public function getSourcePosition() {

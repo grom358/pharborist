@@ -266,6 +266,9 @@ abstract class Node implements NodeInterface {
       return $this;
     }
     if ($nodes instanceof Node) {
+      if ($nodes === $this) {
+        return $this;
+      }
       $nodes->remove();
       $this->parent->replaceChild($this, $nodes);
     }
@@ -274,13 +277,16 @@ abstract class Node implements NodeInterface {
       $insert_after = NULL;
       /** @var Node $node */
       foreach ($nodes as $node) {
-        $node->remove();
         if ($first) {
-          $this->parent->replaceChild($this, $node);
+          if ($node !== $this) {
+            $node->remove();
+            $this->parent->replaceChild($this, $node);
+          }
           $insert_after = $node;
           $first = FALSE;
         }
         else {
+          $node->remove();
           $insert_after->parent->insertAfterChild($insert_after, $node);
           $insert_after = $node;
         }

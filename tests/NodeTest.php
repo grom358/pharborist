@@ -350,6 +350,39 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
   }
 
   /**
+   * Test replacing a node with itself.
+   */
+  public function testReplaceWithSelf() {
+    $original = $this->createNode('original');
+    $original->replaceWith($original);
+    $this->assertEquals('original', $original->getText());
+  }
+
+  /**
+   * Test replacing a node with collection containing itself.
+   */
+  public function testReplaceWithContainsSelf() {
+    $original = $this->createNode('original');
+    $parent = $this->createParentNode();
+    $original->appendTo($parent);
+
+    // Test replacing with collection only containing node being replaced.
+    $original->replaceWith([$original]);
+    $this->assertEquals('original', $parent->firstChild()->getText());
+
+    // Test replacing with collection that contains node being replaced.
+    $replacements = [
+      $this->createNode('replacement_before'),
+      $original,
+      $this->createNode('replacement_after')
+    ];
+    $original->replaceWith($replacements);
+    $this->assertEquals('replacement_before', $parent->firstChild()->getText());
+    $this->assertEquals('original', $parent->firstChild()->next()->getText());
+    $this->assertEquals('replacement_after', $parent->lastChild()->getText());
+  }
+
+  /**
    * @expectedException \InvalidArgumentException
    */
   public function testInvalidReplaceWith() {

@@ -84,6 +84,38 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertNull($node->closest($false));
   }
 
+  public function testFurthest() {
+    $grandparent = $this->createParentNode();
+    $parent = $this->createParentNode();
+    $parent->appendTo($grandparent);
+    $node = $this->createNode('test');
+    $parent->append($node);
+    $parent->append($this->createNode('me'));
+
+    $is_test = function($node) {
+      /** @var Node $node */
+      return $node->getText() === 'test';
+    };
+    $this->assertSame($node, $node->furthest($is_test));
+
+    $is_grandparent = function($node) use ($grandparent) {
+      /** @var Node $node */
+      return $node === $grandparent;
+    };
+    $this->assertSame($grandparent, $node->furthest($is_grandparent));
+
+    $false = function() {
+      return FALSE;
+    };
+    $this->assertNull($node->furthest($false));
+
+    $has_parent = function($node) {
+      /** @var Node $node */
+      return $node->parent() !== NULL;
+    };
+    $this->assertSame($parent, $node->furthest($has_parent));
+  }
+
   public function testIndex() {
     $parent = $this->createParentNode();
     /** @var Node[] $nodes */

@@ -89,6 +89,21 @@ abstract class Node implements NodeInterface {
     return NULL;
   }
 
+  public function furthest(callable $callback) {
+    $match = NULL;
+    if ($callback($this)) {
+      $match = $this;
+    }
+    $parent = $this->parent;
+    while ($parent) {
+      if ($callback($parent)) {
+        $match = $parent;
+      }
+      $parent = $parent->parent;
+    }
+    return $match;
+  }
+
   public function index() {
     $index = 0;
     $child = $this->parent->head;

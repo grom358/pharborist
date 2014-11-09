@@ -68,6 +68,13 @@ interface ParentNodeInterface extends NodeInterface {
   public function has(callable $callback);
 
   /**
+   * Test if the node is a descendant of this node.
+   * @param Node $node Node to test
+   * @return boolean
+   */
+  public function isDescendant(Node $node);
+
+  /**
    * Find descendants that pass filter callback.
    * @param callable $callback Callback to filter by.
    * @return NodeCollection

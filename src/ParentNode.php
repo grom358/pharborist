@@ -353,6 +353,17 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
     return FALSE;
   }
 
+  public function isDescendant(Node $node) {
+    $parent = $node->parent;
+    while ($parent) {
+      if ($parent === $this) {
+        return TRUE;
+      }
+      $parent = $parent->parent;
+    }
+    return FALSE;
+  }
+
   private function _find(&$matches, callable $callback) {
     $child = $this->head;
     while ($child) {

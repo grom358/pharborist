@@ -151,17 +151,6 @@ class ClassMethodNode extends ClassStatementNode implements NameResolutionInterf
     return $this->body;
   }
 
-  /**
-   * Gets the fully qualified name of the method, e.g. \My\Namespaced\Class::foo.
-   *
-   * @return string
-   */
-  public function getFullyQualifiedName() {
-    /** @var ClassNode $class_node */
-    $class_node = $this->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode'));
-    return $class_node->getName()->getAbsolutePath() . '::' . $this->getName()->getText();
-  }
-
   protected function childInserted(Node $node) {
     static $visibilityTypes = [T_PUBLIC, T_PROTECTED, T_PRIVATE];
     if ($node instanceof TokenNode) {

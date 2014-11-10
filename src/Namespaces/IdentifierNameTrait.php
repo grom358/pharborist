@@ -19,7 +19,15 @@ trait IdentifierNameTrait {
    * @return NamespaceNode
    */
   public function getNamespace() {
+    /** @var \Pharborist\Node $this */
     return $this->closest(Filter::isInstanceOf('\Pharborist\Namespaces\NamespaceNode'));
+  }
+
+  /**
+   * @return TokenNode
+   */
+  public function getName() {
+    return $this->name;
   }
 
   /**
@@ -30,9 +38,7 @@ trait IdentifierNameTrait {
    * @return $this
    */
   public function setName($name) {
-    /** @var TokenNode $identifier */
-    $identifier = $this->name->firstChild();
-    $identifier->setText($name);
+    $this->name->setText($name);
     return $this;
   }
 
@@ -47,12 +53,12 @@ trait IdentifierNameTrait {
    */
   public function inNamespace($ns) {
     if (is_string($ns)) {
-      $namespace_node = $this->name->getNamespace();
+      $namespace_node = $this->getNamespace();
       $namespace = $namespace_node === NULL ? '' : $namespace_node->getName()->getAbsolutePath();
       return $ns === $namespace;
     }
     elseif ($ns instanceof NamespaceNode) {
-      return $this->name->getNamespace() === $ns;
+      return $this->getNamespace() === $ns;
     }
     else {
       throw new \InvalidArgumentException();
@@ -63,7 +69,13 @@ trait IdentifierNameTrait {
    * @return string
    */
   public function getFullyQualifiedName() {
-    return '\\' . $this->getNamespace()->getFullyQualifiedName() . '\\' . $this->getQualifiedName();
+    $ns = $this->getNamespace();
+    if ($ns) {
+      return '\\' . $ns->getFullyQualifiedName() . '\\' . $this->getQualifiedName();
+    }
+    else {
+      return '\\' . $this->getQualifiedName();
+    }
   }
 
   /**
@@ -78,5 +90,14 @@ trait IdentifierNameTrait {
    */
   public function getUnqualifiedName() {
     return $this->name->getText();
+  }
+
+  /**
+   * @return string
+   */
+  public function getQualifiedRelativeName() {
+    $full_name = $this->getFullyQualifiedName();
+    $ns_name = $this->getNamespace()->getFullyQualifiedName();
+    return substr($full_name, strlen($ns_name));
   }
 }

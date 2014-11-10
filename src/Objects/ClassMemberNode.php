@@ -150,4 +150,13 @@ class ClassMemberNode extends ParentNode implements NameResolutionInterface {
   public function getUnqualifiedName() {
     return $this->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode'))->getUnqualifiedName() . '::$' . $this->name->getText();
   }
+
+  /**
+   * @return string
+   */
+  public function getQualifiedRelativeName() {
+    $full_name = $this->getFullyQualifiedName();
+    $ns_name = $this->getNamespace()->getFullyQualifiedName();
+    return substr($full_name, strlen($ns_name));
+  }
 }

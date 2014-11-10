@@ -78,15 +78,29 @@ trait MethodTrait {
     return $this;
   }
 
+  public function getClassNode() {
+    /** @var ClassMethodNode $this */
+    return $this->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode'));
+  }
+
   public function getFullyQualifiedName() {
-    return $this->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode'))->getFullyQualifiedName() . '::' . $this->name->getText();
+    return $this->getClassNode()->getFullyQualifiedName() . '::' . $this->name->getText();
   }
 
   public function getQualifiedName() {
-    return $this->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode'))->getQualifiedName() . '::' . $this->name->getText();
+    return $this->getClassNode()->getQualifiedName() . '::' . $this->name->getText();
   }
 
   public function getUnqualifiedName() {
-    return $this->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode'))->getUnqualifiedName() . '::' . $this->name->getText();
+    return $this->getClassNode()->getUnqualifiedName() . '::' . $this->name->getText();
+  }
+
+  /**
+   * @return string
+   */
+  public function getQualifiedRelativeName() {
+    $full_name = $this->getFullyQualifiedName();
+    $ns_name = $this->getNamespace()->getFullyQualifiedName();
+    return substr($full_name, strlen($ns_name));
   }
 }

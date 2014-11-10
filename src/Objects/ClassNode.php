@@ -1,6 +1,8 @@
 <?php
 namespace Pharborist\Objects;
 
+use Pharborist\Filter;
+use Pharborist\NameResolutionInterface;
 use Pharborist\Parser;
 use Pharborist\Token;
 use Pharborist\TokenNode;
@@ -8,7 +10,7 @@ use Pharborist\TokenNode;
 /**
  * Class declaration.
  */
-class ClassNode extends SingleInheritanceNode {
+class ClassNode extends SingleInheritanceNode implements NameResolutionInterface {
   /**
    * @var TokenNode
    */
@@ -18,6 +20,11 @@ class ClassNode extends SingleInheritanceNode {
    * @var TokenNode
    */
   protected $final;
+
+  /**
+   * @var TokenNode
+   */
+  protected $name;
 
   /**
    * @param $class_name
@@ -92,5 +99,19 @@ class ClassNode extends SingleInheritanceNode {
       }
     }
     return $this;
+  }
+
+  public function getFullyQualifiedName() {
+    return '\\' . $this->getQualifiedName();
+  }
+
+  public function getQualifiedName() {
+    $ns = $this->closest(Filter::isInstanceOf('\Pharborist\Namespaces\NamespaceNode'));
+    $name = $ns ? $ns->getName()->getText() . '\\' : '';
+    return $name . $this->getUnqualifiedName();
+  }
+
+  public function getUnqualifiedName() {
+    return $this->name->getText();
   }
 }

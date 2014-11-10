@@ -2,6 +2,8 @@
 namespace Pharborist\Objects;
 
 use Pharborist\ExpressionNode;
+use Pharborist\Filter;
+use Pharborist\NameResolutionInterface;
 use Pharborist\Node;
 use Pharborist\ParentNode;
 use Pharborist\Parser;
@@ -28,7 +30,7 @@ use Pharborist\TokenNode;
  *
  * @see ClassMemberListNode
  */
-class ClassMemberNode extends ParentNode {
+class ClassMemberNode extends ParentNode implements NameResolutionInterface {
   /**
    * @var Node
    */
@@ -135,5 +137,17 @@ class ClassMemberNode extends ParentNode {
   public function setVisibility($visibility) {
     $this->getClassMemberListNode()->setVisibility($visibility);
     return $this;
+  }
+
+  public function getFullyQualifiedName() {
+    return $this->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode'))->getFullyQualifiedName() . '::$' . $this->name->getText();
+  }
+
+  public function getQualifiedName() {
+    return $this->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode'))->getQualifiedName() . '::$' . $this->name->getText();
+  }
+
+  public function getUnqualifiedName() {
+    return $this->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode'))->getUnqualifiedName() . '::$' . $this->name->getText();
   }
 }

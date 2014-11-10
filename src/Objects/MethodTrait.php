@@ -1,6 +1,7 @@
 <?php
 namespace Pharborist\Objects;
 
+use Pharborist\Filter;
 use Pharborist\Functions\FunctionTrait;
 use Pharborist\Token;
 use Pharborist\TokenNode;
@@ -75,5 +76,17 @@ trait MethodTrait {
       }
     }
     return $this;
+  }
+
+  public function getFullyQualifiedName() {
+    return $this->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode'))->getFullyQualifiedName() . '::' . $this->name->getText();
+  }
+
+  public function getQualifiedName() {
+    return $this->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode'))->getQualifiedName() . '::' . $this->name->getText();
+  }
+
+  public function getUnqualifiedName() {
+    return $this->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode'))->getUnqualifiedName() . '::' . $this->name->getText();
   }
 }

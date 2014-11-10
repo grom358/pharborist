@@ -3,6 +3,7 @@ namespace Pharborist\Objects;
 
 use Pharborist\Filter;
 use Pharborist\Functions\FunctionDeclarationNode;
+use Pharborist\NameResolutionInterface;
 use Pharborist\Node;
 use Pharborist\Parser;
 use Pharborist\Settings;
@@ -13,7 +14,7 @@ use Pharborist\TokenNode;
 /**
  * A class method.
  */
-class ClassMethodNode extends ClassStatementNode {
+class ClassMethodNode extends ClassStatementNode implements NameResolutionInterface {
   use MethodTrait;
 
   /**

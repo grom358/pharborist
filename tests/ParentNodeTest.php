@@ -104,6 +104,26 @@ class ParentNodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertFalse($parent->isDescendant($orphan));
   }
 
+  public function testWalk() {
+    $parent = $this->createParentNode();
+    $one = $this->createNode('one');
+    $parent->append($one);
+    $two = $this->createNode('two');
+    $parent->append($two);
+    $sub = $this->createParentNode();
+    $leaf = $this->createNode('findMe');
+    $sub->append($leaf);
+    $parent->append($sub);
+
+    $order = [$parent, $one, $two, $sub, $leaf];
+    $i = 0;
+    $test = function($node) use ($order, &$i) {
+      $this->assertSame($order[$i], $node);
+      $i++;
+    };
+    $parent->walk($test);
+  }
+
   public function testSourcePosition() {
     $position = new SourcePosition(4, 2);
     $token = new TokenNode(T_STRING, 'test', $position);

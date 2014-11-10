@@ -80,4 +80,10 @@ interface ParentNodeInterface extends NodeInterface {
    * @return NodeCollection
    */
   public function find(callable $callback);
+
+  /**
+   * Perform callback on this node and all descendant nodes.
+   * @param callable $callback Callback for each node.
+   */
+  public function walk(callable $callback);
 }

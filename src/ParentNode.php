@@ -383,6 +383,20 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
     return new NodeCollection($matches, FALSE);
   }
 
+  public function walk(callable $callback) {
+    $callback($this);
+    $child = $this->head;
+    while($child) {
+      if($child instanceof ParentNode) {
+        $child->walk($callback);
+      }
+      else {
+        $callback($child);
+      }
+      $child = $child->next;
+    }
+  }
+
   public function getSourcePosition() {
     if ($this->head === NULL) {
       return $this->parent->getSourcePosition();

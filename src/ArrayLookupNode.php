@@ -122,7 +122,7 @@ class ArrayLookupNode extends ParentNode implements VariableExpressionNode {
    *
    * @return Node
    */
-  public function getRoot() {
-    return $this->array instanceof ArrayLookupNode ? $this->array->getRoot() : $this->array;
+  public function getRootArray() {
+    return $this->array instanceof ArrayLookupNode ? $this->array->getRootArray() : $this->array;
   }
 }

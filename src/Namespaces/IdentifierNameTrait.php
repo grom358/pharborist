@@ -96,8 +96,14 @@ trait IdentifierNameTrait {
    * @return string
    */
   public function getQualifiedRelativeName() {
-    $full_name = $this->getFullyQualifiedName();
-    $ns_name = $this->getNamespace()->getFullyQualifiedName();
-    return substr($full_name, strlen($ns_name));
+    $ns = $this->getNamespace();
+    if ($ns) {
+      $full_name = $this->getFullyQualifiedName();
+      $ns_name = $ns->getFullyQualifiedName();
+      return substr($full_name, strlen($ns_name));
+    }
+    else {
+      return $this->name->getText();
+    }
   }
 }

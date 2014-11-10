@@ -3,6 +3,7 @@ namespace Pharborist\Namespaces;
 
 use Pharborist\Constants\ConstantDeclarationNode;
 use Pharborist\Functions\FunctionDeclarationNode;
+use Pharborist\NameResolutionInterface;
 use Pharborist\Objects\ClassNode;
 use Pharborist\Objects\InterfaceNode;
 use Pharborist\Objects\TraitNode;
@@ -35,7 +36,7 @@ use Pharborist\StatementBlockNode;
  *
  * @see \Pharborist\NameNode
  */
-class NamespaceNode extends StatementNode {
+class NamespaceNode extends StatementNode implements NameResolutionInterface {
   use DocCommentTrait;
 
   /**
@@ -87,5 +88,17 @@ class NamespaceNode extends StatementNode {
    */
   public function owns($node) {
     return $this === $node->getName()->getNamespace();
+  }
+
+  public function getFullyQualifiedName() {
+    return $this->getQualifiedName();
+  }
+
+  public function getQualifiedName() {
+    return $this->name->getText();
+  }
+
+  public function getUnqualifiedName() {
+    return $this->name->getUnqualifiedName();
   }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Pharborist\Namespaces;
 
+use Pharborist\Filter;
 use Pharborist\TokenNode;
 
 /**
@@ -10,22 +11,15 @@ use Pharborist\TokenNode;
  */
 trait IdentifierNameTrait {
   /**
-   * @var NameNode
+   * @var TokenNode
    */
   protected $name;
-
-  /**
-   * @return NameNode
-   */
-  public function getName() {
-    return $this->name;
-  }
 
   /**
    * @return NamespaceNode
    */
   public function getNamespace() {
-    return $this->name->getNamespace();
+    return $this->closest(Filter::isInstanceOf('\Pharborist\Namespaces\NamespaceNode'));
   }
 
   /**
@@ -63,5 +57,26 @@ trait IdentifierNameTrait {
     else {
       throw new \InvalidArgumentException();
     }
+  }
+
+  /**
+   * @return string
+   */
+  public function getFullyQualifiedName() {
+    return '\\' . $this->getNamespace()->getFullyQualifiedName() . '\\' . $this->getQualifiedName();
+  }
+
+  /**
+   * @return string
+   */
+  public function getQualifiedName() {
+    return $this->getUnqualifiedName();
+  }
+
+  /**
+   * @return string
+   */
+  public function getUnqualifiedName() {
+    return $this->name->getText();
   }
 }

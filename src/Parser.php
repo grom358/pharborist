@@ -2115,9 +2115,7 @@ class Parser {
     $this->matchDocComment($node);
     $this->mustMatch(T_FUNCTION, $node);
     $this->tryMatch('&', $node, 'reference');
-    $name_node = new NameNode();
-    $this->mustMatch(T_STRING, $name_node, NULL, TRUE);
-    $node->addChild($name_node, 'name');
+    $this->mustMatch(T_STRING, $node, 'name');
     $this->parameterList($node);
     $this->matchHidden($node);
     $this->body($node);
@@ -2378,9 +2376,7 @@ class Parser {
     $this->matchDocComment($node);
     $this->tryMatch(T_ABSTRACT, $node, 'abstract') || $this->tryMatch(T_FINAL, $node, 'final');
     $this->mustMatch(T_CLASS, $node);
-    $name_node = new NameNode();
-    $this->mustMatch(T_STRING, $name_node, NULL, TRUE);
-    $node->addChild($name_node, 'name');
+    $this->mustMatch(T_STRING, $node, 'name');
     if ($this->tryMatch(T_EXTENDS, $node)) {
       $node->addChild($this->name(), 'extends');
     }
@@ -2650,9 +2646,7 @@ class Parser {
     $node = new InterfaceNode();
     $this->matchDocComment($node);
     $this->mustMatch(T_INTERFACE, $node);
-    $name_node = new NameNode();
-    $this->mustMatch(T_STRING, $name_node, NULL, TRUE);
-    $node->addChild($name_node, 'name');
+    $this->mustMatch(T_STRING, $node, 'name');
     if ($this->tryMatch(T_EXTENDS, $node)) {
       $extends = new CommaListNode();
       do {
@@ -2713,9 +2707,7 @@ class Parser {
     $node = new TraitNode();
     $this->matchDocComment($node);
     $this->mustMatch(T_TRAIT, $node);
-    $name_node = new NameNode();
-    $this->mustMatch(T_STRING, $name_node, NULL, TRUE);
-    $node->addChild($name_node, 'name');
+    $this->mustMatch(T_STRING, $node, 'name');
     if ($this->tryMatch(T_EXTENDS, $node)) {
       $node->addChild($this->name(), 'extends');
     }

@@ -6,6 +6,7 @@ use Pharborist\DocCommentTrait;
 use Pharborist\ExpressionNode;
 use Pharborist\Filter;
 use Pharborist\Functions\FunctionDeclarationNode;
+use Pharborist\NameResolutionInterface;
 use Pharborist\Namespaces\IdentifierNameTrait;
 use Pharborist\Namespaces\NameNode;
 use Pharborist\NodeCollection;
@@ -21,7 +22,7 @@ use Pharborist\WhitespaceNode;
  * @see ClassNode
  * @see TraitNode
  */
-abstract class SingleInheritanceNode extends StatementNode {
+abstract class SingleInheritanceNode extends StatementNode implements NameResolutionInterface {
   use DocCommentTrait;
   use IdentifierNameTrait;
 

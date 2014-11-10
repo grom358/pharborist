@@ -1,6 +1,7 @@
 <?php
 namespace Pharborist\Functions;
 
+use Pharborist\NameResolutionInterface;
 use Pharborist\Objects\ClassMethodNode;
 use Pharborist\Objects\ClassNode;
 use Pharborist\Namespaces\IdentifierNameTrait;
@@ -14,7 +15,7 @@ use Pharborist\TokenNode;
 /**
  * A function declaration.
  */
-class FunctionDeclarationNode extends StatementNode {
+class FunctionDeclarationNode extends StatementNode implements NameResolutionInterface {
   use IdentifierNameTrait;
   use FunctionTrait;
 

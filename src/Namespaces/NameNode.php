@@ -44,7 +44,7 @@ class NameNode extends ParentNode implements NameResolutionInterface {
    * @return NamespaceNode
    *   The namespace that owns this node.
    */
-  public function getNamespace() {
+  protected function getNamespace() {
     return $this->closest(Filter::isInstanceOf('\Pharborist\Namespaces\NamespaceNode'));
   }
 

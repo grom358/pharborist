@@ -3,8 +3,7 @@ namespace Pharborist\Namespaces;
 
 use Pharborist\Filter;
 use Pharborist\Functions\FunctionCallNode;
-use Pharborist\Objects\ClassMethodNode;
-use Pharborist\Objects\InterfaceMethodNode;
+use Pharborist\NameResolutionInterface;
 use Pharborist\ParentNode;
 use Pharborist\Token;
 use Pharborist\TokenNode;
@@ -17,7 +16,7 @@ use Pharborist\TokenNode;
  * are wrapped by NameNode: because NameNodes are aware of the namespace they
  * live in, even when moved from one namespace to another.
  */
-class NameNode extends ParentNode {
+class NameNode extends ParentNode implements NameResolutionInterface {
   /**
    * Create namespace path.
    *
@@ -230,5 +229,18 @@ class NameNode extends ParentNode {
    */
   public function isGlobal() {
     return $this->getBasePath() === '\\';
+  }
+
+  public function getFullyQualifiedName() {
+    return '\\' . $this->getQualifiedName();
+  }
+
+  public function getQualifiedName() {
+    return ltrim($this->getText(), '\\');
+  }
+
+  public function getUnqualifiedName() {
+    $parts = $this->childrenByInstance('\Pharborist\TokenNode');
+    return end($parts)->getText();
   }
 }

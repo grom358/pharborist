@@ -139,15 +139,31 @@ class ClassMemberNode extends ParentNode implements NameResolutionInterface {
     return $this;
   }
 
+  /**
+   * @return \Pharborist\Objects\ClassNode
+   */
+  public function getClass() {
+    return $this->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode'));
+  }
+
+  /**
+   * @see NameResolutionInterface::getFullyQualifiedName()
+   */
   public function getFullyQualifiedName() {
-    return $this->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode'))->getFullyQualifiedName() . '::$' . $this->name->getText();
+    return $this->getClass()->getFullyQualifiedName() . '::$' . $this->name->getText();
   }
 
+  /**
+   * @see NameResolutionInterface::getQualifiedName()
+   */
   public function getQualifiedName() {
-    return $this->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode'))->getQualifiedName() . '::$' . $this->name->getText();
+    return $this->getClass()->getQualifiedName() . '::$' . $this->name->getText();
   }
 
+  /**
+   * @see NameResolutionInterface::getUnqualifiedName()
+   */
   public function getUnqualifiedName() {
-    return $this->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode'))->getUnqualifiedName() . '::$' . $this->name->getText();
+    return $this->getClass()->getUnqualifiedName() . '::$' . $this->name->getText();
   }
 }

@@ -78,15 +78,31 @@ trait MethodTrait {
     return $this;
   }
 
+  /**
+   * @return ClassNode|TraitNode
+   */
+  public function getClass() {
+    return $this->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode', '\Pharborist\Objects\TraitNode'));
+  }
+
+  /**
+   * @see \Pharborist\NameResolutionInterface::getFullyQualifiedName()
+   */
   public function getFullyQualifiedName() {
-    return $this->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode'))->getFullyQualifiedName() . '::' . $this->name->getText();
+    return $this->getClass()->getFullyQualifiedName() . '::' . $this->name->getText();
   }
 
+  /**
+   * @see \Pharborist\NameResolutionInterface::getQualifiedName()
+   */
   public function getQualifiedName() {
-    return $this->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode'))->getQualifiedName() . '::' . $this->name->getText();
+    return $this->getClass()->getQualifiedName() . '::' . $this->name->getText();
   }
 
+  /**
+   * @see \Pharborist\NameResolutionInterface::getUnqualifiedName()
+   */
   public function getUnqualifiedName() {
-    return $this->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode'))->getUnqualifiedName() . '::' . $this->name->getText();
+    return $this->getClass()->getUnqualifiedName() . '::' . $this->name->getText();
   }
 }

@@ -47,12 +47,10 @@ trait IdentifierNameTrait {
    */
   public function inNamespace($ns) {
     if (is_string($ns)) {
-      $namespace_node = $this->name->getNamespace();
-      $namespace = $namespace_node === NULL ? '' : $namespace_node->getName()->getAbsolutePath();
-      return $ns === $namespace;
+      return strpos($this->getFullyQualifiedName(), $ns) === 0;
     }
     elseif ($ns instanceof NamespaceNode) {
-      return $this->name->getNamespace() === $ns;
+      return $this->inNamespace($ns->getFullyQualifiedName());
     }
     else {
       throw new \InvalidArgumentException();
@@ -60,21 +58,21 @@ trait IdentifierNameTrait {
   }
 
   /**
-   * @return string
+   * @see NameResolutionInterface::getFullyQualifiedName()
    */
   public function getFullyQualifiedName() {
     return '\\' . $this->getNamespace()->getFullyQualifiedName() . '\\' . $this->getQualifiedName();
   }
 
   /**
-   * @return string
+   * @see NameResolutionInterface::getQualifiedName()
    */
   public function getQualifiedName() {
     return $this->getUnqualifiedName();
   }
 
   /**
-   * @return string
+   * @see NameResolutionInterface::getUnqualifiedName()
    */
   public function getUnqualifiedName() {
     return $this->name->getText();

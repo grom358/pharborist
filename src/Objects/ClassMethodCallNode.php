@@ -3,6 +3,7 @@ namespace Pharborist\Objects;
 
 use Pharborist\CommaListNode;
 use Pharborist\Functions\CallNode;
+use Pharborist\NameResolutionInterface;
 use Pharborist\Namespaces\NameNode;
 use Pharborist\Node;
 use Pharborist\Token;
@@ -11,7 +12,7 @@ use Pharborist\Variables\VariableExpressionNode;
 /**
  * A call to a static class method, e.g. `MyClass::classMethod()`
  */
-class ClassMethodCallNode extends CallNode implements VariableExpressionNode {
+class ClassMethodCallNode extends CallNode implements VariableExpressionNode, NameResolutionInterface {
   /**
    * @var \Pharborist\Namespaces\NameNode|Node
    */
@@ -85,5 +86,17 @@ class ClassMethodCallNode extends CallNode implements VariableExpressionNode {
     $node->addChild(new CommaListNode(), 'arguments');
     $node->addChild(Token::closeParen());
     return $node;
+  }
+
+  public function getFullyQualifiedName() {
+    return $this->getClassName()->getFullyQualifiedName() . '::' . $this->getMethodName()->getText();
+  }
+
+  public function getQualifiedName() {
+    return $this->getClassName()->getQualifiedName() . '::' . $this->getMethodName()->getText();
+  }
+
+  public function getUnqualifiedName() {
+    return $this->getClassName()->getUnqualifiedName() . '::' . $this->getMethodName()->getText();
   }
 }

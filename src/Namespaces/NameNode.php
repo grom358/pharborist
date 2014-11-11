@@ -231,14 +231,23 @@ class NameNode extends ParentNode implements NameResolutionInterface {
     return $this->getBasePath() === '\\';
   }
 
+  /**
+   * @see NameResolutionInterface::getFullyQualifiedName()
+   */
   public function getFullyQualifiedName() {
     return '\\' . $this->getQualifiedName();
   }
 
+  /**
+   * @see NameResolutionInterface::getQualifiedName()
+   */
   public function getQualifiedName() {
     return ltrim($this->getText(), '\\');
   }
 
+  /**
+   * @see NameResolutionInterface::getUnqualifiedName()
+   */
   public function getUnqualifiedName() {
     $parts = $this->childrenByInstance('\Pharborist\TokenNode');
     return end($parts)->getText();

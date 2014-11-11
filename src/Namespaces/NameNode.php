@@ -252,4 +252,10 @@ class NameNode extends ParentNode implements NameResolutionInterface {
     $parts = $this->childrenByInstance('\Pharborist\TokenNode');
     return end($parts)->getText();
   }
+
+  public function getQualifiedRelativeName() {
+    $full_name = $this->getFullyQualifiedName();
+    $ns_name = $this->getNamespace()->getFullyQualifiedName();
+    return substr($full_name, strlen($ns_name));
+  }
 }

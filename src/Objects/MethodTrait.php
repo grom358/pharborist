@@ -78,31 +78,38 @@ trait MethodTrait {
     return $this;
   }
 
-  /**
-   * @return ClassNode|TraitNode
-   */
-  public function getClass() {
-    return $this->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode', '\Pharborist\Objects\TraitNode'));
+  public function getClassNode() {
+    /** @var ClassMethodNode $this */
+    return $this->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode'));
   }
 
-  /**
-   * @see \Pharborist\NameResolutionInterface::getFullyQualifiedName()
-   */
   public function getFullyQualifiedName() {
-    return $this->getClass()->getFullyQualifiedName() . '::' . $this->name->getText();
+    return $this->getClassNode()->getFullyQualifiedName() . '::' . $this->name->getText();
   }
 
-  /**
-   * @see \Pharborist\NameResolutionInterface::getQualifiedName()
-   */
   public function getQualifiedName() {
-    return $this->getClass()->getQualifiedName() . '::' . $this->name->getText();
+    return $this->getClassNode()->getQualifiedName() . '::' . $this->name->getText();
+  }
+
+  public function getUnqualifiedName() {
+    return $this->getClassNode()->getUnqualifiedName() . '::' . $this->name->getText();
   }
 
   /**
-   * @see \Pharborist\NameResolutionInterface::getUnqualifiedName()
+   * @return \Pharborist\Namespaces\NamespaceNode|NULL
    */
-  public function getUnqualifiedName() {
-    return $this->getClass()->getUnqualifiedName() . '::' . $this->name->getText();
+  public function getNamespace() {
+    /** @var \Pharborist\Node $this */
+    return $this->closest(Filter::isInstanceOf('\Pharborist\Namespaces\NamespaceNode'));
+  }
+
+  /**
+   * @return string
+   */
+  public function getQualifiedRelativeName() {
+    $full_name = $this->getFullyQualifiedName();
+    $ns = $this->getNamespace();
+    $ns_name = $ns ? $ns->getFullyQualifiedName() : '\\';
+    return substr($full_name, strlen($ns_name));
   }
 }

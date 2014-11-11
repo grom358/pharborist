@@ -101,4 +101,11 @@ class NamespaceNode extends StatementNode implements NameResolutionInterface {
   public function getUnqualifiedName() {
     return $this->name->getUnqualifiedName();
   }
+
+  /**
+   * @return string
+   */
+  public function getQualifiedRelativeName() {
+    return $this->getUnqualifiedName();
+  }
 }

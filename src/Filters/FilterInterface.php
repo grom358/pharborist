@@ -61,6 +61,20 @@ interface FilterInterface {
   public function parents();
 
   /**
+   * Returns the nearest parent of the origin which matches the filter.
+   *
+   * @return \Pharborist\Node|NULL
+   */
+  public function closest();
+
+  /**
+   * Returns the furthest parent of the origin which matches the filter.
+   *
+   * @return \Pharborist\Node|NULL
+   */
+  public function furthest();
+
+  /**
    * Returns siblings of the origin which match the filter.
    *
    * @return \Pharborist\NodeCollection

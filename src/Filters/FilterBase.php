@@ -18,26 +18,61 @@ abstract class FilterBase implements FilterInterface {
   protected $nodeTypes = [];
 
   /**
+   * Whether to match all configured filters, or any.
+   *
+   * @var mixed
+   */
+  protected $mode;
+
+  /**
    * @var \Pharborist\Node
    */
   protected $origin;
 
   public function __construct(Node $origin = NULL) {
     $this->origin = $origin;
-
-    // Create the node_type callback, formerly known as the isInstanceOf filter.
-    $this->callbacks['node_type'] = function(Node $node) {
-      return in_array(get_class($node), $this->nodeTypes);
-    };
+    $this->callbacks['instance_of'] = [ $this, 'isInstanceOf' ];
   }
 
-  public function __invoke() {
+  protected function isInstanceOf(Node $node) {
+    return in_array(get_class($node), $this->nodeTypes);
+  }
+
+  /**
+   * Match all configured conditions.
+   *
+   * @return $this
+   */
+  public function all() {
+    $this->mode = 'all';
+    return $this;
+  }
+
+  /**
+   * Match any configured condition.
+   *
+   * @return $this
+   */
+  public function any() {
+    $this->mode = 'any';
+    return $this;
+  }
+
+  public function __invoke(Node $node) {
+    $all = TRUE;
+
     foreach ($this->callbacks as $callback) {
-      if (! $callback($this)) {
-        return FALSE;
+      $result = $callback($node);
+
+      if ($result && $this->mode == 'any') {
+        return TRUE;
+      }
+      elseif (empty($result) && $this->mode == 'all') {
+        $all = FALSE;
       }
     }
-    return TRUE;
+
+    return $all;
   }
 
   /**
@@ -87,6 +122,14 @@ abstract class FilterBase implements FilterInterface {
 
   public function parents() {
     return $this->ensureOrigin()->parents($this);
+  }
+
+  public function closest() {
+    return $this->ensureOrigin()->closest($this);
+  }
+
+  public function furthest() {
+    return $this->ensureOrigin()->furthest($this);
   }
 
   public function siblings() {

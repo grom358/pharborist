@@ -52,10 +52,15 @@ class ArrayLookupNode extends ParentNode implements VariableExpressionNode {
    * @return \Pharborist\Node[]
    */
   public function getKeys() {
-    $keys = [ clone $this->key ];
+    $keys = [];
+
+    if ($this->key) {
+      $keys[] = clone $this->key;
+    }
     if ($this->array instanceof ArrayLookupNode) {
       $keys = array_merge($this->array->getKeys(), $keys);
     }
+
     return $keys;
   }
 

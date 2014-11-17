@@ -89,8 +89,4 @@ class FunctionDeclarationNode extends StatementNode implements FilterFactoryInte
       $this->reference = $node;
     }
   }
-
-  public function createFilter() {
-    return new FunctionFilter($this);
-  }
 }

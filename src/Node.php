@@ -577,19 +577,4 @@ abstract class Node implements NodeInterface {
     $this->previous = NULL;
     $this->next = NULL;
   }
-
-  /**
-   * @return callable
-   */
-  public function filter($class = NULL) {
-    if (empty($class)) {
-      $class = get_called_class();
-    }
-    if (in_array('Pharborist\Filters\FilterFactoryInterface', class_implements($class))) {
-      return $class::createFilter($this);
-    }
-    else {
-      throw new \DomainException();
-    }
-  }
 }

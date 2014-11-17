@@ -137,8 +137,11 @@ abstract class FilterBase implements FilterInterface {
   }
 
   public function previousIsMatch() {
-    $previous = $this->ensureOrigin()->previous();
-    return isset($previous) ? $previous->is($this) : FALSE;
+    return $this->previous() instanceof Node;
+  }
+
+  public function previous() {
+    return $this->ensureOrigin()->previous($this);
   }
 
   public function previousAll() {
@@ -150,8 +153,11 @@ abstract class FilterBase implements FilterInterface {
   }
 
   public function nextIsMatch() {
-    $next = $this->ensureOrigin()->next();
-    return isset($next) ? $next->is($this) : FALSE;
+    return $this->next() instanceof Node;
+  }
+
+  public function next() {
+    return $this->ensureOrigin()->next($this);
   }
 
   public function nextAll() {

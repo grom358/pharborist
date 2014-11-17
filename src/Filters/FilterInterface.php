@@ -89,6 +89,13 @@ interface FilterInterface {
   public function previousIsMatch();
 
   /**
+   * Returns the origin's previous sibling, if it matches the filter.
+   *
+   * @return \Pharborist\Node|NULL
+   */
+  public function previous();
+
+  /**
    * Returns the origin's previous siblings, filtered.
    *
    * @return \Pharborist\NodeCollection
@@ -106,10 +113,36 @@ interface FilterInterface {
    */
   public function previousUntil(callable $until, $inclusive = TRUE);
 
+  /**
+   * Returns if the origin's next sibling matches the filter.
+   *
+   * @return boolean
+   */
   public function nextIsMatch();
 
+  /**
+   * Returns the origin's next sibling, if it matches the filter.
+   *
+   * @return \Pharborist\Node|NULL
+   */
+  public function next();
+
+  /**
+   * Returns the origin's next siblings, filtered.
+   *
+   * @return \Pharborist\NodeCollection
+   */
   public function nextAll();
 
+  /**
+   * Returns the origin's next siblings, filtered, stopping at the first
+   * one which matches the predicate.
+   *
+   * @param callable $until
+   * @param bool $inclusive
+   *
+   * @return \Pharborist\NodeCollection
+   */
   public function nextUntil(callable $until, $inclusive = TRUE);
 
 }

@@ -90,7 +90,7 @@ class FunctionDeclarationNode extends StatementNode implements FilterFactoryInte
     }
   }
 
-  public static function createFilter(Node $origin = NULL) {
-    return new FunctionFilter($origin ?: $this);
+  public function createFilter() {
+    return new FunctionFilter($this);
   }
 }

@@ -7,10 +7,11 @@ use Pharborist\Node;
 interface FilterFactoryInterface {
 
   /**
-   * Creates a filter for the given origin node.
+   * Creates a filter, with the origin set to the node on which the method
+   * was called.
    *
    * @return FilterInterface
    */
-  public static function createFilter(Node $origin);
+  public function createFilter();
 
 }

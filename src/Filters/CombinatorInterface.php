@@ -5,6 +5,13 @@ namespace Pharborist\Filters;
 use Pharborist\Node;
 
 interface CombinatorInterface {
+  
+  /**
+   * Returns if a given filter is in the combinator.
+   *
+   * @return boolean
+   */
+  public function has(callable $filter);
 
   /**
    * Adds a filter to the combinator.
@@ -14,12 +21,12 @@ interface CombinatorInterface {
   public function add(callable $filter);
   
   /**
-   * Returns if a given filter is in the combinator.
+   * Removes a specific filter from the combinator.
    *
-   * @return boolean
+   * @return $this
    */
-  public function has(callable $filter);
-  
+  public function drop(callable $filter);
+
   /**
    * Executes all added filters to the given node.
    *

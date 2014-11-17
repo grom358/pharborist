@@ -11,6 +11,12 @@ abstract class CombinatorBase implements CombinatorInterface {
    */
   protected $callbacks = [];
 
+  public function has(callable $filter) {
+    // By default, this implementation is NOT differentiating filters by
+    // their configuration.
+    return in_array($filter, $this->callbacks, TRUE);
+  }
+
   public function add(callable $filter) {
     if (! $this->has($filter)) {
       $this->callbacks[] = $filter;
@@ -18,10 +24,12 @@ abstract class CombinatorBase implements CombinatorInterface {
     return $this;
   }
 
-  public function has(callable $filter) {
-    // By default, this implementation is NOT differentiating filters by
-    // their configuration.
-    return in_array($filter, $this->callbacks, TRUE);
+  public function drop(callable $filter) {
+    $index = array_search($filter, $this->callbacks, TRUE);
+    if (is_integer($index)) {
+      unset($this->callbacks[$index]);
+    }
+    return $this;
   }
 
 }

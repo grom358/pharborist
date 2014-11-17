@@ -18,23 +18,26 @@ abstract class FilterBase implements FilterInterface {
   protected $nodeTypes = [];
 
   /**
-   * Whether to match all configured filters, or any.
-   *
-   * @var mixed
-   */
-  protected $mode;
-
-  /**
    * @var \Pharborist\Node
    */
   protected $origin;
+  
+  /**
+   * @var CombinatorInterface
+   */
+  protected $combinator;
 
   public function __construct(Node $origin = NULL) {
     $this->origin = $origin;
+
+    // Always provide a node type filter by default.
     $this->callbacks['instance_of'] = [ $this, 'isInstanceOf' ];
+
+    // Match all conditions by default.
+    $this->all();
   }
 
-  protected function isInstanceOf(Node $node) {
+  public function isInstanceOf(Node $node) {
     return in_array(get_class($node), $this->nodeTypes);
   }
 
@@ -44,7 +47,7 @@ abstract class FilterBase implements FilterInterface {
    * @return $this
    */
   public function all() {
-    $this->mode = 'all';
+    $this->combinator = new AllCombinator();
     return $this;
   }
 
@@ -54,25 +57,15 @@ abstract class FilterBase implements FilterInterface {
    * @return $this
    */
   public function any() {
-    $this->mode = 'any';
+    $this->combinator = new AnyCombinator();
     return $this;
   }
 
   public function __invoke(Node $node) {
-    $all = TRUE;
-
-    foreach ($this->callbacks as $callback) {
-      $result = $callback($node);
-
-      if ($result && $this->mode === 'any') {
-        return TRUE;
-      }
-      elseif (empty($result) && $this->mode === 'all') {
-        $all = FALSE;
-      }
-    }
-
-    return $all;
+    // Load all condition callbacks into the combinator, execute it, and
+    // return the verdict.
+    array_walk($this->callbacks, [ $this->combinator, 'add' ]);
+    return $this->combinator($node);
   }
 
   /**

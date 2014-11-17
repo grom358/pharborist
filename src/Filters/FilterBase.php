@@ -64,10 +64,10 @@ abstract class FilterBase implements FilterInterface {
     foreach ($this->callbacks as $callback) {
       $result = $callback($node);
 
-      if ($result && $this->mode == 'any') {
+      if ($result && $this->mode === 'any') {
         return TRUE;
       }
-      elseif (empty($result) && $this->mode == 'all') {
+      elseif (empty($result) && $this->mode === 'all') {
         $all = FALSE;
       }
     }

@@ -50,6 +50,16 @@ abstract class FilterBase implements FilterInterface {
     $this->combinator = new AllCombinator();
     return $this;
   }
+
+  /**
+   * Match any configured condition.
+   *
+   * @return $this
+   */
+  public function any() {
+    $this->combinator = new AnyCombinator();
+    return $this;
+  }
   
   /**
    * Returns an AllCombinator containing this filter and the given one.
@@ -74,14 +84,20 @@ abstract class FilterBase implements FilterInterface {
   public function _or(callable $filter) {
     return (new AnyCombinator)->add($this)->add($filter);
   }
-
+  
   /**
-   * Match any configured condition.
+   * Adds an arbitrary condition callback to this filter.
+   *
+   * @param callable $condition
+   *  The condition to add. Should accept a single Node and return a boolean
+   *  indicating if the node is a match.
    *
    * @return $this
    */
-  public function any() {
-    $this->combinator = new AnyCombinator();
+  public function condition(callable $condition) {
+    if (! in_array($condition, $this->conditions, TRUE)) {
+      $this->conditions[] = $condition;
+    }
     return $this;
   }
 

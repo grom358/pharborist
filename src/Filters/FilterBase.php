@@ -50,6 +50,30 @@ abstract class FilterBase implements FilterInterface {
     $this->combinator = new AllCombinator();
     return $this;
   }
+  
+  /**
+   * Returns an AllCombinator containing this filter and the given one.
+   *
+   * @param callable $filter
+   *  The other filter to add to the combinator.
+   *
+   * @return CombinatorInterface
+   */
+  public function _and(callable $filter) {
+    return (new AllCombinator)->add($this)->add($filter);
+  }
+  
+  /**
+   * Returns an AnyCombinator containing this filter and the given one.
+   *
+   * @param callable $filter
+   *  The other filter to add to the combinator.
+   *
+   * @return CombinatorInterface
+   */
+  public function _or(callable $filter) {
+    return (new AnyCombinator)->add($this)->add($filter);
+  }
 
   /**
    * Match any configured condition.

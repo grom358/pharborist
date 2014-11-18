@@ -1,6 +1,9 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Types\IntegerNode;
+use Pharborist\Types\StringNode;
+
 class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
   /**
    * Create mock ParentNode.
@@ -459,6 +462,14 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
     $this->assertSame($first, $collection[0]);
     $this->assertSame($second, $collection[1]);
     $this->assertSame($third, $collection[2]);
+  }
+
+  public function testAddTo() {
+    $c1 = new NodeCollection([ StringNode::fromValue('foo') ]);
+    $c2 = new NodeCollection([ IntegerNode::fromValue(30) ]);
+    $union = $c1->addTo($c2);
+    $this->assertCount(2, $union);
+    $this->assertSame($union, $c2);
   }
 
   /**

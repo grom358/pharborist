@@ -648,6 +648,18 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
   }
 
   /**
+   * Merges the current collection with another one, and returns the other one.
+   *
+   * @param static $collection
+   *  The destination collection.
+   *
+   * @return static
+   */
+  public function addTo(NodeCollection $collection) {
+    return $collection->add($this);
+  }
+
+  /**
    * Apply callback on each element in the node collection.
    *
    * @param callable $callback Callback to apply on each element.

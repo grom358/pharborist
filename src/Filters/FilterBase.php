@@ -10,7 +10,7 @@ abstract class FilterBase implements FilterInterface {
   /**
    * @var callable[]
    */
-  protected $callbacks = [];
+  protected $conditions = [];
 
   /**
    * @var string[]
@@ -31,7 +31,7 @@ abstract class FilterBase implements FilterInterface {
     $this->origin = $origin;
 
     // Always provide a node type filter by default.
-    $this->callbacks['instance_of'] = [ $this, 'isInstanceOf' ];
+    $this->conditions['instance_of'] = [ $this, 'isInstanceOf' ];
 
     // Match all conditions by default.
     $this->all();
@@ -88,7 +88,7 @@ abstract class FilterBase implements FilterInterface {
   public function __invoke(Node $node) {
     // Load all condition callbacks into the combinator, execute it, and
     // return the verdict.
-    array_walk($this->callbacks, [ $this->combinator, 'add' ]);
+    array_walk($this->conditions, [ $this->combinator, 'add' ]);
     return $this->combinator($node);
   }
 

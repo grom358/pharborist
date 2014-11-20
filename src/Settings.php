@@ -20,4 +20,5 @@ class Settings {
 
 Settings::set('formatter.nl', "\n");
 Settings::set('formatter.indent', '  ');
+Settings::set('formatter.soft_limit', 80);
 Settings::set('formatter.boolean_null.upper', TRUE);

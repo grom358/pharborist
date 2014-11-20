@@ -2,6 +2,7 @@
 namespace Pharborist\ControlStructures;
 
 use Pharborist\Node;
+use Pharborist\NodeCollection;
 use Pharborist\StatementNode;
 use Pharborist\ExpressionNode;
 
@@ -39,10 +40,10 @@ class IfNode extends StatementNode {
   }
 
   /**
-   * @return ElseIfNode[]
+   * @return NodeCollection|ElseIfNode[]
    */
   public function getElseIfs() {
-    return $this->childrenByInstance('\Pharborist\ControlStructures\ElseIfNode');
+    return new NodeCollection($this->childrenByInstance('\Pharborist\ControlStructures\ElseIfNode'), FALSE);
   }
 
   /**

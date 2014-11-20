@@ -548,6 +548,7 @@ class Parser {
     if ($this->tryMatch(':', $node, NULL, FALSE, TRUE)) {
       $node->addChild($this->innerIfInnerStatementList(), 'then');
       while ($this->currentType === T_ELSEIF) {
+        $this->matchHidden($node);
         $elseIf = new ElseIfNode();
         $this->mustMatch(T_ELSEIF, $elseIf);
         $this->condition($elseIf, 'condition');
@@ -567,6 +568,7 @@ class Parser {
       $this->matchHidden($node);
       $node->addChild($this->statement(), 'then');
       while ($this->currentType === T_ELSEIF) {
+        $this->matchHidden($node);
         $elseIf = new ElseIfNode();
         $this->mustMatch(T_ELSEIF, $elseIf);
         $this->condition($elseIf, 'condition');
@@ -680,11 +682,10 @@ class Parser {
     $this->condition($node, 'switchOn');
     if ($this->tryMatch(':', $node)) {
       $this->tryMatch(';', $node);
-      $statement_block = new StatementBlockNode();
       while ($this->currentType !== NULL && $this->currentType !== T_ENDSWITCH) {
-        $statement_block->addChild($this->caseStatement(T_ENDSWITCH));
+        $node->addChild($this->caseStatement(T_ENDSWITCH));
+        $this->matchHidden($node);
       }
-      $node->addChild($statement_block, 'cases');
       $this->mustMatch(T_ENDSWITCH, $node);
       $this->endStatement($node);
       return $node;
@@ -692,11 +693,10 @@ class Parser {
     else {
       $this->mustMatch('{', $node);
       $this->tryMatch(';', $node);
-      $statement_block = new StatementBlockNode();
       while ($this->currentType !== NULL && $this->currentType !== '}') {
-        $statement_block->addChild($this->caseStatement('}'));
+        $node->addChild($this->caseStatement('}'));
+        $this->matchHidden($node);
       }
-      $node->addChild($statement_block, 'cases');
       $this->mustMatch('}', $node, NULL, TRUE);
       return $node;
     }
@@ -709,6 +709,7 @@ class Parser {
    * @throws ParserException
    */
   private function caseStatement($terminator) {
+    static $terminators = [T_CASE, T_DEFAULT];
     if ($this->currentType === T_CASE) {
       $node = new CaseNode();
       $this->mustMatch(T_CASE, $node);
@@ -716,9 +717,9 @@ class Parser {
       if (!$this->tryMatch(':', $node, NULL, TRUE, TRUE) && !$this->tryMatch(';', $node, NULL, TRUE, TRUE)) {
         throw new ParserException($this->iterator->getSourcePosition(), 'expected :');
       }
-      $this->matchHidden($node);
-      if ($body = $this->innerCaseStatementList($terminator)) {
-        $node->addChild($body, 'body');
+      if ($this->currentType !== $terminator && !in_array($this->currentType, $terminators)) {
+        $this->matchHidden($node);
+        $node->addChild($this->innerCaseStatementList($terminator), 'body');
       }
       return $node;
     }
@@ -728,9 +729,9 @@ class Parser {
       if (!$this->tryMatch(':', $node, NULL, TRUE, TRUE) && !$this->tryMatch(';', $node, NULL, TRUE, TRUE)) {
         throw new ParserException($this->iterator->getSourcePosition(), 'expected :');
       }
-      $this->matchHidden($node);
-      if ($body = $this->innerCaseStatementList($terminator)) {
-        $node->addChild($body, 'body');
+      if ($this->currentType !== $terminator && !in_array($this->currentType, $terminators)) {
+        $this->matchHidden($node);
+        $node->addChild($this->innerCaseStatementList($terminator), 'body');
       }
       return $node;
     }
@@ -744,9 +745,6 @@ class Parser {
    */
   private function innerCaseStatementList($terminator) {
     static $terminators = [T_CASE, T_DEFAULT];
-    if ($this->currentType === $terminator || in_array($this->currentType, $terminators)) {
-      return NULL;
-    }
     $node = new StatementBlockNode();
     while ($this->currentType !== NULL && $this->currentType !== $terminator && !in_array($this->currentType, $terminators)) {
       $this->matchHidden($node);
@@ -1575,8 +1573,9 @@ class Parser {
       if ($this->currentType === $terminator) {
         break;
       }
+      $this->matchHidden($elements);
       $elements->addChild($this->arrayPair());
-    } while ($this->tryMatch(',', $elements));
+    } while ($this->tryMatch(',', $elements, NULL, TRUE));
     $node->addChild($elements, 'elements');
   }
 
@@ -1591,6 +1590,7 @@ class Parser {
       if ($this->currentType === $terminator) {
         break;
       }
+      $this->matchHidden($elements);
       $value = $this->staticScalar();
       if ($this->currentType === T_DOUBLE_ARROW) {
         $pair = new ArrayPairNode();
@@ -1602,7 +1602,7 @@ class Parser {
       else {
         $elements->addChild($value);
       }
-    } while ($this->tryMatch(',', $elements));
+    } while ($this->tryMatch(',', $elements, NULL, TRUE));
     $node->addChild($elements, 'elements');
   }
 

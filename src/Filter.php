@@ -188,4 +188,19 @@ class Filter {
       return $node === $match;
     };
   }
+
+  /**
+   * Callback to test if match to given token type.
+   *
+   * @param int|string $type
+   *   Token type.
+   *
+   * @return callable
+   */
+  public static function isTokenType($type) {
+    $types = func_get_args();
+    return function ($node) use ($types) {
+      return $node instanceof TokenNode && in_array($node->getType(), $types);
+    };
+  }
 }

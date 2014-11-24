@@ -669,7 +669,7 @@ class Parser {
       return;
     }
     $parent->addChild($this->exprList(), $property_name);
-    $this->mustMatch($terminator, $parent, NULL, $is_last, $is_last);
+    $this->mustMatch($terminator, $parent, NULL, $is_last, FALSE);
   }
 
   /**

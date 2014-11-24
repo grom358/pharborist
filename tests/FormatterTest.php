@@ -197,4 +197,44 @@ if ($test) {
 EOF;
     $this->assertEquals($expected, $actual);
   }
+
+  public function testFor() {
+    $snippet = 'for($i=0;$i<$n;$i++){test();}';
+    $actual = $this->formatSnippet($snippet);
+    $expected = <<<'EOF'
+for ($i = 0; $i < $n; $i++) {
+  test();
+}
+EOF;
+    $this->assertEquals($expected, $actual);
+  }
+
+  public function testForeach() {
+    $snippet = 'foreach($a as $k=>$v){test();}';
+    $actual = $this->formatSnippet($snippet);
+    $expected = <<<'EOF'
+foreach ($a as $k => $v) {
+  test();
+}
+EOF;
+    $this->assertEquals($expected, $actual);
+  }
+
+  public function testFunctionCall() {
+    $snippet = 'test ( $a,$b  );';
+    $actual = $this->formatSnippet($snippet);
+    $expected = 'test($a, $b);';
+    $this->assertEquals($expected, $actual);
+  }
+
+  public function testFunction() {
+    $snippet = 'function test ( $a,$b  ,  $c=1){run();}';
+    $actual = $this->formatSnippet($snippet);
+    $expected = <<<'EOF'
+function test($a, $b, $c = 1) {
+  run();
+}
+EOF;
+    $this->assertEquals($expected, $actual);
+  }
 }

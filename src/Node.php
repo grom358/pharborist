@@ -592,6 +592,52 @@ abstract class Node implements NodeInterface {
 
   }
 
+  /**
+   * @return TokenNode
+   */
+  public function previousToken() {
+    $prev_node = $this->previous;
+    if ($prev_node === NULL) {
+      $parent = $this->parent;
+      while ($parent !== NULL && $parent->previous === NULL) {
+        $parent = $parent->parent;
+      }
+      if ($parent === NULL) {
+        return NULL;
+      }
+      $prev_node = $parent->previous;
+    }
+    if ($prev_node instanceof ParentNode) {
+      return $prev_node->isEmpty() ? $prev_node->previousToken() : $prev_node->lastToken();
+    }
+    else {
+      return $prev_node;
+    }
+  }
+
+  /**
+   * @return TokenNode
+   */
+  public function nextToken() {
+    $next_node = $this->next;
+    if ($next_node === NULL) {
+      $parent = $this->parent;
+      while ($parent !== NULL && $parent->next === NULL) {
+        $parent = $parent->parent;
+      }
+      if ($parent === NULL) {
+        return NULL;
+      }
+      $next_node = $parent->next;
+    }
+    if ($next_node instanceof ParentNode) {
+      return $next_node->isEmpty() ? $next_node->nextToken() : $next_node->firstToken();
+    }
+    else {
+      return $next_node;
+    }
+  }
+
   public function __clone() {
     // Clone does not belong to any parent.
     $this->parent = NULL;

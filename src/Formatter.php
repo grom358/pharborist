@@ -8,6 +8,9 @@ use Pharborist\ControlStructures\ForNode;
 use Pharborist\ControlStructures\IfNode;
 use Pharborist\ControlStructures\SwitchNode;
 use Pharborist\ControlStructures\WhileNode;
+use Pharborist\Functions\CallNode;
+use Pharborist\Functions\FunctionDeclarationNode;
+use Pharborist\Functions\ParameterNode;
 use Pharborist\Operators\BinaryOperationNode;
 use Pharborist\Types\ArrayNode;
 
@@ -28,8 +31,7 @@ class Formatter extends VisitorBase {
   }
 
   public function spaceBefore(Node $node, $enforce = TRUE) {
-    /** @var ParentNode|TokenNode $node */
-    $prev = $node instanceof ParentNode ? $node->firstToken()->previousToken() : $node->previousToken();
+    $prev = $node->previousToken();
     if ($prev instanceof WhitespaceNode) {
       if ($enforce) {
         $prev->setText(' ');
@@ -41,8 +43,7 @@ class Formatter extends VisitorBase {
   }
 
   public function spaceAfter(Node $node, $enforce = TRUE) {
-    /** @var ParentNode|TokenNode $node */
-    $next = $node instanceof ParentNode ? $node->lastToken()->nextToken() : $node->nextToken();
+    $next = $node->nextToken();
     if ($next instanceof WhitespaceNode) {
       if ($enforce) {
         $next->setText(' ');
@@ -54,24 +55,21 @@ class Formatter extends VisitorBase {
   }
 
   public function removeSpaceBefore(Node $node) {
-    /** @var ParentNode|TokenNode $node */
-    $prev = $node instanceof ParentNode ? $node->firstToken()->previousToken() : $node->previousToken();
+    $prev = $node->previousToken();
     if ($prev instanceof WhitespaceNode) {
       $prev->remove();
     }
   }
 
   public function removeSpaceAfter(Node $node) {
-    /** @var ParentNode|TokenNode $node */
-    $next = $node instanceof ParentNode ? $node->lastToken()->nextToken() : $node->nextToken();
+    $next = $node->nextToken();
     if ($next instanceof WhitespaceNode) {
       $next->remove();
     }
   }
 
   public function newlineBefore(Node $node) {
-    /** @var ParentNode|TokenNode $node */
-    $prev = $node instanceof ParentNode ? $node->firstToken()->previousToken() : $node->previousToken();
+    $prev = $node->previousToken();
     if ($prev instanceof WhitespaceNode) {
       $prev->setText($this->getNewlineIndent($prev));
     }
@@ -81,8 +79,7 @@ class Formatter extends VisitorBase {
   }
 
   public function newlineAfter(Node $node) {
-    /** @var ParentNode|TokenNode $node */
-    $next = $node instanceof ParentNode ? $node->lastToken()->nextToken() : $node->nextToken();
+    $next = $node->nextToken();
     if ($next instanceof WhitespaceNode) {
       $next->setText($this->getNewlineIndent($next));
     }
@@ -112,9 +109,10 @@ class Formatter extends VisitorBase {
    * @param Node|NodeInterface $condition
    */
   protected function formatCondition($condition) {
-    $condition->previousUntil(Filter::isTokenType('('))->remove();
-    $condition->nextUntil(Filter::isTokenType(')'))->remove();
-    $this->spaceBefore($condition->previous());
+    $this->removeSpaceBefore($condition);
+    $this->removeSpaceAfter($condition);
+    $open_paren = $condition->previousUntil(Filter::isTokenType('('), TRUE)->get(0);
+    $this->spaceBefore($open_paren);
   }
 
   public function beginIfNode(IfNode $node) {
@@ -165,7 +163,16 @@ class Formatter extends VisitorBase {
 
   public function beginForNode(ForNode $node) {
     $this->indentLevel++;
+    $node->getInitial()->previousUntil(Filter::isTokenType('('))->remove();
+    $this->spaceBefore($node->getInitial()->previous());
+    $node->getStep()->nextUntil(Filter::isTokenType(')'))->remove();
     $this->encloseBlock($node->getBody());
+    $separator = $node->getInitial()->nextUntil(Filter::isTokenType(';'), TRUE)->last()->get(0);
+    $this->removeSpaceBefore($separator);
+    $this->spaceAfter($separator);
+    $separator = $node->getCondition()->nextUntil(Filter::isTokenType(';'), TRUE)->last()->get(0);
+    $this->removeSpaceBefore($separator);
+    $this->spaceAfter($separator);
   }
 
   public function endForNode(ForNode $node) {
@@ -174,6 +181,14 @@ class Formatter extends VisitorBase {
 
   public function beginForeachNode(ForeachNode $node) {
     $this->indentLevel++;
+    $node->getOnEach()->previousUntil(Filter::isTokenType('('))->remove();
+    $this->spaceBefore($node->getOnEach()->previous());
+    $node->getValue()->nextUntil(Filter::isTokenType(')'))->remove();
+    if ($node->getKey()) {
+      $arrow = $node->getKey()->nextUntil(Filter::isTokenType(T_DOUBLE_ARROW), TRUE)->last()->get(0);
+      $this->spaceBefore($arrow);
+      $this->spaceAfter($arrow);
+    }
     $this->encloseBlock($node->getBody());
   }
 
@@ -344,6 +359,47 @@ class Formatter extends VisitorBase {
       }
     }
 
+    $this->indentLevel--;
+  }
+
+  public function beginFunctionDeclarationNode(FunctionDeclarationNode $node) {
+    $this->indentLevel++;
+    $parameter_list = $node->getParameterList();
+    $this->removeSpaceBefore($parameter_list);
+    $this->removeSpaceAfter($parameter_list);
+    $open_paren = $parameter_list->previousUntil(Filter::isTokenType('('), TRUE)->get(0);
+    $this->removeSpaceBefore($open_paren);
+  }
+
+  public function endFunctionDeclarationNode(FunctionDeclarationNode $node) {
+    $this->indentLevel--;
+  }
+
+  public function visitParameterNode(ParameterNode $node) {
+    if ($node->getValue()) {
+      $assign = $node->getValue()->previousUntil(Filter::isTokenType('='), TRUE)->get(0);
+      $this->spaceBefore($assign);
+      $this->spaceAfter($assign);
+    }
+  }
+
+  public function visitCommaListNode(CommaListNode $node) {
+    foreach ($node->children(Filter::isTokenType(',')) as $comma_node) {
+      $this->removeSpaceBefore($comma_node);
+      $this->spaceAfter($comma_node);
+    }
+  }
+
+  public function beginCallNode(CallNode $node) {
+    $this->indentLevel++;
+    $arg_list = $node->getArgumentList();
+    $this->removeSpaceBefore($arg_list);
+    $this->removeSpaceAfter($arg_list);
+    $open_paren = $arg_list->previousUntil(Filter::isTokenType('('), TRUE)->get(0);
+    $this->removeSpaceBefore($open_paren);
+  }
+
+  public function endCallNode(CallNode $node) {
     $this->indentLevel--;
   }
 }

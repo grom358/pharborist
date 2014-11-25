@@ -299,4 +299,25 @@ EOF;
     $expected = 'array(TRUE, FALSE, NULL);';
     $this->assertEquals($expected, $actual);
   }
+
+  public function testTryCatch() {
+    $snippet = 'try{test();}catch( Exception $e ) { test();}';
+    $actual = $this->formatSnippet($snippet);
+    $expected = <<<'EOF'
+try {
+  test();
+}
+catch (Exception $e) {
+  test();
+}
+EOF;
+    $this->assertEquals($expected, $actual);
+  }
+
+  public function testNew() {
+    $snippet = 'new Test;';
+    $actual = $this->formatSnippet($snippet);
+    $expected = 'new Test();';
+    $this->assertEquals($expected, $actual);
+  }
 }

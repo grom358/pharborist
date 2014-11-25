@@ -9,12 +9,15 @@ use Pharborist\ControlStructures\ForNode;
 use Pharborist\ControlStructures\IfNode;
 use Pharborist\ControlStructures\SwitchNode;
 use Pharborist\ControlStructures\WhileNode;
+use Pharborist\Exceptions\CatchNode;
+use Pharborist\Exceptions\TryCatchNode;
 use Pharborist\Functions\CallNode;
 use Pharborist\Functions\FunctionDeclarationNode;
 use Pharborist\Functions\ParameterNode;
 use Pharborist\Objects\ClassMethodNode;
 use Pharborist\Objects\InterfaceMethodNode;
 use Pharborist\Objects\InterfaceNode;
+use Pharborist\Objects\NewNode;
 use Pharborist\Objects\SingleInheritanceNode;
 use Pharborist\Operators\BinaryOperationNode;
 use Pharborist\Types\ArrayNode;
@@ -496,5 +499,31 @@ class Formatter extends VisitorBase {
 
   public function visitNullNode(NullNode $node) {
     $this->handleBuiltinConstantNode($node);
+  }
+
+  public function beginTryCatchNode(TryCatchNode $node) {
+    $this->newlineAfter($node->getTry());
+    $this->indentLevel++;
+  }
+
+  public function endTryCatchNode(TryCatchNode $node) {
+    $this->indentLevel--;
+  }
+
+  public function visitCatchNode(CatchNode $node) {
+    $open_paren = $node->getExceptionType()->previousUntil(Filter::isTokenType('('), TRUE)->get(0);
+    $this->spaceBefore($open_paren);
+    $this->removeSpaceAfter($open_paren);
+    $close_paren = $node->getBody()->previousUntil(Filter::isTokenType(')'), TRUE)->get(0);
+    $this->removeSpaceBefore($close_paren);
+    $this->spaceAfter($close_paren);
+  }
+
+  public function visitNewNode(NewNode $node) {
+    if (!$node->getArgumentList()) {
+      $node->append(Token::openParen());
+      $node->addChild(new CommaListNode(), 'arguments');
+      $node->append(Token::closeParen());
+    }
   }
 }

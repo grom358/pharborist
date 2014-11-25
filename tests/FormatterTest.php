@@ -122,7 +122,7 @@ $arr = array (  'hello',  'world'  ,'!'   );
 EOF;
     $actual = $this->formatSnippet($snippet);
     $expected = <<<'EOF'
-$arr = array('hello', 'world', '!');
+$arr = ['hello', 'world', '!'];
 EOF;
     $this->assertEquals($expected, $actual);
   }
@@ -136,11 +136,11 @@ $arr = array(
 EOF;
     $actual = $this->formatSnippet($snippet);
     $expected = <<<'EOF'
-$arr = array(
+$arr = [
   'a' => 'apple',
   'b' => 'banana',
   'o' => 'orange',
-);
+];
 EOF;
     $this->assertEquals($expected, $actual);
   }
@@ -151,7 +151,7 @@ $arr = array('blah', 'blah', 'blah', 'blah','blah', 'blah','blah', 'blah','blah'
 EOF;
     $actual = $this->formatSnippet($snippet);
     $expected = <<<'EOF'
-$arr = array(
+$arr = [
   'blah',
   'blah',
   'blah',
@@ -162,7 +162,7 @@ $arr = array(
   'blah',
   'blah',
   'blah',
-);
+];
 EOF;
     $this->assertEquals($expected, $actual);
   }
@@ -175,24 +175,24 @@ EOF;
     $actual = $this->formatSnippet($snippet);
     $expected = <<<'EOF'
 if ($test) {
-  $arr = array(
+  $arr = [
     'blah',
     'blah',
     'blah',
     'blah',
-    array('blah', 'blah', 'blah'),
+    ['blah', 'blah', 'blah'],
     'blah',
-    array(
+    [
       'blah',
       'blah',
       'blah',
       'blah',
       'blah',
       'blah',
-    ),
+    ],
     'blah',
     'blah',
-  );
+  ];
 }
 EOF;
     $this->assertEquals($expected, $actual);
@@ -294,9 +294,9 @@ EOF;
   }
 
   public function testSpecialConstants() {
-    $snippet = 'array(true, false, null);';
+    $snippet = '[true, false, null];';
     $actual = $this->formatSnippet($snippet);
-    $expected = 'array(TRUE, FALSE, NULL);';
+    $expected = '[TRUE, FALSE, NULL];';
     $this->assertEquals($expected, $actual);
   }
 

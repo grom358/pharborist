@@ -253,18 +253,12 @@ class Formatter extends VisitorBase {
     }
   }
 
-  public function visitExpressionStatementNode(ExpressionStatementNode $node) {
-    $nl = Settings::get('formatter.nl');
-    $indent_per_level = Settings::get('formatter.indent');
-    $indent = str_repeat($indent_per_level, $this->indentLevel + 1);
-    $collection = $node->find(Filter::isInstanceOf('\Pharborist\WhitespaceNode'));
-    /** @var WhitespaceNode $ws */
-    foreach ($collection as $ws) {
-      $newline_count = $ws->getNewlineCount();
-      if ($newline_count > 0) {
-        $ws->setText(str_repeat($nl, $newline_count) . $indent);
-      }
-    }
+  public function beginExpressionStatementNode(ExpressionStatementNode $node) {
+    $this->indentLevel++;
+  }
+
+  public function endExpressionStatementNode(ExpressionStatementNode $node) {
+    $this->indentLevel--;
   }
 
   /**
@@ -299,6 +293,20 @@ class Formatter extends VisitorBase {
   }
 
   public function endArrayNode(ArrayNode $node) {
+    $this->indentLevel--;
+
+    if (Settings::get('formatter.force_array_new_style')) {
+      $first = $node->firstChild();
+      /** @var TokenNode $first */
+      if ($first->getType() === T_ARRAY) {
+        $open_paren = $first->nextUntil(Filter::isTokenType('('), TRUE)->last()->get(0);
+        $open_paren->previousAll()->remove();
+        $open_paren->replaceWith(Token::openBracket());
+        $close_paren = $node->lastChild();
+        $close_paren->replaceWith(Token::closeBracket());
+      }
+    }
+
     // Remove space after T_ARRAY.
     $first = $node->firstChild();
     /** @var TokenNode $first */
@@ -368,8 +376,6 @@ class Formatter extends VisitorBase {
         $this->spaceAfter($comma);
       }
     }
-
-    $this->indentLevel--;
   }
 
   public function beginFunctionDeclarationNode(FunctionDeclarationNode $node) {
@@ -524,6 +530,15 @@ class Formatter extends VisitorBase {
       $node->append(Token::openParen());
       $node->addChild(new CommaListNode(), 'arguments');
       $node->append(Token::closeParen());
+    }
+  }
+
+  public function beginWhitespaceNode(WhitespaceNode $node) {
+    if ($node->getNewlineCount() > 0) {
+      $node->setText($this->getNewlineIndent($node));
+    }
+    else {
+      $node->setText(' ');
     }
   }
 }

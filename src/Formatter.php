@@ -1,6 +1,7 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Constants\ConstantNode;
 use Pharborist\ControlStructures\DoWhileNode;
 use Pharborist\ControlStructures\ElseIfNode;
 use Pharborist\ControlStructures\ForeachNode;
@@ -11,8 +12,14 @@ use Pharborist\ControlStructures\WhileNode;
 use Pharborist\Functions\CallNode;
 use Pharborist\Functions\FunctionDeclarationNode;
 use Pharborist\Functions\ParameterNode;
+use Pharborist\Objects\ClassMethodNode;
+use Pharborist\Objects\InterfaceMethodNode;
+use Pharborist\Objects\InterfaceNode;
+use Pharborist\Objects\SingleInheritanceNode;
 use Pharborist\Operators\BinaryOperationNode;
 use Pharborist\Types\ArrayNode;
+use Pharborist\Types\BooleanNode;
+use Pharborist\Types\NullNode;
 
 class Formatter extends VisitorBase {
   private $indentLevel = 0;
@@ -401,5 +408,93 @@ class Formatter extends VisitorBase {
 
   public function endCallNode(CallNode $node) {
     $this->indentLevel--;
+  }
+
+  /**
+   * @param SingleInheritanceNode|InterfaceNode $node
+   */
+  protected function beginClassTraitOrInterface($node) {
+    $close_brace = $node->lastChild();
+    $this->newlineBefore($close_brace);
+    $this->indentLevel++;
+  }
+
+  /**
+   * @param SingleInheritanceNode|InterfaceNode $node
+   */
+  protected function endClassTraitOrInterface($node) {
+    /** @var WhitespaceNode $ws_node */
+    foreach ($node->getBody()->children(Filter::isInstanceOf('\Pharborist\WhitespaceNode'))->slice(1) as $ws_node) {
+      $ws_node->setText("\n" . $ws_node->getText());
+    }
+    $this->indentLevel--;
+  }
+
+  /**
+   * @param ClassMethodNode|InterfaceMethodNode $node
+   */
+  protected function beginMethod($node) {
+    $this->indentLevel++;
+    $parameter_list = $node->getParameterList();
+    $this->removeSpaceBefore($parameter_list);
+    $this->removeSpaceAfter($parameter_list);
+    $open_paren = $parameter_list->previousUntil(Filter::isTokenType('('), TRUE)->get(0);
+    $this->removeSpaceBefore($open_paren);
+
+    if ($node->getVisibility() === NULL) {
+      $node->setVisibility('public');
+    }
+  }
+
+  public function beginSingleInheritanceNode(SingleInheritanceNode $node) {
+    $this->beginClassTraitOrInterface($node);
+  }
+
+  public function endSingleInheritanceNode(SingleInheritanceNode $node) {
+    $this->endClassTraitOrInterface($node);
+  }
+
+  public function beginClassMethodNode(ClassMethodNode $node) {
+    $close_brace = $node->getBody()->lastChild();
+    $this->newlineBefore($close_brace);
+    $this->beginMethod($node);
+  }
+
+  public function endClassMethodNode(ClassMethodNode $node) {
+    $this->indentLevel--;
+  }
+
+  public function beginInterfaceNode(InterfaceNode $node) {
+    $this->beginClassTraitOrInterface($node);
+  }
+
+  public function endInterfaceNode(InterfaceNode $node) {
+    $this->endClassTraitOrInterface($node);
+  }
+
+  public function beginInterfaceMethodNode(InterfaceMethodNode $node) {
+    $this->beginMethod($node);
+  }
+
+  public function endInterfaceMethodNode(InterfaceMethodNode $node) {
+    $this->indentLevel--;
+  }
+
+  protected function handleBuiltinConstantNode(ConstantNode $node) {
+    $to_upper = Settings::get('formatter.boolean_null.upper');
+    if ($to_upper) {
+      $node->toUpperCase();
+    }
+    else {
+      $node->toLowerCase();
+    }
+  }
+
+  public function visitBooleanNode(BooleanNode $node) {
+    $this->handleBuiltinConstantNode($node);
+  }
+
+  public function visitNullNode(NullNode $node) {
+    $this->handleBuiltinConstantNode($node);
   }
 }

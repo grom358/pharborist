@@ -237,4 +237,66 @@ function test($a, $b, $c = 1) {
 EOF;
     $this->assertEquals($expected, $actual);
   }
+
+  public function testClass() {
+    $snippet = 'class Test {private $a;protected $b;function test ( $a,$b  ,  $c=1){run();}function run(){test();}}';
+    $actual = $this->formatSnippet($snippet);
+    $expected = <<<'EOF'
+class Test {
+  private $a;
+
+  protected $b;
+
+  public function test($a, $b, $c = 1) {
+    run();
+  }
+
+  public function run() {
+    test();
+  }
+}
+EOF;
+    $this->assertEquals($expected, $actual);
+  }
+
+  public function testTrait() {
+    $snippet = 'trait Test {private $a;protected $b;function test ( $a,$b  ,  $c=1){run();}function run(){test();}}';
+    $actual = $this->formatSnippet($snippet);
+    $expected = <<<'EOF'
+trait Test {
+  private $a;
+
+  protected $b;
+
+  public function test($a, $b, $c = 1) {
+    run();
+  }
+
+  public function run() {
+    test();
+  }
+}
+EOF;
+    $this->assertEquals($expected, $actual);
+  }
+
+  public function testInterface() {
+    $snippet = 'interface Test {function test ( $a,$b  ,  $c=1);function run();}';
+    $actual = $this->formatSnippet($snippet);
+    $expected = <<<'EOF'
+interface Test {
+  public function test($a, $b, $c = 1);
+
+  public function run();
+}
+EOF;
+    $this->assertEquals($expected, $actual);
+  }
+
+  public function testSpecialConstants() {
+    $snippet = 'array(true, false, null);';
+    $actual = $this->formatSnippet($snippet);
+    $expected = 'array(TRUE, FALSE, NULL);';
+    $this->assertEquals($expected, $actual);
+  }
 }

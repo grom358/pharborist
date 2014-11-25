@@ -20,6 +20,10 @@ use Pharborist\Objects\InterfaceNode;
 use Pharborist\Objects\NewNode;
 use Pharborist\Objects\SingleInheritanceNode;
 use Pharborist\Operators\BinaryOperationNode;
+use Pharborist\Operators\CastNode;
+use Pharborist\Operators\PostDecrementNode;
+use Pharborist\Operators\PostIncrementNode;
+use Pharborist\Operators\UnaryOperationNode;
 use Pharborist\Types\ArrayNode;
 use Pharborist\Types\BooleanNode;
 use Pharborist\Types\NullNode;
@@ -102,6 +106,19 @@ class Formatter extends VisitorBase {
     $operator = $node->getOperator();
     $this->spaceBefore($operator);
     $this->spaceAfter($operator);
+  }
+
+  public function visitUnaryOperationNode(UnaryOperationNode $node) {
+    $operator = $node->getOperator();
+    if ($node instanceof PostDecrementNode || $node instanceof PostIncrementNode) {
+      $this->removeSpaceBefore($operator);
+    }
+    elseif ($node instanceof CastNode) {
+      $this->spaceAfter($operator);
+    }
+    else {
+      $this->removeSpaceAfter($operator);
+    }
   }
 
   /**

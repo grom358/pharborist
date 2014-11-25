@@ -4,6 +4,6 @@ namespace Pharborist\Operators;
 /**
  * A string cast operation.
  */
-class StringCastNode extends UnaryOperationNode {
+class StringCastNode extends CastNode {
 
 }

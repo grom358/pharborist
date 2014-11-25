@@ -4,6 +4,6 @@ namespace Pharborist\Operators;
 /**
  * A boolean cast operation.
  */
-class BooleanCastNode extends UnaryOperationNode {
+class BooleanCastNode extends CastNode {
 
 }

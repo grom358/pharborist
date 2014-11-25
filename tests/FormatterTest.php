@@ -320,4 +320,25 @@ EOF;
     $expected = 'new Test();';
     $this->assertEquals($expected, $actual);
   }
+
+  public function testUnary() {
+    $snippet = '$x = 4 - - 2;';
+    $actual = $this->formatSnippet($snippet);
+    $expected = '$x = 4 - -2;';
+    $this->assertEquals($expected, $actual);
+  }
+
+  public function testCast() {
+    $snippet = '(string)1;';
+    $actual = $this->formatSnippet($snippet);
+    $expected = '(string) 1;';
+    $this->assertEquals($expected, $actual);
+  }
+
+  public function testPost() {
+    $snippet = '$x ++;';
+    $actual = $this->formatSnippet($snippet);
+    $expected = '$x++;';
+    $this->assertEquals($expected, $actual);
+  }
 }

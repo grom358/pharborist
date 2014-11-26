@@ -32,6 +32,15 @@ class Formatter extends VisitorBase {
   private $indentLevel = 0;
 
   /**
+   * @var \SplObjectStorage
+   */
+  private $objectStorage;
+
+  public function __construct() {
+    $this->objectStorage = new \SplObjectStorage();
+  }
+
+  /**
    * @param WhitespaceNode|NULL $wsNode
    * @return string
    */
@@ -307,10 +316,6 @@ class Formatter extends VisitorBase {
 
   public function beginArrayNode(ArrayNode $node) {
     $this->indentLevel++;
-  }
-
-  public function endArrayNode(ArrayNode $node) {
-    $this->indentLevel--;
 
     if (Settings::get('formatter.force_array_new_style')) {
       $first = $node->firstChild();
@@ -340,19 +345,36 @@ class Formatter extends VisitorBase {
       $this->spaceAfter($arrow);
     }
 
-    /** @var TokenNode[] $commas */
-    $commas = $node->getElementList()->children(Filter::isTokenType(','));
+    // Remove whitespace before first element.
+    $this->removeSpaceBefore($node->getElementList());
 
-    // Remove spaces before , tokens.
-    foreach ($commas as $comma) {
-      $this->removeSpaceBefore($comma);
+    // Remove whitespace after last element.
+    $this->removeSpaceAfter($node->getElementList());
+
+    // Remove trailing comma.
+    $last = $node->getElementList()->lastChild();
+    if ($last instanceof TokenNode && $last->getType() === ',') {
+      $node->getElementList()->append(Token::comma());
     }
+
+    /** @var NodeCollection|TokenNode[] $commas */
+    $commas = $node->getElementList()->children(Filter::isTokenType(','));
 
     // Line wrap array if required.
     // If already on multiple lines, make array line wrap.
-    $multi_line = $node->find(function (Node $node) {
+    $multi_line = $commas->next(function (Node $node) {
       return $node instanceof WhitespaceNode && $node->getNewlineCount() > 0;
     })->isNotEmpty();
+
+    $this->objectStorage[$node] = $multi_line;
+  }
+
+  public function endArrayNode(ArrayNode $node) {
+    $this->indentLevel--;
+
+    $multi_line = $this->objectStorage[$node];
+    unset($this->objectStorage[$node]);
+
     if (!$multi_line) {
       // Test if array exceeds the soft limit.
       $column_position = $this->calculateColumnPosition($node);
@@ -365,33 +387,21 @@ class Formatter extends VisitorBase {
       // Newline before first element.
       $this->newlineBefore($node->getElementList());
 
+      /** @var NodeCollection|TokenNode[] $commas */
+      $commas = $node->getElementList()->children(Filter::isTokenType(','));
+
       // Newline after each comma.
       foreach ($commas as $comma) {
         $this->newlineAfter($comma);
       }
 
       // Enforce trailing comma after last element.
-      $last = $node->getElementList()->lastChild();
-      if (!($last instanceof TokenNode && $last->getType() === ',')) {
-        $node->getElementList()->append(Token::comma());
-      }
+      $node->getElementList()->append(Token::comma());
 
       // Newline before closing ) or ].
       $this->indentLevel--;
       $this->newlineBefore($node->lastChild());
       $this->indentLevel++;
-    }
-    else {
-      // Remove whitespace before first element.
-      $this->removeSpaceBefore($node->getElementList());
-
-      // Remove whitespace after last element.
-      $this->removeSpaceBefore($node->lastChild());
-
-      // Single space after comma.
-      foreach ($commas as $comma) {
-        $this->spaceAfter($comma);
-      }
     }
   }
 

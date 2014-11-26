@@ -54,24 +54,20 @@ class Formatter extends VisitorBase {
     return str_repeat($nl, $nl_count) . $indent;
   }
 
-  public function spaceBefore(Node $node, $enforce = TRUE) {
+  public function spaceBefore(Node $node) {
     $prev = $node->previousToken();
     if ($prev instanceof WhitespaceNode) {
-      if ($enforce) {
-        $prev->setText(' ');
-      }
+      $prev->setText(' ');
     }
     else {
       $node->before(Token::space());
     }
   }
 
-  public function spaceAfter(Node $node, $enforce = TRUE) {
+  public function spaceAfter(Node $node) {
     $next = $node->nextToken();
     if ($next instanceof WhitespaceNode) {
-      if ($enforce) {
-        $next->setText(' ');
-      }
+      $next->setText(' ');
     }
     else {
       $node->after(Token::space());

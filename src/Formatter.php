@@ -558,4 +558,18 @@ class Formatter extends VisitorBase {
     }
     $this->indentLevel--;
   }
+
+  public function visitWhitespaceNode(WhitespaceNode $node) {
+    // Normalise whitespace.
+    $nl = Settings::get('formatter.nl');
+    $nl_count = $node->getNewlineCount();
+    if ($nl_count > 0) {
+      $lines = explode($nl, $node->getText());
+      $last_line = end($lines);
+      $node->setText(str_repeat($nl, $nl_count) . $last_line);
+    }
+    else {
+      $node->setText(' ');
+    }
+  }
 }

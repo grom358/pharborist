@@ -360,7 +360,6 @@ class Formatter extends VisitorBase {
     /** @var NodeCollection|TokenNode[] $commas */
     $commas = $node->getElementList()->children(Filter::isTokenType(','));
 
-    // Line wrap array if required.
     // If already on multiple lines, make array line wrap.
     $multi_line = $commas->next(function (Node $node) {
       return $node instanceof WhitespaceNode && $node->getNewlineCount() > 0;
@@ -376,7 +375,7 @@ class Formatter extends VisitorBase {
     unset($this->objectStorage[$node]);
 
     if (!$multi_line) {
-      // Test if array exceeds the soft limit.
+      // If array exceeds the soft limit then force line wrapping.
       $column_position = $this->calculateColumnPosition($node);
       $column_position += strlen($node->getText());
       $soft_limit = Settings::get('formatter.soft_limit');

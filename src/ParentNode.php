@@ -397,13 +397,13 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
     }
   }
 
-  public function accept(VisitorInterface $visitor) {
+  public function acceptVisitor(VisitorInterface $visitor) {
     $visitor->visitBegin($this);
     $visitor->visitChild($this);
     $child = $this->head;
     while($child) {
       if($child instanceof ParentNode) {
-        $child->accept($visitor);
+        $child->acceptVisitor($visitor);
       }
       else {
         $visitor->visitChild($child);

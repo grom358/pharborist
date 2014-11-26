@@ -6,7 +6,7 @@ class FormatterTest extends \PHPUnit_Framework_TestCase {
     /** @var ParentNode $node */
     $node = Parser::parseSnippet($snippet);
     $formatter = new Formatter();
-    $node->accept($formatter);
+    $node->acceptVisitor($formatter);
     return $node->getText();
   }
 

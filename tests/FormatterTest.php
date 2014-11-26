@@ -227,6 +227,24 @@ EOF;
     $this->assertEquals($expected, $actual);
   }
 
+  public function testFunctionCallArray() {
+    $snippet = <<<'EOF'
+test(
+  $a,
+  [$b,
+  $c]
+);
+EOF;
+    $actual = $this->formatSnippet($snippet);
+    $expected = <<<'EOF'
+test($a, [
+  $b,
+  $c,
+]);
+EOF;
+    $this->assertEquals($expected, $actual);
+  }
+
   public function testFunction() {
     $snippet = 'function test ( $a,$b  ,  $c=1){run();}';
     $actual = $this->formatSnippet($snippet);
@@ -339,6 +357,31 @@ EOF;
     $snippet = '$x ++;';
     $actual = $this->formatSnippet($snippet);
     $expected = '$x++;';
+    $this->assertEquals($expected, $actual);
+  }
+
+  public function testObjectChain() {
+    $snippet = <<<'EOF'
+$obj
+->method()
+    ->method();
+EOF;
+    $actual = $this->formatSnippet($snippet);
+    $expected = <<<'EOF'
+$obj
+  ->method()
+  ->method();
+EOF;
+    $this->assertEquals($expected, $actual);
+  }
+
+  public function testExpression() {
+    $snippet = <<<'EOF'
+$a = 1 +
+ 2;
+EOF;
+    $actual = $this->formatSnippet($snippet);
+    $expected = '$a = 1 + 2;';
     $this->assertEquals($expected, $actual);
   }
 }

@@ -6,20 +6,12 @@ namespace Pharborist;
  */
 interface VisitorInterface {
   /**
-   * Called when first reach parent node.
-   *
-   * @param ParentNode $node
-   *   Parent node being visited.
-   */
-  public function visitBegin(ParentNode $node);
-
-  /**
-   * Called when visited node.
+   * Called when visiting node.
    *
    * @param Node $node
    *   Node being visited.
    */
-  public function visitChild(Node $node);
+  public function visit(Node $node);
 
   /**
    * Called when completed visiting a parent node.

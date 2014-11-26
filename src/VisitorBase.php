@@ -33,13 +33,7 @@ class VisitorBase implements VisitorInterface {
     }
   }
 
-  public function visitBegin(ParentNode $node) {
-    foreach ($this->getMethods($node, 'begin') as $method_name) {
-      $this->$method_name($node);
-    }
-  }
-
-  public function visitChild(Node $node) {
+  public function visit(Node $node) {
     foreach ($this->getMethods($node, 'visit') as $method_name) {
       $this->$method_name($node);
     }

@@ -2391,15 +2391,16 @@ class Parser {
       } while ($this->tryMatch(',', $implements));
       $node->addChild($implements, 'implements');
     }
-    $this->mustMatch('{', $node, NULL, FALSE, TRUE);
+    $this->matchHidden($node);
     $statement_block = new StatementBlockNode();
+    $this->mustMatch('{', $statement_block, NULL, FALSE, TRUE);
     $is_abstract = $node->getAbstract() !== NULL;
     while ($this->currentType !== NULL && $this->currentType !== '}') {
-      $statement_block->addChild($this->classStatement($is_abstract));
       $this->matchHidden($statement_block);
+      $statement_block->addChild($this->classStatement($is_abstract));
     }
+    $this->mustMatch('}', $statement_block, NULL, TRUE, TRUE);
     $node->addChild($statement_block, 'statements');
-    $this->mustMatch('}', $node, NULL, TRUE, TRUE);
     return $node;
   }
 
@@ -2660,19 +2661,20 @@ class Parser {
       } while ($this->tryMatch(',', $extends));
       $node->addChild($extends, 'extends');
     }
-    $this->mustMatch('{', $node, NULL, FALSE, TRUE);
+    $this->matchHidden($node);
     $statement_block = new StatementBlockNode();
+    $this->mustMatch('{', $statement_block, NULL, FALSE, TRUE);
     while ($this->currentType !== NULL && $this->currentType !== '}') {
+      $this->matchHidden($statement_block);
       if ($this->currentType === T_CONST) {
         $statement_block->addChild($this->_const());
       }
       else {
         $statement_block->addChild($this->interfaceMethod());
       }
-      $this->matchHidden($statement_block);
     }
+    $this->mustMatch('}', $statement_block, NULL, TRUE, TRUE);
     $node->addChild($statement_block, 'statements');
-    $this->mustMatch('}', $node, NULL, TRUE, TRUE);
     return $node;
   }
 
@@ -2726,15 +2728,15 @@ class Parser {
       } while ($this->tryMatch(',', $implements));
       $node->addChild($implements, 'implements');
     }
-    $this->mustMatch('{', $node, NULL, FALSE, TRUE);
-    $this->skipParent = $node;
+    $this->matchHidden($node);
     $statement_block = new StatementBlockNode();
+    $this->mustMatch('{', $statement_block, NULL, FALSE, TRUE);
     while ($this->currentType !== NULL && $this->currentType !== '}') {
-      $statement_block->addChild($this->classStatement(TRUE));
       $this->matchHidden($statement_block);
+      $statement_block->addChild($this->classStatement(TRUE));
     }
+    $this->mustMatch('}', $statement_block, NULL, TRUE, TRUE);
     $node->addChild($statement_block, 'statements');
-    $this->mustMatch('}', $node, NULL, TRUE, TRUE);
     return $node;
   }
 

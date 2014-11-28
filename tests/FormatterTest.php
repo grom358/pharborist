@@ -37,6 +37,23 @@ EOF;
     $this->assertEquals($expected, $actual);
   }
 
+  public function testAlternativeIf() {
+    $snippet = 'if( $a ) : test(); elseif ($b ): test(); elseif ($c):test();else: test();endif;';
+    $actual = $this->formatSnippet($snippet);
+    $expected = <<<'EOF'
+if ($a):
+  test();
+elseif ($b):
+  test();
+elseif ($c):
+  test();
+else:
+  test();
+endif;
+EOF;
+    $this->assertEquals($expected, $actual);
+  }
+
   public function testNestedIf() {
     $snippet = 'if( $a ) test(); elseif ($b ) test(); else if ($c){test();}else test();';
     $actual = $this->formatSnippet($snippet);

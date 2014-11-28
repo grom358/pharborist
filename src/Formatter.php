@@ -150,7 +150,20 @@ class Formatter extends VisitorBase {
     $this->spaceBefore($open_paren);
   }
 
+  protected function handleControlStructure(ParentNode $node) {
+    $keyword = $node->firstChild();
+    $this->spaceAfter($keyword);
+    $colons = $node->children(Filter::isTokenType(':'));
+    foreach ($colons as $colon) {
+      $this->removeSpaceBefore($colon);
+    }
+    if ($colons->isNotEmpty()) {
+      $this->newlineBefore($node->lastChild()->previous());
+    }
+  }
+
   public function visitIfNode(IfNode $node) {
+    $this->handleControlStructure($node);
     $this->formatCondition($node->getCondition());
     $this->encloseBlock($node->getThen());
     $this->encloseBlock($node->getElse());
@@ -161,12 +174,17 @@ class Formatter extends VisitorBase {
   }
 
   public function visitElseIfNode(ElseIfNode $node) {
+    $colons = $node->children(Filter::isTokenType(':'));
+    foreach ($colons as $colon) {
+      $this->removeSpaceBefore($colon);
+    }
     $this->formatCondition($node->getCondition());
     $this->encloseBlock($node->getThen());
     $this->newlineBefore($node);
   }
 
   public function visitWhileNode(WhileNode $node) {
+    $this->handleControlStructure($node);
     $this->formatCondition($node->getCondition());
     $this->encloseBlock($node->getBody());
   }
@@ -178,6 +196,7 @@ class Formatter extends VisitorBase {
   }
 
   public function visitForNode(ForNode $node) {
+    $this->handleControlStructure($node);
     $node->getInitial()->previousUntil(Filter::isTokenType('('))->remove();
     $this->spaceBefore($node->getInitial()->previous());
     $node->getStep()->nextUntil(Filter::isTokenType(')'))->remove();
@@ -191,6 +210,7 @@ class Formatter extends VisitorBase {
   }
 
   public function visitForeachNode(ForeachNode $node) {
+    $this->handleControlStructure($node);
     $node->getOnEach()->previousUntil(Filter::isTokenType('('))->remove();
     $this->spaceBefore($node->getOnEach()->previous());
     $node->getValue()->nextUntil(Filter::isTokenType(')'))->remove();
@@ -203,6 +223,7 @@ class Formatter extends VisitorBase {
   }
 
   public function visitSwitchNode(SwitchNode $node) {
+    $this->handleControlStructure($node);
     $this->formatCondition($node->getSwitchOn());
 
     /** @var TokenNode $token */
@@ -216,8 +237,8 @@ class Formatter extends VisitorBase {
   }
 
   public function visitCaseNode(CaseNode $node) {
-    $this->newlineBefore($node);
     $this->indentLevel++;
+    $this->newlineBefore($node);
   }
 
   public function endCaseNode(CaseNode $node) {
@@ -225,8 +246,8 @@ class Formatter extends VisitorBase {
   }
 
   public function visitDefaultNode(DefaultNode $node) {
-    $this->newlineBefore($node);
     $this->indentLevel++;
+    $this->newlineBefore($node);
   }
 
   public function endDefaultNode(DefaultNode $node) {
@@ -234,13 +255,23 @@ class Formatter extends VisitorBase {
   }
 
   public function visitStatementBlockNode(StatementBlockNode $node) {
+    $this->indentLevel++;
     $first = $node->firstChild();
     if ($first instanceof TokenNode && $first->getType() === '{') {
       $this->spaceBefore($node);
+      $this->newlineAfter($first);
     }
 
     foreach ($node->getStatements() as $statement) {
       $this->newlineBefore($statement);
+    }
+  }
+
+  public function endStatementBlockNode(StatementBlockNode $node) {
+    $this->indentLevel--;
+    $last = $node->lastChild();
+    if ($last instanceof TokenNode && $last->getType() === '}') {
+      $this->newlineBefore($last);
     }
   }
 
@@ -393,7 +424,8 @@ class Formatter extends VisitorBase {
    */
   protected function endClassTraitOrInterface($node) {
     /** @var WhitespaceNode $ws_node */
-    foreach ($node->getBody()->children(Filter::isInstanceOf('\Pharborist\WhitespaceNode')) as $ws_node) {
+    $whitespace = $node->getBody()->children(Filter::isInstanceOf('\Pharborist\WhitespaceNode'));
+    foreach ($whitespace->slice(1, -1) as $ws_node) {
       $ws_node->setText("\n" . $ws_node->getText());
     }
   }
@@ -504,10 +536,6 @@ class Formatter extends VisitorBase {
       case '[':
         $this->indentLevel++;
         break;
-      case '{':
-        $this->indentLevel++;
-        $this->newlineAfter($node);
-        break;
       case ')':
         if (!($node->parent() instanceof CallNode)) {
           $this->indentLevel--;
@@ -519,10 +547,6 @@ class Formatter extends VisitorBase {
         if ($prev instanceof WhitespaceNode) {
           $this->visitWhitespaceNode($prev);
         }
-        break;
-      case '}':
-        $this->indentLevel--;
-        $this->newlineBefore($node);
         break;
     }
   }

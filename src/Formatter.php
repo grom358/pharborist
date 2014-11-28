@@ -151,8 +151,6 @@ class Formatter extends VisitorBase {
   }
 
   protected function handleControlStructure(ParentNode $node) {
-    $keyword = $node->firstChild();
-    $this->spaceAfter($keyword);
     $colons = $node->children(Filter::isTokenType(':'));
     foreach ($colons as $colon) {
       $this->removeSpaceBefore($colon);

@@ -46,16 +46,16 @@ class Formatter extends VisitorBase {
    * @param WhitespaceNode|NULL $wsNode
    * @return string
    */
-  public function getNewlineIndent($wsNode = NULL) {
+  protected function getNewlineIndent($wsNode = NULL, $close = FALSE) {
     $nl = Settings::get('formatter.nl');
     $indent_per_level = Settings::get('formatter.indent');
-    $indent = str_repeat($indent_per_level, $this->indentLevel);
+    $indent = str_repeat($indent_per_level, $this->indentLevel - ($close ? 1 : 0));
     $nl_count = $wsNode ? $wsNode->getNewlineCount() : 1;
     $nl_count = max($nl_count, 1);
     return str_repeat($nl, $nl_count) . $indent;
   }
 
-  public function spaceBefore(Node $node) {
+  protected function spaceBefore(Node $node) {
     $prev = $node->previousToken();
     if ($prev instanceof WhitespaceNode) {
       $prev->setText(' ');
@@ -65,7 +65,7 @@ class Formatter extends VisitorBase {
     }
   }
 
-  public function spaceAfter(Node $node) {
+  protected function spaceAfter(Node $node) {
     $next = $node->nextToken();
     if ($next instanceof WhitespaceNode) {
       $next->setText(' ');
@@ -75,31 +75,31 @@ class Formatter extends VisitorBase {
     }
   }
 
-  public function removeSpaceBefore(Node $node) {
+  protected function removeSpaceBefore(Node $node) {
     $prev = $node->previousToken();
     if ($prev instanceof WhitespaceNode) {
       $prev->remove();
     }
   }
 
-  public function removeSpaceAfter(Node $node) {
+  protected function removeSpaceAfter(Node $node) {
     $next = $node->nextToken();
     if ($next instanceof WhitespaceNode) {
       $next->remove();
     }
   }
 
-  public function newlineBefore(Node $node) {
+  protected function newlineBefore(Node $node, $close = FALSE) {
     $prev = $node->previousToken();
     if ($prev instanceof WhitespaceNode) {
-      $prev->setText($this->getNewlineIndent($prev));
+      $prev->setText($this->getNewlineIndent($prev, $close));
     }
     else {
-      $node->before(Token::whitespace($this->getNewlineIndent()));
+      $node->before(Token::whitespace($this->getNewlineIndent(NULL, $close)));
     }
   }
 
-  public function newlineAfter(Node $node) {
+  protected function newlineAfter(Node $node) {
     $next = $node->nextToken();
     if ($next instanceof WhitespaceNode) {
       $next->setText($this->getNewlineIndent($next));
@@ -184,9 +184,7 @@ class Formatter extends VisitorBase {
     }
     $this->handleParens($node);
     $this->encloseBlock($node->getThen());
-    $this->indentLevel--;
-    $this->newlineBefore($node);
-    $this->indentLevel++;
+    $this->newlineBefore($node, TRUE);
   }
 
   public function visitWhileNode(WhileNode $node) {
@@ -275,9 +273,7 @@ class Formatter extends VisitorBase {
     }
     $last = $node->lastChild();
     if ($last instanceof TokenNode && $last->getType() === '}') {
-      $this->indentLevel--;
-      $this->newlineBefore($last);
-      $this->indentLevel++;
+      $this->newlineBefore($last, TRUE);
     }
   }
 
@@ -389,9 +385,7 @@ class Formatter extends VisitorBase {
       $node->getElementList()->append(Token::comma());
 
       // Newline before closing ) or ].
-      $this->indentLevel--;
-      $this->newlineBefore($node->lastChild());
-      $this->indentLevel++;
+      $this->newlineBefore($node->lastChild(), TRUE);
     }
   }
 

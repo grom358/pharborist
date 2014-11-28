@@ -2,6 +2,8 @@
 namespace Pharborist;
 
 use Pharborist\Constants\ConstantNode;
+use Pharborist\ControlStructures\CaseNode;
+use Pharborist\ControlStructures\DefaultNode;
 use Pharborist\ControlStructures\DoWhileNode;
 use Pharborist\ControlStructures\ElseIfNode;
 use Pharborist\ControlStructures\ForeachNode;
@@ -149,53 +151,33 @@ class Formatter extends VisitorBase {
   }
 
   public function visitIfNode(IfNode $node) {
-    $this->indentLevel++;
     $this->formatCondition($node->getCondition());
     $this->encloseBlock($node->getThen());
     $this->encloseBlock($node->getElse());
     if ($node->getElse()) {
       $elseKeyword = $node->getElse()->previousUntil(Filter::isTokenType(T_ELSE), TRUE)->get(0);
-      $this->indentLevel--;
       $this->newlineBefore($elseKeyword);
-      $this->indentLevel++;
     }
   }
 
   public function visitElseIfNode(ElseIfNode $node) {
     $this->formatCondition($node->getCondition());
     $this->encloseBlock($node->getThen());
-    $this->indentLevel--;
     $this->newlineBefore($node);
-    $this->indentLevel++;
-  }
-
-  public function endIfNode(IfNode $node) {
-    $this->indentLevel--;
   }
 
   public function visitWhileNode(WhileNode $node) {
-    $this->indentLevel++;
     $this->formatCondition($node->getCondition());
     $this->encloseBlock($node->getBody());
   }
 
-  public function endWhileNode(WhileNode $node) {
-    $this->indentLevel--;
-  }
-
   public function visitDoWhileNode(DoWhileNode $node) {
-    $this->indentLevel++;
     $this->formatCondition($node->getCondition());
     $this->encloseBlock($node->getBody());
     $this->spaceBefore($node->children(Filter::isTokenType(T_WHILE))->get(0));
   }
 
-  public function endDoWhileNode(DoWhileNode $node) {
-    $this->indentLevel--;
-  }
-
   public function visitForNode(ForNode $node) {
-    $this->indentLevel++;
     $node->getInitial()->previousUntil(Filter::isTokenType('('))->remove();
     $this->spaceBefore($node->getInitial()->previous());
     $node->getStep()->nextUntil(Filter::isTokenType(')'))->remove();
@@ -208,12 +190,7 @@ class Formatter extends VisitorBase {
     $this->spaceAfter($separator);
   }
 
-  public function endForNode(ForNode $node) {
-    $this->indentLevel--;
-  }
-
   public function visitForeachNode(ForeachNode $node) {
-    $this->indentLevel++;
     $node->getOnEach()->previousUntil(Filter::isTokenType('('))->remove();
     $this->spaceBefore($node->getOnEach()->previous());
     $node->getValue()->nextUntil(Filter::isTokenType(')'))->remove();
@@ -225,12 +202,7 @@ class Formatter extends VisitorBase {
     $this->encloseBlock($node->getBody());
   }
 
-  public function endForeachNode(ForeachNode $node) {
-    $this->indentLevel--;
-  }
-
   public function visitSwitchNode(SwitchNode $node) {
-    $this->indentLevel++;
     $this->formatCondition($node->getSwitchOn());
 
     /** @var TokenNode $token */
@@ -241,34 +213,30 @@ class Formatter extends VisitorBase {
     else {
       $this->spaceBefore($token);
     }
+  }
 
-    $cases = $node->getCases();
-
-    // Indent before each case.
-    foreach ($cases as $case) {
-      $this->newlineBefore($case);
-    }
-
-    $this->indentLevel--;
-    $this->newlineBefore($node->lastChild());
-    $this->indentLevel++;
-
+  public function visitCaseNode(CaseNode $node) {
+    $this->newlineBefore($node);
     $this->indentLevel++;
   }
 
-  public function endSwitchNode(SwitchNode $node) {
-    $this->indentLevel -= 2;
+  public function endCaseNode(CaseNode $node) {
+    $this->indentLevel--;
+  }
+
+  public function visitDefaultNode(DefaultNode $node) {
+    $this->newlineBefore($node);
+    $this->indentLevel++;
+  }
+
+  public function endDefaultNode(DefaultNode $node) {
+    $this->indentLevel--;
   }
 
   public function visitStatementBlockNode(StatementBlockNode $node) {
     $first = $node->firstChild();
     if ($first instanceof TokenNode && $first->getType() === '{') {
       $this->spaceBefore($node);
-
-      // Newline before closing }.
-      $this->indentLevel--;
-      $this->newlineBefore($node->lastChild());
-      $this->indentLevel++;
     }
 
     foreach ($node->getStatements() as $statement) {
@@ -304,8 +272,6 @@ class Formatter extends VisitorBase {
   }
 
   public function visitArrayNode(ArrayNode $node) {
-    $this->indentLevel++;
-
     if (Settings::get('formatter.force_array_new_style')) {
       $first = $node->firstChild();
       /** @var TokenNode $first */
@@ -389,21 +355,14 @@ class Formatter extends VisitorBase {
       $this->newlineBefore($node->lastChild());
       $this->indentLevel++;
     }
-
-    $this->indentLevel--;
   }
 
   public function visitFunctionDeclarationNode(FunctionDeclarationNode $node) {
-    $this->indentLevel++;
     $parameter_list = $node->getParameterList();
     $this->removeSpaceBefore($parameter_list);
     $this->removeSpaceAfter($parameter_list);
     $open_paren = $parameter_list->previousUntil(Filter::isTokenType('('), TRUE)->get(0);
     $this->removeSpaceBefore($open_paren);
-  }
-
-  public function endFunctionDeclarationNode(FunctionDeclarationNode $node) {
-    $this->indentLevel--;
   }
 
   public function visitParameterNode(ParameterNode $node) {
@@ -432,28 +391,17 @@ class Formatter extends VisitorBase {
   /**
    * @param SingleInheritanceNode|InterfaceNode $node
    */
-  protected function visitClassTraitOrInterface($node) {
-    $close_brace = $node->lastChild();
-    $this->newlineBefore($close_brace);
-    $this->indentLevel++;
-  }
-
-  /**
-   * @param SingleInheritanceNode|InterfaceNode $node
-   */
   protected function endClassTraitOrInterface($node) {
     /** @var WhitespaceNode $ws_node */
-    foreach ($node->getBody()->children(Filter::isInstanceOf('\Pharborist\WhitespaceNode'))->slice(1) as $ws_node) {
+    foreach ($node->getBody()->children(Filter::isInstanceOf('\Pharborist\WhitespaceNode')) as $ws_node) {
       $ws_node->setText("\n" . $ws_node->getText());
     }
-    $this->indentLevel--;
   }
 
   /**
    * @param ClassMethodNode|InterfaceMethodNode $node
    */
   protected function visitMethod($node) {
-    $this->indentLevel++;
     $parameter_list = $node->getParameterList();
     $this->removeSpaceBefore($parameter_list);
     $this->removeSpaceAfter($parameter_list);
@@ -463,10 +411,6 @@ class Formatter extends VisitorBase {
     if ($node->getVisibility() === NULL) {
       $node->setVisibility('public');
     }
-  }
-
-  public function visitSingleInheritanceNode(SingleInheritanceNode $node) {
-    $this->visitClassTraitOrInterface($node);
   }
 
   public function endSingleInheritanceNode(SingleInheritanceNode $node) {
@@ -479,24 +423,12 @@ class Formatter extends VisitorBase {
     $this->visitMethod($node);
   }
 
-  public function endClassMethodNode(ClassMethodNode $node) {
-    $this->indentLevel--;
-  }
-
-  public function visitInterfaceNode(InterfaceNode $node) {
-    $this->visitClassTraitOrInterface($node);
-  }
-
   public function endInterfaceNode(InterfaceNode $node) {
     $this->endClassTraitOrInterface($node);
   }
 
   public function visitInterfaceMethodNode(InterfaceMethodNode $node) {
     $this->visitMethod($node);
-  }
-
-  public function endInterfaceMethodNode(InterfaceMethodNode $node) {
-    $this->indentLevel--;
   }
 
   protected function handleBuiltinConstantNode(ConstantNode $node) {
@@ -519,11 +451,6 @@ class Formatter extends VisitorBase {
 
   public function visitTryCatchNode(TryCatchNode $node) {
     $this->newlineAfter($node->getTry());
-    $this->indentLevel++;
-  }
-
-  public function endTryCatchNode(TryCatchNode $node) {
-    $this->indentLevel--;
   }
 
   public function visitCatchNode(CatchNode $node) {
@@ -544,32 +471,59 @@ class Formatter extends VisitorBase {
   }
 
   public function visitObjectMethodCallNode(ObjectMethodCallNode $node) {
-    $this->indentLevel++;
     $object_operator = $node->getMethodName()->previousUntil(Filter::isTokenType(T_OBJECT_OPERATOR), TRUE)->get(0);
     $this->removeSpaceAfter($object_operator);
-    $prev = $object_operator->previous();
-    if ($prev instanceof WhitespaceNode) {
-      if ($prev->getNewlineCount() > 0) {
-        $prev->setText($this->getNewlineIndent($prev));
-      }
-      else {
-        $prev->remove();
-      }
-    }
-    $this->indentLevel--;
   }
 
   public function visitWhitespaceNode(WhitespaceNode $node) {
     // Normalise whitespace.
-    $nl = Settings::get('formatter.nl');
     $nl_count = $node->getNewlineCount();
     if ($nl_count > 0) {
-      $lines = explode($nl, $node->getText());
-      $last_line = end($lines);
-      $node->setText(str_repeat($nl, $nl_count) . $last_line);
+      $node->setText($this->getNewlineIndent($node));
     }
     else {
       $node->setText(' ');
+    }
+  }
+
+  public function visitExpressionStatementNode(ExpressionStatementNode $node) {
+    $this->indentLevel++;
+  }
+
+  public function endExpressionStatementNode(ExpressionStatementNode $node) {
+    $this->indentLevel--;
+  }
+
+  public function visitTokenNode(TokenNode $node) {
+    switch ($node->getType()) {
+      case '(':
+        if (!($node->parent() instanceof CallNode)) {
+          $this->indentLevel++;
+        }
+        break;
+      case '[':
+        $this->indentLevel++;
+        break;
+      case '{':
+        $this->indentLevel++;
+        $this->newlineAfter($node);
+        break;
+      case ')':
+        if (!($node->parent() instanceof CallNode)) {
+          $this->indentLevel--;
+        }
+        break;
+      case ']':
+        $this->indentLevel--;
+        $prev = $node->previousToken();
+        if ($prev instanceof WhitespaceNode) {
+          $this->visitWhitespaceNode($prev);
+        }
+        break;
+      case '}':
+        $this->indentLevel--;
+        $this->newlineBefore($node);
+        break;
     }
   }
 }

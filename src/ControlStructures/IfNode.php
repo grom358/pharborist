@@ -3,6 +3,7 @@ namespace Pharborist\ControlStructures;
 
 use Pharborist\Node;
 use Pharborist\NodeCollection;
+use Pharborist\ParenTrait;
 use Pharborist\StatementNode;
 use Pharborist\ExpressionNode;
 
@@ -10,6 +11,8 @@ use Pharborist\ExpressionNode;
  * An if control structure.
  */
 class IfNode extends StatementNode {
+  use ParenTrait;
+
   /**
    * @var ExpressionNode
    */

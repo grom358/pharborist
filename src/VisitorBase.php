@@ -28,7 +28,8 @@ class VisitorBase implements VisitorInterface {
           $methods[] = $method_name;
         }
       }
-      $this->methodCache[$node_class_name][$prefix] = array_reverse($methods);
+      $methods = array_reverse($methods);
+      $this->methodCache[$node_class_name][$prefix] = $methods;
       return $methods;
     }
   }

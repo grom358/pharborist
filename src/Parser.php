@@ -527,14 +527,14 @@ class Parser {
    * @param string $property_name
    */
   private function condition(ParentNode $node, $property_name) {
-    $this->mustMatch('(', $node);
+    $this->mustMatch('(', $node, 'openParen');
     if ($this->currentType === T_YIELD) {
       $node->addChild($this->_yield(), $property_name);
     }
     else {
       $node->addChild($this->expr(), $property_name);
     }
-    $this->mustMatch(')', $node);
+    $this->mustMatch(')', $node, 'closeParen');
   }
 
   /**
@@ -639,10 +639,10 @@ class Parser {
   private function _for() {
     $node = new ForNode();
     $this->mustMatch(T_FOR, $node);
-    $this->mustMatch('(', $node);
+    $this->mustMatch('(', $node, 'openParen');
     $this->forExpr($node, ';', 'initial');
     $this->forExpr($node, ';', 'condition');
-    $this->forExpr($node, ')', 'step', TRUE);
+    $this->forExpr($node, ')', 'step', TRUE, 'closeParen');
     if ($this->tryMatch(':', $node, NULL, FALSE, TRUE)) {
       $node->addChild($this->innerStatementListNode(T_ENDFOR), 'body');
       $this->mustMatch(T_ENDFOR, $node);
@@ -662,14 +662,15 @@ class Parser {
    * @param int|string $terminator Token type that terminates the for expression
    * @param string $property_name
    * @param bool $is_last TRUE if last for expression
+   * @param string $terminator_name
    */
-  private function forExpr(ForNode $parent, $terminator, $property_name, $is_last = FALSE) {
+  private function forExpr(ForNode $parent, $terminator, $property_name, $is_last = FALSE, $terminator_name = NULL) {
     if ($this->tryMatch($terminator, $parent)) {
       $parent->addChild(new CommaListNode(), $property_name);
       return;
     }
     $parent->addChild($this->exprList(), $property_name);
-    $this->mustMatch($terminator, $parent, NULL, $is_last, FALSE);
+    $this->mustMatch($terminator, $parent, $terminator_name, $is_last, FALSE);
   }
 
   /**
@@ -912,7 +913,7 @@ class Parser {
   private function _foreach() {
     $node = new ForeachNode();
     $this->mustMatch(T_FOREACH, $node);
-    $this->mustMatch('(', $node);
+    $this->mustMatch('(', $node, 'openParen');
     $node->addChild($this->expr(), 'onEach');
     $this->mustMatch(T_AS, $node);
     $value = $this->foreachVariable();
@@ -924,7 +925,7 @@ class Parser {
     else {
       $node->addChild($value, 'value');
     }
-    $this->mustMatch(')', $node, NULL, FALSE, TRUE);
+    $this->mustMatch(')', $node, 'closeParen', FALSE, TRUE);
     if ($this->tryMatch(':', $node, NULL, FALSE, TRUE)) {
       $node->addChild($this->innerStatementListNode(T_ENDFOREACH), 'body');
       $this->mustMatch(T_ENDFOREACH, $node);
@@ -1033,10 +1034,10 @@ class Parser {
     $node->addChild($this->innerStatementBlock(), 'try');
     $catch_node = new CatchNode();
     while ($this->tryMatch(T_CATCH, $catch_node)) {
-      $this->mustMatch('(', $catch_node);
+      $this->mustMatch('(', $catch_node, 'openParen');
       $catch_node->addChild($this->name(), 'exceptionType');
       $this->mustMatch(T_VARIABLE, $catch_node, 'variable');
-      $this->mustMatch(')', $catch_node, NULL, FALSE, TRUE);
+      $this->mustMatch(')', $catch_node, 'closeParen', FALSE, TRUE);
       $catch_node->addChild($this->innerStatementBlock(), 'body');
       $node->addChild($catch_node);
       $catch_node = new CatchNode();

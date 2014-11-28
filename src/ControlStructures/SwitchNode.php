@@ -2,6 +2,7 @@
 namespace Pharborist\ControlStructures;
 
 use Pharborist\NodeCollection;
+use Pharborist\ParenTrait;
 use Pharborist\StatementNode;
 use Pharborist\ExpressionNode;
 
@@ -9,6 +10,8 @@ use Pharborist\ExpressionNode;
  * A switch control structure.
  */
 class SwitchNode extends StatementNode {
+  use ParenTrait;
+
   /**
    * @var ExpressionNode
    */

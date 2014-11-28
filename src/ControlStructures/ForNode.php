@@ -2,6 +2,7 @@
 namespace Pharborist\ControlStructures;
 
 use Pharborist\Node;
+use Pharborist\ParenTrait;
 use Pharborist\StatementNode;
 use Pharborist\CommaListNode;
 
@@ -9,6 +10,8 @@ use Pharborist\CommaListNode;
  * A for control structure.
  */
 class ForNode extends StatementNode {
+  use ParenTrait;
+
   /**
    * @var CommaListNode
    */

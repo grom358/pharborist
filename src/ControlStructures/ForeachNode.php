@@ -2,12 +2,15 @@
 namespace Pharborist\ControlStructures;
 
 use Pharborist\Node;
+use Pharborist\ParenTrait;
 use Pharborist\StatementNode;
 
 /**
  * foreach control structure.
  */
 class ForeachNode extends StatementNode {
+  use ParenTrait;
+
   /**
    * @var Node
    */

@@ -2,6 +2,7 @@
 namespace Pharborist\ControlStructures;
 
 use Pharborist\Node;
+use Pharborist\ParenTrait;
 use Pharborist\StatementNode;
 use Pharborist\ExpressionNode;
 
@@ -9,6 +10,8 @@ use Pharborist\ExpressionNode;
  * do-while control structure.
  */
 class DoWhileNode extends StatementNode {
+  use ParenTrait;
+
   /**
    * @var ExpressionNode
    */

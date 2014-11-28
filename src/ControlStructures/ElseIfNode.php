@@ -4,11 +4,14 @@ namespace Pharborist\ControlStructures;
 use Pharborist\ParentNode;
 use Pharborist\Node;
 use Pharborist\ExpressionNode;
+use Pharborist\ParenTrait;
 
 /**
  * elseif control structure.
  */
 class ElseIfNode extends ParentNode {
+  use ParenTrait;
+
   /**
    * @var ExpressionNode
    */

@@ -320,15 +320,6 @@ class Formatter extends VisitorBase {
       $this->removeSpaceAfter($first);
     }
 
-    // Spaces around => operator.
-    $arrows = $node->getElementList()
-      ->children(Filter::isInstanceOf('\Pharborist\Types\ArrayPairNode'))
-      ->children(Filter::isTokenType(T_DOUBLE_ARROW));
-    foreach ($arrows as $arrow) {
-      $this->spaceBefore($arrow);
-      $this->spaceAfter($arrow);
-    }
-
     // Remove whitespace before first element.
     $this->removeSpaceBefore($node->getElementList());
 
@@ -545,6 +536,10 @@ class Formatter extends VisitorBase {
         if ($prev instanceof WhitespaceNode) {
           $this->visitWhitespaceNode($prev);
         }
+        break;
+      case T_DOUBLE_ARROW:
+        $this->spaceBefore($node);
+        $this->spaceAfter($node);
         break;
     }
   }

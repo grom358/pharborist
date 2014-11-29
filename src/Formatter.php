@@ -16,6 +16,7 @@ use Pharborist\Functions\CallNode;
 use Pharborist\Functions\FunctionDeclarationNode;
 use Pharborist\Functions\ParameterNode;
 use Pharborist\Objects\ClassMethodNode;
+use Pharborist\Objects\ClassNode;
 use Pharborist\Objects\InterfaceMethodNode;
 use Pharborist\Objects\InterfaceNode;
 use Pharborist\Objects\NewNode;
@@ -258,6 +259,14 @@ class Formatter extends VisitorBase {
     $this->newlineBefore($node);
   }
 
+  protected function isDeclaration(ParentNode $node) {
+    return $node instanceof FunctionDeclarationNode ||
+      $node instanceof SingleInheritanceNode ||
+      $node instanceof InterfaceNode ||
+      $node instanceof ClassMethodNode ||
+      $node instanceof InterfaceMethodNode;
+  }
+
   public function visitStatementBlockNode(StatementBlockNode $node) {
     $nested = FALSE;
     if ($node->parent(Filter::isInstanceOf('\Pharborist\StatementBlockNode'))) {
@@ -267,7 +276,13 @@ class Formatter extends VisitorBase {
     $this->objectStorage[$node] = $nested;
     $first = $node->firstChild();
     if ($first instanceof TokenNode && $first->getType() === '{') {
-      $this->spaceBefore($node);
+      $brace_newline = Settings::get('formatter.declaration_brace_newline');
+      if ($brace_newline && $this->isDeclaration($node->parent())) {
+        $this->newlineBefore($node, TRUE);
+      }
+      else {
+        $this->spaceBefore($node);
+      }
       $this->newlineAfter($first);
     }
 

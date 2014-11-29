@@ -454,4 +454,22 @@ EOF;
     $this->assertEquals($expected, $actual);
     Settings::setAll($settings);
   }
+
+  public function testPsr2Class() {
+    $settings = Settings::getAll();
+    Settings::set('formatter.declaration_brace_newline', TRUE);
+    $snippet = 'class Test{public function test(){run();}}';
+    $actual = $this->formatSnippet($snippet);
+    $expected = <<<'EOF'
+class Test
+{
+  public function test()
+  {
+    run();
+  }
+}
+EOF;
+    $this->assertEquals($expected, $actual);
+    Settings::setAll($settings);
+  }
 }

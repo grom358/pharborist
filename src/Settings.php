@@ -32,3 +32,4 @@ Settings::set('formatter.soft_limit', 80);
 Settings::set('formatter.boolean_null.upper', TRUE);
 Settings::set('formatter.force_array_new_style', TRUE);
 Settings::set('formatter.else_newline', TRUE);
+Settings::set('formatter.declaration_brace_newline', FALSE);

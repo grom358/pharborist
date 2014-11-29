@@ -173,14 +173,26 @@ class Formatter extends VisitorBase {
     $this->handleControlStructure($node);
     if ($node->getElse()) {
       $elseKeyword = $node->getElseKeyword();
-      $this->newlineBefore($elseKeyword);
+      $else_newline = Settings::get('formatter.else_newline');
+      if ($node->isAlterativeSyntax() || $else_newline) {
+        $this->newlineBefore($elseKeyword);
+      }
+      else {
+        $this->spaceBefore($elseKeyword);
+      }
     }
   }
 
   public function visitElseIfNode(ElseIfNode $node) {
     $this->handleParens($node);
     $this->encloseBlock($node->getThen());
-    $this->newlineBefore($node, TRUE);
+    $else_newline = Settings::get('formatter.else_newline');
+    if ($node->getOpenColon() || $else_newline) {
+      $this->newlineBefore($node, TRUE);
+    }
+    else {
+      $this->spaceBefore($node);
+    }
     if ($colon = $node->getOpenColon()) {
       $this->removeSpaceBefore($colon);
     }

@@ -434,4 +434,24 @@ abstract class Test {
 EOF;
     $this->assertEquals($expected, $actual);
   }
+
+  public function testPsr2If() {
+    $settings = Settings::getAll();
+    Settings::set('formatter.else_newline', FALSE);
+    $snippet = 'if( $a ) test(); elseif ($b ) test(); elseif ($c){test();}else test();';
+    $actual = $this->formatSnippet($snippet);
+    $expected = <<<'EOF'
+if ($a) {
+  test();
+} elseif ($b) {
+  test();
+} elseif ($c) {
+  test();
+} else {
+  test();
+}
+EOF;
+    $this->assertEquals($expected, $actual);
+    Settings::setAll($settings);
+  }
 }

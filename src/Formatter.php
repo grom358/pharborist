@@ -172,19 +172,18 @@ class Formatter extends VisitorBase {
   public function endIfNode(IfNode $node) {
     $this->handleControlStructure($node);
     if ($node->getElse()) {
-      $elseKeyword = $node->getElse()->previousUntil(Filter::isTokenType(T_ELSE), TRUE)->get(0);
+      $elseKeyword = $node->getElseKeyword();
       $this->newlineBefore($elseKeyword);
     }
   }
 
   public function visitElseIfNode(ElseIfNode $node) {
-    $colons = $node->children(Filter::isTokenType(':'));
-    foreach ($colons as $colon) {
-      $this->removeSpaceBefore($colon);
-    }
     $this->handleParens($node);
     $this->encloseBlock($node->getThen());
     $this->newlineBefore($node, TRUE);
+    if ($colon = $node->getOpenColon()) {
+      $this->removeSpaceBefore($colon);
+    }
   }
 
   public function visitWhileNode(WhileNode $node) {

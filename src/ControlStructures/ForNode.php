@@ -11,6 +11,7 @@ use Pharborist\CommaListNode;
  */
 class ForNode extends StatementNode {
   use ParenTrait;
+  use AltSyntaxTrait;
 
   /**
    * @var CommaListNode

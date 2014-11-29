@@ -11,6 +11,7 @@ use Pharborist\ExpressionNode;
  */
 class SwitchNode extends StatementNode {
   use ParenTrait;
+  use AltSyntaxTrait;
 
   /**
    * @var ExpressionNode

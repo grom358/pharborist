@@ -6,12 +6,14 @@ use Pharborist\NodeCollection;
 use Pharborist\ParenTrait;
 use Pharborist\StatementNode;
 use Pharborist\ExpressionNode;
+use Pharborist\TokenNode;
 
 /**
  * An if control structure.
  */
 class IfNode extends StatementNode {
   use ParenTrait;
+  use AltSyntaxTrait;
 
   /**
    * @var ExpressionNode
@@ -22,6 +24,16 @@ class IfNode extends StatementNode {
    * @var Node
    */
   protected $then;
+
+  /**
+   * @var TokenNode
+   */
+  protected $elseKeyword;
+
+  /**
+   * @var TokenNode
+   */
+  protected $elseColon;
 
   /**
    * @var Node
@@ -47,6 +59,24 @@ class IfNode extends StatementNode {
    */
   public function getElseIfs() {
     return new NodeCollection($this->childrenByInstance('\Pharborist\ControlStructures\ElseIfNode'), FALSE);
+  }
+
+  /**
+   * The T_ELSE keyword token.
+   *
+   * @return TokenNode
+   */
+  public function getElseKeyword() {
+    return $this->elseKeyword;
+  }
+
+  /**
+   * The colon ':' token when using alternative syntax.
+   *
+   * @return TokenNode
+   */
+  public function getElseColon() {
+    return $this->elseColon;
   }
 
   /**

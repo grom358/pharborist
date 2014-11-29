@@ -5,6 +5,7 @@ use Pharborist\ParentNode;
 use Pharborist\Node;
 use Pharborist\ExpressionNode;
 use Pharborist\ParenTrait;
+use Pharborist\TokenNode;
 
 /**
  * elseif control structure.
@@ -18,6 +19,11 @@ class ElseIfNode extends ParentNode {
   protected $condition;
 
   /**
+   * @var TokenNode
+   */
+  protected $openColon;
+
+  /**
    * @var Node
    */
   protected $then;
@@ -27,6 +33,15 @@ class ElseIfNode extends ParentNode {
    */
   public function getCondition() {
     return $this->condition;
+  }
+
+  /**
+   * The colon (':') delimiter for body of statements.
+   *
+   * @return TokenNode
+   */
+  public function getOpenColon() {
+    return $this->openColon;
   }
 
   /**

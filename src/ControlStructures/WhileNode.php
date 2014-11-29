@@ -11,6 +11,7 @@ use Pharborist\ExpressionNode;
  */
 class WhileNode extends StatementNode {
   use ParenTrait;
+  use AltSyntaxTrait;
 
   /**
    * @var ExpressionNode

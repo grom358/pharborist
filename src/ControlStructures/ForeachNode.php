@@ -10,6 +10,7 @@ use Pharborist\StatementNode;
  */
 class ForeachNode extends StatementNode {
   use ParenTrait;
+  use AltSyntaxTrait;
 
   /**
    * @var Node

@@ -570,4 +570,40 @@ EOF;
 
     Settings::setAll($settings);
   }
+
+  public function testPsr2FunctionDeclaration() {
+    $settings = Settings::getAll();
+    Settings::set('formatter.declaration_brace_newline', TRUE);
+    Settings::set('formatter.parameters.keep_wrap', TRUE);
+
+    $snippet = <<<'EOF'
+function test(
+$a,
+$b) {}
+EOF;
+    $actual = $this->formatSnippet($snippet);
+    $expected = <<<'EOF'
+function test(
+  $a,
+  $b
+) {
+}
+EOF;
+    $this->assertEquals($expected, $actual);
+
+    Settings::set('formatter.parameters.wrap_if_long', TRUE);
+    $snippet = 'function test($someLongParameterName, $anotherLongParameterName, $yetAnotherParameterName){}';
+    $actual = $this->formatSnippet($snippet);
+    $expected = <<<'EOF'
+function test(
+  $someLongParameterName,
+  $anotherLongParameterName,
+  $yetAnotherParameterName
+) {
+}
+EOF;
+    $this->assertEquals($expected, $actual);
+
+    Settings::setAll($settings);
+  }
 }

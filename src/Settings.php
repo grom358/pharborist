@@ -35,3 +35,5 @@ Settings::set('formatter.else_newline', TRUE);
 Settings::set('formatter.declaration_brace_newline', FALSE);
 Settings::set('formatter.implement_extend.keep_wrap', FALSE);
 Settings::set('formatter.implement_extend.wrap_if_long', FALSE);
+Settings::set('formatter.parameters.keep_wrap', FALSE);
+Settings::set('formatter.parameters.wrap_if_long', FALSE);

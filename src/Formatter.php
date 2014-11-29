@@ -421,6 +421,41 @@ class Formatter extends VisitorBase {
     $this->removeSpaceAfter($parameter_list);
     $open_paren = $parameter_list->previousUntil(Filter::isTokenType('('), TRUE)->get(0);
     $this->removeSpaceBefore($open_paren);
+
+    $keep_wrap = Settings::get('formatter.parameters.keep_wrap');
+    if ($keep_wrap) {
+      $has_wrap = $parameter_list->children(function (Node $node) {
+        return $node instanceof WhitespaceNode && $node->getNewlineCount() > 0;
+      })->isNotEmpty();
+      $this->objectStorage[$node] = $has_wrap;
+    }
+  }
+
+  public function endFunctionDeclarationNode(FunctionDeclarationNode $node) {
+    $keep_wrap = Settings::get('formatter.parameters.keep_wrap');
+    $wrap_parameters = FALSE;
+    if ($keep_wrap) {
+      $wrap_parameters = $this->objectStorage[$node];
+      unset($this->objectStorage[$node]);
+    }
+    $parameter_list = $node->getParameterList();
+    $wrap_if_long = Settings::get('formatter.parameters.wrap_if_long');
+    if (!$wrap_parameters && $wrap_if_long) {
+      $column_position = $this->calculateColumnPosition($parameter_list);
+      $column_position += strlen($parameter_list->getText());
+      $soft_limit = Settings::get('formatter.soft_limit');
+      $wrap_parameters = $column_position > $soft_limit;
+    }
+    if ($wrap_parameters) {
+      $this->indentLevel++;
+      $this->newlineBefore($parameter_list);
+      foreach ($parameter_list->children(Filter::isTokenType(',')) as $comma) {
+        $this->newlineAfter($comma);
+      }
+      $this->indentLevel--;
+      $this->newlineAfter($parameter_list, TRUE);
+      $this->spaceBefore($node->getBody());
+    }
   }
 
   public function visitParameterNode(ParameterNode $node) {

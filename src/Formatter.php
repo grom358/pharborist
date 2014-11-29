@@ -424,10 +424,12 @@ class Formatter extends VisitorBase {
    * @param SingleInheritanceNode|InterfaceNode $node
    */
   protected function endClassTraitOrInterface($node) {
+    $nl = Settings::get('formatter.nl');
+    $indent = Settings::get('formatter.indent');
     /** @var WhitespaceNode $ws_node */
     $whitespace = $node->getBody()->children(Filter::isInstanceOf('\Pharborist\WhitespaceNode'));
     foreach ($whitespace->slice(1, -1) as $ws_node) {
-      $ws_node->setText("\n" . $ws_node->getText());
+      $ws_node->setText(str_repeat($nl, 2) . $indent);
     }
   }
 
@@ -444,6 +446,13 @@ class Formatter extends VisitorBase {
     if ($node->getVisibility() === NULL) {
       $node->setVisibility('public');
     }
+    if ($node->getStatic()) {
+      /** @var TokenNode $next */
+      $next = $node->getStatic()->nextUntil(Filter::isNotHidden(), TRUE)->last()->get(0);
+      if ($next->getType() !== T_FUNCTION) {
+        $node->getStatic()->swapWith($node->getVisibility());
+      }
+    }
   }
 
   public function endSingleInheritanceNode(SingleInheritanceNode $node) {
@@ -451,9 +460,17 @@ class Formatter extends VisitorBase {
   }
 
   public function visitClassMethodNode(ClassMethodNode $node) {
-    $close_brace = $node->getBody()->lastChild();
-    $this->newlineBefore($close_brace);
+    if ($node->getBody()) {
+      $close_brace = $node->getBody()->lastChild();
+      $this->newlineBefore($close_brace);
+    }
     $this->visitMethod($node);
+    if ($node->getAbstract() && $node->firstChild() !== $node->getAbstract()) {
+      $node->getAbstract()->swapWith($node->getVisibility());
+    }
+    if ($node->getFinal() && $node->firstChild() !== $node->getFinal()) {
+      $node->getFinal()->swapWith($node->getVisibility());
+    }
   }
 
   public function endInterfaceNode(InterfaceNode $node) {
@@ -484,9 +501,7 @@ class Formatter extends VisitorBase {
 
   public function endCatchNode(CatchNode $node) {
     $this->handleParens($node);
-    $this->indentLevel--;
-    $this->newlineBefore($node);
-    $this->indentLevel++;
+    $this->newlineBefore($node, TRUE);
   }
 
   public function visitNewNode(NewNode $node) {

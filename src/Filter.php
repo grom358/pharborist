@@ -203,4 +203,15 @@ class Filter {
       return $node instanceof TokenNode && in_array($node->getType(), $types);
     };
   }
+
+  /**
+   * Callback to skip whitespace and comments.
+   *
+   * @return callable
+   */
+  public static function isNotHidden() {
+    return function ($node) {
+      return !($node instanceof WhitespaceNode || $node instanceof CommentNode || $node instanceof LineCommentBlockNode);
+    };
+  }
 }

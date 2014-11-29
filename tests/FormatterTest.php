@@ -401,4 +401,37 @@ EOF;
     $expected = '$a = 1 + 2;';
     $this->assertEquals($expected, $actual);
   }
+
+  public function testMethodModifiers() {
+    $snippet = <<<'EOF'
+abstract class Test {
+  public abstract function abstractMethod();
+
+  public final function finalMethod() {
+  }
+
+  static public function classMethod() {
+  }
+
+  final static public function testFinalStatic() {
+  }
+}
+EOF;
+    $actual = $this->formatSnippet($snippet);
+    $expected = <<<'EOF'
+abstract class Test {
+  abstract public function abstractMethod();
+
+  final public function finalMethod() {
+  }
+
+  public static function classMethod() {
+  }
+
+  final public static function testFinalStatic() {
+  }
+}
+EOF;
+    $this->assertEquals($expected, $actual);
+  }
 }

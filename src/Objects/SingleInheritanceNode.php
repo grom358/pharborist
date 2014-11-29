@@ -85,6 +85,13 @@ abstract class SingleInheritanceNode extends StatementNode {
   }
 
   /**
+   * @return CommaListNode
+   */
+  public function getImplementList() {
+    return $this->implements;
+  }
+
+  /**
    * @return NodeCollection|NameNode[]
    */
   public function getImplements() {

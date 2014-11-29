@@ -481,8 +481,60 @@ class Formatter extends VisitorBase {
     }
   }
 
+  /**
+   * @param CommaListNode|NULL $list_node
+   */
+  protected function checkExtendImplementList($list_node) {
+    if (!$list_node) {
+      return;
+    }
+    $keep_wrap = Settings::get('formatter.implement_extend.keep_wrap');
+    if ($keep_wrap) {
+      $wrap_implements = FALSE;
+      $wrap_implements = $list_node->children(function (Node $node) {
+        return $node instanceof WhitespaceNode && $node->getNewlineCount() > 0;
+      })->isNotEmpty();
+      $this->objectStorage[$list_node] = $wrap_implements;
+    }
+  }
+
+  public function visitSingleInheritanceNode(SingleInheritanceNode $node) {
+    $this->checkExtendImplementList($node->getImplementList());
+  }
+
+  /**
+   * @param CommaListNode|NULL $list_node
+   */
+  protected function wrapExtendImplementList($list_node) {
+    if (!$list_node) {
+      return;
+    }
+    $keep_wrap = Settings::get('formatter.implement_extend.keep_wrap');
+    $wrap_implements = FALSE;
+    if ($keep_wrap) {
+      $wrap_implements = $this->objectStorage[$list_node];
+      unset($this->objectStorage[$list_node]);
+    }
+    $wrap_if_long = Settings::get('formatter.implement_extend.wrap_if_long');
+    if (!$wrap_implements && $wrap_if_long) {
+      $column_position = $this->calculateColumnPosition($list_node);
+      $column_position += strlen($list_node->getText());
+      $soft_limit = Settings::get('formatter.soft_limit');
+      $wrap_implements = $column_position > $soft_limit;
+    }
+    if ($wrap_implements) {
+      $this->indentLevel++;
+      $this->newlineBefore($list_node);
+      foreach ($list_node->children(Filter::isTokenType(',')) as $comma) {
+        $this->newlineAfter($comma);
+      }
+      $this->indentLevel--;
+    }
+  }
+
   public function endSingleInheritanceNode(SingleInheritanceNode $node) {
     $this->endClassTraitOrInterface($node);
+    $this->wrapExtendImplementList($node->getImplementList());
   }
 
   public function visitClassMethodNode(ClassMethodNode $node) {
@@ -499,8 +551,13 @@ class Formatter extends VisitorBase {
     }
   }
 
+  public function visitInterfaceNode(InterfaceNode $node) {
+    $this->checkExtendImplementList($node->getExtendList());
+  }
+
   public function endInterfaceNode(InterfaceNode $node) {
     $this->endClassTraitOrInterface($node);
+    $this->wrapExtendImplementList($node->getExtendList());
   }
 
   public function visitInterfaceMethodNode(InterfaceMethodNode $node) {

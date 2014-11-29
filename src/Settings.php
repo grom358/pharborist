@@ -33,3 +33,5 @@ Settings::set('formatter.boolean_null.upper', TRUE);
 Settings::set('formatter.force_array_new_style', TRUE);
 Settings::set('formatter.else_newline', TRUE);
 Settings::set('formatter.declaration_brace_newline', FALSE);
+Settings::set('formatter.implement_extend.keep_wrap', FALSE);
+Settings::set('formatter.implement_extend.wrap_if_long', FALSE);

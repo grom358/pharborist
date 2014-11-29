@@ -27,6 +27,13 @@ class InterfaceNode extends StatementNode {
   protected $statements;
 
   /**
+   * @return CommaListNode
+   */
+  public function getExtendList() {
+    return $this->extends;
+  }
+
+  /**
    * @return NodeCollection|NameNode[]
    */
   public function getExtends() {

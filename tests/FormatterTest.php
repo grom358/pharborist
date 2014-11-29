@@ -472,4 +472,102 @@ EOF;
     $this->assertEquals($expected, $actual);
     Settings::setAll($settings);
   }
+
+  public function testPsr2ImplementsWrap() {
+    $settings = Settings::getAll();
+    Settings::set('formatter.declaration_brace_newline', TRUE);
+    Settings::set('formatter.implement_extend.keep_wrap', TRUE);
+
+    $snippet = "class Test extends ParentClass implements
+    TestInterface {}";
+    $actual = $this->formatSnippet($snippet);
+    $expected = <<<'EOF'
+class Test extends ParentClass implements
+  TestInterface
+{
+}
+EOF;
+    $this->assertEquals($expected, $actual);
+
+    $snippet = "class Test extends ParentClass implements OneInterface,
+    TwoInterface,ThreeInterface,FourInterface,FiveInterface {}";
+    $actual = $this->formatSnippet($snippet);
+    $expected = <<<'EOF'
+class Test extends ParentClass implements
+  OneInterface,
+  TwoInterface,
+  ThreeInterface,
+  FourInterface,
+  FiveInterface
+{
+}
+EOF;
+    $this->assertEquals($expected, $actual);
+
+    Settings::set('formatter.implement_extend.wrap_if_long', TRUE);
+    $snippet = 'class Test extends ParentClass implements OneInterface,TwoInterface,ThreeInterface,FourInterface,FiveInterface {}';
+    $actual = $this->formatSnippet($snippet);
+    $expected = <<<'EOF'
+class Test extends ParentClass implements
+  OneInterface,
+  TwoInterface,
+  ThreeInterface,
+  FourInterface,
+  FiveInterface
+{
+}
+EOF;
+    $this->assertEquals($expected, $actual);
+
+    Settings::setAll($settings);
+  }
+
+  public function testPsr2ExtendsWrap() {
+    $settings = Settings::getAll();
+    Settings::set('formatter.declaration_brace_newline', TRUE);
+    Settings::set('formatter.implement_extend.keep_wrap', TRUE);
+
+    $snippet = "interface TestInterface extends
+    ParentInterface {}";
+    $actual = $this->formatSnippet($snippet);
+    $expected = <<<'EOF'
+interface TestInterface extends
+  ParentInterface
+{
+}
+EOF;
+    $this->assertEquals($expected, $actual);
+
+    $snippet = "interface TestInterface extends OneInterface,
+    TwoInterface,ThreeInterface,FourInterface,FiveInterface {}";
+    $actual = $this->formatSnippet($snippet);
+    $expected = <<<'EOF'
+interface TestInterface extends
+  OneInterface,
+  TwoInterface,
+  ThreeInterface,
+  FourInterface,
+  FiveInterface
+{
+}
+EOF;
+    $this->assertEquals($expected, $actual);
+
+    Settings::set('formatter.implement_extend.wrap_if_long', TRUE);
+    $snippet = 'interface TestInterface extends OneInterface,TwoInterface,ThreeInterface,FourInterface,FiveInterface {}';
+    $actual = $this->formatSnippet($snippet);
+    $expected = <<<'EOF'
+interface TestInterface extends
+  OneInterface,
+  TwoInterface,
+  ThreeInterface,
+  FourInterface,
+  FiveInterface
+{
+}
+EOF;
+    $this->assertEquals($expected, $actual);
+
+    Settings::setAll($settings);
+  }
 }

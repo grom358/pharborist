@@ -214,4 +214,19 @@ class Filter {
       return !($node instanceof WhitespaceNode || $node instanceof CommentNode || $node instanceof LineCommentBlockNode);
     };
   }
+
+  /**
+   * Callback to match whitespace containing newlines.
+   *
+   * @return callable
+   */
+  public static function isNewline() {
+    static $callback = NULL;
+    if (!$callback) {
+      $callback = function (Node $node) {
+        return $node instanceof WhitespaceNode && $node->getNewlineCount() > 0;
+      };
+    }
+    return $callback;
+  }
 }

@@ -16,7 +16,6 @@ use Pharborist\Functions\CallNode;
 use Pharborist\Functions\FunctionDeclarationNode;
 use Pharborist\Functions\ParameterNode;
 use Pharborist\Objects\ClassMethodNode;
-use Pharborist\Objects\ClassNode;
 use Pharborist\Objects\InterfaceMethodNode;
 use Pharborist\Objects\InterfaceNode;
 use Pharborist\Objects\NewNode;
@@ -32,6 +31,11 @@ use Pharborist\Types\BooleanNode;
 use Pharborist\Types\NullNode;
 
 class Formatter extends VisitorBase {
+  /**
+   * Current indentation level.
+   *
+   * @var int
+   */
   private $indentLevel = 0;
 
   /**
@@ -332,7 +336,7 @@ class Formatter extends VisitorBase {
 
   public function visitArrayNode(ArrayNode $node) {
     $nested = FALSE;
-    if ($node->closest(Filter::isInstanceOf('\Pharborist\Types\ArrayNode'))) {
+    if ($node->parents(Filter::isInstanceOf('\Pharborist\Types\ArrayNode'))->isNotEmpty()) {
       $this->indentLevel++;
       $nested = TRUE;
     }
@@ -365,53 +369,27 @@ class Formatter extends VisitorBase {
     // Remove trailing comma.
     $last = $node->getElementList()->lastChild();
     if ($last instanceof TokenNode && $last->getType() === ',') {
-      $node->getElementList()->append(Token::comma());
+      $last->remove();
     }
 
-    /** @var NodeCollection|TokenNode[] $commas */
-    $commas = $node->getElementList()->children(Filter::isTokenType(','));
-
-    // If already on multiple lines, make array line wrap.
-    $multi_line = $commas->next(function (Node $node) {
-      return $node instanceof WhitespaceNode && $node->getNewlineCount() > 0;
-    })->isNotEmpty();
-
-    $this->objectStorage[$node] = array($multi_line, $nested);
+    $this->objectStorage[$node] = $nested;
   }
 
   public function endArrayNode(ArrayNode $node) {
-    list($multi_line, $nested) = $this->objectStorage[$node];
+    $nested = $this->objectStorage[$node];
     unset($this->objectStorage[$node]);
 
     if ($nested) {
       $this->indentLevel--;
     }
 
-    if (!$multi_line) {
-      // If array exceeds the soft limit then force line wrapping.
-      $column_position = $this->calculateColumnPosition($node);
-      $column_position += strlen($node->getText());
-      $soft_limit = Settings::get('formatter.soft_limit');
-      $multi_line = $column_position > $soft_limit;
-    }
-
-    if ($multi_line) {
-      // Newline before first element.
-      $this->newlineBefore($node->getElementList());
-
-      /** @var NodeCollection|TokenNode[] $commas */
-      $commas = $node->getElementList()->children(Filter::isTokenType(','));
-
-      // Newline after each comma.
-      foreach ($commas as $comma) {
-        $this->newlineAfter($comma);
-      }
-
+    $is_wrapped = $node->getElementList()->children(Filter::isNewline())->isNotEmpty();
+    if ($is_wrapped) {
       // Enforce trailing comma after last element.
       $node->getElementList()->append(Token::comma());
 
       // Newline before closing ) or ].
-      $this->newlineBefore($node->lastChild(), TRUE);
+      $this->newlineBefore($node->lastChild(), !$nested);
     }
   }
 
@@ -421,39 +399,15 @@ class Formatter extends VisitorBase {
     $this->removeSpaceAfter($parameter_list);
     $open_paren = $parameter_list->previousUntil(Filter::isTokenType('('), TRUE)->get(0);
     $this->removeSpaceBefore($open_paren);
-
-    $keep_wrap = Settings::get('formatter.parameters.keep_wrap');
-    if ($keep_wrap) {
-      $has_wrap = $parameter_list->children(function (Node $node) {
-        return $node instanceof WhitespaceNode && $node->getNewlineCount() > 0;
-      })->isNotEmpty();
-      $this->objectStorage[$node] = $has_wrap;
-    }
   }
 
   public function endFunctionDeclarationNode(FunctionDeclarationNode $node) {
-    $keep_wrap = Settings::get('formatter.parameters.keep_wrap');
-    $wrap_parameters = FALSE;
-    if ($keep_wrap) {
-      $wrap_parameters = $this->objectStorage[$node];
-      unset($this->objectStorage[$node]);
-    }
     $parameter_list = $node->getParameterList();
-    $wrap_if_long = Settings::get('formatter.parameters.wrap_if_long');
-    if (!$wrap_parameters && $wrap_if_long) {
-      $column_position = $this->calculateColumnPosition($parameter_list);
-      $column_position += strlen($parameter_list->getText());
-      $soft_limit = Settings::get('formatter.soft_limit');
-      $wrap_parameters = $column_position > $soft_limit;
-    }
-    if ($wrap_parameters) {
-      $this->indentLevel++;
-      $this->newlineBefore($parameter_list);
-      foreach ($parameter_list->children(Filter::isTokenType(',')) as $comma) {
-        $this->newlineAfter($comma);
-      }
-      $this->indentLevel--;
-      $this->newlineAfter($parameter_list, TRUE);
+    $parameter_wrapped = $parameter_list->children(function (Node $node) {
+      return $node instanceof WhitespaceNode && $node->getNewlineCount() > 0;
+    })->isNotEmpty();
+    if ($parameter_wrapped) {
+      $this->newlineAfter($parameter_list);
       $this->spaceBefore($node->getBody());
     }
   }
@@ -467,9 +421,44 @@ class Formatter extends VisitorBase {
   }
 
   public function visitCommaListNode(CommaListNode $node) {
+    $keep_wrap = Settings::get('formatter.list.keep_wrap');
+    if (!$keep_wrap) {
+      $keep_wrap = $node->parent() instanceof ArrayNode;
+    }
+    if ($keep_wrap) {
+      $has_wrap = $node->children(Filter::isNewline())->isNotEmpty();
+      $this->objectStorage[$node] = $has_wrap;
+    }
     foreach ($node->children(Filter::isTokenType(',')) as $comma_node) {
       $this->removeSpaceBefore($comma_node);
       $this->spaceAfter($comma_node);
+    }
+  }
+
+  public function endCommaListNode(CommaListNode $node) {
+    $keep_wrap = Settings::get('formatter.list.keep_wrap');
+    $wrap_if_long = Settings::get('formatter.list.wrap_if_long');
+    if ($node->parent() instanceof ArrayNode) {
+      $keep_wrap = TRUE;
+      $wrap_if_long = TRUE;
+    }
+    $wrap_list = FALSE;
+    if ($keep_wrap) {
+      $wrap_list = $this->objectStorage[$node];
+      unset($this->objectStorage[$node]);
+    }
+    if (!$wrap_list && $wrap_if_long) {
+      $column_position = $this->calculateColumnPosition($node);
+      $column_position += strlen($node->getText());
+      $soft_limit = Settings::get('formatter.soft_limit');
+      $wrap_list = $column_position > $soft_limit;
+    }
+    if ($wrap_list) {
+      $this->newlineBefore($node);
+      foreach ($node->children(Filter::isTokenType(',')) as $comma_node) {
+        $this->newlineAfter($comma_node);
+      }
+      $this->newlineAfter($node, TRUE);
     }
   }
 
@@ -516,60 +505,8 @@ class Formatter extends VisitorBase {
     }
   }
 
-  /**
-   * @param CommaListNode|NULL $list_node
-   */
-  protected function checkExtendImplementList($list_node) {
-    if (!$list_node) {
-      return;
-    }
-    $keep_wrap = Settings::get('formatter.implement_extend.keep_wrap');
-    if ($keep_wrap) {
-      $wrap_implements = FALSE;
-      $wrap_implements = $list_node->children(function (Node $node) {
-        return $node instanceof WhitespaceNode && $node->getNewlineCount() > 0;
-      })->isNotEmpty();
-      $this->objectStorage[$list_node] = $wrap_implements;
-    }
-  }
-
-  public function visitSingleInheritanceNode(SingleInheritanceNode $node) {
-    $this->checkExtendImplementList($node->getImplementList());
-  }
-
-  /**
-   * @param CommaListNode|NULL $list_node
-   */
-  protected function wrapExtendImplementList($list_node) {
-    if (!$list_node) {
-      return;
-    }
-    $keep_wrap = Settings::get('formatter.implement_extend.keep_wrap');
-    $wrap_implements = FALSE;
-    if ($keep_wrap) {
-      $wrap_implements = $this->objectStorage[$list_node];
-      unset($this->objectStorage[$list_node]);
-    }
-    $wrap_if_long = Settings::get('formatter.implement_extend.wrap_if_long');
-    if (!$wrap_implements && $wrap_if_long) {
-      $column_position = $this->calculateColumnPosition($list_node);
-      $column_position += strlen($list_node->getText());
-      $soft_limit = Settings::get('formatter.soft_limit');
-      $wrap_implements = $column_position > $soft_limit;
-    }
-    if ($wrap_implements) {
-      $this->indentLevel++;
-      $this->newlineBefore($list_node);
-      foreach ($list_node->children(Filter::isTokenType(',')) as $comma) {
-        $this->newlineAfter($comma);
-      }
-      $this->indentLevel--;
-    }
-  }
-
   public function endSingleInheritanceNode(SingleInheritanceNode $node) {
     $this->endClassTraitOrInterface($node);
-    $this->wrapExtendImplementList($node->getImplementList());
   }
 
   public function visitClassMethodNode(ClassMethodNode $node) {
@@ -586,13 +523,8 @@ class Formatter extends VisitorBase {
     }
   }
 
-  public function visitInterfaceNode(InterfaceNode $node) {
-    $this->checkExtendImplementList($node->getExtendList());
-  }
-
   public function endInterfaceNode(InterfaceNode $node) {
     $this->endClassTraitOrInterface($node);
-    $this->wrapExtendImplementList($node->getExtendList());
   }
 
   public function visitInterfaceMethodNode(InterfaceMethodNode $node) {

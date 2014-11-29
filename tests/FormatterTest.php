@@ -476,7 +476,7 @@ EOF;
   public function testPsr2ImplementsWrap() {
     $settings = Settings::getAll();
     Settings::set('formatter.declaration_brace_newline', TRUE);
-    Settings::set('formatter.implement_extend.keep_wrap', TRUE);
+    Settings::set('formatter.list.keep_wrap', TRUE);
 
     $snippet = "class Test extends ParentClass implements
     TestInterface {}";
@@ -504,7 +504,7 @@ class Test extends ParentClass implements
 EOF;
     $this->assertEquals($expected, $actual);
 
-    Settings::set('formatter.implement_extend.wrap_if_long', TRUE);
+    Settings::set('formatter.list.wrap_if_long', TRUE);
     $snippet = 'class Test extends ParentClass implements OneInterface,TwoInterface,ThreeInterface,FourInterface,FiveInterface {}';
     $actual = $this->formatSnippet($snippet);
     $expected = <<<'EOF'
@@ -525,7 +525,7 @@ EOF;
   public function testPsr2ExtendsWrap() {
     $settings = Settings::getAll();
     Settings::set('formatter.declaration_brace_newline', TRUE);
-    Settings::set('formatter.implement_extend.keep_wrap', TRUE);
+    Settings::set('formatter.list.keep_wrap', TRUE);
 
     $snippet = "interface TestInterface extends
     ParentInterface {}";
@@ -553,7 +553,7 @@ interface TestInterface extends
 EOF;
     $this->assertEquals($expected, $actual);
 
-    Settings::set('formatter.implement_extend.wrap_if_long', TRUE);
+    Settings::set('formatter.list.wrap_if_long', TRUE);
     $snippet = 'interface TestInterface extends OneInterface,TwoInterface,ThreeInterface,FourInterface,FiveInterface {}';
     $actual = $this->formatSnippet($snippet);
     $expected = <<<'EOF'
@@ -574,7 +574,7 @@ EOF;
   public function testPsr2FunctionDeclaration() {
     $settings = Settings::getAll();
     Settings::set('formatter.declaration_brace_newline', TRUE);
-    Settings::set('formatter.parameters.keep_wrap', TRUE);
+    Settings::set('formatter.list.keep_wrap', TRUE);
 
     $snippet = <<<'EOF'
 function test(
@@ -591,7 +591,7 @@ function test(
 EOF;
     $this->assertEquals($expected, $actual);
 
-    Settings::set('formatter.parameters.wrap_if_long', TRUE);
+    Settings::set('formatter.list.wrap_if_long', TRUE);
     $snippet = 'function test($someLongParameterName, $anotherLongParameterName, $yetAnotherParameterName){}';
     $actual = $this->formatSnippet($snippet);
     $expected = <<<'EOF'

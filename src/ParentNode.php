@@ -18,7 +18,7 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
   /**
    * @var int
    */
-  protected $childCount;
+  protected $childCount = 0;
 
   protected function getProperties() {
     $properties = get_object_vars($this);

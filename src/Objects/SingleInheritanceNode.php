@@ -5,15 +5,14 @@ use Pharborist\CommaListNode;
 use Pharborist\DocCommentTrait;
 use Pharborist\ExpressionNode;
 use Pharborist\Filter;
+use Pharborist\FormatterFactory;
 use Pharborist\Functions\FunctionDeclarationNode;
 use Pharborist\Namespaces\IdentifierNameTrait;
 use Pharborist\Namespaces\NameNode;
 use Pharborist\NodeCollection;
-use Pharborist\Settings;
 use Pharborist\StatementBlockNode;
 use Pharborist\StatementNode;
 use Pharborist\Token;
-use Pharborist\WhitespaceNode;
 
 /**
  * Base class for ClassNode and TraitNode.
@@ -190,13 +189,8 @@ abstract class SingleInheritanceNode extends StatementNode {
     elseif (is_string($method)) {
       $method = ClassMethodNode::create($method);
     }
-    $nl = Settings::get('formatter.nl');
-    $indent = Settings::get('formatter.indent');
-    $this->statements->lastChild()->before([
-      WhitespaceNode::create($nl . $indent),
-      $method,
-      WhitespaceNode::create($nl),
-    ]);
+    $this->statements->lastChild()->before($method);
+    FormatterFactory::format($this);
     return $this;
   }
 
@@ -327,22 +321,14 @@ abstract class SingleInheritanceNode extends StatementNode {
     if (is_string($property)) {
       $property = ClassMemberListNode::create($property);
     }
-    $nl = Settings::get('formatter.nl');
-    $indent = Settings::get('formatter.indent');
     $properties = $this->statements->children(Filter::isInstanceOf('\Pharborist\ClassMemberListNode'));
     if ($properties->count() === 0) {
-      $this->statements->firstChild()->after([
-        WhitespaceNode::create($nl . $indent),
-        $property,
-        WhitespaceNode::create($nl),
-      ]);
+      $this->statements->firstChild()->after($property);
     }
     else {
-      $properties->last()->after([
-        WhitespaceNode::create($nl . $nl . $indent),
-        $property
-      ]);
+      $properties->last()->after($property);
     }
+    FormatterFactory::format($this);
     return $this;
   }
 }

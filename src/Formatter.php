@@ -32,19 +32,63 @@ use Pharborist\Types\NullNode;
 
 class Formatter extends VisitorBase {
   /**
+   * Formatter config
+   *
+   * @var array
+   */
+  protected $config;
+
+  /**
    * Current indentation level.
    *
    * @var int
    */
-  private $indentLevel = 0;
+  protected $indentLevel = 0;
 
   /**
+   * Data attached to nodes.
+   *
    * @var \SplObjectStorage
    */
-  private $nodeData;
+  protected $nodeData;
 
-  public function __construct() {
+  public function __construct($config = []) {
     $this->nodeData = new \SplObjectStorage();
+    $this->config = $config + [
+      'nl' => "\n",
+      'indent' => 2,
+      'soft_limit' => 80,
+      'boolean_null_upper' => TRUE,
+      'force_array_new_style' => TRUE,
+      'else_newline' => TRUE,
+      'declaration_brace_newline' => FALSE,
+      'list_keep_wrap' => FALSE,
+      'list_wrap_if_long' => FALSE,
+    ];
+  }
+
+  /**
+   * @param Node $node
+   */
+  public function format(Node $node) {
+    if ($node instanceof ParentNode) {
+      $node->acceptVisitor($this);
+    }
+    else {
+      $this->visit($node);
+    }
+  }
+
+  /**
+   * Get the config value for the specified key.
+   *
+   * @param string $key
+   *   The config key.
+   *
+   * @return mixed
+   */
+  public function getConfig($key) {
+    return $this->config[$key];
   }
 
   /**
@@ -52,12 +96,11 @@ class Formatter extends VisitorBase {
    * @return string
    */
   protected function getNewlineIndent($wsNode = NULL, $close = FALSE) {
-    $nl = Settings::get('formatter.nl');
-    $indent_per_level = Settings::get('formatter.indent');
+    $indent_per_level = str_repeat(' ', $this->config['indent']);
     $indent = str_repeat($indent_per_level, $this->indentLevel - ($close ? 1 : 0));
     $nl_count = $wsNode ? $wsNode->getNewlineCount() : 1;
     $nl_count = max($nl_count, 1);
-    return str_repeat($nl, $nl_count) . $indent;
+    return str_repeat($this->config['nl'], $nl_count) . $indent;
   }
 
   protected function spaceBefore(Node $node) {
@@ -178,7 +221,7 @@ class Formatter extends VisitorBase {
     $this->handleControlStructure($node);
     if ($node->getElse()) {
       $elseKeyword = $node->getElseKeyword();
-      $else_newline = Settings::get('formatter.else_newline');
+      $else_newline = $this->config['else_newline'];
       if ($node->isAlterativeSyntax() || $else_newline) {
         $this->newlineBefore($elseKeyword);
       }
@@ -191,7 +234,7 @@ class Formatter extends VisitorBase {
   public function visitElseIfNode(ElseIfNode $node) {
     $this->handleParens($node);
     $this->encloseBlock($node->getThen());
-    $else_newline = Settings::get('formatter.else_newline');
+    $else_newline = $this->config['else_newline'];
     if ($node->getOpenColon() || $else_newline) {
       $this->newlineBefore($node, TRUE);
     }
@@ -214,7 +257,7 @@ class Formatter extends VisitorBase {
   public function visitDoWhileNode(DoWhileNode $node) {
     $this->handleParens($node);
     $this->encloseBlock($node->getBody());
-    $this->spaceBefore($node->children(Filter::isTokenType(T_WHILE))->get(0));
+    $this->spaceBefore($node->getWhileKeyword());
   }
 
   public function visitForNode(ForNode $node) {
@@ -280,7 +323,7 @@ class Formatter extends VisitorBase {
     $this->nodeData[$node] = $nested;
     $first = $node->firstChild();
     if ($first instanceof TokenNode && $first->getType() === '{') {
-      $brace_newline = Settings::get('formatter.declaration_brace_newline');
+      $brace_newline = $this->config['declaration_brace_newline'];
       if ($brace_newline && $this->isDeclaration($node->parent())) {
         $this->newlineBefore($node, TRUE);
       }
@@ -317,14 +360,13 @@ class Formatter extends VisitorBase {
    *   Column position.
    */
   protected function calculateColumnPosition(Node $node) {
-    $nl = Settings::get('formatter.nl');
     // Add tokens until have whitespace containing newline.
     $column_position = 1;
     $start_token = $node instanceof ParentNode ? $node->firstToken() : $node;
     $token = $start_token;
     while ($token = $token->previousToken()) {
       if ($token instanceof WhitespaceNode && $token->getNewlineCount() > 0) {
-        $lines = explode($nl, $token->getText());
+        $lines = explode($this->config['nl'], $token->getText());
         $last_line = end($lines);
         $column_position += strlen($last_line);
         break;
@@ -341,7 +383,7 @@ class Formatter extends VisitorBase {
       $nested = TRUE;
     }
 
-    if (Settings::get('formatter.force_array_new_style')) {
+    if ($this->config['force_array_new_style']) {
       $first = $node->firstChild();
       /** @var TokenNode $first */
       if ($first->getType() === T_ARRAY) {
@@ -421,7 +463,10 @@ class Formatter extends VisitorBase {
   }
 
   public function visitCommaListNode(CommaListNode $node) {
-    $keep_wrap = Settings::get('formatter.list.keep_wrap');
+    if ($node->isEmpty()) {
+      return;
+    }
+    $keep_wrap = $this->config['list_keep_wrap'];
     if (!$keep_wrap) {
       $keep_wrap = $node->parent() instanceof ArrayNode;
     }
@@ -436,8 +481,11 @@ class Formatter extends VisitorBase {
   }
 
   public function endCommaListNode(CommaListNode $node) {
-    $keep_wrap = Settings::get('formatter.list.keep_wrap');
-    $wrap_if_long = Settings::get('formatter.list.wrap_if_long');
+    if ($node->isEmpty()) {
+      return;
+    }
+    $keep_wrap = $this->config['list_keep_wrap'];
+    $wrap_if_long = $this->config['list_wrap_if_long'];
     if ($node->parent() instanceof ArrayNode) {
       $keep_wrap = TRUE;
       $wrap_if_long = TRUE;
@@ -450,7 +498,7 @@ class Formatter extends VisitorBase {
     if (!$wrap_list && $wrap_if_long) {
       $column_position = $this->calculateColumnPosition($node);
       $column_position += strlen($node->getText());
-      $soft_limit = Settings::get('formatter.soft_limit');
+      $soft_limit = $this->config['soft_limit'];
       $wrap_list = $column_position > $soft_limit;
     }
     if ($wrap_list) {
@@ -474,8 +522,9 @@ class Formatter extends VisitorBase {
    * @param SingleInheritanceNode|InterfaceNode $node
    */
   protected function endClassTraitOrInterface($node) {
-    $nl = Settings::get('formatter.nl');
-    $indent = Settings::get('formatter.indent');
+    $nl = $this->config['nl'];
+    $indent = str_repeat(' ', $this->config['indent']);
+    $indent = str_repeat($indent, $this->indentLevel + 1);
     /** @var WhitespaceNode $ws_node */
     $whitespace = $node->getBody()->children(Filter::isInstanceOf('\Pharborist\WhitespaceNode'));
     foreach ($whitespace->slice(1, -1) as $ws_node) {
@@ -532,7 +581,7 @@ class Formatter extends VisitorBase {
   }
 
   protected function handleBuiltinConstantNode(ConstantNode $node) {
-    $to_upper = Settings::get('formatter.boolean_null.upper');
+    $to_upper = $this->config['boolean_null_upper'];
     if ($to_upper) {
       $node->toUpperCase();
     }

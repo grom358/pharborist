@@ -13,7 +13,7 @@ class WhitespaceNode extends HiddenNode {
    * @return int
    */
   public function getNewlineCount() {
-    $nl = Settings::get('formatter.nl');
+    $nl = FormatterFactory::getDefaultFormatter()->getConfig('nl');
     return substr_count($this->getText(), $nl);
   }
 }

@@ -188,4 +188,45 @@ class Filter {
       return $node === $match;
     };
   }
+
+  /**
+   * Callback to test if match to given token type.
+   *
+   * @param int|string $type
+   *   Token type.
+   *
+   * @return callable
+   */
+  public static function isTokenType($type) {
+    $types = func_get_args();
+    return function ($node) use ($types) {
+      return $node instanceof TokenNode && in_array($node->getType(), $types);
+    };
+  }
+
+  /**
+   * Callback to skip whitespace and comments.
+   *
+   * @return callable
+   */
+  public static function isNotHidden() {
+    return function ($node) {
+      return !($node instanceof WhitespaceNode || $node instanceof CommentNode || $node instanceof LineCommentBlockNode);
+    };
+  }
+
+  /**
+   * Callback to match whitespace containing newlines.
+   *
+   * @return callable
+   */
+  public static function isNewline() {
+    static $callback = NULL;
+    if (!$callback) {
+      $callback = function (Node $node) {
+        return $node instanceof WhitespaceNode && $node->getNewlineCount() > 0;
+      };
+    }
+    return $callback;
+  }
 }

@@ -2,6 +2,7 @@
 namespace Pharborist\Types;
 
 use Pharborist\ParentNode;
+use Pharborist\ParenTrait;
 use Pharborist\Token;
 use Pharborist\ExpressionNode;
 use Pharborist\Filter;
@@ -13,6 +14,8 @@ use Pharborist\Parser;
  * A PHP array, e.g. `array(1, 3, 'banana', 'apple')`
  */
 class ArrayNode extends ParentNode implements ExpressionNode {
+  use ParenTrait;
+
   /**
    * @var CommaListNode
    */

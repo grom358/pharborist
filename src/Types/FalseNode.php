@@ -1,8 +1,8 @@
 <?php
 namespace Pharborist\Types;
 
+use Pharborist\FormatterFactory;
 use Pharborist\Namespaces\NameNode;
-use Pharborist\Settings;
 
 /**
  * Boolean FALSE.
@@ -20,7 +20,7 @@ class FalseNode extends BooleanNode {
    * @return FalseNode
    */
   public static function create($boolean = FALSE) {
-    $is_upper = Settings::get('formatter.boolean_null.upper', TRUE);
+    $is_upper = FormatterFactory::getDefaultFormatter()->getConfig('boolean_null_upper');
     $node = new FalseNode();
     $node->addChild(NameNode::create($is_upper ? 'FALSE' : 'false'), 'constantName');
     return $node;

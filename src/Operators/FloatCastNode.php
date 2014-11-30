@@ -4,6 +4,6 @@ namespace Pharborist\Operators;
 /**
  * A float cast operation.
  */
-class FloatCastNode extends UnaryOperationNode {
+class FloatCastNode extends CastNode {
 
 }

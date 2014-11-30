@@ -3,6 +3,7 @@ namespace Pharborist\Exceptions;
 
 use Pharborist\ParentNode;
 use Pharborist\Namespaces\NameNode;
+use Pharborist\ParenTrait;
 use Pharborist\StatementBlockNode;
 use Pharborist\Variables\VariableNode;
 
@@ -10,6 +11,8 @@ use Pharborist\Variables\VariableNode;
  * A catch in a try control structure.
  */
 class CatchNode extends ParentNode {
+  use ParenTrait;
+
   /**
    * @var NameNode
    */

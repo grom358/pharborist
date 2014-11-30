@@ -13,16 +13,22 @@ class BooleanNodeTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testToUpper() {
-    Settings::set('formatter.boolean_null.upper', FALSE);
+    $default_formatter = FormatterFactory::getDefaultFormatter();
+    $formatter = new Formatter(['boolean_null_upper' => FALSE]);
+    FormatterFactory::setDefaultFormatter($formatter);
     $true = BooleanNode::create(TRUE);
     $this->assertEquals('true', $true->getText());
     $this->assertEquals('TRUE', $true->toUpperCase()->getText());
+    FormatterFactory::setDefaultFormatter($default_formatter);
   }
 
   public function testToLower() {
-    Settings::set('formatter.boolean_null.upper', TRUE);
+    $default_formatter = FormatterFactory::getDefaultFormatter();
+    $formatter = new Formatter(['boolean_null_upper' => TRUE]);
+    FormatterFactory::setDefaultFormatter($formatter);
     $true = BooleanNode::create(TRUE);
     $this->assertEquals('TRUE', $true->getText());
     $this->assertEquals('true', $true->toLowerCase()->getText());
+    FormatterFactory::setDefaultFormatter($default_formatter);
   }
 }

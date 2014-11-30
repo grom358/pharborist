@@ -18,7 +18,7 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
   /**
    * @var int
    */
-  protected $childCount;
+  protected $childCount = 0;
 
   protected function getProperties() {
     $properties = get_object_vars($this);
@@ -395,6 +395,21 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
       }
       $child = $child->next;
     }
+  }
+
+  public function acceptVisitor(VisitorInterface $visitor) {
+    $visitor->visit($this);
+    $child = $this->head;
+    while($child) {
+      if($child instanceof ParentNode) {
+        $child->acceptVisitor($visitor);
+      }
+      else {
+        $visitor->visit($child);
+      }
+      $child = $child->next;
+    }
+    $visitor->visitEnd($this);
   }
 
   public function getSourcePosition() {

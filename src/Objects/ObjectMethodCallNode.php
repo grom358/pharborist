@@ -6,6 +6,7 @@ use Pharborist\Functions\CallNode;
 use Pharborist\Namespaces\NameNode;
 use Pharborist\Node;
 use Pharborist\Token;
+use Pharborist\TokenNode;
 use Pharborist\Variables\VariableExpressionNode;
 
 /**
@@ -18,6 +19,11 @@ class ObjectMethodCallNode extends CallNode implements VariableExpressionNode {
   protected $object;
 
   /**
+   * @var TokenNode
+   */
+  protected $operator;
+
+  /**
    * @var Node
    */
   protected $methodName;
@@ -27,6 +33,15 @@ class ObjectMethodCallNode extends CallNode implements VariableExpressionNode {
    */
   public function getObject() {
     return $this->object;
+  }
+
+  /**
+   * The object operator '->' token (T_OBJECT_OPERATOR).
+   *
+   * @return TokenNode
+   */
+  public function getOperator() {
+    return $this->operator;
   }
 
   /**

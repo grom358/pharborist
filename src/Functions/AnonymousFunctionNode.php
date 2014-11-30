@@ -38,6 +38,13 @@ class AnonymousFunctionNode extends ParentNode implements ExpressionNode {
   }
 
   /**
+   * @return CommaListNode
+   */
+  public function getLexicalVariableList() {
+    return $this->lexicalVariables;
+  }
+
+  /**
    * @return NodeCollection|LexicalVariableNode[]
    */
   public function getLexicalVariables() {

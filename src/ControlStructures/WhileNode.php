@@ -2,6 +2,7 @@
 namespace Pharborist\ControlStructures;
 
 use Pharborist\Node;
+use Pharborist\ParenTrait;
 use Pharborist\StatementNode;
 use Pharborist\ExpressionNode;
 
@@ -9,6 +10,9 @@ use Pharborist\ExpressionNode;
  * while control structure.
  */
 class WhileNode extends StatementNode {
+  use ParenTrait;
+  use AltSyntaxTrait;
+
   /**
    * @var ExpressionNode
    */

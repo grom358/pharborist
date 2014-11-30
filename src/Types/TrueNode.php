@@ -1,8 +1,8 @@
 <?php
 namespace Pharborist\Types;
 
+use Pharborist\FormatterFactory;
 use Pharborist\Namespaces\NameNode;
-use Pharborist\Settings;
 
 /**
  * Boolean TRUE.
@@ -20,7 +20,7 @@ class TrueNode extends BooleanNode {
    * @return TrueNode
    */
   public static function create($boolean = TRUE) {
-    $is_upper = Settings::get('formatter.boolean_null.upper', TRUE);
+    $is_upper = FormatterFactory::getDefaultFormatter()->getConfig('boolean_null_upper');
     $node = new TrueNode();
     $node->addChild(NameNode::create($is_upper ? 'TRUE' : 'true'), 'constantName');
     return $node;

@@ -5,6 +5,7 @@ use Pharborist\ExpressionNode;
 use Pharborist\Functions\ArgumentTrait;
 use Pharborist\Namespaces\NameNode;
 use Pharborist\ParentNode;
+use Pharborist\ParenTrait;
 
 /**
  * A new expression, e.g. `new Foo()`
@@ -14,6 +15,7 @@ use Pharborist\ParentNode;
  */
 class NewNode extends ParentNode implements ExpressionNode {
   use ArgumentTrait;
+  use ParenTrait;
 
   /**
    * @var NameNode

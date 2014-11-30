@@ -4,6 +4,6 @@ namespace Pharborist\Operators;
 /**
  * An unset cast operation.
  */
-class UnsetCastNode extends UnaryOperationNode {
+class UnsetCastNode extends CastNode {
 
 }

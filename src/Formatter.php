@@ -103,6 +103,12 @@ class Formatter extends VisitorBase {
     return str_repeat($this->config['nl'], $nl_count) . $indent;
   }
 
+  /**
+   * Set a single space before a node.
+   *
+   * @param Node $node
+   *   Node to set space before.
+   */
   protected function spaceBefore(Node $node) {
     $prev = $node->previousToken();
     if ($prev instanceof WhitespaceNode) {
@@ -113,6 +119,12 @@ class Formatter extends VisitorBase {
     }
   }
 
+  /**
+   * Set a single space after a node.
+   *
+   * @param Node $node
+   *   Node to set space after.
+   */
   protected function spaceAfter(Node $node) {
     $next = $node->nextToken();
     if ($next instanceof WhitespaceNode) {
@@ -123,6 +135,12 @@ class Formatter extends VisitorBase {
     }
   }
 
+  /**
+   * Remove whitespace before a node.
+   *
+   * @param Node $node
+   *   Node to remove space before.
+   */
   protected function removeSpaceBefore(Node $node) {
     $prev = $node->previousToken();
     if ($prev instanceof WhitespaceNode) {
@@ -130,6 +148,12 @@ class Formatter extends VisitorBase {
     }
   }
 
+  /**
+   * Remove whitespace after a node.
+   *
+   * @param Node $node
+   *   Node to remove space after.
+   */
   protected function removeSpaceAfter(Node $node) {
     $next = $node->nextToken();
     if ($next instanceof WhitespaceNode) {
@@ -137,6 +161,14 @@ class Formatter extends VisitorBase {
     }
   }
 
+  /**
+   * Set so there a newline before a node.
+   *
+   * @param Node $node
+   *   Node to set newline before.
+   * @param bool $close
+   *   If the newline is for before a closing token, eg. ) or }
+   */
   protected function newlineBefore(Node $node, $close = FALSE) {
     $prev = $node->previousToken();
     if ($prev instanceof WhitespaceNode) {
@@ -147,6 +179,12 @@ class Formatter extends VisitorBase {
     }
   }
 
+  /**
+   * Set so there a newline after a node.
+   *
+   * @param Node $node
+   *   Node to set newline after.
+   */
   protected function newlineAfter(Node $node) {
     $next = $node->nextToken();
     if ($next instanceof WhitespaceNode) {
@@ -157,9 +195,19 @@ class Formatter extends VisitorBase {
     }
   }
 
+  public function visitStatementNode(StatementNode $node) {
+    $this->indentLevel++;
+  }
+
+  public function endStatementNode(StatementNode $node) {
+    $this->indentLevel--;
+  }
+
   public function visitBinaryOperationNode(BinaryOperationNode $node) {
+    // Space around operator.
     $operator = $node->getOperator();
     $this->spaceBefore($operator);
+    // @todo The following results in expressions are single line.
     $this->spaceAfter($operator);
   }
 
@@ -176,7 +224,53 @@ class Formatter extends VisitorBase {
     }
   }
 
+  public function visitWhitespaceNode(WhitespaceNode $node) {
+    // Normalise whitespace.
+    $nl_count = $node->getNewlineCount();
+    if ($nl_count > 0) {
+      $node->setText($this->getNewlineIndent($node));
+    }
+    else {
+      $node->setText(' ');
+    }
+  }
+
+  public function visitTokenNode(TokenNode $node) {
+    switch ($node->getType()) {
+      case T_DOUBLE_ARROW:
+        $this->spaceBefore($node);
+        $this->spaceAfter($node);
+        break;
+    }
+  }
+
   /**
+   * Handle formatting of constant node.
+   *
+   * @param ConstantNode $node
+   *   true, false, or null node.
+   */
+  protected function handleBuiltinConstantNode(ConstantNode $node) {
+    $to_upper = $this->config['boolean_null_upper'];
+    if ($to_upper) {
+      $node->toUpperCase();
+    }
+    else {
+      $node->toLowerCase();
+    }
+  }
+
+  public function visitBooleanNode(BooleanNode $node) {
+    $this->handleBuiltinConstantNode($node);
+  }
+
+  public function visitNullNode(NullNode $node) {
+    $this->handleBuiltinConstantNode($node);
+  }
+
+  /**
+   * Wrap single line body statements in braces.
+   *
    * @param Node|NULL $node
    */
   protected function encloseBlock($node) {
@@ -188,6 +282,8 @@ class Formatter extends VisitorBase {
   }
 
   /**
+   * Handle whitespace around and inside parens for control structures.
+   *
    * @param IfNode|ElseIfNode|ForNode|ForeachNode|SwitchNode|DoWhileNode|WhileNode $node
    */
   protected function handleParens($node) {
@@ -199,6 +295,8 @@ class Formatter extends VisitorBase {
   }
 
   /**
+   * Generic formatting rules for control structures.
+   *
    * @param IfNode|ForNode|ForeachNode|SwitchNode|DoWhileNode|WhileNode $node
    */
   protected function handleControlStructure($node) {
@@ -306,6 +404,15 @@ class Formatter extends VisitorBase {
     $this->newlineBefore($node);
   }
 
+  /**
+   * Test if declaration_brace_newline setting applies to node.
+   *
+   * @param ParentNode $node
+   *   Node to test.
+   *
+   * @return bool
+   *   TRUE if declaration_brace_newline applies to node.
+   */
   protected function isDeclaration(ParentNode $node) {
     return $node instanceof FunctionDeclarationNode ||
       $node instanceof SingleInheritanceNode ||
@@ -435,33 +542,6 @@ class Formatter extends VisitorBase {
     }
   }
 
-  public function visitFunctionDeclarationNode(FunctionDeclarationNode $node) {
-    $parameter_list = $node->getParameterList();
-    $this->removeSpaceBefore($parameter_list);
-    $this->removeSpaceAfter($parameter_list);
-    $open_paren = $parameter_list->previousUntil(Filter::isTokenType('('), TRUE)->get(0);
-    $this->removeSpaceBefore($open_paren);
-  }
-
-  public function endFunctionDeclarationNode(FunctionDeclarationNode $node) {
-    $parameter_list = $node->getParameterList();
-    $parameter_wrapped = $parameter_list->children(function (Node $node) {
-      return $node instanceof WhitespaceNode && $node->getNewlineCount() > 0;
-    })->isNotEmpty();
-    if ($parameter_wrapped) {
-      $this->newlineAfter($parameter_list);
-      $this->spaceBefore($node->getBody());
-    }
-  }
-
-  public function visitParameterNode(ParameterNode $node) {
-    if ($node->getValue()) {
-      $assign = $node->getValue()->previousUntil(Filter::isTokenType('='), TRUE)->get(0);
-      $this->spaceBefore($assign);
-      $this->spaceAfter($assign);
-    }
-  }
-
   public function visitCommaListNode(CommaListNode $node) {
     if ($node->isEmpty()) {
       return;
@@ -510,12 +590,51 @@ class Formatter extends VisitorBase {
     }
   }
 
+  /**
+   * @param FunctionDeclarationNode|ClassMethodNode|InterfaceMethodNode $node
+   */
+  protected function handleParameters($node) {
+    $parameter_list = $node->getParameterList();
+    $this->removeSpaceBefore($parameter_list);
+    $this->removeSpaceAfter($parameter_list);
+    $this->removeSpaceBefore($node->getOpenParen());
+  }
+
+  public function visitFunctionDeclarationNode(FunctionDeclarationNode $node) {
+    $this->handleParameters($node);
+  }
+
+  /**
+   * @param FunctionDeclarationNode|ClassMethodNode|InterfaceMethodNode $node
+   */
+  protected function handleParameterWrapping($node) {
+    $parameter_list = $node->getParameterList();
+    $parameter_wrapped = $parameter_list->children(Filter::isNewline())->isNotEmpty();
+    if ($parameter_wrapped) {
+      $this->newlineAfter($parameter_list);
+      if (!($node instanceof InterfaceMethodNode) && $node->getBody()) {
+        $this->spaceBefore($node->getBody());
+      }
+    }
+  }
+
+  public function endFunctionDeclarationNode(FunctionDeclarationNode $node) {
+    $this->handleParameterWrapping($node);
+  }
+
+  public function visitParameterNode(ParameterNode $node) {
+    if ($node->getValue()) {
+      $assign = $node->getValue()->previousUntil(Filter::isTokenType('='), TRUE)->get(0);
+      $this->spaceBefore($assign);
+      $this->spaceAfter($assign);
+    }
+  }
+
   public function visitCallNode(CallNode $node) {
     $arg_list = $node->getArgumentList();
     $this->removeSpaceBefore($arg_list);
     $this->removeSpaceAfter($arg_list);
-    $open_paren = $arg_list->previousUntil(Filter::isTokenType('('), TRUE)->get(0);
-    $this->removeSpaceBefore($open_paren);
+    $this->removeSpaceBefore($node->getOpenParen());
   }
 
   /**
@@ -528,19 +647,20 @@ class Formatter extends VisitorBase {
     /** @var WhitespaceNode $ws_node */
     $whitespace = $node->getBody()->children(Filter::isInstanceOf('\Pharborist\WhitespaceNode'));
     foreach ($whitespace->slice(1, -1) as $ws_node) {
+      // Blank line at start and end of body.
       $ws_node->setText(str_repeat($nl, 2) . $indent);
     }
+  }
+
+  public function endSingleInheritanceNode(SingleInheritanceNode $node) {
+    $this->endClassTraitOrInterface($node);
   }
 
   /**
    * @param ClassMethodNode|InterfaceMethodNode $node
    */
   protected function visitMethod($node) {
-    $parameter_list = $node->getParameterList();
-    $this->removeSpaceBefore($parameter_list);
-    $this->removeSpaceAfter($parameter_list);
-    $open_paren = $parameter_list->previousUntil(Filter::isTokenType('('), TRUE)->get(0);
-    $this->removeSpaceBefore($open_paren);
+    $this->handleParameters($node);
 
     if ($node->getVisibility() === NULL) {
       $node->setVisibility('public');
@@ -552,10 +672,6 @@ class Formatter extends VisitorBase {
         $node->getStatic()->swapWith($node->getVisibility());
       }
     }
-  }
-
-  public function endSingleInheritanceNode(SingleInheritanceNode $node) {
-    $this->endClassTraitOrInterface($node);
   }
 
   public function visitClassMethodNode(ClassMethodNode $node) {
@@ -572,6 +688,10 @@ class Formatter extends VisitorBase {
     }
   }
 
+  public function endClassMethodNode(ClassMethodNode $node) {
+    $this->handleParameterWrapping($node);
+  }
+
   public function endInterfaceNode(InterfaceNode $node) {
     $this->endClassTraitOrInterface($node);
   }
@@ -580,22 +700,8 @@ class Formatter extends VisitorBase {
     $this->visitMethod($node);
   }
 
-  protected function handleBuiltinConstantNode(ConstantNode $node) {
-    $to_upper = $this->config['boolean_null_upper'];
-    if ($to_upper) {
-      $node->toUpperCase();
-    }
-    else {
-      $node->toLowerCase();
-    }
-  }
-
-  public function visitBooleanNode(BooleanNode $node) {
-    $this->handleBuiltinConstantNode($node);
-  }
-
-  public function visitNullNode(NullNode $node) {
-    $this->handleBuiltinConstantNode($node);
+  public function endInterfaceMethodNode(InterfaceMethodNode $node) {
+    $this->handleParameterWrapping($node);
   }
 
   public function endCatchNode(CatchNode $node) {
@@ -612,35 +718,6 @@ class Formatter extends VisitorBase {
   }
 
   public function visitObjectMethodCallNode(ObjectMethodCallNode $node) {
-    $object_operator = $node->getMethodName()->previousUntil(Filter::isTokenType(T_OBJECT_OPERATOR), TRUE)->get(0);
-    $this->removeSpaceAfter($object_operator);
-  }
-
-  public function visitWhitespaceNode(WhitespaceNode $node) {
-    // Normalise whitespace.
-    $nl_count = $node->getNewlineCount();
-    if ($nl_count > 0) {
-      $node->setText($this->getNewlineIndent($node));
-    }
-    else {
-      $node->setText(' ');
-    }
-  }
-
-  public function visitStatementNode(StatementNode $node) {
-    $this->indentLevel++;
-  }
-
-  public function endStatementNode(StatementNode $node) {
-    $this->indentLevel--;
-  }
-
-  public function visitTokenNode(TokenNode $node) {
-    switch ($node->getType()) {
-      case T_DOUBLE_ARROW:
-        $this->spaceBefore($node);
-        $this->spaceAfter($node);
-        break;
-    }
+    $this->removeSpaceAfter($node->getOperator());
   }
 }

@@ -2,12 +2,14 @@
 namespace Pharborist\Functions;
 
 use Pharborist\DocCommentTrait;
+use Pharborist\ParenTrait;
 use Pharborist\Token;
 use Pharborist\TokenNode;
 
 trait FunctionTrait {
   use ParameterTrait;
   use DocCommentTrait;
+  use ParenTrait;
 
   /**
    * @var TokenNode

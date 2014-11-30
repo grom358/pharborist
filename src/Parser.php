@@ -1912,7 +1912,7 @@ class Parser {
       return $object;
     }
     $operator_node = new PartialNode();
-    $this->mustMatch(T_OBJECT_OPERATOR, $operator_node);
+    $this->mustMatch(T_OBJECT_OPERATOR, $operator_node, 'operator');
 
     $object_property = $this->objectProperty();
     if ($this->currentType === '(') {

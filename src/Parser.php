@@ -341,8 +341,8 @@ class Parser {
       case T_HALT_COMPILER:
         $node = new HaltCompilerNode();
         $this->mustMatch(T_HALT_COMPILER, $node, 'name');
-        $this->mustMatch('(', $node);
-        $this->mustMatch(')', $node);
+        $this->mustMatch('(', $node, 'openParen');
+        $this->mustMatch(')', $node, 'closeParen');
         $this->endStatement($node);
         return $node;
       default:
@@ -789,9 +789,9 @@ class Parser {
    * @param BreakStatementNode|ContinueStatementNode $node
    */
   private function parseLevel($node) {
-    if ($this->tryMatch('(', $node)) {
+    if ($this->tryMatch('(', $node, 'openParen')) {
       $this->mustMatch(T_LNUMBER, $node, 'level');
-      $this->mustMatch(')', $node);
+      $this->mustMatch(')', $node, 'closeParen');
     }
     else {
       $this->mustMatch(T_LNUMBER, $node, 'level');
@@ -895,12 +895,12 @@ class Parser {
     $node = new UnsetNode();
     $this->mustMatch(T_UNSET, $node, 'name');
     $arguments = new CommaListNode();
-    $this->mustMatch('(', $node);
+    $this->mustMatch('(', $node, 'openParen');
     $node->addChild($arguments, 'arguments');
     do {
       $arguments->addChild($this->variable());
     } while ($this->tryMatch(',', $arguments));
-    $this->mustMatch(')', $node, NULL, FALSE);
+    $this->mustMatch(')', $node, 'closeParen', FALSE);
     $statement_node->addChild($node, 'functionCall');
     $this->endStatement($statement_node);
     return $statement_node;
@@ -964,7 +964,7 @@ class Parser {
     $node = new ListNode();
     $this->mustMatch(T_LIST, $node, 'name');
     $arguments = new CommaListNode();
-    $this->mustMatch('(', $node);
+    $this->mustMatch('(', $node, 'openParen');
     $node->addChild($arguments, 'arguments');
     do {
       if ($this->currentType === ')') {
@@ -974,7 +974,7 @@ class Parser {
         $arguments->addChild($this->listElement());
       }
     } while ($this->tryMatch(',', $arguments));
-    $this->mustMatch(')', $node, NULL, TRUE);
+    $this->mustMatch(')', $node, 'closeParen', TRUE);
     return $node;
   }
 
@@ -998,10 +998,10 @@ class Parser {
   private function _declare() {
     $node = new DeclareNode();
     $this->mustMatch(T_DECLARE, $node);
-    $this->mustMatch('(', $node);
+    $this->mustMatch('(', $node, 'openParen');
     $directives = new CommaListNode();
     $node->addChild($directives, 'directives');
-    if (!$this->tryMatch(')', $node, NULL, FALSE, TRUE)) {
+    if (!$this->tryMatch(')', $node, 'closeParen', FALSE, TRUE)) {
       do {
         $declare_directive = new DeclareDirectiveNode();
         $this->tryMatch(T_STRING, $declare_directive, 'name');
@@ -1010,7 +1010,7 @@ class Parser {
         }
         $directives->addChild($declare_directive);
       } while ($this->tryMatch(',', $directives));
-      $this->mustMatch(')', $node, NULL, FALSE, TRUE);
+      $this->mustMatch(')', $node, 'closeParen', FALSE, TRUE);
     }
     if ($this->tryMatch(':', $node, NULL, FALSE, TRUE)) {
       $node->addChild($this->innerStatementListNode(T_ENDDECLARE), 'body');
@@ -1093,9 +1093,9 @@ class Parser {
     if ($this->currentType === T_ARRAY) {
       $node = new ArrayNode();
       $this->mustMatch(T_ARRAY, $node);
-      $this->mustMatch('(', $node);
+      $this->mustMatch('(', $node, 'openParen');
       $this->staticArrayPairList($node, ')');
-      $this->mustMatch(')', $node, NULL, TRUE);
+      $this->mustMatch(')', $node, 'closeParen', TRUE);
       return $node;
     }
     elseif ($this->currentType === '[') {
@@ -1134,9 +1134,9 @@ class Parser {
     }
     elseif ($this->currentType === '(') {
       $node = new ParenthesisNode();
-      $this->mustMatch('(', $node);
+      $this->mustMatch('(', $node, 'openParen');
       $node->addChild($this->staticScalar(), 'expression');
-      $this->mustMatch(')', $node, NULL, TRUE);
+      $this->mustMatch(')', $node, 'closeParen', TRUE);
       return $node;
     }
     elseif (in_array($this->currentType, self::$namespacePathTypes)) {
@@ -1270,9 +1270,9 @@ class Parser {
       case T_ARRAY:
         $node = new ArrayNode();
         $this->mustMatch(T_ARRAY, $node);
-        $this->mustMatch('(', $node);
+        $this->mustMatch('(', $node, 'openParen');
         $this->arrayPairList($node, ')');
-        $this->mustMatch(')', $node, NULL, TRUE);
+        $this->mustMatch(')', $node, 'closeParen', TRUE);
         return $this->arrayDeference($node);
       case '[':
         $node = new ArrayNode();
@@ -1282,19 +1282,19 @@ class Parser {
         return $this->arrayDeference($node);
       case '(':
         $node = new ParenthesisNode();
-        $this->mustMatch('(', $node);
+        $this->mustMatch('(', $node, 'openParen');
         if ($this->currentType === T_NEW) {
           $node->addChild($this->newExpr(), 'expression');
-          $this->mustMatch(')', $node, NULL, TRUE);
+          $this->mustMatch(')', $node, 'closeParen', TRUE);
           $node = $this->objectDereference($this->arrayDeference($node));
         }
         elseif ($this->currentType === T_YIELD) {
           $node->addChild($this->_yield());
-          $this->mustMatch(')', $node, NULL, TRUE);
+          $this->mustMatch(')', $node, 'closeParen', TRUE);
         }
         else {
           $node->addChild($this->expr());
-          $this->mustMatch(')', $node, NULL, TRUE);
+          $this->mustMatch(')', $node, 'closeParen', TRUE);
         }
         return $node;
       case T_START_HEREDOC:
@@ -1364,12 +1364,12 @@ class Parser {
         $node = new IssetNode();
         $this->mustMatch(T_ISSET, $node, 'name');
         $arguments = new CommaListNode();
-        $this->mustMatch('(', $node);
+        $this->mustMatch('(', $node, 'openParen');
         $node->addChild($arguments, 'arguments');
         do {
           $arguments->addChild($this->variable());
         } while ($this->tryMatch(',', $arguments));
-        $this->mustMatch(')', $node, NULL, TRUE);
+        $this->mustMatch(')', $node, 'closeParen', TRUE);
         return $node;
       case T_EMPTY:
       case T_EVAL:
@@ -1381,10 +1381,10 @@ class Parser {
         }
         $this->mustMatch($this->currentType, $node, 'name');
         $arguments = new CommaListNode();
-        $this->mustMatch('(', $node);
+        $this->mustMatch('(', $node, 'openParen');
         $node->addChild($arguments, 'arguments');
         $arguments->addChild($this->expr());
-        $this->mustMatch(')', $node, NULL, TRUE);
+        $this->mustMatch(')', $node, 'closeParen', TRUE);
         return $node;
       case T_INCLUDE:
       case T_REQUIRE:
@@ -1415,8 +1415,8 @@ class Parser {
         if ($this->currentType !== '(') {
           return $node;
         }
-        $this->mustMatch('(', $node);
-        if ($this->tryMatch(')', $node, NULL, TRUE)) {
+        $this->mustMatch('(', $node, 'openParen');
+        if ($this->tryMatch(')', $node, 'closeParen', TRUE)) {
           return $node;
         }
         if ($this->currentType === T_YIELD) {
@@ -1425,7 +1425,7 @@ class Parser {
         else {
           $node->addChild($this->expr(), 'expression');
         }
-        $this->mustMatch(')', $node);
+        $this->mustMatch(')', $node, 'closeParen', TRUE);
         return $node;
       case T_FUNCTION:
         return $this->anonymousFunction();
@@ -1461,21 +1461,21 @@ class Parser {
     $this->tryMatch('&', $node, 'reference');
     $this->parameterList($node);
     if ($this->tryMatch(T_USE, $node)) {
-      $this->mustMatch('(', $node);
+      $this->mustMatch('(', $node, 'openParen');
       $lexical_vars_node = new CommaListNode();
       do {
         if ($this->currentType === '&') {
           $var = new ReferenceVariableNode();
           $this->mustMatch('&', $var);
-          $this->mustMatch(T_VARIABLE, $var, 'variable');
+          $this->mustMatch(T_VARIABLE, $var, 'variable', TRUE);
           $lexical_vars_node->addChild($var);
         }
         else {
-          $this->mustMatch(T_VARIABLE, $lexical_vars_node);
+          $this->mustMatch(T_VARIABLE, $lexical_vars_node, TRUE);
         }
       } while ($this->tryMatch(',', $lexical_vars_node));
       $node->addChild($lexical_vars_node, 'lexicalVariables');
-      $this->mustMatch(')', $node);
+      $this->mustMatch(')', $node, 'closeParen');
     }
     $node->addChild($this->innerStatementBlock(), 'body');
     return $node;
@@ -2059,9 +2059,9 @@ class Parser {
    */
   private function functionCallParameterList($node) {
     $arguments = new CommaListNode();
-    $this->mustMatch('(', $node);
+    $this->mustMatch('(', $node, 'openParen');
     $node->addChild($arguments, 'arguments');
-    if ($this->tryMatch(')', $node, NULL, TRUE)) {
+    if ($this->tryMatch(')', $node, 'closeParen', TRUE)) {
       return;
     }
     if ($this->currentType === T_YIELD) {
@@ -2071,7 +2071,7 @@ class Parser {
         $arguments->addChild($this->functionCallParameter());
       } while ($this->tryMatch(',', $arguments));
     }
-    $this->mustMatch(')', $node, NULL, TRUE);
+    $this->mustMatch(')', $node, 'closeParen', TRUE);
   }
 
   /**
@@ -2131,15 +2131,15 @@ class Parser {
    */
   private function parameterList(ParentNode $parent) {
     $node = new CommaListNode();
-    $this->mustMatch('(', $parent);
+    $this->mustMatch('(', $parent, 'openParen');
     $parent->addChild($node, 'parameters');
-    if ($this->tryMatch(')', $parent, NULL, TRUE)) {
+    if ($this->tryMatch(')', $parent, 'closeParen', TRUE)) {
       return;
     }
     do {
       $node->addChild($this->parameter());
     } while ($this->tryMatch(',', $node));
-    $this->mustMatch(')', $parent, NULL, TRUE);
+    $this->mustMatch(')', $parent, 'closeParen', TRUE);
   }
 
   /**

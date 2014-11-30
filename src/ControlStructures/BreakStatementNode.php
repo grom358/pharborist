@@ -1,6 +1,7 @@
 <?php
 namespace Pharborist\ControlStructures;
 
+use Pharborist\ParenTrait;
 use Pharborist\StatementNode;
 use Pharborist\Types\IntegerNode;
 
@@ -8,6 +9,8 @@ use Pharborist\Types\IntegerNode;
  * A break statement.
  */
 class BreakStatementNode extends StatementNode {
+  use ParenTrait;
+
   /**
    * @var IntegerNode
    */

@@ -41,10 +41,10 @@ class Formatter extends VisitorBase {
   /**
    * @var \SplObjectStorage
    */
-  private $objectStorage;
+  private $nodeData;
 
   public function __construct() {
-    $this->objectStorage = new \SplObjectStorage();
+    $this->nodeData = new \SplObjectStorage();
   }
 
   /**
@@ -277,7 +277,7 @@ class Formatter extends VisitorBase {
       $this->indentLevel++;
       $nested = TRUE;
     }
-    $this->objectStorage[$node] = $nested;
+    $this->nodeData[$node] = $nested;
     $first = $node->firstChild();
     if ($first instanceof TokenNode && $first->getType() === '{') {
       $brace_newline = Settings::get('formatter.declaration_brace_newline');
@@ -296,8 +296,8 @@ class Formatter extends VisitorBase {
   }
 
   public function endStatementBlockNode(StatementBlockNode $node) {
-    $nested = $this->objectStorage[$node];
-    unset($this->objectStorage[$node]);
+    $nested = $this->nodeData[$node];
+    unset($this->nodeData[$node]);
     if ($nested) {
       $this->indentLevel--;
     }
@@ -372,12 +372,12 @@ class Formatter extends VisitorBase {
       $last->remove();
     }
 
-    $this->objectStorage[$node] = $nested;
+    $this->nodeData[$node] = $nested;
   }
 
   public function endArrayNode(ArrayNode $node) {
-    $nested = $this->objectStorage[$node];
-    unset($this->objectStorage[$node]);
+    $nested = $this->nodeData[$node];
+    unset($this->nodeData[$node]);
 
     if ($nested) {
       $this->indentLevel--;
@@ -427,7 +427,7 @@ class Formatter extends VisitorBase {
     }
     if ($keep_wrap) {
       $has_wrap = $node->children(Filter::isNewline())->isNotEmpty();
-      $this->objectStorage[$node] = $has_wrap;
+      $this->nodeData[$node] = $has_wrap;
     }
     foreach ($node->children(Filter::isTokenType(',')) as $comma_node) {
       $this->removeSpaceBefore($comma_node);
@@ -444,8 +444,8 @@ class Formatter extends VisitorBase {
     }
     $wrap_list = FALSE;
     if ($keep_wrap) {
-      $wrap_list = $this->objectStorage[$node];
-      unset($this->objectStorage[$node]);
+      $wrap_list = $this->nodeData[$node];
+      unset($this->nodeData[$node]);
     }
     if (!$wrap_list && $wrap_if_long) {
       $column_position = $this->calculateColumnPosition($node);

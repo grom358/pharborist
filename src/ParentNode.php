@@ -73,7 +73,7 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
       }
       $child = $child->next;
     }
-    return new NodeCollection($matches);
+    return new NodeCollection($matches, FALSE);
   }
 
   public function clear() {

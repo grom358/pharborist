@@ -586,4 +586,19 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals(1, $collection->indexOf(Filter::is($second)));
     $this->assertEquals(-1, $collection->indexOf(Filter::is($not_found)));
   }
+
+  public function testSort() {
+    $root = new RootNode();
+    $parent = $this->createParentNode();
+    $root->append($parent);
+    $children = [];
+    for ($i = 0; $i <= 21; $i++) {
+      $children[] = $this->createNode();
+    }
+    $parent->append($children);
+    $collection = new NodeCollection($children, TRUE);
+    foreach ($collection as $k => $child) {
+      $this->assertSame($children[$k], $child);
+    }
+  }
 }

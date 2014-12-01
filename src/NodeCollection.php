@@ -29,7 +29,7 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
         $sort[$key] = $node;
       }
     }
-    ksort($sort);
+    ksort($sort, SORT_NATURAL);
     return array_merge(array_values($sort), $detached);
   }
 

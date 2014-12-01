@@ -561,4 +561,11 @@ class ThrowStatementNode extends StatementNode {
 EOF;
     $this->assertEquals($expected, $actual);
   }
+
+  public function testClone() {
+    $snippet = '$a = clone   $b;';
+    $actual = $this->formatSnippet($snippet);
+    $expected = '$a = clone $b;';
+    $this->assertEquals($expected, $actual);
+  }
 }

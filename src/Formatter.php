@@ -24,8 +24,10 @@ use Pharborist\Objects\ObjectMethodCallNode;
 use Pharborist\Objects\SingleInheritanceNode;
 use Pharborist\Operators\BinaryOperationNode;
 use Pharborist\Operators\CastNode;
+use Pharborist\Operators\CloneNode;
 use Pharborist\Operators\PostDecrementNode;
 use Pharborist\Operators\PostIncrementNode;
+use Pharborist\Operators\PrintNode;
 use Pharborist\Operators\UnaryOperationNode;
 use Pharborist\Types\ArrayNode;
 use Pharborist\Types\BooleanNode;
@@ -217,7 +219,7 @@ class Formatter extends VisitorBase {
     if ($node instanceof PostDecrementNode || $node instanceof PostIncrementNode) {
       $this->removeSpaceBefore($operator);
     }
-    elseif ($node instanceof CastNode) {
+    elseif ($node instanceof CastNode || $node instanceof CloneNode || $node instanceof PrintNode) {
       $this->spaceAfter($operator);
     }
     else {

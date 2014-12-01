@@ -227,9 +227,14 @@ class Formatter extends VisitorBase {
 
   public function visitDocCommentNode(DocCommentNode $node) {
     $this->removeSpaceAfter($node);
-    $this->indentLevel--;
-    $this->newlineAfter($node);
-    $this->indentLevel++;
+    if ($this->indentLevel > 0) {
+      $this->indentLevel--;
+      $this->newlineAfter($node);
+      $this->indentLevel++;
+    }
+    else {
+      $this->newlineAfter($node);
+    }
   }
 
   public function visitWhitespaceNode(WhitespaceNode $node) {

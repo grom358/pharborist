@@ -310,17 +310,6 @@ class Parser {
   }
 
   /**
-   * Parse a block of top level statements.
-   * @param string $terminator Character that ends the statement block
-   * @return Node
-   */
-  private function topStatementBlock($terminator) {
-    $node = new StatementBlockNode();
-    $this->topStatementList($node, $terminator);
-    return $node;
-  }
-
-  /**
    * Parse a top level statement.
    * @return Node
    */
@@ -2278,9 +2267,12 @@ class Parser {
       $name = $this->namespaceName();
       $node->addChild($name, 'name');
     }
-    if ($this->tryMatch('{', $node)) {
-      $node->addChild($this->topStatementBlock('}'), 'body');
-      $this->mustMatch('}', $node);
+    $this->matchHidden($node);
+    $body = new StatementBlockNode();
+    if ($this->tryMatch('{', $body)) {
+      $this->topStatementList($body, '}');
+      $this->mustMatch('}', $body);
+      $node->addChild($body, 'body');
     }
     else {
       $this->endStatement($node);

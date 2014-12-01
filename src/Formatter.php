@@ -15,6 +15,7 @@ use Pharborist\Exceptions\CatchNode;
 use Pharborist\Functions\CallNode;
 use Pharborist\Functions\FunctionDeclarationNode;
 use Pharborist\Functions\ParameterNode;
+use Pharborist\Namespaces\NamespaceNode;
 use Pharborist\Objects\ClassMethodNode;
 use Pharborist\Objects\InterfaceMethodNode;
 use Pharborist\Objects\InterfaceNode;
@@ -719,5 +720,37 @@ class Formatter extends VisitorBase {
 
   public function visitObjectMethodCallNode(ObjectMethodCallNode $node) {
     $this->removeSpaceAfter($node->getOperator());
+  }
+
+  public function endRootNode(RootNode $node) {
+    /** @var $open_tag TokenNode */
+    foreach ($node->children(Filter::isTokenType(T_OPEN_TAG)) as $open_tag) {
+      $this->removeSpaceAfter($open_tag);
+      if ($open_tag !== "<?php\n") {
+        $open_tag->setText("<?php\n");
+      }
+    }
+  }
+
+  public function visitNamespaceNode(NamespaceNode $node) {
+    $first = $node->getBody()->firstToken();
+    $has_braces = $first->getType() === '{';
+    $this->indentLevel = $has_braces ? 1 : 0;
+    if (!$has_braces) {
+      foreach ($node->children(Filter::isTokenType(';')) as $semicolon) {
+        $next = $semicolon->next();
+        $newlines = str_repeat($this->config['nl'], 2);
+        if ($next instanceof WhitespaceNode) {
+          $next->setText($newlines);
+        }
+        else {
+          $semicolon->after(Token::whitespace($newlines));
+        }
+      }
+    }
+  }
+
+  public function endNamespaceNode(NamespaceNode $node) {
+    $this->indentLevel = 0;
   }
 }

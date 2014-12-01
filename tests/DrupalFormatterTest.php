@@ -10,6 +10,14 @@ class DrupalFormatterTest extends \PHPUnit_Framework_TestCase {
     return $node->getText();
   }
 
+  protected function formatSource($source) {
+    /** @var ParentNode $node */
+    $node = Parser::parseSource($source);
+    $formatter = FormatterFactory::getDrupalFormatter();
+    $formatter->format($node);
+    return $node->getText();
+  }
+
   public function testBinaryOp() {
     $snippet = '$a=1+2;';
     $actual = $this->formatSnippet($snippet);
@@ -429,6 +437,53 @@ abstract class Test {
   }
 
   final public static function testFinalStatic() {
+  }
+}
+EOF;
+    $this->assertEquals($expected, $actual);
+  }
+
+  public function testNestedClass() {
+    $snippet = 'if ($cond) { class Test {} }';
+    $actual = $this->formatSnippet($snippet);
+    $expected = <<<'EOF'
+if ($cond) {
+  class Test {
+  }
+}
+EOF;
+    $this->assertEquals($expected, $actual);
+  }
+
+  public function testNamespace() {
+    $source = <<<'EOF'
+<?php
+namespace Test;
+class Me {}
+EOF;
+    $actual = $this->formatSource($source);
+    $expected = <<<'EOF'
+<?php
+namespace Test;
+
+class Me {
+}
+EOF;
+    $this->assertEquals($expected, $actual);
+  }
+
+  public function testNestedNamespace() {
+    $source = <<<'EOF'
+<?php
+namespace Test {
+class Me {}
+}
+EOF;
+    $actual = $this->formatSource($source);
+    $expected = <<<'EOF'
+<?php
+namespace Test {
+  class Me {
   }
 }
 EOF;

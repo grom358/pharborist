@@ -225,7 +225,18 @@ class Formatter extends VisitorBase {
     }
   }
 
+  public function visitDocCommentNode(DocCommentNode $node) {
+    $this->removeSpaceAfter($node);
+    $this->indentLevel--;
+    $this->newlineAfter($node);
+    $this->indentLevel++;
+  }
+
   public function visitWhitespaceNode(WhitespaceNode $node) {
+    if ($node->previousToken()->getType() === T_DOC_COMMENT) {
+      return;
+    }
+
     // Normalise whitespace.
     $nl_count = $node->getNewlineCount();
     if ($nl_count > 0) {
@@ -424,13 +435,13 @@ class Formatter extends VisitorBase {
 
   public function visitStatementBlockNode(StatementBlockNode $node) {
     $nested = FALSE;
-    if ($node->parent(Filter::isInstanceOf('\Pharborist\StatementBlockNode'))) {
-      $this->indentLevel++;
-      $nested = TRUE;
-    }
-    $this->nodeData[$node] = $nested;
     $first = $node->firstChild();
     if ($first instanceof TokenNode && $first->getType() === '{') {
+      if ($node->parent() instanceof StatementBlockNode) {
+        $this->indentLevel++;
+        $nested = TRUE;
+      }
+
       $brace_newline = $this->config['declaration_brace_newline'];
       if ($brace_newline && $this->isDeclaration($node->parent())) {
         $this->newlineBefore($node, TRUE);
@@ -440,6 +451,7 @@ class Formatter extends VisitorBase {
       }
       $this->newlineAfter($first);
     }
+    $this->nodeData[$node] = $nested;
 
     foreach ($node->getStatements() as $statement) {
       $this->newlineBefore($statement);

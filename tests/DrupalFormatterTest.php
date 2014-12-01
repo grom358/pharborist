@@ -489,4 +489,76 @@ namespace Test {
 EOF;
     $this->assertEquals($expected, $actual);
   }
+
+  public function testDocComment() {
+    $source = <<<'EOF'
+<?php
+/**
+ * A throw statement.
+ */
+
+ class ThrowStatementNode extends StatementNode {
+  /**
+   * @var ExpressionNode
+   */
+  protected $expression;
+  /**
+   * @return ExpressionNode
+   */public function getExpression() {
+    return $this->expression;
+  }
+}
+EOF;
+    $actual = $this->formatSource($source);
+    $expected = <<<'EOF'
+<?php
+/**
+ * A throw statement.
+ */
+class ThrowStatementNode extends StatementNode {
+  /**
+   * @var ExpressionNode
+   */
+  protected $expression;
+
+  /**
+   * @return ExpressionNode
+   */
+  public function getExpression() {
+    return $this->expression;
+  }
+}
+EOF;
+    $this->assertEquals($expected, $actual);
+  }
+
+  public function testUse() {
+    $source = <<<'EOF'
+<?php
+namespace Pharborist\Exceptions;
+
+use Pharborist\StatementNode;use Pharborist\ExpressionNode;
+
+/**
+ * A throw statement.
+ */
+class ThrowStatementNode extends StatementNode {
+}
+EOF;
+    $actual = $this->formatSource($source);
+    $expected = <<<'EOF'
+<?php
+namespace Pharborist\Exceptions;
+
+use Pharborist\StatementNode;
+use Pharborist\ExpressionNode;
+
+/**
+ * A throw statement.
+ */
+class ThrowStatementNode extends StatementNode {
+}
+EOF;
+    $this->assertEquals($expected, $actual);
+  }
 }

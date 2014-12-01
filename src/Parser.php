@@ -2319,9 +2319,10 @@ class Parser {
    */
   private function useBlock() {
     $node = new UseDeclarationBlockNode();
+    $node->addChild($this->_use());
     while ($this->currentType === T_USE) {
-      $node->addChild($this->_use());
       $this->matchHidden($node);
+      $node->addChild($this->_use());
     }
     return $node;
   }

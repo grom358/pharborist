@@ -95,12 +95,23 @@ class Formatter extends VisitorBase {
   }
 
   /**
+   * @param bool $close
+   *
+   * @return string
+   */
+  protected function getIndent($close = FALSE) {
+    $indent_per_level = str_repeat(' ', $this->config['indent']);
+    return str_repeat($indent_per_level, $this->indentLevel - ($close ? 1 : 0));
+  }
+
+  /**
    * @param WhitespaceNode|NULL $wsNode
+   * @param bool $close
+   *
    * @return string
    */
   protected function getNewlineIndent($wsNode = NULL, $close = FALSE) {
-    $indent_per_level = str_repeat(' ', $this->config['indent']);
-    $indent = str_repeat($indent_per_level, $this->indentLevel - ($close ? 1 : 0));
+    $indent = $this->getIndent($close);
     $nl_count = $wsNode ? $wsNode->getNewlineCount() : 1;
     $nl_count = max($nl_count, 1);
     return str_repeat($this->config['nl'], $nl_count) . $indent;
@@ -175,10 +186,23 @@ class Formatter extends VisitorBase {
   protected function newlineBefore(Node $node, $close = FALSE) {
     $prev = $node->previousToken();
     if ($prev instanceof WhitespaceNode) {
-      $prev->setText($this->getNewlineIndent($prev, $close));
+      $prev_ws = $prev->previousToken();
+      if ($prev_ws instanceof CommentNode && $prev_ws->isLineComment() && $prev->getNewlineCount() === 0) {
+        $prev->setText($this->getIndent($close));
+      }
+      else {
+        $prev->setText($this->getNewlineIndent($prev, $close));
+      }
     }
     else {
-      $node->before(Token::whitespace($this->getNewlineIndent(NULL, $close)));
+      if ($prev instanceof CommentNode && $prev->isLineComment()) {
+        if ($this->indentLevel > 0) {
+          $node->before(Token::whitespace($this->getIndent($close)));
+        }
+      }
+      else {
+        $node->before(Token::whitespace($this->getNewlineIndent(NULL, $close)));
+      }
     }
   }
 
@@ -250,7 +274,13 @@ class Formatter extends VisitorBase {
       $node->setText($this->getNewlineIndent($node));
     }
     else {
-      $node->setText(' ');
+      $prev = $node->previousToken();
+      if ($prev instanceof CommentNode && $prev->isLineComment()) {
+        // Whitespace has already been processed.
+      }
+      else {
+        $node->setText(' ');
+      }
     }
   }
 
@@ -474,6 +504,24 @@ class Formatter extends VisitorBase {
     $last = $node->lastChild();
     if ($last instanceof TokenNode && $last->getType() === '}') {
       $this->newlineBefore($last, TRUE);
+    }
+  }
+
+  public function visitLineCommentBlockNode(LineCommentBlockNode $node) {
+    if ($this->indentLevel > 0) {
+      $indent = $this->getIndent();
+      foreach ($node->children(Filter::isInstanceOf('\Pharborist\CommentNode'))->slice(1) as $line_comment) {
+        $prev = $line_comment->previous();
+        if ($prev instanceof WhitespaceNode) {
+          $prev->setText($indent);
+        }
+        else {
+          $line_comment->before(Token::whitespace($indent));
+        }
+      }
+    }
+    else {
+      $node->children(Filter::isInstanceOf('\Pharborist\WhitespaceNode'))->remove();
     }
   }
 

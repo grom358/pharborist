@@ -568,4 +568,57 @@ EOF;
     $expected = '$a = clone $b;';
     $this->assertEquals($expected, $actual);
   }
+
+  public function testLineComment() {
+    $source = <<<'EOF'
+<?php
+// one
+one();
+
+// multi
+// line two
+two();
+
+    // multi
+  // line three
+  three();
+
+if ($cond) {
+    // four
+  four();
+
+// multi line
+ // five
+five();
+
+  six();  // six
+}
+EOF;
+    $actual = $this->formatSource($source);
+    $expected = <<<'EOF'
+<?php
+// one
+one();
+
+// multi
+// line two
+two();
+
+// multi
+// line three
+three();
+
+if ($cond) {
+  // four
+  four();
+
+  // multi line
+  // five
+  five();
+
+  six(); // six
+}
+EOF;
+    $this->assertEquals($expected, $actual);
+  }
 }

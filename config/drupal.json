@@ -8,6 +8,7 @@
     "else_newline": true,
     "declaration_brace_newline": false,
     "list_keep_wrap": false,
-    "list_wrap_if_long": false
+    "list_wrap_if_long": false,
+    "blank_lines_around_class_body": 1
   }
 }

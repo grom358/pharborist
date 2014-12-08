@@ -20,7 +20,7 @@ class FormatterFactory {
    */
   public static function getDefaultFormatter() {
     if (!static::$defaultFormatter) {
-      static::$defaultFormatter = new Formatter();
+      static::$defaultFormatter = static::getDrupalFormatter();
     }
     return static::$defaultFormatter;
   }

@@ -67,6 +67,7 @@ class Formatter extends VisitorBase {
       'declaration_brace_newline' => FALSE,
       'list_keep_wrap' => FALSE,
       'list_wrap_if_long' => FALSE,
+      'blank_lines_around_class_body' => 1,
     ];
   }
 
@@ -715,9 +716,25 @@ class Formatter extends VisitorBase {
     /** @var WhitespaceNode $ws_node */
     $whitespace = $node->getBody()->children(Filter::isInstanceOf('\Pharborist\WhitespaceNode'));
     foreach ($whitespace->slice(1, -1) as $ws_node) {
-      // Blank line at start and end of body.
+      // Blank line between methods and properties.
       $ws_node->setText(str_repeat($nl, 2) . $indent);
     }
+
+    if ($whitespace->count() === 1) {
+      return;
+    }
+
+    $blank_lines_around_class_body = $this->config['blank_lines_around_class_body'];
+    $nl_count = $blank_lines_around_class_body + 1;
+
+    /** @var WhitespaceNode $open_whitespace */
+    $open_whitespace = $whitespace->get(0);
+    $open_whitespace->setText(str_repeat($nl, $nl_count) . $indent);
+
+    /** @var WhitespaceNode $close_whitespace */
+    $close_whitespace = $whitespace->last()->get(0);
+    $indent = str_repeat($indent, $this->indentLevel);
+    $close_whitespace->setText(str_repeat($nl, $nl_count) . $indent);
   }
 
   public function endSingleInheritanceNode(SingleInheritanceNode $node) {

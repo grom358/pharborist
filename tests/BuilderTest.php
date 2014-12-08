@@ -50,10 +50,12 @@ class BuilderTest extends \PHPUnit_Framework_TestCase {
 
     $expected = <<<'EOF'
 class MyTest {
+
   private $someProperty;
 
   public function someMethod() {
   }
+
 }
 EOF;
     $this->assertEquals($expected, $classNode->getText());
@@ -166,6 +168,7 @@ END;
 
     $expected = <<<'END'
 class DefaultController extends ControllerBase {
+
   public function diff_diffs_overview($node) {
     drupal_set_title(t('Revisions for %title', ['%title' => $node->title]), PASS_THROUGH);
     if ($cond) {
@@ -173,6 +176,7 @@ class DefaultController extends ControllerBase {
     }
     return drupal_get_form('diff_node_revisions', $node);
   }
+
 }
 END;
 

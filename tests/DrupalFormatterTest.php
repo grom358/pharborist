@@ -286,6 +286,7 @@ EOF;
     $actual = $this->formatSnippet($snippet);
     $expected = <<<'EOF'
 class Test {
+
   private $a;
 
   protected $b;
@@ -297,6 +298,7 @@ class Test {
   public function run() {
     test();
   }
+
 }
 EOF;
     $this->assertEquals($expected, $actual);
@@ -307,6 +309,7 @@ EOF;
     $actual = $this->formatSnippet($snippet);
     $expected = <<<'EOF'
 trait Test {
+
   private $a;
 
   protected $b;
@@ -318,6 +321,7 @@ trait Test {
   public function run() {
     test();
   }
+
 }
 EOF;
     $this->assertEquals($expected, $actual);
@@ -328,9 +332,11 @@ EOF;
     $actual = $this->formatSnippet($snippet);
     $expected = <<<'EOF'
 interface Test {
+
   public function test($a, $b, $c = 1);
 
   public function run();
+
 }
 EOF;
     $this->assertEquals($expected, $actual);
@@ -413,6 +419,7 @@ EOF;
   public function testMethodModifiers() {
     $snippet = <<<'EOF'
 abstract class Test {
+
   public abstract function abstractMethod();
 
   public final function finalMethod() {
@@ -423,11 +430,13 @@ abstract class Test {
 
   final static public function testFinalStatic() {
   }
+
 }
 EOF;
     $actual = $this->formatSnippet($snippet);
     $expected = <<<'EOF'
 abstract class Test {
+
   abstract public function abstractMethod();
 
   final public function finalMethod() {
@@ -438,6 +447,7 @@ abstract class Test {
 
   final public static function testFinalStatic() {
   }
+
 }
 EOF;
     $this->assertEquals($expected, $actual);
@@ -516,6 +526,7 @@ EOF;
  * A throw statement.
  */
 class ThrowStatementNode extends StatementNode {
+
   /**
    * @var ExpressionNode
    */
@@ -527,6 +538,7 @@ class ThrowStatementNode extends StatementNode {
   public function getExpression() {
     return $this->expression;
   }
+
 }
 EOF;
     $this->assertEquals($expected, $actual);

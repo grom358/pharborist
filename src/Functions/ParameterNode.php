@@ -83,12 +83,17 @@ class ParameterNode extends ParentNode {
   }
 
   /**
-   * Returns the function which defines this parameter.
+   * Returns the function/method which defines this parameter.
    *
-   * @return FunctionDeclarationNode|\Pharborist\Objects\ClassMethodNode|AnonymousFunctionNode|NULL
+   * @return FunctionDeclarationNode|\Pharborist\Objects\ClassMethodNode|\Pharborist\Objects\InterfaceMethodNode|AnonymousFunctionNode|NULL
    */
   public function getFunction() {
-    return $this->closest(Filter::isInstanceOf('Pharborist\Functions\FunctionDeclarationNode', 'Pharborist\Objects\ClassMethodNode', 'Pharborist\AnonymousFunctionNode'));
+    return $this->closest(Filter::isInstanceOf(
+      'Pharborist\Functions\FunctionDeclarationNode',
+      'Pharborist\Objects\ClassMethodNode',
+      'Pharborist\Objects\InterfaceMethodNode',
+      'Pharborist\Functions\AnonymousFunctionNode'
+    ));
   }
 
   /**

@@ -200,7 +200,7 @@ class ParameterNode extends ParentNode {
    *  The parameter name, without the leading $.
    */
   public function getName() {
-    return ltrim($this->getVariable(), '$');
+    return ltrim($this->getVariable()->getText(), '$');
   }
 
   /**
@@ -213,19 +213,19 @@ class ParameterNode extends ParentNode {
    * @return $this
    */
   public function setName($name, $rewrite = FALSE) {
-    $original_name = $this->getName();
+    $original_name = $this->name->getText();
 
-    $this->name->setText('$' . ltrim($name, '$'));
+    $this->name->setName($name);
 
     if ($rewrite) {
       $this
         ->getFunction()
         ->find(Filter::isInstanceOf('\Pharborist\Variables\VariableNode'))
         ->filter(function(VariableNode $node) use ($original_name) {
-          return $node->getText() === '$' . $original_name;
+          return $node->getText() === $original_name;
         })
         ->each(function(VariableNode $node) use ($name) {
-          $node->replaceWith(Token::variable('$' . $name));
+          $node->setText('$' . $name);
         });
     }
 

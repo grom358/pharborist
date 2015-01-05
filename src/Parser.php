@@ -85,8 +85,6 @@ use Pharborist\Variables\VariableVariableNode;
 
 /**
  * Parses PHP tokens into syntax tree.
- *
- * @internal
  */
 class Parser {
   /**

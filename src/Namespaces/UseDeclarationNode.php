@@ -29,10 +29,16 @@ class UseDeclarationNode extends ParentNode {
    */
   protected $alias;
 
+  /**
+   * @param string $import
+   *   Fully qualified class name; can also include optional alias.
+   *
+   * @return UseDeclarationNode
+   */
   public static function create($import) {
     /** @var UseDeclarationBlockNode $use_declaration_block_node */
     $use_declaration_block_node = Parser::parseSnippet('use ' . $import . ';');
-    return $use_declaration_block_node->firstChild();
+    return $use_declaration_block_node->getDeclarationStatements()[0]->getDeclarations()[0];
   }
 
   /**

@@ -1,6 +1,8 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Namespaces\UseDeclarationNode;
+
 class UseDeclarationNodeTest extends \PHPUnit_Framework_TestCase {
 
   public function testImports() {
@@ -86,6 +88,11 @@ EOF;
     $this->assertEquals('TestAlias', $declaration->getAlias()->getText());
     $this->assertEquals('Foobar as TestAlias', $declaration->getText());
 
+    $declaration->setAlias('Overridden');
+    $this->assertTrue($declaration->hasAlias());
+    $this->assertEquals('Overridden', $declaration->getAlias()->getText());
+    $this->assertEquals('Foobar as Overridden', $declaration->getText());
+
     $declaration->setAlias(NULL);
     $this->assertFalse($declaration->hasAlias());
     $this->assertEquals('Foobar', $declaration->getText());
@@ -99,6 +106,12 @@ EOF;
     $declaration_block = Parser::parseSnippet('use Cleese as Chapman;');
     $declaration = $declaration_block->getDeclarationStatements()[0]->getDeclarations()[0];
     $declaration->setAlias(3.141);
+  }
+
+  public function testCreate() {
+    $declaration = UseDeclarationNode::create('Cleese as Chapman');
+    $this->assertEquals('Cleese', $declaration->getName()->getText());
+    $this->assertEquals('Chapman', $declaration->getAlias()->getText());
   }
 
 }

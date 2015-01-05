@@ -15,7 +15,7 @@ use Pharborist\Variables\VariableNode;
  */
 class ParameterNode extends ParentNode {
   /**
-   * @var Node
+   * @var NameNode|TokenNode
    */
   protected $typeHint;
 
@@ -97,21 +97,31 @@ class ParameterNode extends ParentNode {
   }
 
   /**
-   * @return Node
+   * @return NameNode|TokenNode
    */
   public function getTypeHint() {
     return $this->typeHint;
   }
 
   /**
-   * @param string|Node $type_hint
+   * @param string|NameNode|TokenNode $type_hint
    * @return $this
    */
   public function setTypeHint($type_hint) {
     if (is_string($type_hint)) {
       $type = $type_hint;
-      $type_hint = new NameNode();
-      $type_hint->append(Token::identifier($type));
+      switch ($type) {
+        case 'array':
+          $type_hint = Token::_array();
+          break;
+        case 'callable':
+          $type_hint = Token::_callable();
+          break;
+        default:
+          $type_hint = new NameNode();
+          $type_hint->append(Token::identifier($type));
+          break;
+      }
     }
     if (isset($this->typeHint)) {
       $this->typeHint->replaceWith($type_hint);
@@ -172,6 +182,14 @@ class ParameterNode extends ParentNode {
         $this->variadic->remove();
       }
     }
+  }
+
+  /**
+   * @return bool
+   *   TRUE if parameter is variadic.
+   */
+  public function isVariadic() {
+    return isset($this->variadic);
   }
 
   /**
@@ -265,5 +283,16 @@ class ParameterNode extends ParentNode {
       }
     }
     return $this;
+  }
+
+  /**
+   * Get the doc block tag associated with this parameter.
+   *
+   * @return null|\phpDocumentor\Reflection\DocBlock\Tag\ParamTag
+   *   The parameter tag or null if not found.
+   */
+  public function getDocBlockTag() {
+    $doc_comment = $this->getFunction()->getDocComment();
+    return $doc_comment->getParameter($this->name->getText());
   }
 }

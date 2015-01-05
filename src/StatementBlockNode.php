@@ -26,4 +26,26 @@ class StatementBlockNode extends ParentNode {
   public function getStatements() {
     return new NodeCollection($this->_getStatements(), FALSE);
   }
+
+  /**
+   * Return mapping of class names to fully qualified names.
+   *
+   * @return array
+   *   Associative array of namespace alias to fully qualified names.
+   */
+  public function getClassAliases() {
+    $mappings = array();
+    /** @var \Pharborist\Namespaces\UseDeclarationBlockNode[] $use_blocks */
+    $use_blocks = $this->children(Filter::isInstanceOf('\Pharborist\Namespaces\UseDeclarationBlockNode'));
+    foreach ($use_blocks as $use_block) {
+      foreach ($use_block->getDeclarationStatements() as $use_statement) {
+        if ($use_statement->importsClass()) {
+          foreach ($use_statement->getDeclarations() as $use_declaration) {
+            $mappings[$use_declaration->getBoundedName()] = $use_declaration->getName()->getAbsolutePath();
+          }
+        }
+      }
+    }
+    return $mappings;
+  }
 }

@@ -4,8 +4,6 @@ namespace Pharborist\Namespaces;
 use Pharborist\Constants\ConstantNode;
 use Pharborist\Filter;
 use Pharborist\Functions\FunctionCallNode;
-use Pharborist\Objects\ClassMethodNode;
-use Pharborist\Objects\InterfaceMethodNode;
 use Pharborist\ParentNode;
 use Pharborist\Token;
 use Pharborist\TokenNode;
@@ -179,7 +177,7 @@ class NameNode extends ParentNode {
       return '\\' . $name;
     }
     if ($this->parent instanceof UseDeclarationNode) {
-      return '\\' . $this->getPath();
+      return '\\' . $name;
     }
     $namespace = $this->getNamespace();
     if (!$namespace) {
@@ -253,5 +251,18 @@ class NameNode extends ParentNode {
    */
   public function isGlobal() {
     return $this->getBasePath() === '\\';
+  }
+
+
+  /**
+   * Returns trailing name component of path.
+   *
+   * @return string
+   *   Last component of path.
+   */
+  public function getBaseName() {
+    $path = $this->getAbsolutePath();
+    $parts = explode('\\', $path);
+    return end($parts);
   }
 }

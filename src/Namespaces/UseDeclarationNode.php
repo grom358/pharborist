@@ -93,6 +93,42 @@ class UseDeclarationNode extends ParentNode {
   }
 
   /**
+   * Test if use declaration is for class.
+   *
+   * @return bool
+   *   TRUE if use declaration of class.
+   */
+  public function isClass() {
+    /** @var UseDeclarationStatementNode $parent */
+    $parent = $this->parent->parent;
+    return $parent->importsClass();
+  }
+
+  /**
+   * Test if use declaration is for function.
+   *
+   * @return bool
+   *   TRUE if use declaration of function.
+   */
+  public function isFunction() {
+    /** @var UseDeclarationStatementNode $parent */
+    $parent = $this->parent->parent;
+    return $parent->importsFunction();
+  }
+
+  /**
+   * Test if use declaration is for const.
+   *
+   * @return bool
+   *   TRUE if use declaration of const.
+   */
+  public function isConst() {
+    /** @var UseDeclarationStatementNode $parent */
+    $parent = $this->parent->parent;
+    return $parent->importsConst();
+  }
+
+  /**
    * Name bounded inside namespace.
    *
    * @return string

@@ -1,6 +1,7 @@
 <?php
 namespace Pharborist\Namespaces;
 
+use Pharborist\Constants\ConstantNode;
 use Pharborist\Filter;
 use Pharborist\Functions\FunctionCallNode;
 use Pharborist\Objects\ClassMethodNode;
@@ -165,33 +166,55 @@ class NameNode extends ParentNode {
   }
 
   /**
+   * Resolve an unqualified name to fully qualified name.
+   *
    * @param string $name
    *   The unqualified name to resolve.
    *
    * @return string
+   *   Fully qualified name.
    */
   protected function resolveUnqualified($name) {
-    if ($this->parent() instanceof NamespaceNode) {
+    if ($this->parent instanceof NamespaceNode) {
       return '\\' . $name;
+    }
+    if ($this->parent instanceof UseDeclarationNode) {
+      return '\\' . $this->getPath();
     }
     $namespace = $this->getNamespace();
     if (!$namespace) {
       return '\\' . $name;
     }
-    if ($this->parent() instanceof FunctionCallNode) {
+    $use_declarations = $namespace->find(Filter::isInstanceOf('\Pharborist\Namespaces\UseDeclarationNode'));
+    if ($this->parent instanceof FunctionCallNode) {
+      /** @var UseDeclarationNode $use_declaration */
+      foreach ($use_declarations as $use_declaration) {
+        if ($use_declaration->isFunction() && $use_declaration->getBoundedName() === $name) {
+          return '\\' . $use_declaration->getName()->getPath();
+        }
+      }
       return $this->getBasePath() . $name;
     }
-    if ($this->parent() instanceof UseDeclarationNode) {
-      return '\\' . $this->getPath();
-    }
-    /** @var UseDeclarationNode $use_declaration */
-    foreach ($namespace->find(Filter::isInstanceOf('\Pharborist\Namespaces\UseDeclarationNode')) as $use_declaration) {
-      $bounded_name = $use_declaration->getBoundedName();
-      if ($bounded_name === $name) {
-        return '\\' . $use_declaration->getName()->getPath();
+    elseif ($this->parent instanceof ConstantNode) {
+      /** @var UseDeclarationNode $use_declaration */
+      foreach ($use_declarations as $use_declaration) {
+        if ($use_declaration->isConst() && $use_declaration->getBoundedName() === $name) {
+          return '\\' . $use_declaration->getName()->getPath();
+        }
       }
+      return $this->getBasePath() . $name;
     }
-    return $this->getBasePath() . $name;
+    else {
+      // Name is a class reference.
+      /** @var UseDeclarationNode $use_declaration */
+      foreach ($use_declarations as $use_declaration) {
+        if ($use_declaration->isClass() && $use_declaration->getBoundedName() === $name) {
+          return '\\' . $use_declaration->getName()->getPath();
+        }
+      }
+      // No use declaration so class name refers to class in current namespace.
+      return $this->getBasePath() . $name;
+    }
   }
 
   /**

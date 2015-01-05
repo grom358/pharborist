@@ -245,4 +245,61 @@ EOF;
     $this->assertEquals('\\', $children[2]->getText());
     $this->assertEquals('Sub', $children[3]->getText());
   }
+
+  public function testFunction() {
+    $snippet = <<<'EOF'
+namespace Test {
+  use function MyNamespace\test;
+  use function MyNamespace\some_func as my_func;
+  test();
+  my_func();
+}
+EOF;
+    /** @var NamespaceNode $namespace */
+    $namespace = Parser::parseSnippet($snippet);
+
+    /** @var StatementNode[] $statements */
+    $statements = $namespace->getBody()->getStatements();
+
+    /** @var ExpressionStatementNode $statement */
+    $statement = $statements[2];
+    /** @var FunctionCallNode $function_call */
+    $function_call = $statement->getExpression();
+    $name = $function_call->getName();
+    $this->assertEquals('\MyNamespace\test', $name->getAbsolutePath());
+
+    $statement = $statements[3];
+    $function_call = $statement->getExpression();
+    $name = $function_call->getName();
+    $this->assertEquals('\MyNamespace\some_func', $name->getAbsolutePath());
+  }
+
+  public function testConst() {
+    $snippet = <<<'EOF'
+namespace Test {
+  use const MyNamespace\TEST;
+  use const MyNamespace\SOME_CONST as MY_CONST;
+  $a = TEST;
+  $a = MY_CONST;
+}
+EOF;
+    /** @var NamespaceNode $namespace */
+    $namespace = Parser::parseSnippet($snippet);
+
+    /** @var StatementNode[] $statements */
+    $statements = $namespace->getBody()->getStatements();
+
+    /** @var ExpressionStatementNode $statement */
+    $statement = $statements[2];
+    /** @var \Pharborist\Operators\AssignNode $assignment */
+    $assignment = $statement->getExpression();
+    /** @var \Pharborist\Constants\ConstantNode $const */
+    $const = $assignment->getRightOperand();
+    $this->assertEquals('\MyNamespace\TEST', $const->getConstantName()->getAbsolutePath());
+
+    $statement = $statements[3];
+    $assignment = $statement->getExpression();
+    $const = $assignment->getRightOperand();
+    $this->assertEquals('\MyNamespace\SOME_CONST', $const->getConstantName()->getAbsolutePath());
+  }
 }

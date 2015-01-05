@@ -1,6 +1,8 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Namespaces\UseDeclarationNode;
+
 /**
  * A block of statements.
  */
@@ -28,6 +30,24 @@ class StatementBlockNode extends ParentNode {
   }
 
   /**
+   * Get the use declarations of this statement block.
+   *
+   * @return NodeCollection|UseDeclarationNode[]
+   *   Use declarations.
+   */
+  public function getUseDeclarations() {
+    $declarations = new NodeCollection();
+    /** @var \Pharborist\Namespaces\UseDeclarationBlockNode[] $use_blocks */
+    $use_blocks = $this->children(Filter::isInstanceOf('\Pharborist\Namespaces\UseDeclarationBlockNode'));
+    foreach ($use_blocks as $use_block) {
+      foreach ($use_block->getDeclarationStatements() as $use_statement) {
+        $declarations->add($use_statement->getDeclarations());
+      }
+    }
+    return $declarations;
+  }
+
+  /**
    * Return mapping of class names to fully qualified names.
    *
    * @return array
@@ -35,15 +55,9 @@ class StatementBlockNode extends ParentNode {
    */
   public function getClassAliases() {
     $mappings = array();
-    /** @var \Pharborist\Namespaces\UseDeclarationBlockNode[] $use_blocks */
-    $use_blocks = $this->children(Filter::isInstanceOf('\Pharborist\Namespaces\UseDeclarationBlockNode'));
-    foreach ($use_blocks as $use_block) {
-      foreach ($use_block->getDeclarationStatements() as $use_statement) {
-        if ($use_statement->importsClass()) {
-          foreach ($use_statement->getDeclarations() as $use_declaration) {
-            $mappings[$use_declaration->getBoundedName()] = $use_declaration->getName()->getAbsolutePath();
-          }
-        }
+    foreach ($this->getUseDeclarations() as $use_declaration) {
+      if ($use_declaration->isClass()) {
+        $mappings[$use_declaration->getBoundedName()] = $use_declaration->getName()->getAbsolutePath();
       }
     }
     return $mappings;

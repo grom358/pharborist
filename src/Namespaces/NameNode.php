@@ -51,8 +51,11 @@ class NameNode extends ParentNode {
   /**
    * @return string
    */
-  public function getBasePath() {
-    if ($this->parent() instanceof NamespaceNode) {
+  public function getParentPath() {
+    if ($this->parent instanceof NamespaceNode) {
+      return '\\';
+    }
+    if ($this->isAbsolute()) {
       return '\\';
     }
     /** @var NamespaceNode $namespace */
@@ -61,7 +64,11 @@ class NameNode extends ParentNode {
       return '\\';
     }
     else {
-      return '\\' . $namespace->getName()->getText() . '\\';
+      $name = $namespace->getName();
+      if (!$name) {
+        return '\\';
+      }
+      return '\\' . $name->getPath() . '\\';
     }
   }
 
@@ -180,10 +187,17 @@ class NameNode extends ParentNode {
       return '\\' . $name;
     }
     $namespace = $this->getNamespace();
-    if (!$namespace) {
-      return '\\' . $name;
+    $use_declarations = array();
+    if ($namespace) {
+      $use_declarations = $namespace->getBody()->getUseDeclarations();
     }
-    $use_declarations = $namespace->find(Filter::isInstanceOf('\Pharborist\Namespaces\UseDeclarationNode'));
+    else {
+      /** @var \Pharborist\RootNode $root_node */
+      $root_node = $this->closest(Filter::isInstanceOf('\Pharborist\RootNode'));
+      if ($root_node) {
+        $use_declarations = $root_node->getUseDeclarations();
+      }
+    }
     if ($this->parent instanceof FunctionCallNode) {
       /** @var UseDeclarationNode $use_declaration */
       foreach ($use_declarations as $use_declaration) {
@@ -191,7 +205,7 @@ class NameNode extends ParentNode {
           return '\\' . $use_declaration->getName()->getPath();
         }
       }
-      return $this->getBasePath() . $name;
+      return $this->getParentPath() . $name;
     }
     elseif ($this->parent instanceof ConstantNode) {
       /** @var UseDeclarationNode $use_declaration */
@@ -200,7 +214,7 @@ class NameNode extends ParentNode {
           return '\\' . $use_declaration->getName()->getPath();
         }
       }
-      return $this->getBasePath() . $name;
+      return $this->getParentPath() . $name;
     }
     else {
       // Name is a class reference.
@@ -211,7 +225,7 @@ class NameNode extends ParentNode {
         }
       }
       // No use declaration so class name refers to class in current namespace.
-      return $this->getBasePath() . $name;
+      return $this->getParentPath() . $name;
     }
   }
 
@@ -234,7 +248,7 @@ class NameNode extends ParentNode {
       }
     }
     else {
-      $path = $absolute ? '\\' : $this->getBasePath();
+      $path = $absolute ? '\\' : $this->getParentPath();
       if ($parts[0]->getType() === T_NAMESPACE) {
         unset($parts[0]);
       }
@@ -250,7 +264,7 @@ class NameNode extends ParentNode {
    * @return boolean
    */
   public function isGlobal() {
-    return $this->getBasePath() === '\\';
+    return $this->getParentPath() === '\\';
   }
 
 

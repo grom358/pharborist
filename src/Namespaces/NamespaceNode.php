@@ -92,7 +92,20 @@ class NamespaceNode extends StatementNode {
   }
 
   /**
+   * Get use declarations.
+   *
+   * @return UseDeclarationNode[]|\Pharborist\NodeCollection
+   *   Use declarations.
+   */
+  public function getUseDeclarations() {
+    return $this->body->getUseDeclarations();
+  }
+
+  /**
    * Return mapping of class names to fully qualified names.
+   *
+   * @return array
+   *   Associative array of namespace alias to fully qualified names.
    */
   public function getClassAliases() {
     return $this->body->getClassAliases();

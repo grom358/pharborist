@@ -6,13 +6,13 @@ namespace Pharborist;
  */
 class FilterTest extends \PHPUnit_Framework_TestCase {
   public function testIsInstanceOf() {
-    $doc = <<<'END'
+    $source = <<<'END'
 <?php
 $foo = 'baz';
 function a() {}
 class B {}
 END;
-    $doc = Parser::parseSource($doc);
+    $doc = Parser::parseSource($source);
     $stuff = $doc->find(Filter::isInstanceOf('\Pharborist\Variables\VariableNode', '\Pharborist\Functions\FunctionDeclarationNode', '\Pharborist\Objects\ClassNode'));
     $this->assertCount(3, $stuff);
     $this->assertInstanceOf('\Pharborist\Variables\VariableNode', $stuff[0]);
@@ -24,13 +24,14 @@ END;
   }
 
   public function testIsFunction() {
-    $doc = <<<'END'
+    $source = <<<'END'
 <?php
 function foo() {}
 function bar() {}
 function baz() {}
 END;
-    $functions = Parser::parseSource($doc)->find(Filter::isFunction('foo', 'bar'));
+    /** @var \Pharborist\Functions\FunctionDeclarationNode[] $functions */
+    $functions = Parser::parseSource($source)->find(Filter::isFunction('foo', 'bar'));
     $this->assertCount(2, $functions);
     $this->assertInstanceOf('\Pharborist\Functions\FunctionDeclarationNode', $functions[0]);
     $this->assertEquals('foo', $functions[0]->getName());
@@ -39,14 +40,15 @@ END;
   }
 
   public function testIsFunctionCall() {
-    $doc = <<<'END'
+    $source = <<<'END'
 <?php
 echo strrev("Foobaz");
 echo strlen("I am a banana!");
 echo strrev("Foobar");
 echo md5("Werd up.");
 END;
-    $function_calls = Parser::parseSource($doc)->find(Filter::isFunctionCall('strrev', 'strlen'));
+    /** @var \Pharborist\Functions\FunctionCallNode[] $function_calls */
+    $function_calls = Parser::parseSource($source)->find(Filter::isFunctionCall('strrev', 'strlen'));
     $this->assertCount(3, $function_calls);
     $this->assertInstanceOf('\Pharborist\Functions\FunctionCallNode', $function_calls[0]);
     $this->assertEquals('strrev', $function_calls[0]->getName());
@@ -57,17 +59,64 @@ END;
   }
 
   public function testIsClass() {
-    $doc = <<<'END'
+    $source = <<<'END'
 <?php
 class A {}
 class B {}
 class C {}
 END;
-    $classes = Parser::parseSource($doc)->find(Filter::isClass('A', 'B'));
+    /** @var \Pharborist\Objects\ClassNode[] $classes */
+    $classes = Parser::parseSource($source)->find(Filter::isClass('A', 'B'));
     $this->assertCount(2, $classes);
     $this->assertInstanceOf('\Pharborist\Objects\ClassNode', $classes[0]);
     $this->assertEquals('A', $classes[0]->getName());
     $this->assertInstanceOf('\Pharborist\Objects\ClassNode', $classes[1]);
     $this->assertEquals('B', $classes[1]->getName());
+  }
+
+  public function testIsClassMethodCall() {
+    $source = <<<'END'
+<?php
+use MyNamespace\Test;
+
+A::test();
+MyNamespace\Test::method();
+Test::method();
+END;
+    /** @var \Pharborist\Objects\ClassMethodCallNode[] $method_calls */
+    $method_calls = Parser::parseSource($source)->find(Filter::isClassMethodCall('\A', 'test'));
+    $this->assertCount(1, $method_calls);
+    $method_call = $method_calls[0];
+    $this->assertInstanceOf('\Pharborist\Objects\ClassMethodCallNode', $method_call);
+    $this->assertEquals('\A', $method_call->getClassName()->getAbsolutePath());
+    $this->assertEquals('test', $method_call->getMethodName()->getText());
+    $method_calls = Parser::parseSource($source)->find(Filter::isClassMethodCall('\MyNamespace\Test', 'method'));
+    $this->assertCount(2, $method_calls);
+    $method_call = $method_calls[0];
+    $this->assertInstanceOf('\Pharborist\Objects\ClassMethodCallNode', $method_call);
+    $this->assertEquals('\MyNamespace\Test', $method_call->getClassName()->getAbsolutePath());
+    $this->assertEquals('method', $method_call->getMethodName()->getText());
+  }
+
+  public function testAny() {
+    $pass = function () { return TRUE; };
+    $fail = function () { return FALSE; };
+
+    $filter = Filter::any([$fail]);
+    $this->assertFalse($filter(NULL));
+
+    $filter = Filter::any([$fail, $pass]);
+    $this->assertTrue($filter(NULL));
+  }
+
+  public function testAll() {
+    $pass = function () { return TRUE; };
+    $fail = function () { return FALSE; };
+
+    $filter = Filter::all([$pass]);
+    $this->assertTrue($filter(NULL));
+
+    $filter = Filter::all([$pass, $fail]);
+    $this->assertFalse($filter(NULL));
   }
 }

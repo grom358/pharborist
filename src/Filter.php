@@ -3,6 +3,7 @@ namespace Pharborist;
 
 use Pharborist\Functions\FunctionCallNode;
 use Pharborist\Functions\FunctionDeclarationNode;
+use Pharborist\Namespaces\NameNode;
 use Pharborist\Objects\ClassMethodCallNode;
 use Pharborist\Objects\ClassNode;
 
@@ -124,14 +125,20 @@ class Filter {
 
   /**
    * Callback to filter for calls to a class method.
+   *
    * @param string $class_name
+   *   Fully qualified class name or expression string.
    * @param string $method_name
+   *   Method name or expression string.
    * @return callable
+   *   Filter callable.
    */
   public static function isClassMethodCall($class_name, $method_name) {
     return function ($node) use ($class_name, $method_name) {
       if ($node instanceof ClassMethodCallNode) {
-        $class_matches = $node->getClassName()->getText() === $class_name;
+        $call_class_name_node = $node->getClassName();
+        $call_class_name = $call_class_name_node instanceof NameNode ? $call_class_name_node->getAbsolutePath() : $call_class_name_node->getText();
+        $class_matches = $call_class_name === $class_name;
         $method_matches = $node->getMethodName()->getText() === $method_name;
         return $class_matches && $method_matches;
       }

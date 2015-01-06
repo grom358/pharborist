@@ -8,6 +8,7 @@ use Pharborist\Constants\FunctionMagicConstantNode;
 use Pharborist\Constants\LineMagicConstantNode;
 use Pharborist\Constants\MethodMagicConstantNode;
 use Pharborist\Constants\NamespaceMagicConstantNode;
+use Pharborist\Constants\TraitMagicConstantNode;
 use Pharborist\Types\FloatNode;
 use Pharborist\Types\IntegerNode;
 use Pharborist\Variables\VariableNode;
@@ -18,10 +19,21 @@ use Pharborist\Variables\VariableNode;
  * Keywords are prefix with underscore _ since can't name function as keyword.
  */
 class Token {
+  /**
+   * Parse a single token.
+   *
+   * @param $text
+   *   String contents of a single token.
+   *
+   * @return TokenNode
+   *   The parsed token.
+   */
   public static function parse($text) {
     switch ($text) {
       case 'abstract':
         return static::_abstract();
+      case 'array':
+        return static::_array();
       case 'as':
         return static::_as();
       case 'break':
@@ -32,6 +44,8 @@ class Token {
         return static::_case();
       case 'catch':
         return static::_catch();
+      case 'class':
+        return static::_class();
       case 'clone':
         return static::_clone();
       case 'const':
@@ -197,11 +211,13 @@ class Token {
       case '|=':
         return static::bitwiseOrAssign();
       case '^=':
-        return static::bitwiseOrAssign();
+        return static::bitwiseXorAssign();
       case '*=':
         return static::multiplyAssign();
       case '/=':
         return static::divideAssign();
+      case '%=':
+        return static::modulusAssign();
       case '+=':
         return static::addAssign();
       case '-=':
@@ -232,6 +248,12 @@ class Token {
         return static::bitwiseShiftRight();
       case '>>=':
         return static::bitwiseShiftRightAssign();
+      case '\\':
+        return static::namespaceSeparator();
+      case '--':
+        return static::decrement();
+      case '++':
+        return static::increment();
       case '`':
       case '~':
       case '!':
@@ -249,7 +271,6 @@ class Token {
       case '}':
       case '[':
       case ']':
-      case '\\':
       case '|':
       case ':':
       case ';':
@@ -264,7 +285,12 @@ class Token {
         return new TokenNode($text, $text);
       case ' ':
         return static::space();
+      case '?>':
+        return static::closeTag();
       default:
+        if (rtrim($text) === '<?php') {
+          return static::openTag();
+        }
         // @todo handle all tokens as per http://php.net/manual/en/tokens.php
         throw new \InvalidArgumentException("Unable to parse '{$text}'");
     }
@@ -279,7 +305,7 @@ class Token {
   }
 
   public static function addAssign() {
-    return new TokenNode(T_AND_EQUAL, '+=');
+    return new TokenNode(T_PLUS_EQUAL, '+=');
   }
 
   public static function _array() {
@@ -308,6 +334,10 @@ class Token {
 
   public static function bitwiseAndAssign() {
     return new TokenNode(T_AND_EQUAL, '&=');
+  }
+
+  public static function bitwiseNot() {
+    return new TokenNode('~', '~');
   }
 
   public static function bitwiseOr() {
@@ -411,7 +441,7 @@ class Token {
   }
 
   public static function curlyOpen() {
-    return new TokenNode(T_CURLY_OPEN, '{$');
+    return new TokenNode(T_CURLY_OPEN, '{');
   }
 
   public static function decrement() {
@@ -807,7 +837,7 @@ class Token {
   }
 
   public static function traitConstant() {
-    return new TokenNode(T_TRAIT_C, '__TRAIT__');
+    return new TraitMagicConstantNode(T_TRAIT_C, '__TRAIT__');
   }
 
   public static function _try() {
@@ -871,7 +901,7 @@ class Token {
   }
 
   public static function startHeredoc($label) {
-    return new TokenNode(T_START_HEREDOC, $label . "\n");
+    return new TokenNode(T_START_HEREDOC, "<<<{$label}\n");
   }
 
   public static function endHeredoc($label) {
@@ -879,15 +909,11 @@ class Token {
   }
 
   public static function startNowdoc($label) {
-    return new TokenNode(T_START_HEREDOC,  "'{$label}'\n");
+    return new TokenNode(T_START_HEREDOC,  "<<<'{$label}'\n");
   }
 
   public static function endNowdoc($label) {
     return static::endHeredoc($label);
-  }
-
-  public static function singleQuote() {
-    return new TokenNode("'", "'");
   }
 
   public static function doubleQuote() {

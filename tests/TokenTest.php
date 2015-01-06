@@ -194,6 +194,12 @@ class TokenTest extends \PHPUnit_Framework_TestCase {
     $this->assertToken($tokens[0], Token::openTag());
   }
 
+  public function testOpenEchoTag() {
+    $tokenizer = new Tokenizer();
+    $tokens = $tokenizer->getAll('<?=$test?>');
+    $this->assertToken($tokens[0], Token::openEchoTag());
+  }
+
   public function testCurlyOpen() {
     $tokenizer = new Tokenizer();
     $tokens = $tokenizer->getAll('<?php "{$test}";');
@@ -224,6 +230,39 @@ class TokenTest extends \PHPUnit_Framework_TestCase {
     $end_nowdoc = $tokens[2];
     $this->assertToken($start_nowdoc, Token::startNowdoc('EOF'));
     $this->assertToken($end_nowdoc, Token::endNowdoc('EOF'));
+  }
+
+  public function testInteger() {
+    $this->assertPhpToken('42', Token::integer('42'));
+    $this->assertPhpToken('07', Token::integer('07'));
+    $this->assertPhpToken('0x7F', Token::integer('0x7F'));
+    $this->assertPhpToken('0b101', Token::integer('0b101'));
+  }
+
+  public function testDecimal() {
+    $this->assertPhpToken('42.3', Token::decimalNumber('42.3'));
+    $this->assertPhpToken('0.42', Token::decimalNumber('0.42'));
+    $this->assertPhpToken('.42', Token::decimalNumber('.42'));
+    $this->assertPhpToken('42.0', Token::decimalNumber('42.0'));
+    $this->assertPhpToken('42.', Token::decimalNumber('42.'));
+    $this->assertPhpToken('42e3', Token::decimalNumber('42e3'));
+    $this->assertPhpToken('42E3', Token::decimalNumber('42E3'));
+    $this->assertPhpToken('42e+3', Token::decimalNumber('42e+3'));
+    $this->assertPhpToken('42e-3', Token::decimalNumber('42e-3'));
+    $this->assertPhpToken('0.42e3', Token::decimalNumber('0.42e3'));
+    $this->assertPhpToken('.42e3', Token::decimalNumber('.42e3'));
+    $this->assertPhpToken('42.0e3', Token::decimalNumber('42.0e3'));
+    $this->assertPhpToken('42.e3', Token::decimalNumber('42.e3'));
+  }
+
+  public function testVariable() {
+    $this->assertPhpToken('$hello', Token::variable('$hello'));
+  }
+
+  public function testInline() {
+    $tokenizer = new Tokenizer();
+    $tokens = $tokenizer->getAll('<html>');
+    $this->assertToken($tokens[0], Token::inlineHtml('<html>'));
   }
 
   /**

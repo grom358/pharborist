@@ -29,6 +29,23 @@ class Token {
    *   The parsed token.
    */
   public static function parse($text) {
+    static $int_regex = <<<'EOF'
+/^[+-]?(?:
+  0
+  | [1-9][0-9]*
+  | 0[xX][0-9a-fA-F]+
+  | 0[0-7]+
+  | 0b[01]+
+)$/x
+EOF;
+    static $decimal_regex = <<<EOF
+/^[+-]?(?:
+  [0-9]*\.[0-9]+ (?:[eE][+-]?[0-9]+)?
+  | [0-9]+\.[0-9]* (?:[eE][+-]?[0-9]+)?
+  | [0-9]+[eE][+-]?[0-9]+
+)$/x
+EOF;
+    static $var_regex = '/^\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/';
     switch ($text) {
       case 'abstract':
         return static::_abstract();
@@ -290,6 +307,15 @@ class Token {
       default:
         if (rtrim($text) === '<?php') {
           return static::openTag();
+        }
+        elseif (preg_match($int_regex, $text)) {
+          return static::integer($text);
+        }
+        elseif (preg_match($decimal_regex, $text)) {
+          return static::decimalNumber($text);
+        }
+        elseif (preg_match($var_regex, $text)) {
+          return static::variable($text);
         }
         // @todo handle all tokens as per http://php.net/manual/en/tokens.php
         throw new \InvalidArgumentException("Unable to parse '{$text}'");

@@ -1447,8 +1447,8 @@ class Parser {
     $this->mustMatch(T_FUNCTION, $node);
     $this->tryMatch('&', $node, 'reference');
     $this->parameterList($node);
-    if ($this->tryMatch(T_USE, $node)) {
-      $this->mustMatch('(', $node, 'openParen');
+    if ($this->tryMatch(T_USE, $node, 'lexicalUse')) {
+      $this->mustMatch('(', $node, 'lexicalOpenParen');
       $lexical_vars_node = new CommaListNode();
       do {
         if ($this->currentType === '&') {
@@ -1462,8 +1462,9 @@ class Parser {
         }
       } while ($this->tryMatch(',', $lexical_vars_node));
       $node->addChild($lexical_vars_node, 'lexicalVariables');
-      $this->mustMatch(')', $node, 'closeParen');
+      $this->mustMatch(')', $node, 'lexicalCloseParen');
     }
+    $this->matchHidden($node);
     $node->addChild($this->innerStatementBlock(), 'body');
     return $node;
   }

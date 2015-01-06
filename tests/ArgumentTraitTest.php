@@ -56,4 +56,39 @@ class ArgumentTraitTest extends \PHPUnit_Framework_TestCase {
     $call = Parser::parseExpression('foo()');
     $call->appendArgument(NULL);
   }
+
+  public function testInsertArgument() {
+    /** @var \Pharborist\Functions\FunctionCallNode $call */
+    $call = Parser::parseExpression('foo()');
+    $call->insertArgument('a', 0);
+    $arguments = $call->getArguments();
+    $this->assertCount(1, $arguments);
+    $this->assertInstanceOf('\Pharborist\Types\StringNode', $arguments[0]);
+  }
+
+  /**
+   * @expectedException \InvalidArgumentException
+   */
+  public function testInsertInvalidArgument() {
+    /** @var \Pharborist\Functions\FunctionCallNode $call */
+    $call = Parser::parseExpression('foo()');
+    $call->insertArgument(NULL, 0);
+  }
+
+  /**
+   * @expectedException \OutOfBoundsException
+   */
+  public function testInsertInvalidIndex() {
+    /** @var \Pharborist\Functions\FunctionCallNode $call */
+    $call = Parser::parseExpression('foo()');
+    $call->insertArgument(42, 1);
+  }
+
+  public function testClearArguments() {
+    /** @var \Pharborist\Functions\FunctionCallNode $call */
+    $call = Parser::parseExpression('foo(42)');
+    $this->assertCount(1, $call->getArguments());
+    $call->clearArguments();
+    $this->assertTrue($call->getArguments()->isEmpty());
+  }
 }

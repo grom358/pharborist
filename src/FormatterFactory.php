@@ -61,6 +61,6 @@ class FormatterFactory {
    *   Node to format.
    */
   public static function format(Node $node) {
-    static::$defaultFormatter->format($node);
+    static::getDefaultFormatter()->format($node);
   }
 }

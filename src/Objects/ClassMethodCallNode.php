@@ -81,9 +81,9 @@ class ClassMethodCallNode extends CallNode implements VariableExpressionNode {
     $node->addChild($class_name, 'className');
     $node->addChild(Token::doubleColon());
     $node->addChild(NameNode::create($method_name), 'methodName');
-    $node->addChild(Token::openParen());
+    $node->addChild(Token::openParen(), 'openParen');
     $node->addChild(new CommaListNode(), 'arguments');
-    $node->addChild(Token::closeParen());
+    $node->addChild(Token::closeParen(), 'closeParen');
     return $node;
   }
 }

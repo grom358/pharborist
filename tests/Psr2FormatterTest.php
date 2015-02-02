@@ -2,11 +2,19 @@
 namespace Pharborist;
 
 class Psr2FormatterTest extends \PHPUnit_Framework_TestCase {
+  /**
+   * @var Formatter
+   */
+  protected $formatter;
+
+  public function setUp() {
+    $this->formatter = FormatterFactory::getPsr2Formatter();
+  }
+
   protected function formatSnippet($snippet) {
     /** @var ParentNode $node */
     $node = Parser::parseSnippet($snippet);
-    $formatter = FormatterFactory::getPsr2Formatter();
-    $formatter->format($node);
+    $this->formatter->format($node);
     return $node->getText();
   }
 
@@ -25,6 +33,27 @@ if ($a) {
 }
 EOF;
     $this->assertEquals($expected, $actual);
+  }
+
+  public function testRootNode() {
+    $snippet = <<<'END'
+<?php
+namespace Foo\Baz; class Blorg { public function __construct() {}}
+END;
+    $expected = <<<'END'
+<?php
+namespace Foo\Baz;
+
+class Blorg
+{
+    public function __construct()
+    {
+    }
+}
+END;
+    $doc = Parser::parseSource($snippet);
+    $this->formatter->format($doc);
+    $this->assertEquals($expected, $doc->getText());
   }
 
   public function testClass() {

@@ -1,0 +1,1712 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>Class Pharborist\Formatter | Pharborist</title>
+
+	<link rel="stylesheet" href="resources/style.css?e99947befd7bf673c6b43ff75e9e0f170c88a60e">
+
+</head>
+
+<body>
+<div id="left">
+	<div id="menu">
+		<a href="index.html" title="Overview"><span>Overview</span></a>
+
+
+		<div id="groups">
+				<h3>Namespaces</h3>
+			<ul>
+				<li class="active">
+					<a href="namespace-Pharborist.html">
+						Pharborist<span></span>
+					</a>
+
+						<ul>
+				<li>
+					<a href="namespace-Pharborist.Constants.html">
+						Constants					</a>
+
+						</li>
+				<li>
+					<a href="namespace-Pharborist.ControlStructures.html">
+						ControlStructures					</a>
+
+						</li>
+				<li>
+					<a href="namespace-Pharborist.Exceptions.html">
+						Exceptions					</a>
+
+						</li>
+				<li>
+					<a href="namespace-Pharborist.Functions.html">
+						Functions					</a>
+
+						</li>
+				<li>
+					<a href="namespace-Pharborist.Generators.html">
+						Generators					</a>
+
+						</li>
+				<li>
+					<a href="namespace-Pharborist.Namespaces.html">
+						Namespaces					</a>
+
+						</li>
+				<li>
+					<a href="namespace-Pharborist.Objects.html">
+						Objects					</a>
+
+						</li>
+				<li>
+					<a href="namespace-Pharborist.Operators.html">
+						Operators					</a>
+
+						</li>
+				<li>
+					<a href="namespace-Pharborist.Types.html">
+						Types					</a>
+
+						</li>
+				<li>
+					<a href="namespace-Pharborist.Variables.html">
+						Variables					</a>
+
+						</li>
+							</ul></li>
+			</ul>
+		</div>
+
+		<hr>
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li><a href="class-Pharborist.ArrayLookupNode.html">ArrayLookupNode</a></li>
+				<li><a href="class-Pharborist.BacktickNode.html">BacktickNode</a></li>
+				<li><a href="class-Pharborist.BlankStatementNode.html">BlankStatementNode</a></li>
+				<li><a href="class-Pharborist.CommaListNode.html">CommaListNode</a></li>
+				<li><a href="class-Pharborist.CommentNode.html">CommentNode</a></li>
+				<li><a href="class-Pharborist.DocCommentNode.html">DocCommentNode</a></li>
+				<li><a href="class-Pharborist.EchoStatementNode.html">EchoStatementNode</a></li>
+				<li><a href="class-Pharborist.EchoTagStatementNode.html">EchoTagStatementNode</a></li>
+				<li><a href="class-Pharborist.ExpressionStatementNode.html">ExpressionStatementNode</a></li>
+				<li><a href="class-Pharborist.Filter.html">Filter</a></li>
+				<li class="active"><a href="class-Pharborist.Formatter.html">Formatter</a></li>
+				<li><a href="class-Pharborist.FormatterFactory.html">FormatterFactory</a></li>
+				<li><a href="class-Pharborist.LineCommentBlockNode.html">LineCommentBlockNode</a></li>
+				<li><a href="class-Pharborist.Node.html">Node</a></li>
+				<li><a href="class-Pharborist.NodeCollection.html">NodeCollection</a></li>
+				<li><a href="class-Pharborist.OperatorFactory.html">OperatorFactory</a></li>
+				<li><a href="class-Pharborist.ParenthesisNode.html">ParenthesisNode</a></li>
+				<li><a href="class-Pharborist.ParentNode.html">ParentNode</a></li>
+				<li><a href="class-Pharborist.Parser.html">Parser</a></li>
+				<li><a href="class-Pharborist.PartialCommentNode.html">PartialCommentNode</a></li>
+				<li><a href="class-Pharborist.PartialNode.html">PartialNode</a></li>
+				<li><a href="class-Pharborist.RootNode.html">RootNode</a></li>
+				<li><a href="class-Pharborist.SourceDiscovery.html">SourceDiscovery</a></li>
+				<li><a href="class-Pharborist.SourcePosition.html">SourcePosition</a></li>
+				<li><a href="class-Pharborist.SplatNode.html">SplatNode</a></li>
+				<li><a href="class-Pharborist.StatementBlockNode.html">StatementBlockNode</a></li>
+				<li><a href="class-Pharborist.StatementNode.html">StatementNode</a></li>
+				<li><a href="class-Pharborist.TemplateNode.html">TemplateNode</a></li>
+				<li><a href="class-Pharborist.Token.html">Token</a></li>
+				<li><a href="class-Pharborist.TokenIterator.html">TokenIterator</a></li>
+				<li><a href="class-Pharborist.Tokenizer.html">Tokenizer</a></li>
+				<li><a href="class-Pharborist.TokenNode.html">TokenNode</a></li>
+				<li><a href="class-Pharborist.UnsetStatementNode.html">UnsetStatementNode</a></li>
+				<li><a href="class-Pharborist.VisitorBase.html">VisitorBase</a></li>
+				<li><a href="class-Pharborist.WhitespaceNode.html">WhitespaceNode</a></li>
+			</ul>
+
+			<h3>Interfaces</h3>
+			<ul>
+				<li><a href="class-Pharborist.ExpressionNode.html">ExpressionNode</a></li>
+				<li><a href="class-Pharborist.NodeInterface.html">NodeInterface</a></li>
+				<li><a href="class-Pharborist.ParentNodeInterface.html">ParentNodeInterface</a></li>
+				<li><a href="class-Pharborist.ParserException.html">ParserException</a></li>
+				<li><a href="class-Pharborist.VisitorInterface.html">VisitorInterface</a></li>
+			</ul>
+
+			<h3>Traits</h3>
+			<ul>
+				<li><a href="class-Pharborist.DocCommentTrait.html">DocCommentTrait</a></li>
+				<li><a href="class-Pharborist.ParenTrait.html">ParenTrait</a></li>
+				<li><a href="class-Pharborist.UncommentTrait.html">UncommentTrait</a></li>
+			</ul>
+
+
+
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+<div id="rightInner">
+	<form id="search">
+		<input type="hidden" name="cx" value="">
+		<input type="hidden" name="ie" value="UTF-8">
+		<input type="text" name="q" class="text" placeholder="Search">
+	</form>
+
+	<div id="navigation">
+		<ul>
+			<li>
+				<a href="index.html" title="Overview"><span>Overview</span></a>
+			</li>
+			<li>
+				<a href="namespace-Pharborist.html" title="Summary of Pharborist"><span>Namespace</span></a>
+			</li>
+			<li class="active">
+<span>Class</span>			</li>
+		</ul>
+		<ul>
+		</ul>
+		<ul>
+		</ul>
+	</div>
+
+<div id="content" class="class">
+	<h1>Class Formatter</h1>
+
+
+	<div class="description">
+	<p>Visitor</p>
+	</div>
+
+	<dl class="tree">
+		<dd style="padding-left:0px">
+			<a href="class-Pharborist.VisitorBase.html"><span>Pharborist\VisitorBase</span></a>
+			
+			 implements 
+				<a href="class-Pharborist.VisitorInterface.html"><span>Pharborist\VisitorInterface</span></a>
+			
+			
+		</dd>
+		<dd style="padding-left:30px">
+			<img src="resources/inherit.png" alt="Extended by">
+<b><span>Pharborist\Formatter</span></b>			
+			
+			
+		</dd>
+	</dl>
+
+
+
+
+
+
+
+
+	<div class="info">
+		
+		
+		<b>Namespace:</b> <a href="namespace-Pharborist.html">Pharborist</a><br>
+		
+
+			<b>Located at</b> <a href="source-class-Pharborist.Formatter.html#36-840" title="Go to source code">Formatter.php</a>
+		<br>
+	</div>
+
+
+
+	<table class="summary methods" id="methods">
+	<caption>Methods summary</caption>
+	<tr data-order="__construct" id="___construct">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#___construct">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#58-72" title="Go to source code">__construct</a>( <span> <var>$config</var> = []</span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="format" id="_format">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_format">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#74-84" title="Go to source code">format</a>( <span><code><a href="class-Pharborist.Node.html">Pharborist\Node</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$node</var></dt>
+					<dd></dd>
+				</dl></div>
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getConfig" id="_getConfig">
+
+		<td class="attributes"><code>
+			 public 
+
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getConfig">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#86-96" title="Go to source code">getConfig</a>( <span>string <var>$key</var></span> )</code>
+
+		<div class="description short">
+			<p>Get the config value for the specified key.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Get the config value for the specified key.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$key</var></dt>
+					<dd>The config key.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					mixed
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="visitStatementNode" id="_visitStatementNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_visitStatementNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#226-228" title="Go to source code">visitStatementNode</a>( <span><code><a href="class-Pharborist.StatementNode.html">Pharborist\StatementNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="endStatementNode" id="_endStatementNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_endStatementNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#230-232" title="Go to source code">endStatementNode</a>( <span><code><a href="class-Pharborist.StatementNode.html">Pharborist\StatementNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="visitBinaryOperationNode" id="_visitBinaryOperationNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_visitBinaryOperationNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#234-240" title="Go to source code">visitBinaryOperationNode</a>( <span><code><a href="class-Pharborist.Operators.BinaryOperationNode.html">Pharborist\Operators\BinaryOperationNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="visitUnaryOperationNode" id="_visitUnaryOperationNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_visitUnaryOperationNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#242-253" title="Go to source code">visitUnaryOperationNode</a>( <span><code><a href="class-Pharborist.Operators.UnaryOperationNode.html">Pharborist\Operators\UnaryOperationNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="visitDocCommentNode" id="_visitDocCommentNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_visitDocCommentNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#255-265" title="Go to source code">visitDocCommentNode</a>( <span><code><a href="class-Pharborist.DocCommentNode.html">Pharborist\DocCommentNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="visitWhitespaceNode" id="_visitWhitespaceNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_visitWhitespaceNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#267-286" title="Go to source code">visitWhitespaceNode</a>( <span><code><a href="class-Pharborist.WhitespaceNode.html">Pharborist\WhitespaceNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="visitTokenNode" id="_visitTokenNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_visitTokenNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#288-295" title="Go to source code">visitTokenNode</a>( <span><code><a href="class-Pharborist.TokenNode.html">Pharborist\TokenNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="visitBooleanNode" id="_visitBooleanNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_visitBooleanNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#313-315" title="Go to source code">visitBooleanNode</a>( <span><code><a href="class-Pharborist.Types.BooleanNode.html">Pharborist\Types\BooleanNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="visitNullNode" id="_visitNullNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_visitNullNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#317-319" title="Go to source code">visitNullNode</a>( <span><code><a href="class-Pharborist.Types.NullNode.html">Pharborist\Types\NullNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="visitIfNode" id="_visitIfNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_visitIfNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#363-366" title="Go to source code">visitIfNode</a>( <span><code><a href="class-Pharborist.ControlStructures.IfNode.html">Pharborist\ControlStructures\IfNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="endIfNode" id="_endIfNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_endIfNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#368-380" title="Go to source code">endIfNode</a>( <span><code><a href="class-Pharborist.ControlStructures.IfNode.html">Pharborist\ControlStructures\IfNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="visitElseIfNode" id="_visitElseIfNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_visitElseIfNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#382-395" title="Go to source code">visitElseIfNode</a>( <span><code><a href="class-Pharborist.ControlStructures.ElseIfNode.html">Pharborist\ControlStructures\ElseIfNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="visitWhileNode" id="_visitWhileNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_visitWhileNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#397-399" title="Go to source code">visitWhileNode</a>( <span><code><a href="class-Pharborist.ControlStructures.WhileNode.html">Pharborist\ControlStructures\WhileNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="endWhileNode" id="_endWhileNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_endWhileNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#401-403" title="Go to source code">endWhileNode</a>( <span><code><a href="class-Pharborist.ControlStructures.WhileNode.html">Pharborist\ControlStructures\WhileNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="visitDoWhileNode" id="_visitDoWhileNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_visitDoWhileNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#405-409" title="Go to source code">visitDoWhileNode</a>( <span><code><a href="class-Pharborist.ControlStructures.DoWhileNode.html">Pharborist\ControlStructures\DoWhileNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="visitForNode" id="_visitForNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_visitForNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#411-417" title="Go to source code">visitForNode</a>( <span><code><a href="class-Pharborist.ControlStructures.ForNode.html">Pharborist\ControlStructures\ForNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="endForNode" id="_endForNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_endForNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#419-421" title="Go to source code">endForNode</a>( <span><code><a href="class-Pharborist.ControlStructures.ForNode.html">Pharborist\ControlStructures\ForNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="visitForeachNode" id="_visitForeachNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_visitForeachNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#423-425" title="Go to source code">visitForeachNode</a>( <span><code><a href="class-Pharborist.ControlStructures.ForeachNode.html">Pharborist\ControlStructures\ForeachNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="endForeachNode" id="_endForeachNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_endForeachNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#427-429" title="Go to source code">endForeachNode</a>( <span><code><a href="class-Pharborist.ControlStructures.ForeachNode.html">Pharborist\ControlStructures\ForeachNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="endSwitchNode" id="_endSwitchNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_endSwitchNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#431-447" title="Go to source code">endSwitchNode</a>( <span><code><a href="class-Pharborist.ControlStructures.SwitchNode.html">Pharborist\ControlStructures\SwitchNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="endCaseNode" id="_endCaseNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_endCaseNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#449-451" title="Go to source code">endCaseNode</a>( <span><code><a href="class-Pharborist.ControlStructures.CaseNode.html">Pharborist\ControlStructures\CaseNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="endDefaultNode" id="_endDefaultNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_endDefaultNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#453-455" title="Go to source code">endDefaultNode</a>( <span><code><a href="class-Pharborist.ControlStructures.DefaultNode.html">Pharborist\ControlStructures\DefaultNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="visitStatementBlockNode" id="_visitStatementBlockNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_visitStatementBlockNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#474-497" title="Go to source code">visitStatementBlockNode</a>( <span><code><a href="class-Pharborist.StatementBlockNode.html">Pharborist\StatementBlockNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="endStatementBlockNode" id="_endStatementBlockNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_endStatementBlockNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#499-509" title="Go to source code">endStatementBlockNode</a>( <span><code><a href="class-Pharborist.StatementBlockNode.html">Pharborist\StatementBlockNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="visitLineCommentBlockNode" id="_visitLineCommentBlockNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_visitLineCommentBlockNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#511-527" title="Go to source code">visitLineCommentBlockNode</a>( <span><code><a href="class-Pharborist.LineCommentBlockNode.html">Pharborist\LineCommentBlockNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="visitArrayNode" id="_visitArrayNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_visitArrayNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#555-594" title="Go to source code">visitArrayNode</a>( <span><code><a href="class-Pharborist.Types.ArrayNode.html">Pharborist\Types\ArrayNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="endArrayNode" id="_endArrayNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_endArrayNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#596-612" title="Go to source code">endArrayNode</a>( <span><code><a href="class-Pharborist.Types.ArrayNode.html">Pharborist\Types\ArrayNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="visitCommaListNode" id="_visitCommaListNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_visitCommaListNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#614-630" title="Go to source code">visitCommaListNode</a>( <span><code><a href="class-Pharborist.CommaListNode.html">Pharborist\CommaListNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="endCommaListNode" id="_endCommaListNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_endCommaListNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#632-660" title="Go to source code">endCommaListNode</a>( <span><code><a href="class-Pharborist.CommaListNode.html">Pharborist\CommaListNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="visitFunctionDeclarationNode" id="_visitFunctionDeclarationNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_visitFunctionDeclarationNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#672-674" title="Go to source code">visitFunctionDeclarationNode</a>( <span><code><a href="class-Pharborist.Functions.FunctionDeclarationNode.html">Pharborist\Functions\FunctionDeclarationNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="endFunctionDeclarationNode" id="_endFunctionDeclarationNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_endFunctionDeclarationNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#690-692" title="Go to source code">endFunctionDeclarationNode</a>( <span><code><a href="class-Pharborist.Functions.FunctionDeclarationNode.html">Pharborist\Functions\FunctionDeclarationNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="visitParameterNode" id="_visitParameterNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_visitParameterNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#694-700" title="Go to source code">visitParameterNode</a>( <span><code><a href="class-Pharborist.Functions.ParameterNode.html">Pharborist\Functions\ParameterNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="visitCallNode" id="_visitCallNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_visitCallNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#702-707" title="Go to source code">visitCallNode</a>( <span><code><a href="class-Pharborist.Functions.CallNode.html">Pharborist\Functions\CallNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="endSingleInheritanceNode" id="_endSingleInheritanceNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_endSingleInheritanceNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#740-742" title="Go to source code">endSingleInheritanceNode</a>( <span><code><a href="class-Pharborist.Objects.SingleInheritanceNode.html">Pharborist\Objects\SingleInheritanceNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="visitClassMethodNode" id="_visitClassMethodNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_visitClassMethodNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#762-774" title="Go to source code">visitClassMethodNode</a>( <span><code><a href="class-Pharborist.Objects.ClassMethodNode.html">Pharborist\Objects\ClassMethodNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="endClassMethodNode" id="_endClassMethodNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_endClassMethodNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#776-778" title="Go to source code">endClassMethodNode</a>( <span><code><a href="class-Pharborist.Objects.ClassMethodNode.html">Pharborist\Objects\ClassMethodNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="endInterfaceNode" id="_endInterfaceNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_endInterfaceNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#780-782" title="Go to source code">endInterfaceNode</a>( <span><code><a href="class-Pharborist.Objects.InterfaceNode.html">Pharborist\Objects\InterfaceNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="visitInterfaceMethodNode" id="_visitInterfaceMethodNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_visitInterfaceMethodNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#784-786" title="Go to source code">visitInterfaceMethodNode</a>( <span><code><a href="class-Pharborist.Objects.InterfaceMethodNode.html">Pharborist\Objects\InterfaceMethodNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="endInterfaceMethodNode" id="_endInterfaceMethodNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_endInterfaceMethodNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#788-790" title="Go to source code">endInterfaceMethodNode</a>( <span><code><a href="class-Pharborist.Objects.InterfaceMethodNode.html">Pharborist\Objects\InterfaceMethodNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="endCatchNode" id="_endCatchNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_endCatchNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#792-795" title="Go to source code">endCatchNode</a>( <span><code><a href="class-Pharborist.Exceptions.CatchNode.html">Pharborist\Exceptions\CatchNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="visitNewNode" id="_visitNewNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_visitNewNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#797-803" title="Go to source code">visitNewNode</a>( <span><code><a href="class-Pharborist.Objects.NewNode.html">Pharborist\Objects\NewNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="visitObjectMethodCallNode" id="_visitObjectMethodCallNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_visitObjectMethodCallNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#805-807" title="Go to source code">visitObjectMethodCallNode</a>( <span><code><a href="class-Pharborist.Objects.ObjectMethodCallNode.html">Pharborist\Objects\ObjectMethodCallNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="endRootNode" id="_endRootNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_endRootNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#809-817" title="Go to source code">endRootNode</a>( <span><code><a href="class-Pharborist.RootNode.html">Pharborist\RootNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="visitNamespaceNode" id="_visitNamespaceNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_visitNamespaceNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#819-835" title="Go to source code">visitNamespaceNode</a>( <span><code><a href="class-Pharborist.Namespaces.NamespaceNode.html">Pharborist\Namespaces\NamespaceNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="endNamespaceNode" id="_endNamespaceNode">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_endNamespaceNode">#</a>
+		<code><a href="source-class-Pharborist.Formatter.html#837-839" title="Go to source code">endNamespaceNode</a>( <span><code><a href="class-Pharborist.Namespaces.NamespaceNode.html">Pharborist\Namespaces\NamespaceNode</a></code> <var>$node</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	</table>
+
+	<table class="summary inherited">
+	<caption>Methods inherited from <a href="class-Pharborist.VisitorBase.html#methods">Pharborist\VisitorBase</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-Pharborist.VisitorBase.html#_getShortClassName">getShortClassName()</a>, 
+			<a href="class-Pharborist.VisitorBase.html#_visit">visit()</a>, 
+			<a href="class-Pharborist.VisitorBase.html#_visitEnd">visitEnd()</a>
+		</code></td>
+	</tr>
+	</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+	<div id="footer">
+		Pharborist API documentation generated by <a href="http://apigen.org">ApiGen</a>
+	</div>
+</div>
+</div>
+<script src="resources/combined.js"></script>
+<script src="elementlist.js"></script>
+</body>
+</html>

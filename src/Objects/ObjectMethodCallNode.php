@@ -79,7 +79,7 @@ class ObjectMethodCallNode extends CallNode implements VariableExpressionNode {
     $node = new static();
     $node->addChild($object, 'object');
     $node->addChild(Token::objectOperator(), 'operator');
-    $node->addChild(NameNode::create($method_name), 'methodName');
+    $node->addChild(Token::identifier($method_name), 'methodName');
     $node->addChild(Token::openParen(), 'openParen');
     $node->addChild(new CommaListNode(), 'arguments');
     $node->addChild(Token::closeParen(), 'closeParen');

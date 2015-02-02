@@ -102,6 +102,12 @@ EOF;
     $arg = $method_call->getArguments()[0];
     $this->assertInstanceOf('\Pharborist\Variables\VariableNode', $arg);
     $this->assertEquals('$a', $arg->getText());
+
+    /** @var ParentNode $expression */
+    $expression = Parser::parseExpression($method_call->getText());
+    $expected = $expression->getTree();
+    $actual = $method_call->getTree();
+    $this->assertEquals($expected, $actual);
   }
 
   public function testClassMethodCall() {
@@ -115,6 +121,12 @@ EOF;
     $arg = $method_call->getArguments()[0];
     $this->assertInstanceOf('\Pharborist\Variables\VariableNode', $arg);
     $this->assertEquals('$a', $arg->getText());
+
+    /** @var ParentNode $expression */
+    $expression = Parser::parseExpression($method_call->getText());
+    $expected = $expression->getTree();
+    $actual = $method_call->getTree();
+    $this->assertEquals($expected, $actual);
   }
 
   public function testChainMethodCall() {

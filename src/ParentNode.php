@@ -478,16 +478,23 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
    */
   public function getTree() {
     $children = array();
+    $properties = $this->getProperties();
     $child = $this->head;
+    $i = 0;
     while ($child) {
+      $key = array_search($child, $properties, TRUE);
+      if (!$key) {
+        $key = $i;
+      }
       if ($child instanceof ParentNode) {
-        $children[] = $child->getTree();
+        $children[$key] = $child->getTree();
       }
       else {
         /** @var TokenNode $child */
-        $children[] = array($child->getTypeName() => $child->getText());
+        $children[$key] = array($child->getTypeName() => $child->getText());
       }
       $child = $child->next;
+      $i++;
     }
     $class_name = get_class($this);
     return array($class_name => $children);

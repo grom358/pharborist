@@ -2406,12 +2406,12 @@ class Parser {
   private function classStatement($is_abstract) {
     if ($this->currentType === T_FUNCTION) {
       $modifiers = new ModifiersNode();
-      $doc_comment = new PartialNode();
+      $doc_comment = new PartialCommentNode();
       $this->matchDocComment($doc_comment);
       return $this->classMethod($doc_comment, $modifiers);
     }
     elseif ($this->currentType === T_VAR) {
-      $doc_comment = new PartialNode();
+      $doc_comment = new PartialCommentNode();
       $this->matchDocComment($doc_comment);
       $modifiers = new ModifiersNode();
       $this->mustMatch(T_VAR, $modifiers, 'visibility');
@@ -2424,7 +2424,7 @@ class Parser {
       return $this->traitUse();
     }
     // Match modifiers
-    $doc_comment = new PartialNode();
+    $doc_comment = new PartialCommentNode();
     $this->matchDocComment($doc_comment);
     $modifiers = new ModifiersNode();
     while ($this->iterator->hasNext()) {

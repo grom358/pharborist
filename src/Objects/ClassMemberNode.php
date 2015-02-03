@@ -82,7 +82,7 @@ class ClassMemberNode extends ParentNode {
   /**
    * @return ClassMemberListNode
    */
-  protected function getClassMemberListNode() {
+  public function getClassMemberListNode() {
     return $this->parent()->parent();
   }
 

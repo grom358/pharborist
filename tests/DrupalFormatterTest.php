@@ -633,4 +633,21 @@ if ($cond) {
 EOF;
     $this->assertEquals($expected, $actual);
   }
+
+  public function testUseStatements() {
+    $source = <<<'END'
+<?php
+
+namespace Foo;
+use Package\One; use Package\Two;
+END;
+    $expected = <<<'END'
+<?php
+namespace Foo;
+
+use Package\One;
+use Package\Two;
+END;
+    $this->assertEquals($expected, $this->formatSource($source));
+  }
 }

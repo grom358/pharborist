@@ -15,7 +15,7 @@ trait DocCommentTrait {
   public function getIndent() {
     /** @var ParentNode $this */
     $whitespace_token = $this->previousToken();
-    if ($whitespace_token->getType() !== T_WHITESPACE) {
+    if (empty($whitespace_token) || $whitespace_token->getType() !== T_WHITESPACE) {
       return '';
     }
     $nl = FormatterFactory::getDefaultFormatter()->getConfig('nl');

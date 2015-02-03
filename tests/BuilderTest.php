@@ -203,4 +203,37 @@ END;
     $ns = NamespaceNode::create('\Drupal\pantaloons');
     $this->assertInstanceOf('\Pharborist\Namespaces\NamespaceNode', $ns);
   }
+
+  public function testImport() {
+    $root = RootNode::create('MyNamespace\Test');
+    $expected = <<<'EOF'
+<?php
+namespace MyNamespace\Test;
+
+EOF;
+    $this->assertEquals($expected, $root->getText());
+
+    /** @var NamespaceNode $namespace_node */
+    $namespace_node = $root->children(Filter::isInstanceOf('\Pharborist\Namespaces\NamespaceNode'))->get(0);
+    $namespace_node->getBody()->useClass('Package\One');
+    $expected = <<<'EOF'
+<?php
+namespace MyNamespace\Test;
+
+use Package\One;
+
+EOF;
+    $this->assertEquals($expected, $root->getText());
+
+    $namespace_node->getBody()->useClass('Package\Two');
+    $expected = <<<'EOF'
+<?php
+namespace MyNamespace\Test;
+
+use Package\One;
+use Package\Two;
+
+EOF;
+    $this->assertEquals($expected, $root->getText());
+  }
 }

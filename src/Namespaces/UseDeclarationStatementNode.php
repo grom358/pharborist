@@ -3,6 +3,7 @@ namespace Pharborist\Namespaces;
 
 use Pharborist\CommaListNode;
 use Pharborist\NodeCollection;
+use Pharborist\Parser;
 use Pharborist\StatementNode;
 use Pharborist\TokenNode;
 
@@ -35,6 +36,19 @@ class UseDeclarationStatementNode extends StatementNode {
    * @var TokenNode
    */
   protected $useConst;
+
+  /**
+   * @param string $import
+   *   Use declaration.
+   *
+   * @return UseDeclarationStatementNode
+   *   Use declaration statement.
+   */
+  public static function create($import) {
+    /** @var UseDeclarationBlockNode $use_declaration_block_node */
+    $use_declaration_block_node = Parser::parseSnippet('use ' . $import . ';');
+    return $use_declaration_block_node->getDeclarationStatements()[0];
+  }
 
   /**
    * Test whether use declaration imports a class.

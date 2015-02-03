@@ -1,7 +1,9 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Namespaces\UseDeclarationBlockNode;
 use Pharborist\Namespaces\UseDeclarationNode;
+use Pharborist\Namespaces\UseDeclarationStatementNode;
 
 /**
  * A block of statements.
@@ -61,5 +63,45 @@ class StatementBlockNode extends ParentNode {
       }
     }
     return $mappings;
+  }
+
+  /**
+   * Get the use declaration block.
+   *
+   * @return UseDeclarationBlockNode|NULL
+   *   The use declaration block or NULL if does not exist.
+   */
+  public function getUseDeclarationBlock() {
+    $use_blocks = $this->children(Filter::isInstanceOf('\Pharborist\Namespaces\UseDeclarationBlockNode'));
+    if ($use_blocks->isEmpty()) {
+      return NULL;
+    }
+    return $use_blocks->get(0);
+  }
+
+  /**
+   * Add use declaration for class.
+   *
+   * @param string $class
+   */
+  public function useClass($class) {
+    $use_block = $this->getUseDeclarationBlock();
+    if (!$use_block) {
+      // Create use declaration block.
+      $use_block = new UseDeclarationBlockNode();
+      if (!$this->isEmpty() && $this->firstToken()->getType() === '{') {
+        // @todo indent statement
+        $this->firstChild()->after([Token::newline(), $use_block]);
+      }
+      else {
+        $this->prepend([Token::newline(), Token::newline(), $use_block]);
+      }
+    }
+    else {
+      // Append newline
+      $use_block->appendChild(Token::newline());
+    }
+    $use_declaration_stmt = UseDeclarationStatementNode::create($class);
+    $use_block->appendChild($use_declaration_stmt);
   }
 }

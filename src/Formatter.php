@@ -256,10 +256,12 @@ class Formatter extends VisitorBase {
     $this->removeSpaceAfter($node);
     if ($this->indentLevel > 0) {
       $this->indentLevel--;
+      $node->setIndent($this->getIndent());
       $this->newlineAfter($node);
       $this->indentLevel++;
     }
     else {
+      $node->setIndent($this->getIndent());
       $this->newlineAfter($node);
     }
   }

@@ -183,4 +183,39 @@ function test(
 EOF;
     $this->assertEquals($expected, $actual);
   }
+
+  public function testClassComments() {
+    $snippet = <<<'EOF'
+class MyTest {
+  /**
+* Some property.
+   */
+  private $someProperty;
+    /**
+        * Some method.
+ */
+  public function someMethod() {
+  }
+
+}
+EOF;
+    $actual = $this->formatSnippet($snippet);
+    $expected = <<<'EOF'
+class MyTest
+{
+    /**
+     * Some property.
+     */
+    private $someProperty;
+
+    /**
+     * Some method.
+     */
+    public function someMethod()
+    {
+    }
+}
+EOF;
+    $this->assertEquals($expected, $actual);
+  }
 }

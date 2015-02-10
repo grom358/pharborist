@@ -59,6 +59,30 @@ class MyTest {
 }
 EOF;
     $this->assertEquals($expected, $classNode->getText());
+
+    $property = $classNode->getProperty('someProperty');
+    $property->getClassMemberListNode()->setDocComment(DocCommentNode::create('Some property.'));
+
+    $method = $classNode->getMethod('someMethod');
+    $method->setDocComment(DocCommentNode::create('Some method.'));
+
+    $expected = <<<'EOF'
+class MyTest {
+
+  /**
+   * Some property.
+   */
+  private $someProperty;
+
+  /**
+   * Some method.
+   */
+  public function someMethod() {
+  }
+
+}
+EOF;
+    $this->assertEquals($expected, $classNode->getText());
   }
 
   public function testClassMethod() {

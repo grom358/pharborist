@@ -206,23 +206,27 @@ class Parser {
     if ($source === FALSE) {
       return FALSE;
     }
-    return self::parseSource($source);
+    return self::parseSource($source, $filename);
   }
 
   /**
    * Parse PHP source code and return the parsed tree.
-   * @param string $source PHP source code
+   *
+   * @param string $source
+   *   PHP source code
+   * @param string $filename
+   *   (Optional) Filename of source.
    * @return RootNode
    *   The top-level node of the parsed tree
    */
-  public static function parseSource($source) {
+  public static function parseSource($source, $filename = NULL) {
     static $tokenizer, $parser = NULL;
     if (!isset($parser)) {
       $tokenizer = new Tokenizer();
       $parser = new self();
     }
-    $tokens = $tokenizer->getAll($source);
-    return $parser->buildTree(new TokenIterator($tokens));
+    $tokens = $tokenizer->getAll($source, $filename);
+    return $parser->buildTree(new TokenIterator($tokens, $filename));
   }
 
   /**

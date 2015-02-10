@@ -125,7 +125,7 @@ class ParentNodeTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testSourcePosition() {
-    $position = new SourcePosition(4, 2);
+    $position = new SourcePosition(NULL, 4, 2);
     $token = new TokenNode(T_STRING, 'test', $position);
     $grandparent = $this->createParentNode();
     $grandparent->append($token);
@@ -136,7 +136,7 @@ class ParentNodeTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testLastToken() {
-    $position = new SourcePosition(4, 2);
+    $position = new SourcePosition(NULL, 4, 2);
     $token = new TokenNode(T_STRING, 'test', $position);
     $grandparent = $this->createParentNode();
     $parent = $this->createParentNode();

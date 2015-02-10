@@ -6,6 +6,12 @@ namespace Pharborist;
  */
 class SourcePosition {
   /**
+   * The file name.
+   * @var string
+   */
+  protected $filename;
+
+  /**
    * The line number.
    * @var int
    */
@@ -20,12 +26,22 @@ class SourcePosition {
   /**
    * Constructor.
    *
+   * @param string $filename
    * @param integer $line_no
    * @param integer $col_no
    */
-  public function __construct($line_no, $col_no) {
+  public function __construct($filename, $line_no, $col_no) {
+    $this->filename = $filename;
     $this->lineNo = $line_no;
     $this->colNo = $col_no;
+  }
+
+  /**
+   * Get the file name.
+   * @return string
+   */
+  public function getFilename() {
+    return $this->filename;
   }
 
   /**

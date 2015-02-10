@@ -21,7 +21,7 @@ class Tokenizer {
   private $lineNo;
   private $colNo;
 
-  private function parseToken($token) {
+  private function parseToken($token, $filename = NULL) {
     if (is_array($token)) {
       $type = $token[0];
       $text = $token[1];
@@ -40,7 +40,7 @@ class Tokenizer {
     } else {
       $this->colNo += strlen($text);
     }
-    return $this->createToken($type, $text, new SourcePosition($lineNo, $colNo));
+    return $this->createToken($type, $text, new SourcePosition($filename, $lineNo, $colNo));
   }
 
   private function createToken($type, $text, $position) {
@@ -80,12 +80,20 @@ class Tokenizer {
     }
   }
 
-  public function getAll($source) {
+  /**
+   * @param string $source
+   *   PHP source code.
+   * @param $filename
+   *   (Optional) PHP filename.
+   * @return TokenNode[]
+   *   Tokens.
+   */
+  public function getAll($source, $filename = NULL) {
     $this->colNo = 1;
     $this->lineNo = 1;
     $tokens = [];
     foreach (token_get_all($source) as $rawToken) {
-      $tokens[] = $this->parseToken($rawToken);
+      $tokens[] = $this->parseToken($rawToken, $filename);
     }
     return $tokens;
   }

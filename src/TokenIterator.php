@@ -24,11 +24,18 @@ class TokenIterator {
   private $length;
 
   /**
+   * The filename that tokens belong to.
+   * @var string
+   */
+  private $filename;
+
+  /**
    * @param TokenNode[] $tokens
    */
-  public function __construct(array $tokens) {
+  public function __construct(array $tokens, $filename = NULL) {
     $this->tokens = $tokens;
     $this->length = count($tokens);
+    $this->filename = $filename;
     $this->position = 0;
   }
 
@@ -82,16 +89,17 @@ class TokenIterator {
    */
   public function getSourcePosition() {
     if ($this->length === 0) {
-      return new SourcePosition(1, 1);
+      return new SourcePosition($this->filename, 1, 1);
     }
     $token = $this->current();
     if ($token === NULL) {
       $token = $this->tokens[$this->length - 1];
       $source_position = $token->getSourcePosition();
+      $filename = $source_position->getFilename();
       $line_no = $source_position->getLineNumber();
       $col_no = $source_position->getColumnNumber();
       $length = strlen($token->getText());
-      return new SourcePosition($line_no, $col_no + $length);
+      return new SourcePosition($filename, $line_no, $col_no + $length);
     }
     return $token->getSourcePosition();
   }

@@ -1,6 +1,6 @@
 <?php
 namespace Pharborist\Index;
 
-class ConstantIndex {
+class ConstantIndex extends BaseIndex {
 
 }

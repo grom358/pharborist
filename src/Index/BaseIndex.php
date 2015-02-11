@@ -11,10 +11,24 @@ abstract class BaseIndex {
   protected $sourcePosition;
 
   /**
+   * @var string
+   */
+  protected $name;
+
+  /**
    * @return SourcePosition
    */
   public function getSourcePosition() {
     return $this->sourcePosition;
+  }
+
+  /**
+   * Get the name of index item.
+   *
+   * @return string
+   */
+  public function getName() {
+    return $this->name;
   }
 
 }

@@ -1,6 +1,6 @@
 <?php
 namespace Pharborist\Index;
 
-class FunctionIndex {
+class FunctionIndex extends BaseIndex {
 
 }

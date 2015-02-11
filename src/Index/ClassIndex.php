@@ -9,11 +9,6 @@ use Pharborist\SourcePosition;
 class ClassIndex extends BaseIndex {
 
   /**
-   * @var string
-   */
-  private $name;
-
-  /**
    * @var PropertyIndex[]
    */
   private $properties;
@@ -34,15 +29,6 @@ class ClassIndex extends BaseIndex {
     $this->name = $name;
     $this->properties = $properties;
     $this->methods = $methods;
-  }
-
-  /**
-   * Get the fully qualified name of the class.
-   *
-   * @return string
-   */
-  public function getName() {
-    return $this->name;
   }
 
   /**

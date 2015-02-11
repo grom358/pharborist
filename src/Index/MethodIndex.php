@@ -18,4 +18,10 @@ class MethodIndex extends FunctionIndex {
     return $this->visibility;
   }
 
+  public function __construct($position, $name, $visibility) {
+    $this->sourcePosition = $position;
+    $this->name = $name;
+    $this->visibility = $visibility;
+  }
+
 }

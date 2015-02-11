@@ -1,6 +1,6 @@
 <?php
 namespace Pharborist\Index;
 
-class ParameterIndex {
+class ParameterIndex extends BaseIndex {
 
 }

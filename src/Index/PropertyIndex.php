@@ -8,11 +8,6 @@ class PropertyIndex extends BaseIndex {
   /**
    * @var string
    */
-  private $name;
-
-  /**
-   * @var string
-   */
   private $visibility;
 
   /**
@@ -31,16 +26,6 @@ class PropertyIndex extends BaseIndex {
     $this->name = $name;
     $this->visibility = $visibility;
     $this->type = $type;
-  }
-
-  /**
-   * Get the name of the property.
-   *
-   * @return string
-   *   Name of property.
-   */
-  public function getName() {
-    return $this->name;
   }
 
   /**

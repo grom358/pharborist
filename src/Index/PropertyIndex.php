@@ -11,21 +11,21 @@ class PropertyIndex extends BaseIndex {
   private $visibility;
 
   /**
-   * @var string
+   * @var string[]
    */
-  private $type;
+  private $types;
 
   /**
    * @param SourcePosition $position
    * @param string $name
    * @param string $visibility
-   * @param string $type
+   * @param string[] $types
    */
-  public function __construct($position, $name, $visibility = 'public', $type = 'mixed') {
+  public function __construct($position, $name, $visibility = 'public', $types = ['mixed']) {
     $this->sourcePosition = $position;
     $this->name = $name;
     $this->visibility = $visibility;
-    $this->type = $type;
+    $this->types = $types;
   }
 
   /**
@@ -38,4 +38,12 @@ class PropertyIndex extends BaseIndex {
     return $this->visibility;
   }
 
+  /**
+   * Get property types.
+   *
+   * @return string[]
+   */
+  public function getTypes() {
+    return $this->types;
+  }
 }

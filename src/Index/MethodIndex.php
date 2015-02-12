@@ -1,6 +1,8 @@
 <?php
 namespace Pharborist\Index;
 
+use Pharborist\SourcePosition;
+
 class MethodIndex extends FunctionIndex {
 
   /**
@@ -18,10 +20,19 @@ class MethodIndex extends FunctionIndex {
     return $this->visibility;
   }
 
-  public function __construct($position, $name, $visibility) {
+  /**
+   * @param SourcePosition $position
+   * @param string $name
+   * @param string $visibility
+   * @param ParameterIndex[]  $parameters
+   * @param string[] $returnTypes
+   */
+  public function __construct($position, $name, $visibility, $parameters, $returnTypes) {
     $this->sourcePosition = $position;
     $this->name = $name;
     $this->visibility = $visibility;
+    $this->parameters = $parameters;
+    $this->returnTypes = $returnTypes;
   }
 
 }

@@ -2,9 +2,16 @@
 namespace MyNamespace;
 
 class MyClass {
+  /**
+   * @var SomeType|Relative\TestType
+   */
   private $myProperty;
 
-  public function myMethod() {
-
+  /**
+   * @param string $arg
+   *
+   * @return int
+   */
+  public function myMethod($arg) {
   }
 }

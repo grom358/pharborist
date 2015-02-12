@@ -8,6 +8,7 @@ use Pharborist\RootNode;
 use Pharborist\VisitorBase;
 use Pharborist\Objects\ClassMemberNode;
 use Pharborist\Objects\ClassNode;
+use phpDocumentor\Reflection\DocBlock;
 
 class Indexer extends VisitorBase {
 
@@ -95,12 +96,20 @@ class Indexer extends VisitorBase {
       if ($visibility !== 'private' || $visibility !== 'protected') {
         $visibility = 'public';
       }
-      //@todo get type from doc comment
-      $type = 'mixed';
-      $properties[$name] = new PropertyIndex($property->getSourcePosition(), $name, $visibility, $type);
+      $types = ['mixed'];
+      $doc_comment = $property->getClassMemberListNode()->getDocComment();
+      if ($doc_comment) {
+        $var_tags = $doc_comment->getDocBlock()->getTagsByName('var');
+        if (!empty($var_tags)) {
+          /** @var DocBlock\Tag\VarTag $var_tag */
+          $var_tag = end($var_tags);
+          $types = $var_tag->getTypes();
+        }
+      }
+      $properties[$name] = new PropertyIndex($property->getSourcePosition(), $name, $visibility, $types);
     }
 
-    /** @var MethodIndex $methods */
+    /** @var MethodIndex[] $methods */
     $methods = [];
     /** @var ClassMethodNode $method */
     foreach ($classNode->getAllMethods() as $method) {
@@ -109,8 +118,47 @@ class Indexer extends VisitorBase {
       if ($visibility !== 'private' || $visibility !== 'protected') {
         $visibility = 'public';
       }
-      //@todo handle arguments/return type
-      $methods[$name] = new MethodIndex($method->getSourcePosition(), $name, $visibility);
+      $return_types = [];
+      $doc_comment = $method->getDocComment();
+      $parameter_tags = [];
+      if ($doc_comment) {
+        $param_tags = $doc_comment->getDocBlock()->getTagsByName('param');
+        /** @var DocBlock\Tag\ParamTag $param_tag */
+        foreach ($param_tags as $param_tag) {
+          $variable_name = ltrim($param_tag->getVariableName(), '$');
+          if ($variable_name) {
+            $parameter_tags[$variable_name] = $param_tag;
+          }
+        }
+        $return_tags = $doc_comment->getDocBlock()->getTagsByName('return');
+        if (!empty($return_tags)) {
+          /** @var DocBlock\Tag\ReturnTag $return_tag */
+          $return_tag = end($return_tags);
+          $return_types = $return_tag->getTypes();
+        }
+      }
+      $parameters = [];
+      $i = 0;
+      foreach ($method->getParameters() as $parameter_node) {
+        $param_name = $parameter_node->getName();
+        $parameter_types = ['mixed'];
+        $param_tag = isset($parameter_tags[$param_name]) ? $parameter_tags[$param_name] : NULL;
+        if ($param_tag) {
+          $parameter_types = $param_tag->getTypes();
+        }
+        $type_hint = $parameter_node->getTypeHint();
+        if ($type_hint) {
+          $parameter_types = [$type_hint];
+        }
+        $parameter = new ParameterIndex(
+          $parameter_node->getSourcePosition(),
+          $param_name,
+          $parameter_types
+        );
+        // Store by both index and name.
+        $parameters[$i++] = $parameters[$param_name] = $parameter;
+      }
+      $methods[$name] = new MethodIndex($method->getSourcePosition(), $name, $visibility, $parameters, $return_types);
     }
 
     $class_fqn = $classNode->getName()->getAbsolutePath();

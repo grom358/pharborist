@@ -14,7 +14,16 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
     $class_index = $classes['\MyNamespace\MyClass'];
     $properties = $class_index->getProperties();
     $this->assertArrayHasKey('myProperty', $properties);
+    $property = $properties['myProperty'];
+    $expected = ['\MyNamespace\SomeType', '\MyNamespace\Relative\TestType'];
+    $this->assertEquals($expected, $property->getTypes());
     $methods = $class_index->getMethods();
     $this->assertArrayHasKey('myMethod', $methods);
+    $method = $methods['myMethod'];
+    $this->assertEquals(['int'], $method->getReturnTypes());
+    $parameters = $method->getParameters();
+    $this->assertArrayHasKey('arg', $parameters);
+    $parameter = $parameters['arg'];
+    $this->assertEquals(['string'], $parameter->getTypes());
   }
 }

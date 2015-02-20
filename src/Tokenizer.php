@@ -20,6 +20,7 @@ use Pharborist\Variables\VariableNode;
 class Tokenizer {
   private $lineNo;
   private $colNo;
+  private $byteOffset;
 
   private function parseToken($token, $filename = NULL) {
     if (is_array($token)) {
@@ -31,6 +32,7 @@ class Tokenizer {
     }
     $lineNo = $this->lineNo;
     $colNo = $this->colNo;
+    $byteOffset = $this->byteOffset;
     $newline_count = substr_count($text, "\n");
     if ($newline_count > 0) {
       $this->lineNo += $newline_count;
@@ -40,7 +42,8 @@ class Tokenizer {
     } else {
       $this->colNo += strlen($text);
     }
-    return $this->createToken($type, $text, new SourcePosition($filename, $lineNo, $colNo));
+    $this->byteOffset += strlen($text);
+    return $this->createToken($type, $text, new SourcePosition($filename, $lineNo, $colNo, $byteOffset));
   }
 
   private function createToken($type, $text, $position) {
@@ -89,6 +92,7 @@ class Tokenizer {
    *   Tokens.
    */
   public function getAll($source, $filename = NULL) {
+    $this->byteOffset = 0;
     $this->colNo = 1;
     $this->lineNo = 1;
     $tokens = [];

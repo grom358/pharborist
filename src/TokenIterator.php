@@ -89,7 +89,7 @@ class TokenIterator {
    */
   public function getSourcePosition() {
     if ($this->length === 0) {
-      return new SourcePosition($this->filename, 1, 1);
+      return new SourcePosition($this->filename, 1, 1, 0);
     }
     $token = $this->current();
     if ($token === NULL) {
@@ -98,8 +98,9 @@ class TokenIterator {
       $filename = $source_position->getFilename();
       $line_no = $source_position->getLineNumber();
       $col_no = $source_position->getColumnNumber();
+      $byte_offset = $source_position->getByteOffset();
       $length = strlen($token->getText());
-      return new SourcePosition($filename, $line_no, $col_no + $length);
+      return new SourcePosition($filename, $line_no, $col_no + $length, $byte_offset + $length);
     }
     return $token->getSourcePosition();
   }

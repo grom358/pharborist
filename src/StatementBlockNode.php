@@ -62,4 +62,21 @@ class StatementBlockNode extends ParentNode {
     }
     return $mappings;
   }
+
+  /**
+   * Append statement to block.
+   *
+   * @param StatementNode $statementNode
+   *   Statement to append.
+   * @return $this
+   */
+  public function appendStatement(StatementNode $statementNode) {
+    if (!$this->isEmpty() && $this->firstToken()->getType() === '{') {
+      $this->lastChild()->before($statementNode);
+    }
+    else {
+      $this->appendChild($statementNode);
+    }
+    return $this;
+  }
 }

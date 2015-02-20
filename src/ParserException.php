@@ -10,6 +10,6 @@ class ParserException extends \Exception {
    * @param string $message
    */
   public function __construct($position, $message) {
-    parent::__construct("Error at {$position->getLineNumber()}:{$position->getColumnNumber()}: $message");
+    parent::__construct("Error at {$position->getLineNumber()}:{$position->getColumnNumber()} in {$position->getFilename()}: $message");
   }
 }

@@ -124,6 +124,29 @@ class ParentNodeTest extends \PHPUnit_Framework_TestCase {
     $parent->walk($test);
   }
 
+  public function testWalkAbort() {
+    $parent = $this->createParentNode();
+    $one = $this->createNode('one');
+    $parent->append($one);
+    $two = $this->createNode('two');
+    $parent->append($two);
+    $sub = $this->createParentNode();
+    $leaf = $this->createNode('findMe');
+    $sub->append($leaf);
+    $parent->append($sub);
+
+    $visited = [];
+    $test = function($node) use (&$visited) {
+      $visited[] = $node;
+      if ($node instanceof ParentNode && $node->parent() !== NULL) {
+        return FALSE;
+      }
+      return TRUE;
+    };
+    $parent->walk($test);
+    $this->assertEquals([$parent, $one, $two, $sub], $visited);
+  }
+
   public function testSourcePosition() {
     $position = new SourcePosition(NULL, 4, 2, 0);
     $token = new TokenNode(T_STRING, 'test', $position);

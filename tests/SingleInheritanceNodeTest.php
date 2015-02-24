@@ -72,6 +72,15 @@ class SingleInheritanceNodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertNull($class->getMethod('harrr'));
   }
 
+  public function testGetTraitUses() {
+    /** @var \Pharborist\Objects\ClassNode $class */
+    $class = Parser::parseSnippet('class Foo { use Bar; use Soap; }');
+    $traits = $class->getTraitUses();
+    $this->assertCount(2, $traits);
+    $this->assertInstanceOf('\Pharborist\Objects\TraitUseNode', $traits[0]);
+    $this->assertInstanceOf('\Pharborist\Objects\TraitUseNode', $traits[1]);
+  }
+
   public function testGetTraits() {
     /** @var \Pharborist\Objects\ClassNode $class */
     $class = Parser::parseSnippet('class Foo { use Bar; }');

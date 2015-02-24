@@ -276,12 +276,19 @@ abstract class SingleInheritanceNode extends StatementNode {
   }
 
   /**
+   * @return NodeCollection|TraitUseNode[]
+   */
+  public function getTraitUses() {
+    return $this->statements->children(Filter::isInstanceOf('\Pharborist\Objects\TraitUseNode'));
+  }
+
+  /**
    * @return NodeCollection|NameNode[]
    */
   public function getTraits() {
     $traits = [];
-    /** @var \Pharborist\Objects\TraitUseNode $node */
-    foreach ($this->statements->children(Filter::isInstanceOf('\Pharborist\Objects\TraitUseNode')) as $node) {
+    /** @var TraitUseNode $node */
+    foreach ($this->getTraitUses() as $node) {
       $traits = array_merge($traits, $node->getTraits()->toArray());
     }
     return new NodeCollection($traits, FALSE);

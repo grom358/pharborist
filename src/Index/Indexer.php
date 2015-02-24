@@ -153,7 +153,7 @@ class Indexer extends VisitorBase {
     /** @var PropertyIndex[] $properties */
     $properties = [];
     /** @var ClassMemberNode $property */
-    foreach ($classNode->getAllProperties() as $property) {
+    foreach ($classNode->getProperties() as $property) {
       $name = ltrim($property->getName()->getText(), '$');
       $visibility = $property->getVisibility()->getText();
       if ($visibility !== 'private' || $visibility !== 'protected') {

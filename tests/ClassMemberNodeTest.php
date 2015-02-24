@@ -21,7 +21,7 @@ class ClassMemberNodeTest extends \PHPUnit_Framework_TestCase {
     /** @var ClassNode $class_node */
     $class_node = Parser::parseSnippet('class Foo { public $bar; }');
     /** @var ClassMemberNode $a */
-    $a = $class_node->getAllProperties()[0];
+    $a = $class_node->getProperties()[0];
     $this->assertFalse($a->isStatic());
     $this->assertNull($a->getStatic());
     $a->setStatic(TRUE);
@@ -30,7 +30,7 @@ class ClassMemberNodeTest extends \PHPUnit_Framework_TestCase {
 
     $class_node = Parser::parseSnippet('class Bar { protected static $baz; }');
     /** @var ClassMemberNode $b */
-    $b = $class_node->getAllProperties()[0];
+    $b = $class_node->getProperties()[0];
     $this->assertTrue($b->isStatic());
     $this->assertInstanceOf('\Pharborist\TokenNode', $b->getStatic());
     $this->assertSame(T_STATIC, $b->getStatic()->getType());
@@ -43,7 +43,7 @@ class ClassMemberNodeTest extends \PHPUnit_Framework_TestCase {
     /** @var ClassNode $class_node */
     $class_node = Parser::parseSnippet('class Foo { public $bar; }');
     /** @var ClassMemberNode $a */
-    $a = $class_node->getAllProperties()[0];
+    $a = $class_node->getProperties()[0];
     $this->assertEquals('private $bar;', $a->setVisibility('private')->parent()->parent()->getText());
   }
 }

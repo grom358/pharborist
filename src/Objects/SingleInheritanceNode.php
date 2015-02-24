@@ -215,13 +215,13 @@ abstract class SingleInheritanceNode extends StatementNode {
   public function getPropertyNames() {
     return array_map(function (ClassMemberNode $property) {
       return ltrim($property->getName(), '$');
-    }, $this->getAllProperties()->toArray());
+    }, $this->getProperties()->toArray());
   }
 
   /**
    * @return \Pharborist\NodeCollection
    */
-  public function getAllProperties() {
+  public function getProperties() {
     $properties = [];
     /** @var ClassMemberListNode $node */
     foreach ($this->statements->children(Filter::isInstanceOf('\Pharborist\Objects\ClassMemberListNode')) as $node) {
@@ -272,7 +272,7 @@ abstract class SingleInheritanceNode extends StatementNode {
     $name = ltrim($name, '$');
 
     $properties = $this
-      ->getAllProperties()
+      ->getProperties()
       ->filter(function (ClassMemberNode $property) use ($name) {
         return ltrim($property->getName(), '$') === $name;
       });

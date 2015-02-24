@@ -33,7 +33,7 @@ class SingleInheritanceNodeTest extends \PHPUnit_Framework_TestCase {
   public function testGetAllProperties() {
     /** @var \Pharborist\Objects\ClassNode $class */
     $class = Parser::parseSnippet('class Foo { protected $bar; public $baz; }');
-    $properties = $class->getAllProperties();
+    $properties = $class->getProperties();
     $this->assertInstanceOf('\Pharborist\NodeCollection', $properties);
     $this->assertEquals(2, $properties->count());
   }

@@ -13,12 +13,24 @@ use phpDocumentor\Reflection\DocBlock;
 class Indexer extends VisitorBase {
 
   /**
-   * @var ProjectIndex
+   * @var string[]
    */
-  private $projectIndex;
+  private $directories;
+
+  /**
+   * @var FileIndex[]
+   */
+  private $files;
+
+  /**
+   * @var ClassIndex[]
+   */
+  private $classes;
 
   public function __construct() {
-    $this->projectIndex = new ProjectIndex();
+    $this->directories = [];
+    $this->files = [];
+    $this->classes = [];
   }
 
   /**
@@ -28,28 +40,21 @@ class Indexer extends VisitorBase {
    * @return bool
    */
   protected function indexRequired($filename) {
-    $file_index = $this->projectIndex->getFileIndex($filename);
-    $index_required = FALSE;
-    // If not previously indexed, indexing is required.
-    if (!$file_index) {
-      $index_required = TRUE;
+    if (!isset($this->files[$filename])) {
+      return TRUE;
     }
+    $file_index = $this->files[$filename];
     // If file has been modified, indexing is required.
-    if (!$index_required) {
-      // Check file modification time
-      $last_modified = filemtime($filename);
-      if ($last_modified !== FALSE) {
-        $index_required = $last_modified >= $file_index->getLastIndexed();
-      }
+    $last_modified = filemtime($filename);
+    if ($last_modified === FALSE || $last_modified >= $file_index->getLastIndexed()) {
+      return TRUE;
     }
     // If file contents have changed, indexing is required.
-    if (!$index_required) {
-      $current_hash = md5_file($filename);
-      if ($current_hash !== FALSE) {
-        $index_required = $current_hash !== $file_index->getHash();
-      }
+    $current_hash = md5_file($filename);
+    if ($current_hash === FALSE || $current_hash !== $file_index->getHash()) {
+      return TRUE;
     }
-    return $index_required;
+    return FALSE;
   }
 
   protected function processFile($filename) {
@@ -60,7 +65,7 @@ class Indexer extends VisitorBase {
       $tree->acceptVisitor($this);
 
       $hash = md5_file($filename);
-      $this->projectIndex->addFile(new FileIndex($filename, time(), $hash));
+      $this->files[$filename] = new FileIndex($filename, time(), $hash);
     }
   }
 
@@ -72,7 +77,7 @@ class Indexer extends VisitorBase {
   }
 
   public function addDirectory($directory) {
-    $this->projectIndex->addDirectory($directory);
+    $this->directories[] = $directory;
     return $this;
   }
 
@@ -80,10 +85,14 @@ class Indexer extends VisitorBase {
    * @return ProjectIndex
    */
   public function index() {
-    foreach ($this->projectIndex->getDirectories() as $directory) {
+    foreach ($this->directories as $directory) {
       $this->processDirectory($directory);
     }
-    return $this->projectIndex;
+    return new ProjectIndex(
+      $this->directories,
+      $this->files,
+      $this->classes
+    );
   }
 
   public function visitClassNode(ClassNode $classNode) {
@@ -165,7 +174,7 @@ class Indexer extends VisitorBase {
     $final = $classNode->getFinal() !== NULL;
     $abstract = $classNode->getAbstract() !== NULL;
     $class_index = new ClassIndex($classNode->getSourcePosition(), $class_fqn, $final, $abstract, $properties, $methods);
-    $this->projectIndex->addClass($class_index);
+    $this->classes[$class_fqn] = $class_index;
   }
 
 }

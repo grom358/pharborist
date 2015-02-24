@@ -19,6 +19,17 @@ class ProjectIndex {
   private $classes = [];
 
   /**
+   * @param string[] $directories
+   * @param FileIndex[] $files
+   * @param ClassIndex[] $classes
+   */
+  public function __construct($directories, $files, $classes) {
+    $this->directories = $directories;
+    $this->files = $files;
+    $this->classes = $classes;
+  }
+
+  /**
    * Sub directories in this project containing source code.
    *
    * @return string[]
@@ -28,21 +39,10 @@ class ProjectIndex {
   }
 
   /**
-   * @param string $directory
-   */
-  public function addDirectory($directory) {
-    $this->directories[] = $directory;
-  }
-
-  /**
    * @return ClassIndex[]
    */
   public function getClasses() {
     return $this->classes;
-  }
-
-  public function addClass(ClassIndex $classIndex) {
-    $this->classes[$classIndex->getName()] = $classIndex;
   }
 
   /**
@@ -54,18 +54,5 @@ class ProjectIndex {
    */
   public function getFileIndex($filename) {
     return isset($this->files[$filename]) ? $this->files[$filename] : NULL;
-  }
-
-  /**
-   * Add (or update) file index.
-   *
-   * @param FileIndex $file_index
-   *   File index to add to project index.
-   *
-   * @return $this
-   */
-  public function addFile(FileIndex $file_index) {
-    $this->files[$file_index->getFilename()] = $file_index;
-    return $this;
   }
 }

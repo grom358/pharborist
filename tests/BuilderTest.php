@@ -34,6 +34,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('class MyTest extends BaseClass {}', $classNode->getText());
 
     $classNode->setExtends(NULL);
+    $this->assertNull($classNode->getExtends());
     $this->assertEquals('class MyTest {}', $classNode->getText());
 
     $classNode->setImplements('MyInterface');
@@ -43,6 +44,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('class MyTest implements Yai {}', $classNode->getText());
 
     $classNode->setImplements(NULL);
+    $this->assertNull($classNode->getImplementList());
     $this->assertEquals('class MyTest {}', $classNode->getText());
 
     $classNode->appendProperty('someProperty');

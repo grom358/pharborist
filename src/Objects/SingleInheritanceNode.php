@@ -62,6 +62,7 @@ abstract class SingleInheritanceNode extends StatementNode {
         $this->extends->previous()->remove();
         // Remove extends namespace.
         $this->extends->remove();
+        $this->extends = NULL;
       }
     }
     else {
@@ -114,6 +115,7 @@ abstract class SingleInheritanceNode extends StatementNode {
         $this->implements->previous()->remove();
         // Remove implements list.
         $this->implements->remove();
+        $this->implements = NULL;
       }
     }
     else {

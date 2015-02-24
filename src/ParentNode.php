@@ -384,7 +384,10 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
   }
 
   public function walk(callable $callback) {
-    $callback($this);
+    $ret = $callback($this);
+    if ($ret === FALSE) {
+      return;
+    }
     $child = $this->head;
     while($child) {
       if($child instanceof ParentNode) {

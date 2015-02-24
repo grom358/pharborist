@@ -30,7 +30,7 @@ class SingleInheritanceNodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertFalse($class->hasMethod('blorf'));
   }
 
-  public function testGetAllProperties() {
+  public function testGetProperties() {
     /** @var \Pharborist\Objects\ClassNode $class */
     $class = Parser::parseSnippet('class Foo { protected $bar; public $baz; }');
     $properties = $class->getProperties();
@@ -38,12 +38,20 @@ class SingleInheritanceNodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals(2, $properties->count());
   }
 
-  public function testGetAllMethods() {
+  public function testGetMethods() {
     /** @var \Pharborist\Objects\ClassNode $class */
     $class = Parser::parseSnippet('class Foo { public function wambooli() {} }');
     $methods = $class->getMethods();
     $this->assertInstanceOf('\Pharborist\NodeCollection', $methods);
     $this->assertEquals(1, $methods->count());
+  }
+
+  public function testGetConstants() {
+    /** @var \Pharborist\Objects\ClassNode $class */
+    $class = Parser::parseSnippet("class Foo { const WAMBOOLI = 'blorf'; }");
+    $constants = $class->getConstants();
+    $this->assertInstanceOf('\Pharborist\NodeCollection', $constants);
+    $this->assertEquals(1, $constants->count());
   }
 
   public function testGetProperty() {

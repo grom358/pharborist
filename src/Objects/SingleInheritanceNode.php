@@ -2,6 +2,7 @@
 namespace Pharborist\Objects;
 
 use Pharborist\CommaListNode;
+use Pharborist\Constants\ConstantDeclarationNode;
 use Pharborist\DocCommentTrait;
 use Pharborist\ExpressionNode;
 use Pharborist\Filter;
@@ -258,6 +259,18 @@ abstract class SingleInheritanceNode extends StatementNode {
    */
   public function getMethods() {
     return $this->statements->children(Filter::isInstanceOf('\Pharborist\Objects\ClassMethodNode'));
+  }
+
+  /**
+   * @return NodeCollection|ConstantDeclarationNode[]
+   */
+  public function getConstants() {
+    $declarations = [];
+    /** @var \Pharborist\Constants\ConstantDeclarationStatementNode $node */
+    foreach ($this->statements->children(Filter::isInstanceOf('\Pharborist\Constants\ConstantDeclarationStatementNode')) as $node) {
+      $declarations = array_merge($declarations, $node->getDeclarations()->toArray());
+    }
+    return new NodeCollection($declarations, FALSE);
   }
 
   /**

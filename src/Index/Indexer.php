@@ -162,7 +162,9 @@ class Indexer extends VisitorBase {
     }
 
     $class_fqn = $classNode->getName()->getAbsolutePath();
-    $class_index = new ClassIndex($classNode->getSourcePosition(), $class_fqn, $properties, $methods);
+    $final = $classNode->getFinal() !== NULL;
+    $abstract = $classNode->getAbstract() !== NULL;
+    $class_index = new ClassIndex($classNode->getSourcePosition(), $class_fqn, $final, $abstract, $properties, $methods);
     $this->projectIndex->addClass($class_index);
   }
 

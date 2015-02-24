@@ -12,6 +12,8 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
     $classes = $index->getClasses();
     $this->assertArrayHasKey('\MyNamespace\MyClass', $classes);
     $class_index = $classes['\MyNamespace\MyClass'];
+    $this->assertFalse($class_index->isFinal());
+    $this->assertFalse($class_index->isAbstract());
     $properties = $class_index->getProperties();
     $this->assertArrayHasKey('myProperty', $properties);
     $property = $properties['myProperty'];

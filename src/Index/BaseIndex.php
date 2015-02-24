@@ -16,6 +16,15 @@ abstract class BaseIndex {
   protected $name;
 
   /**
+   * @param SourcePosition $position
+   * @param string $name
+   */
+  public function __construct(SourcePosition $position, $name) {
+    $this->sourcePosition = $position;
+    $this->name = $name;
+  }
+
+  /**
    * @return SourcePosition
    */
   public function getSourcePosition() {

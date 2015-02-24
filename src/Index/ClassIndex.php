@@ -9,6 +9,16 @@ use Pharborist\SourcePosition;
 class ClassIndex extends BaseIndex {
 
   /**
+   * @var bool
+   */
+  private $final;
+
+  /**
+   * @var bool
+   */
+  private $abstract;
+
+  /**
    * @var PropertyIndex[]
    */
   private $properties;
@@ -21,14 +31,35 @@ class ClassIndex extends BaseIndex {
   /**
    * @param SourcePosition $position
    * @param string $name
+   * @param bool $final
+   * @param bool $abstract
    * @param PropertyIndex[] $properties
    * @param MethodIndex[] $methods
    */
-  public function __construct($position, $name, $properties, $methods) {
-    $this->sourcePosition = $position;
-    $this->name = $name;
+  public function __construct(SourcePosition $position, $name, $final, $abstract, $properties, $methods) {
+    parent::__construct($position, $name);
+    $this->final = $final;
+    $this->abstract = $abstract;
     $this->properties = $properties;
     $this->methods = $methods;
+  }
+
+  /**
+   * Class is final.
+   *
+   * @return bool
+   */
+  public function isFinal() {
+    return $this->final;
+  }
+
+  /**
+   * Class is abstract.
+   *
+   * @return bool
+   */
+  public function isAbstract() {
+    return $this->abstract;
   }
 
   /**

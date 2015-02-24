@@ -21,9 +21,8 @@ class PropertyIndex extends BaseIndex {
    * @param string $visibility
    * @param string[] $types
    */
-  public function __construct($position, $name, $visibility = 'public', $types = ['mixed']) {
-    $this->sourcePosition = $position;
-    $this->name = $name;
+  public function __construct(SourcePosition $position, $name, $visibility = 'public', $types = ['mixed']) {
+    parent::__construct($position, $name);
     $this->visibility = $visibility;
     $this->types = $types;
   }

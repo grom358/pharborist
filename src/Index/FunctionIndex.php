@@ -21,8 +21,7 @@ class FunctionIndex extends BaseIndex {
    * @param string[] $return_types
    */
   public function __construct($position, $name, $parameters, $return_types) {
-    $this->sourcePosition = $position;
-    $this->name = $name;
+    parent::__construct($position, $name);
     $this->parameters = $parameters;
     $this->returnTypes = $return_types;
   }

@@ -15,9 +15,8 @@ class ParameterIndex extends BaseIndex {
    * @param string $name
    * @param string[] $types
    */
-  public function __construct($position, $name, $types) {
-    $this->sourcePosition = $position;
-    $this->name = $name;
+  public function __construct(SourcePosition $position, $name, $types) {
+    parent::__construct($position, $name);
     $this->types = $types;
   }
 

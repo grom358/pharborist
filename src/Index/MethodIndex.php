@@ -27,12 +27,9 @@ class MethodIndex extends FunctionIndex {
    * @param ParameterIndex[]  $parameters
    * @param string[] $returnTypes
    */
-  public function __construct($position, $name, $visibility, $parameters, $returnTypes) {
-    $this->sourcePosition = $position;
-    $this->name = $name;
+  public function __construct(SourcePosition $position, $name, $visibility, $parameters, $returnTypes) {
+    parent::__construct($position, $name, $parameters, $returnTypes);
     $this->visibility = $visibility;
-    $this->parameters = $parameters;
-    $this->returnTypes = $returnTypes;
   }
 
 }

@@ -41,7 +41,7 @@ class SingleInheritanceNodeTest extends \PHPUnit_Framework_TestCase {
   public function testGetAllMethods() {
     /** @var \Pharborist\Objects\ClassNode $class */
     $class = Parser::parseSnippet('class Foo { public function wambooli() {} }');
-    $methods = $class->getAllMethods();
+    $methods = $class->getMethods();
     $this->assertInstanceOf('\Pharborist\NodeCollection', $methods);
     $this->assertEquals(1, $methods->count());
   }

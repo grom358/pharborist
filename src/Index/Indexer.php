@@ -175,7 +175,7 @@ class Indexer extends VisitorBase {
     /** @var MethodIndex[] $methods */
     $methods = [];
     /** @var ClassMethodNode $method */
-    foreach ($classNode->getAllMethods() as $method) {
+    foreach ($classNode->getMethods() as $method) {
       $name = $method->getName()->getText();
       $visibility = $method->getVisibility()->getText();
       if ($visibility !== 'private' || $visibility !== 'protected') {

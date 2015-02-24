@@ -250,13 +250,13 @@ abstract class SingleInheritanceNode extends StatementNode {
   public function getMethodNames() {
     return array_map(function (ClassMethodNode $node) {
       return $node->getName()->getText();
-    }, $this->getAllMethods()->toArray());
+    }, $this->getMethods()->toArray());
   }
 
   /**
    * @return NodeCollection|ClassMethodNode[]
    */
-  public function getAllMethods() {
+  public function getMethods() {
     return $this->statements->children(Filter::isInstanceOf('\Pharborist\Objects\ClassMethodNode'));
   }
 
@@ -289,7 +289,7 @@ abstract class SingleInheritanceNode extends StatementNode {
    */
   public function getMethod($name) {
     $methods = $this
-      ->getAllMethods()
+      ->getMethods()
       ->filter(function (ClassMethodNode $method) use ($name) {
         return $method->getName()->getText() === $name;
       });

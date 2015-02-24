@@ -2,6 +2,7 @@
 namespace Pharborist;
 
 use Pharborist\Index\Indexer;
+use Pharborist\Index\ProjectIndex;
 
 class IndexTest extends \PHPUnit_Framework_TestCase {
   public function testIndex() {
@@ -27,5 +28,13 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
     $this->assertArrayHasKey('arg', $parameters);
     $parameter = $parameters['arg'];
     $this->assertEquals(['string'], $parameter->getTypes());
+
+    $indexer = new Indexer();
+    // Remove source directory from index, to test for removal of file.
+    $index = new ProjectIndex([], $index->getFiles(), $index->getClasses());
+    $indexer->load($index);
+    $index = $indexer->index();
+    $this->assertEmpty($index->getFiles());
+    $this->assertEmpty($index->getClasses());
   }
 }

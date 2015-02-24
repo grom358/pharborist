@@ -46,6 +46,13 @@ class ProjectIndex {
   }
 
   /**
+   * @return FileIndex[]
+   */
+  public function getFiles() {
+    return $this->files;
+  }
+
+  /**
    * Get file index for filename.
    *
    * @param string $filename

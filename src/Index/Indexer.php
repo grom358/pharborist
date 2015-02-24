@@ -27,6 +27,20 @@ class Indexer extends VisitorBase {
    */
   private $classes;
 
+  /**
+   * Classes defined by the current file being processed.
+   *
+   * @var string[]
+   */
+  private $fileClasses;
+
+  /**
+   * List of files that no longer exist in project.
+   *
+   * @var string[]
+   */
+  private $deletedFiles;
+
   public function __construct() {
     $this->directories = [];
     $this->files = [];
@@ -57,15 +71,33 @@ class Indexer extends VisitorBase {
     return FALSE;
   }
 
+  /**
+   * Remove all definitions and usages that belong to a file.
+   *
+   * @param FileIndex $fileIndex
+   */
+  protected function fileRemoved(FileIndex $fileIndex) {
+    foreach ($fileIndex->getClasses() as $class_fqn) {
+      unset($this->classes[$class_fqn]);
+    }
+    unset($this->files[$fileIndex->getFilename()]);
+  }
+
   protected function processFile($filename) {
     // Process file if indexing is required.
     if ($this->indexRequired($filename)) {
+      if (isset($this->files[$filename])) {
+        $this->fileRemoved($this->files[$filename]);
+      }
+
+      $this->fileClasses = [];
+
       /** @var RootNode $tree */
       $tree = Parser::parseFile($filename);
       $tree->acceptVisitor($this);
 
       $hash = md5_file($filename);
-      $this->files[$filename] = new FileIndex($filename, time(), $hash);
+      $this->files[$filename] = new FileIndex($filename, time(), $hash, $this->fileClasses);
     }
   }
 
@@ -73,6 +105,7 @@ class Indexer extends VisitorBase {
     $files = FileUtil::findFiles($directory, $extensions);
     foreach ($files as $filename) {
       $this->processFile($filename);
+      unset($this->deletedFiles[$filename]);
     }
   }
 
@@ -82,11 +115,32 @@ class Indexer extends VisitorBase {
   }
 
   /**
+   * Load an existing index into the indexer.
+   *
+   * @param ProjectIndex $index
+   *   Project index to load.
+   *
+   * @return $this
+   */
+  public function load(ProjectIndex $index) {
+    $this->directories = $index->getDirectories();
+    $this->files = $index->getFiles();
+    $this->classes = $index->getClasses();
+  }
+
+  /**
    * @return ProjectIndex
    */
   public function index() {
+    $this->deletedFiles = array_flip(array_keys($this->files));
+    // Scan directories for files.
     foreach ($this->directories as $directory) {
       $this->processDirectory($directory);
+    }
+    // Handle files that no longer exist.
+    foreach ($this->deletedFiles as $filename => $dummy) {
+      $file_index = $this->files[$filename];
+      $this->fileRemoved($file_index);
     }
     return new ProjectIndex(
       $this->directories,
@@ -175,6 +229,7 @@ class Indexer extends VisitorBase {
     $abstract = $classNode->getAbstract() !== NULL;
     $class_index = new ClassIndex($classNode->getSourcePosition(), $class_fqn, $final, $abstract, $properties, $methods);
     $this->classes[$class_fqn] = $class_index;
+    $this->fileClasses[] = $class_fqn;
   }
 
 }

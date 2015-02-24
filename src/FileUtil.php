@@ -14,6 +14,9 @@ class FileUtil {
    *   List of files found with matching extensions.
    */
   public static function findFiles($directory, $extensions = ['php']) {
+    if (!is_dir($directory)) {
+      return [];
+    }
     $directory_iterator = new \RecursiveDirectoryIterator($directory);
     $iterator = new \RecursiveIteratorIterator($directory_iterator);
     $pattern = '/^.+\.(' . implode('|', $extensions) . ')$/i';

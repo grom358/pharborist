@@ -22,14 +22,21 @@ class FileIndex {
   private $hash;
 
   /**
+   * @var string[]
+   */
+  private $classes;
+
+  /**
    * @param string $filename
    * @param int $lastIndexed
    * @param string $hash
+   * @param string[] $classes
    */
-  public function __construct($filename, $lastIndexed, $hash) {
+  public function __construct($filename, $lastIndexed, $hash, $classes) {
     $this->filename = $filename;
     $this->lastIndexed = $lastIndexed;
     $this->hash = $hash;
+    $this->classes = $classes;
   }
 
   /**
@@ -57,5 +64,14 @@ class FileIndex {
    */
   public function getHash() {
     return $this->hash;
+  }
+
+  /**
+   * Return the Fully Qualified Names of the classes defined by this file.
+   *
+   * @return string[]
+   */
+  public function getClasses() {
+    return $this->classes;
   }
 }

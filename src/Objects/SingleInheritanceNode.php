@@ -2,6 +2,7 @@
 namespace Pharborist\Objects;
 
 use Pharborist\CommaListNode;
+use Pharborist\Constants\ConstantDeclarationNode;
 use Pharborist\DocCommentTrait;
 use Pharborist\ExpressionNode;
 use Pharborist\Filter;
@@ -61,6 +62,7 @@ abstract class SingleInheritanceNode extends StatementNode {
         $this->extends->previous()->remove();
         // Remove extends namespace.
         $this->extends->remove();
+        $this->extends = NULL;
       }
     }
     else {
@@ -113,6 +115,7 @@ abstract class SingleInheritanceNode extends StatementNode {
         $this->implements->previous()->remove();
         // Remove implements list.
         $this->implements->remove();
+        $this->implements = NULL;
       }
     }
     else {
@@ -215,13 +218,13 @@ abstract class SingleInheritanceNode extends StatementNode {
   public function getPropertyNames() {
     return array_map(function (ClassMemberNode $property) {
       return ltrim($property->getName(), '$');
-    }, $this->getAllProperties()->toArray());
+    }, $this->getProperties()->toArray());
   }
 
   /**
    * @return \Pharborist\NodeCollection
    */
-  public function getAllProperties() {
+  public function getProperties() {
     $properties = [];
     /** @var ClassMemberListNode $node */
     foreach ($this->statements->children(Filter::isInstanceOf('\Pharborist\Objects\ClassMemberListNode')) as $node) {
@@ -250,14 +253,45 @@ abstract class SingleInheritanceNode extends StatementNode {
   public function getMethodNames() {
     return array_map(function (ClassMethodNode $node) {
       return $node->getName()->getText();
-    }, $this->getAllMethods()->toArray());
+    }, $this->getMethods()->toArray());
   }
 
   /**
    * @return NodeCollection|ClassMethodNode[]
    */
-  public function getAllMethods() {
+  public function getMethods() {
     return $this->statements->children(Filter::isInstanceOf('\Pharborist\Objects\ClassMethodNode'));
+  }
+
+  /**
+   * @return NodeCollection|ConstantDeclarationNode[]
+   */
+  public function getConstants() {
+    $declarations = [];
+    /** @var \Pharborist\Constants\ConstantDeclarationStatementNode $node */
+    foreach ($this->statements->children(Filter::isInstanceOf('\Pharborist\Constants\ConstantDeclarationStatementNode')) as $node) {
+      $declarations = array_merge($declarations, $node->getDeclarations()->toArray());
+    }
+    return new NodeCollection($declarations, FALSE);
+  }
+
+  /**
+   * @return NodeCollection|TraitUseNode[]
+   */
+  public function getTraitUses() {
+    return $this->statements->children(Filter::isInstanceOf('\Pharborist\Objects\TraitUseNode'));
+  }
+
+  /**
+   * @return NodeCollection|NameNode[]
+   */
+  public function getTraits() {
+    $traits = [];
+    /** @var TraitUseNode $node */
+    foreach ($this->getTraitUses() as $node) {
+      $traits = array_merge($traits, $node->getTraits()->toArray());
+    }
+    return new NodeCollection($traits, FALSE);
   }
 
   /**
@@ -272,7 +306,7 @@ abstract class SingleInheritanceNode extends StatementNode {
     $name = ltrim($name, '$');
 
     $properties = $this
-      ->getAllProperties()
+      ->getProperties()
       ->filter(function (ClassMemberNode $property) use ($name) {
         return ltrim($property->getName(), '$') === $name;
       });
@@ -289,7 +323,7 @@ abstract class SingleInheritanceNode extends StatementNode {
    */
   public function getMethod($name) {
     $methods = $this
-      ->getAllMethods()
+      ->getMethods()
       ->filter(function (ClassMethodNode $method) use ($name) {
         return $method->getName()->getText() === $name;
       });

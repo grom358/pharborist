@@ -149,7 +149,7 @@ class DocCommentNode extends CommentNode {
     $parameters = array();
     /** @var \phpDocumentor\Reflection\DocBlock\Tag\ParamTag $param_tag */
     foreach ($param_tags as $param_tag) {
-      $name = $param_tag->getVariableName();
+      $name = ltrim($param_tag->getVariableName(), '$');
       $parameters[$name] = $param_tag;
     }
     return $parameters;
@@ -165,10 +165,11 @@ class DocCommentNode extends CommentNode {
    *   The tag for parameter.
    */
   public function getParameter($parameterName) {
+    $parameterName = ltrim($parameterName, '$');
     $param_tags = $this->getDocBlock()->getTagsByName('param');
     /** @var \phpDocumentor\Reflection\DocBlock\Tag\ParamTag $param_tag */
     foreach ($param_tags as $param_tag) {
-      if ($param_tag->getVariableName() === $parameterName) {
+      if (ltrim($param_tag->getVariableName(), '$') === $parameterName) {
         return $param_tag;
       }
     }

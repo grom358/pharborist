@@ -51,6 +51,7 @@ EOF;
     $this->assertEquals('\MyNamespace\MyClass', $param_tag->getType());
     $this->assertFalse($param_tag->isVariadic());
     $this->assertEquals('A test parameter.', $param_tag->getDescription());
+    $this->assertEquals($types, $parameter->getTypes());
 
     $parameter->setName('b', TRUE);
     $this->assertEquals('b', $parameter->getName());
@@ -80,6 +81,7 @@ EOF;
     $this->assertEquals('\MyNamespace\SomeClass', $param_tag->getType());
     $this->assertFalse($param_tag->isVariadic());
     $this->assertEquals('Parameter using alias.', $param_tag->getDescription());
+    $this->assertEquals($types, $parameter->getTypes());
 
     $parameter = $function->getParameter(2);
     $this->assertEquals('data', $parameter->getName());
@@ -96,6 +98,7 @@ EOF;
     $this->assertEquals('array', $param_tag->getType());
     $this->assertFalse($param_tag->isVariadic());
     $this->assertEquals('An array parameter.', $param_tag->getDescription());
+    $this->assertEquals($types, $parameter->getTypes());
 
     $parameter = $function->getParameter(3);
     $this->assertEquals('callback', $parameter->getName());
@@ -112,5 +115,41 @@ EOF;
     $this->assertEquals('callable', $param_tag->getType());
     $this->assertFalse($param_tag->isVariadic());
     $this->assertEquals('A callable parameter.', $param_tag->getDescription());
+    $this->assertEquals($types, $parameter->getTypes());
+  }
+
+  public function testDocCommentTypes() {
+    $source = <<<'EOF'
+<?php
+use MyNamespace\MyClass;
+use MyNamespace\SomeClass as TestClass;
+
+/**
+ * @param MyClass $a
+ *   A test parameter.
+ * @param TestClass $b
+ *   Parameter using alias.
+ * @param array $data
+ *   An array parameter.
+ * @param callable $callback
+ *   A callable parameter.
+ * @param int $num
+ *   An integer parameter.
+ */
+function foo($a, $b, $data, $callback, $num, $unknown) {
+  $a = new stdClass();
+}
+EOF;
+    $tree = Parser::parseSource($source);
+
+    /** @var \Pharborist\Functions\FunctionDeclarationNode $function */
+    $function = $tree->children(Filter::isInstanceOf('\Pharborist\Functions\FunctionDeclarationNode'))[0];
+
+    $this->assertEquals(['\MyNamespace\MyClass'], $function->getParameter(0)->getTypes());
+    $this->assertEquals(['\MyNamespace\SomeClass'], $function->getParameter(1)->getTypes());
+    $this->assertEquals(['array'], $function->getParameter(2)->getTypes());
+    $this->assertEquals(['callable'], $function->getParameter(3)->getTypes());
+    $this->assertEquals(['int'], $function->getParameter(4)->getTypes());
+    $this->assertEquals(['mixed'], $function->getParameter(5)->getTypes());
   }
 }

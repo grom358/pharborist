@@ -41,4 +41,23 @@ trait FunctionTrait {
     }
     return $this;
   }
+
+  /**
+   * Get the return type of the function as defined by the doc comment.
+   *
+   * @return string[]
+   *   The types as defined by phpdoc standard. Default is ['void'].
+   */
+  public function getReturnTypes() {
+    $types = ['void'];
+    $doc_comment = $this->getDocComment();
+    if (!$doc_comment) {
+      return $types;
+    }
+    $return_tag = $doc_comment->getReturn();
+    if (!$return_tag) {
+      return $types;
+    }
+    return $return_tag->getTypes();
+  }
 }

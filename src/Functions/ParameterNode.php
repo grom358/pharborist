@@ -293,6 +293,36 @@ class ParameterNode extends ParentNode {
    */
   public function getDocBlockTag() {
     $doc_comment = $this->getFunction()->getDocComment();
-    return $doc_comment->getParameter($this->name->getText());
+    return $doc_comment ? $doc_comment->getParameter($this->name->getText()) : NULL;
+  }
+
+  /**
+   * Get the type of the parameter as defined by type hinting or doc comment.
+   *
+   * @return string[]
+   *   The types as defined by phpdoc standard. Default is ['mixed'].
+   */
+  public function getTypes() {
+    // If type hint is set then that is the type of the parameter.
+    if ($this->typeHint) {
+      if ($this->typeHint instanceof TokenNode) {
+        return [$this->typeHint->getText()];
+      }
+      else {
+        return [$this->typeHint->getAbsolutePath()];
+      }
+    }
+    // No type specified means type is mixed.
+    $types = ['mixed'];
+    // Use types from the doc comment if available.
+    $doc_comment = $this->getFunction()->getDocComment();
+    if (!$doc_comment) {
+      return $types;
+    }
+    $param_tag = $doc_comment->getParameter($this->getName());
+    if (!$param_tag) {
+      return $types;
+    }
+    return $param_tag->getTypes();
   }
 }

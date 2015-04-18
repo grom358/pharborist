@@ -132,10 +132,10 @@ abstract class SingleInheritanceNode extends StatementNode {
         $implementList = new CommaListNode();
         foreach ($implements as $implement) {
           if (is_string($implement)) {
-            $implementList->append(NameNode::create($implement));
+            $implementList->appendItem(NameNode::create($implement));
           }
           elseif ($implement instanceof NameNode) {
-            $implementList->append($implement);
+            $implementList->appendItem($implement);
           }
           else {
             throw new \InvalidArgumentException('Invalid $implements argument');

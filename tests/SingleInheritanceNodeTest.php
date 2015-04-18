@@ -100,4 +100,15 @@ class SingleInheritanceNodeTest extends \PHPUnit_Framework_TestCase {
     $class->createProperty('baz', NULL, 'protected');
     $this->assertTrue($class->hasProperty('baz'));
   }
+
+  public function testSetImplementsStringArray() {
+    /** @var \Pharborist\Objects\ClassNode $class */
+    $class = Parser::parseSnippet('class Foo {}');
+    $class->setImplements(['\IteratorAggregate', '\ArrayAccess']);
+    $implements = $class->getImplementList();
+    $this->assertInstanceOf('\Pharborist\CommaListNode', $implements);
+    $items = $implements->getItems();
+    $this->assertCount(2, $items);
+    $this->assertEquals('\IteratorAggregate, \ArrayAccess', $implements->getText());
+  }
 }

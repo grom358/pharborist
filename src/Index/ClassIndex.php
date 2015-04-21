@@ -19,6 +19,11 @@ class ClassIndex extends BaseIndex {
   private $abstract;
 
   /**
+   * @var TraitIndex[]
+   */
+  private $traits;
+
+  /**
    * @var PropertyIndex[]
    */
   private $properties;
@@ -36,10 +41,11 @@ class ClassIndex extends BaseIndex {
    * @param PropertyIndex[] $properties
    * @param MethodIndex[] $methods
    */
-  public function __construct(SourcePosition $position, $name, $final, $abstract, $properties, $methods) {
+  public function __construct(SourcePosition $position, $name, $final, $abstract, $traits, $properties, $methods) {
     parent::__construct($position, $name);
     $this->final = $final;
     $this->abstract = $abstract;
+    $this->traits = $traits;
     $this->properties = $properties;
     $this->methods = $methods;
   }
@@ -60,6 +66,15 @@ class ClassIndex extends BaseIndex {
    */
   public function isAbstract() {
     return $this->abstract;
+  }
+
+  /**
+   * Get traits used by this class.
+   *
+   * @return TraitIndex[]
+   */
+  public function getTraits() {
+    return $this->traits;
   }
 
   /**

@@ -14,13 +14,19 @@ class InterfaceIndex extends BaseIndex {
   private $classes;
 
   /**
+   * @var MethodIndex[]
+   */
+  private $methods;
+
+  /**
    * @param SourcePosition $position
    * @param string $name
    * @param ClassIndex[] $classes
    */
-  public function __construct(SourcePosition $position, $name, array $classes = []) {
+  public function __construct(SourcePosition $position, $name, array $methods = [], array $classes = []) {
     parent::__construct($position, $name);
-    $this->classes = [];
+    $this->methods = $methods;
+    $this->classes = $classes;
   }
 
   /**
@@ -30,6 +36,15 @@ class InterfaceIndex extends BaseIndex {
    */
   public function getClasses() {
     return $this->classes;
+  }
+
+  /**
+   * Get methods defined by this interface.
+   *
+   * @return MethodIndex[]
+   */
+  public function getMethods() {
+    return $this->methods;
   }
 
 }

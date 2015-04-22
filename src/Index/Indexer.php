@@ -221,15 +221,20 @@ class Indexer extends VisitorBase {
         // Store by both index and name.
         $parameters[$i++] = $parameters[$param_name] = $parameter;
       }
-      $methods[$name] = new MethodIndex($method->getSourcePosition(), $name, $visibility, $parameters, $return_types);
+      $final = $method->getFinal() !== NULL;
+      $static = $method->getStatic() !== NULL;
+      $abstract = $method->getAbstract() !== NULL;
+      $methods[$name] = new MethodIndex($method->getSourcePosition(), $name, $visibility, $final, $static, $abstract, $parameters, $return_types);
     }
 
     $class_fqn = $classNode->getName()->getAbsolutePath();
     $final = $classNode->getFinal() !== NULL;
     $abstract = $classNode->getAbstract() !== NULL;
-    // @TODO Actually handle the traits used by the class.
+    // @TODO Actually fill in $interfaces by handling $classNode->getImplementList().
+    $interfaces = array();
+    // @TODO Actually fill in $traits when ClassNode supports traits properly.
     $traits = array();
-    $class_index = new ClassIndex($classNode->getSourcePosition(), $class_fqn, $final, $abstract, $traits, $properties, $methods);
+    $class_index = new ClassIndex($classNode->getSourcePosition(), $class_fqn, $final, $abstract, $interfaces, $traits, $properties, $methods);
     $this->classes[$class_fqn] = $class_index;
     $this->fileClasses[] = $class_fqn;
   }

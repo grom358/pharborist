@@ -24,6 +24,11 @@ class ClassIndex extends BaseIndex {
   private $interfaces;
 
   /**
+   * @var TraitIndex[]
+   */
+  private $traits;
+
+  /**
    * @var PropertyIndex[]
    */
   private $properties;
@@ -39,14 +44,16 @@ class ClassIndex extends BaseIndex {
    * @param bool $final
    * @param bool $abstract
    * @param InterfaceIndex[] $interfaces
+   * @param TraitIndex[] $traits
    * @param PropertyIndex[] $properties
    * @param MethodIndex[] $methods
    */
-  public function __construct(SourcePosition $position, $name, $final, $abstract, $interfaces, $properties, $methods) {
+  public function __construct(SourcePosition $position, $name, $final, $abstract, $interfaces, $traits, $properties, $methods) {
     parent::__construct($position, $name);
     $this->final = $final;
     $this->abstract = $abstract;
     $this->interfaces = $interfaces;
+    $this->traits = $traits;
     $this->properties = $properties;
     $this->methods = $methods;
   }
@@ -76,6 +83,15 @@ class ClassIndex extends BaseIndex {
    */
   public function getInterfaces() {
     return $this->interfaces;
+  }
+
+  /**
+   * Gets traits used by this class.
+   *
+   * @return TraitIndex[]
+   */
+  public function getTraits() {
+    return $this->traits;
   }
 
   /**

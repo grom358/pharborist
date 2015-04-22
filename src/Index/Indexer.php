@@ -232,7 +232,9 @@ class Indexer extends VisitorBase {
     $abstract = $classNode->getAbstract() !== NULL;
     // @TODO Actually fill in $interfaces by handling $classNode->getImplementList().
     $interfaces = array();
-    $class_index = new ClassIndex($classNode->getSourcePosition(), $class_fqn, $final, $abstract, $interfaces, $properties, $methods);
+    // @TODO Actually fill in $traits when ClassNode supports traits properly.
+    $traits = array();
+    $class_index = new ClassIndex($classNode->getSourcePosition(), $class_fqn, $final, $abstract, $interfaces, $traits, $properties, $methods);
     $this->classes[$class_fqn] = $class_index;
     $this->fileClasses[] = $class_fqn;
   }

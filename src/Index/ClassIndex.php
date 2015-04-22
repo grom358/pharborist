@@ -11,6 +11,7 @@ class ClassIndex extends BaseIndex {
   use ConstantContainerTrait;
   use MethodContainerTrait;
   use PropertyContainerTrait;
+  use TraitConsumerTrait;
 
   /**
    * @var bool

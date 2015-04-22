@@ -8,15 +8,24 @@ trait MethodContainerTrait {
    */
   protected $methods;
 
+  /**
+   * @return \Doctrine\Common\Collections\Collection
+   */
   public function getMethods() {
     return $this->methods;
   }
 
+  /**
+   * @return MethodIndex
+   */
   public function getMethod($method) {
     return $this->getMethods()->get($method);
   }
 
-  public function hasConstant($method) {
+  /**
+   * @return boolean
+   */
+  public function hasMethod($method) {
     return $this->getMethods()->containsKey($method);
   }
 

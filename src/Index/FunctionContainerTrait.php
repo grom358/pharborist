@@ -8,14 +8,23 @@ trait FunctionContainerTrait {
    */
   protected $functions;
 
+  /**
+   * @return \Doctrine\Common\Collections\Collection
+   */
   public function getFunctions() {
     return $this->functions;
   }
 
+  /**
+   * @return FunctionIndex
+   */
   public function getFunction($function) {
     return $this->getFunctions()->get($function);
   }
 
+  /**
+   * @return boolean
+   */
   public function hasFunction($function) {
     return $this->getFunctions()->containsKey($function);
   }

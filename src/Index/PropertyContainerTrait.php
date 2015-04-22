@@ -8,14 +8,23 @@ trait PropertyContainerTrait {
    */
   protected $properties;
 
+  /**
+   * @return \Doctrine\Common\Collections\Collection
+   */
   public function getProperties() {
     return $this->properties;
   }
 
+  /**
+   * @return PropertyIndex
+   */
   public function getProperty($property) {
     return $this->getProperties()->get($property);
   }
 
+  /**
+   * @return boolean
+   */
   public function hasProperty($property) {
     return $this->getProperties()->containsKey($property);
   }

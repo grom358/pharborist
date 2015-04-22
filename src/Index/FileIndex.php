@@ -6,6 +6,12 @@ namespace Pharborist\Index;
  */
 class FileIndex {
 
+  use ClassContainerTrait;
+  use ConstantContainerTrait;
+  use FunctionContainerTrait;
+  use InterfaceContainerTrait;
+  use TraitContainerTrait;
+
   /**
    * @var string
    */

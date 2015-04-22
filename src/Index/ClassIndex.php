@@ -86,6 +86,15 @@ class ClassIndex extends BaseIndex {
   }
 
   /**
+   * Gets traits used by this class.
+   *
+   * @return TraitIndex[]
+   */
+  public function getTraits() {
+    return $this->traits;
+  }
+
+  /**
    * Get properties on this class.
    *
    * @return PropertyIndex[]

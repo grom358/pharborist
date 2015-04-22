@@ -3,6 +3,12 @@ namespace Pharborist\Index;
 
 class ProjectIndex {
 
+  use ClassContainerTrait;
+  use ConstantContainerTrait;
+  use FunctionContainerTrait;
+  use InterfaceContainerTrait;
+  use TraitContainerTrait;
+
   /**
    * @var string[]
    */
@@ -12,11 +18,6 @@ class ProjectIndex {
    * @var FileIndex[]
    */
   private $files = [];
-
-  /**
-   * @var ClassIndex[]
-   */
-  private $classes = [];
 
   /**
    * @param string[] $directories
@@ -36,13 +37,6 @@ class ProjectIndex {
    */
   public function getDirectories() {
     return $this->directories;
-  }
-
-  /**
-   * @return ClassIndex[]
-   */
-  public function getClasses() {
-    return $this->classes;
   }
 
   /**

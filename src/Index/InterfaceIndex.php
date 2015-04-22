@@ -8,15 +8,12 @@ use Pharborist\SourcePosition;
  */
 class InterfaceIndex extends BaseIndex {
 
+  use MethodContainerTrait;
+
   /**
    * @var ClassIndex[]
    */
   private $classes;
-
-  /**
-   * @var MethodIndex[]
-   */
-  private $methods;
 
   /**
    * @param SourcePosition $position
@@ -36,15 +33,6 @@ class InterfaceIndex extends BaseIndex {
    */
   public function getClasses() {
     return $this->classes;
-  }
-
-  /**
-   * Get methods defined by this interface.
-   *
-   * @return MethodIndex[]
-   */
-  public function getMethods() {
-    return $this->methods;
   }
 
 }

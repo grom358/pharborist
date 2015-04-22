@@ -8,6 +8,10 @@ use Pharborist\SourcePosition;
  */
 class ClassIndex extends BaseIndex {
 
+  use ConstantContainerTrait;
+  use MethodContainerTrait;
+  use PropertyContainerTrait;
+
   /**
    * @var bool
    */
@@ -22,16 +26,6 @@ class ClassIndex extends BaseIndex {
    * @var InterfaceIndex[]
    */
   private $interfaces;
-
-  /**
-   * @var PropertyIndex[]
-   */
-  private $properties;
-
-  /**
-   * @var MethodIndex[]
-   */
-  private $methods;
 
   /**
    * @param SourcePosition $position
@@ -76,24 +70,6 @@ class ClassIndex extends BaseIndex {
    */
   public function getInterfaces() {
     return $this->interfaces;
-  }
-
-  /**
-   * Get properties on this class.
-   *
-   * @return PropertyIndex[]
-   */
-  public function getProperties() {
-    return $this->properties;
-  }
-
-  /**
-   * Get methods on this class.
-   *
-   * @return MethodIndex[]
-   */
-  public function getMethods() {
-    return $this->methods;
   }
 
 }

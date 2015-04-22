@@ -366,4 +366,34 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
     // $index->getClass('foo')->getProperty('baz') should return a
     // PropertyIndex for @property string $baz
   }
+
+  public function testGetNamespaces() {
+    // $index->getNamespaces() should return a collection of NamespaceIndex
+    // keyed by fully-qualified name
+  }
+
+  public function testGetClassesInNamespace() {
+    // $index->getNamespace('foo')->getClasses() should return a collection
+    // of ClassIndex keyed by fully-qualified name
+  }
+
+  public function testGetInterfacesInNamespace() {
+    // $index->getNamespace('foo')->getInterfaces() should return a collection
+    // of InterfaceIndex keyed by fully-qualified name
+  }
+
+  public function testGetTraitsInNamespace() {
+    // $index->getNamespace('foo')->getTraits() should return a collection
+    // of TraitIndex keyed by fully-qualified name
+  }
+
+  public function testGetFunctionsInNamespace() {
+    // $index->getNamespace('foo')->getFunctions() should return a collection
+    // of FunctionIndex keyed by fully-qualified name
+  }
+
+  public function testGetConstantsInNamespace() {
+    // $index->getNamespace('foo')->getConstants() should return a collection
+    // of ConstantIndex keyed by fully-qualified name
+  }
 }

@@ -19,6 +19,11 @@ class ClassIndex extends BaseIndex {
   private $abstract;
 
   /**
+   * @var InterfaceIndex[]
+   */
+  private $interfaces;
+
+  /**
    * @var PropertyIndex[]
    */
   private $properties;
@@ -33,13 +38,15 @@ class ClassIndex extends BaseIndex {
    * @param string $name
    * @param bool $final
    * @param bool $abstract
+   * @param InterfaceIndex[] $interfaces
    * @param PropertyIndex[] $properties
    * @param MethodIndex[] $methods
    */
-  public function __construct(SourcePosition $position, $name, $final, $abstract, $properties, $methods) {
+  public function __construct(SourcePosition $position, $name, $final, $abstract, $interfaces, $properties, $methods) {
     parent::__construct($position, $name);
     $this->final = $final;
     $this->abstract = $abstract;
+    $this->interfaces = $interfaces;
     $this->properties = $properties;
     $this->methods = $methods;
   }
@@ -60,6 +67,15 @@ class ClassIndex extends BaseIndex {
    */
   public function isAbstract() {
     return $this->abstract;
+  }
+
+  /**
+   * Gets interfaces implemented by this class.
+   *
+   * @return InterfaceIndex[]
+   */
+  public function getInterfaces() {
+    return $this->interfaces;
   }
 
   /**

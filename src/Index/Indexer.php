@@ -227,7 +227,9 @@ class Indexer extends VisitorBase {
     $class_fqn = $classNode->getName()->getAbsolutePath();
     $final = $classNode->getFinal() !== NULL;
     $abstract = $classNode->getAbstract() !== NULL;
-    $class_index = new ClassIndex($classNode->getSourcePosition(), $class_fqn, $final, $abstract, $properties, $methods);
+    // @TODO Actually fill in $interfaces by handling $classNode->getImplementList().
+    $interfaces = array();
+    $class_index = new ClassIndex($classNode->getSourcePosition(), $class_fqn, $final, $abstract, $interfaces, $properties, $methods);
     $this->classes[$class_fqn] = $class_index;
     $this->fileClasses[] = $class_fqn;
   }

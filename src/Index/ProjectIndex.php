@@ -20,6 +20,11 @@ class ProjectIndex {
   private $files = [];
 
   /**
+   * @var NamespaceIndex[]
+   */
+  private $namespaces = [];
+
+  /**
    * @param string[] $directories
    * @param FileIndex[] $files
    * @param ClassIndex[] $classes
@@ -55,5 +60,26 @@ class ProjectIndex {
    */
   public function getFileIndex($filename) {
     return isset($this->files[$filename]) ? $this->files[$filename] : NULL;
+  }
+
+  /**
+   * @return NamespaceIndex[]
+   */
+  public function getNamespaces() {
+    return $this->namespaces;
+  }
+
+  /**
+   * @return NamespaceIndex|NULL
+   */
+  public function getNamespace($ns) {
+    return $this->namespaces[$ns];
+  }
+
+  /**
+   * @return boolean
+   */
+  public function hasNamespace($ns) {
+    return isset($this->namespaces[$ns]);
   }
 }

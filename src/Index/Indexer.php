@@ -221,7 +221,10 @@ class Indexer extends VisitorBase {
         // Store by both index and name.
         $parameters[$i++] = $parameters[$param_name] = $parameter;
       }
-      $methods[$name] = new MethodIndex($method->getSourcePosition(), $name, $visibility, $parameters, $return_types);
+      $final = $method->getFinal() !== NULL;
+      $static = $method->getStatic() !== NULL;
+      $abstract = $method->getAbstract() !== NULL;
+      $methods[$name] = new MethodIndex($method->getSourcePosition(), $name, $visibility, $final, $static, $abstract, $parameters, $return_types);
     }
 
     $class_fqn = $classNode->getName()->getAbsolutePath();

@@ -20,4 +20,12 @@ trait PropertyContainerTrait {
     return $this->getProperties()->containsKey($property);
   }
 
+  public function addProperty(PropertyIndex $property) {
+    $this->getProperties()->set($property->getName(), $property);
+  }
+
+  public function deleteProperty($property) {
+    $this->getProperty($property)->delete();
+  }
+
 }

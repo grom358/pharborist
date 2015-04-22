@@ -20,4 +20,12 @@ trait InterfaceContainerTrait {
     return $this->getInterfaces()->containsKey($interface);
   }
 
+  public function addInterface(InterfaceIndex $interface) {
+    $this->getInterfaces()->set($interface->getName(), $interface);
+  }
+
+  public function deleteInterface($interface) {
+    $this->getInterface($interface)->delete();
+  }
+
 }

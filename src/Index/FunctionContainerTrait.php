@@ -20,4 +20,12 @@ trait FunctionContainerTrait {
     return $this->getFunctions()->containsKey($function);
   }
 
+  public function addFunction(FunctionIndex $function) {
+    $this->getFunctions()->set($function->getName(), $function);
+  }
+
+  public function deleteFunction($function) {
+    $this->getFunction($function)->delete();
+  }
+
 }

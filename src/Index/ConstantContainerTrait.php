@@ -20,4 +20,12 @@ trait ConstantContainerTrait {
     return $this->getConstants()->containsKey($constant);
   }
 
+  public function addConstant(ConstantIndex $constant) {
+    $this->getConstants()->set($constant->getName(), $constant);
+  }
+
+  public function deleteConstant($constant) {
+    $this->getConstant($constant)->delete();
+  }
+
 }

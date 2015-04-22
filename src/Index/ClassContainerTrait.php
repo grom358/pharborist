@@ -20,4 +20,12 @@ trait ClassContainerTrait {
     return $this->getClasses()->containsKey($class);
   }
 
+  public function addClass(ClassIndex $class) {
+    $this->getClasses()->set($class->getName(), $class);
+  }
+
+  public function deleteClass($class) {
+    $this->getClass($class)->delete();
+  }
+
 }

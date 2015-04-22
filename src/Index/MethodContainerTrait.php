@@ -20,4 +20,12 @@ trait MethodContainerTrait {
     return $this->getMethods()->containsKey($method);
   }
 
+  public function addMethod(MethodIndex $method) {
+    $this->getMethods()->set($method->getName(), $method);
+  }
+
+  public function deleteMethod($method) {
+    $this->getMethod($method)->delete();
+  }
+
 }

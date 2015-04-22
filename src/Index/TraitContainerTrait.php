@@ -20,4 +20,12 @@ trait TraitContainerTrait {
     return $this->getTraits()->containsKey($trait);
   }
 
+  public function addTrait(TraitIndex $trait) {
+    $this->getTraits()->set($trait->getName(), $trait);
+  }
+
+  public function deleteTrait($trait) {
+    $this->getTrait($trait)->delete();
+  }
+
 }

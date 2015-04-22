@@ -167,8 +167,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
    * keyed by name.
    */
   public function testGetClassProperties() {
-    $class = $this->index->getClass('Knights\Lancelot');
-    $properties = $class->getProperties();
+    $properties = $this->index->getClass('Knights\Lancelot')->getProperties();
     $this->assertInstanceOf('\Doctrine\Common\Collections\Collection', $properties);
 
     $keys = [
@@ -183,19 +182,47 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
     $this->assertInstanceOf('\Pharborist\Index\PropertyIndex', $properties->get('sword'));
   }
 
+  /**
+   * ClassIndex::getOwnProperties() should return a collection of PropertyIndex,
+   * keyed by name, which are NOT inherited from parent classes.
+   */
   public function testGetClassOwnProperties() {
-    // $index->getClass('foo')->getOwnProperties() returns a collection of
-    // PropertyIndex keyed by name
+    $properties = $this->index->getClass('Knights\Lancelot')->getOwnProperties();
+    $this->assertInstanceOf('\Doctrine\Common\Collections\Collection', $properties);
+    $this->assertEquals([ 'isBerserk' ], $properties->getKeys());
+    $this->assertInstanceOf('\Pharborist\Index\PropertyIndex', $properties['isBerserk']);
   }
 
+  /**
+   * ClassIndex::getMethods() should return a collection of MethodIndex, keyed
+   * by name.
+   */
   public function testGetClassMethods() {
-    // $index->getClass('foo')->getMethods() returns a collection of
-    // MethodIndex keyed by name
+    $methods = $this->index->getClass('Knights\Lancelot')->getMethods();
+    $this->assertInstanceOf('\Doctrine\Common\Collections\Collection', $methods);
+
+    $keys = [
+      'attack',
+      'retreat',
+      'runStrangely',
+    ];
+    $this->assertEquals($keys, $methods->getKeys());
+
+    foreach ($keys as $key) {
+      $this->assertInstanceOf('\Pharborist\Index\MethodIndex', $methods[$key]);
+    }
+    $this->assertInstanceOf('\Pharborist\Index\PropertyIndex', $methods->get('attack'));
   }
 
+  /**
+   * ClassIndex::getOwnMethods() should return a collection of MethodIndex,
+   * keyed by name, which are NOT inherited from parent classes.
+   */
   public function testGetClassOwnMethods() {
-    // $index->getClass('foo')->getOwnMethods() returns a collection of
-    // MethodIndex keyed by name
+    $methods = $this->index->getClass('Knights\Lancelot')->getOwnMethods();
+    $this->assertInstanceOf('\Doctrine\Common\Collections\Collection', $methods);
+    $this->assertEquals([ 'runStrangely' ], $methods->getKeys());
+    $this->assertInstanceOf('\Pharborist\Index\PropertyIndex', $methods['runStrangely']);
   }
 
   public function testGetClassConstants() {

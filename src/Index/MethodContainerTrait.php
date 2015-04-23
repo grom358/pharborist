@@ -29,6 +29,27 @@ trait MethodContainerTrait {
     return $this->getMethods()->containsKey($method);
   }
 
+  /**
+   * @return \Doctrine\Common\Collections\Collection
+   */
+  public function getOwnMethods() {
+    // @TODO
+  }
+
+  /**
+   * @return MethodIndex
+   */
+  public function getOwnMethod($method) {
+    return $this->getOwnMethods()->get($method);
+  }
+
+  /**
+   * @return boolean
+   */
+  public function hasOwnMethod($method) {
+    return $this->getOwnMethods()->containsKey($method);
+  }
+
   public function addMethod(MethodIndex $method) {
     $this->getMethods()->set($method->getName(), $method);
   }

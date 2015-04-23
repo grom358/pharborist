@@ -29,6 +29,27 @@ trait PropertyContainerTrait {
     return $this->getProperties()->containsKey($property);
   }
 
+  /**
+   * @return \Doctrine\Common\Collections\Collection
+   */
+  public function getOwnProperties() {
+    // @TODO
+  }
+
+  /**
+   * @return PropertyIndex
+   */
+  public function getOwnProperty($property) {
+    return $this->getOwnProperties()->get($property);
+  }
+
+  /**
+   * @return boolean
+   */
+  public function hasOwnProperty($property) {
+    return $this->getOwnProperties()->containsKey($property);
+  }
+
   public function addProperty(PropertyIndex $property) {
     $this->getProperties()->set($property->getName(), $property);
   }

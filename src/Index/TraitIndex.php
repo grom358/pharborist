@@ -38,14 +38,14 @@ class TraitIndex extends BaseIndex {
   /**
    * @return boolean
    */
-  public function usedByClass($class) {
+  public function isUsedByClass($class) {
     return $this->getClassesUsing()->containsKey($class);
   }
 
   /**
    * @return boolean
    */
-  public function usedByTrait($trait) {
+  public function isUsedByTrait($trait) {
     return $this->getTraitsUsing()->containsKey($trait);
   }
 
@@ -59,8 +59,8 @@ class TraitIndex extends BaseIndex {
   /**
    * @return boolean
    */
-  public function usedBy($name) {
-    return ($this->usedByClass($name) || $this->usedByTrait($name));
+  public function isUsedBy($name) {
+    return ($this->isUsedByClass($name) || $this->isUsedByTrait($name));
   }
 
   public function delete() {

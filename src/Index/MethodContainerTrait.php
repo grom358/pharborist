@@ -54,6 +54,12 @@ trait MethodContainerTrait {
     $this->getMethods()->set($method->getName(), $method);
   }
 
+  public function deleteMethods() {
+    foreach ($this->getMethods() as $method) {
+      $method->delete();
+    }
+  }
+
   public function deleteMethod($method) {
     $this->getMethod($method)->delete();
   }

@@ -33,6 +33,12 @@ trait ConstantContainerTrait {
     $this->getConstants()->set($constant->getName(), $constant);
   }
 
+  public function deleteConstants() {
+    foreach ($this->getConstants() as $constant) {
+      $constant->delete();
+    }
+  }
+
   public function deleteConstant($constant) {
     $this->getConstant($constant)->delete();
   }

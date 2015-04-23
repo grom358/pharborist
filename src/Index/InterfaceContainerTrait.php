@@ -33,6 +33,12 @@ trait InterfaceContainerTrait {
     $this->getInterfaces()->set($interface->getName(), $interface);
   }
 
+  public function deleteInterfaces() {
+    foreach ($this->getInterfaces() as $interface) {
+      $interface->delete();
+    }
+  }
+
   public function deleteInterface($interface) {
     $this->getInterface($interface)->delete();
   }

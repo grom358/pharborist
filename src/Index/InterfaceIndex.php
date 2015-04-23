@@ -39,7 +39,7 @@ class InterfaceIndex extends ExtendableIndex {
     parent::delete();
 
     foreach ($this->getClasses() as $class) {
-      $class->getInterfaces()->remove($this);
+      $class->getInterfaces()->removeElement($this);
     }
   }
 

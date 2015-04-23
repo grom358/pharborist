@@ -33,6 +33,12 @@ trait TraitContainerTrait {
     $this->getTraits()->set($trait->getName(), $trait);
   }
 
+  public function deleteTraits() {
+    foreach ($this->getTraits() as $trait) {
+      $trait->delete();
+    }
+  }
+
   public function deleteTrait($trait) {
     $this->getTrait($trait)->delete();
   }

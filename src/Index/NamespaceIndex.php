@@ -9,4 +9,12 @@ class NamespaceIndex extends BaseIndex {
   use InterfaceContainerTrait;
   use TraitContainerTrait;
 
+  public function delete() {
+    $this->deleteClasses();
+    $this->deleteConstants();
+    $this->deleteFunctions();
+    $this->deleteInterfaces();
+    $this->deleteTraits();
+  }
+
 }

@@ -33,6 +33,12 @@ trait FunctionContainerTrait {
     $this->getFunctions()->set($function->getName(), $function);
   }
 
+  public function deleteFunctions() {
+    foreach ($this->getFunctions() as $function) {
+      $function->delete();
+    }
+  }
+
   public function deleteFunction($function) {
     $this->getFunction($function)->delete();
   }

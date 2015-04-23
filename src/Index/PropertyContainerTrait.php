@@ -54,6 +54,12 @@ trait PropertyContainerTrait {
     $this->getProperties()->set($property->getName(), $property);
   }
 
+  public function deleteProperties() {
+    foreach ($this->getProperties() as $property) {
+      $property->delete();
+    }
+  }
+
   public function deleteProperty($property) {
     $this->getProperty($property)->delete();
   }

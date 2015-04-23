@@ -4,13 +4,7 @@ namespace Pharborist\Index;
 /**
  * Index information about a file.
  */
-class FileIndex {
-
-  use ClassContainerTrait;
-  use ConstantContainerTrait;
-  use FunctionContainerTrait;
-  use InterfaceContainerTrait;
-  use TraitContainerTrait;
+class FileIndex extends NamespaceIndex {
 
   /**
    * @var string
@@ -26,11 +20,6 @@ class FileIndex {
    * @var string
    */
   private $hash;
-
-  /**
-   * @var string[]
-   */
-  private $classes;
 
   /**
    * @param string $filename
@@ -72,12 +61,4 @@ class FileIndex {
     return $this->hash;
   }
 
-  /**
-   * Return the Fully Qualified Names of the classes defined by this file.
-   *
-   * @return string[]
-   */
-  public function getClasses() {
-    return $this->classes;
-  }
 }

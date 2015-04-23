@@ -63,4 +63,14 @@ class TraitIndex extends BaseIndex {
     return ($this->usedByClass($name) || $this->usedByTrait($name));
   }
 
+  public function delete() {
+    foreach ($this->getClassesUsing() as $class) {
+      $class->getTraitsUsed()->removeElement($this);
+    }
+
+    foreach ($this->getTraitsUsed() as $trait) {
+      $trait->getTraitsUsing()->removeElement($this);
+    }
+  }
+
 }

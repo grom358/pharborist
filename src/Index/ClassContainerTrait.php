@@ -33,6 +33,12 @@ trait ClassContainerTrait {
     $this->getClasses()->set($class->getName(), $class);
   }
 
+  public function deleteClasses() {
+    foreach ($this->getClasses() as $class) {
+      $class->delete();
+    }
+  }
+
   public function deleteClass($class) {
     $this->getClass($class)->delete();
   }

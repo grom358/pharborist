@@ -20,9 +20,9 @@ class ProjectIndex {
   private $files = [];
 
   /**
-   * @var NamespaceIndex[]
+   * @var \Doctrine\Common\Collections\Collection
    */
-  private $namespaces = [];
+  private $namespaces;
 
   /**
    * @param string[] $directories
@@ -63,7 +63,7 @@ class ProjectIndex {
   }
 
   /**
-   * @return NamespaceIndex[]
+   * @return \Doctrine\Common\Collections\Collection
    */
   public function getNamespaces() {
     return $this->namespaces;
@@ -73,13 +73,13 @@ class ProjectIndex {
    * @return NamespaceIndex|NULL
    */
   public function getNamespace($ns) {
-    return $this->namespaces[$ns];
+    return $this->getNamespaces()->get($ns);
   }
 
   /**
    * @return boolean
    */
   public function hasNamespace($ns) {
-    return isset($this->namespaces[$ns]);
+    return $this->getNamespaces()->containsKey($ns);
   }
 }

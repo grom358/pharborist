@@ -6,7 +6,7 @@ use Pharborist\SourcePosition;
 /**
  * Index information about an interface
  */
-class InterfaceIndex extends BaseIndex {
+class InterfaceIndex extends ExtendableIndex {
 
   use MethodContainerTrait;
 

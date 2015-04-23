@@ -6,7 +6,7 @@ use Pharborist\SourcePosition;
 /**
  * Index information about a class.
  */
-class ClassIndex extends BaseIndex {
+class ClassIndex extends ExtendableIndex {
 
   use ConstantContainerTrait;
   use MethodContainerTrait;

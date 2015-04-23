@@ -73,4 +73,15 @@ class ClassIndex extends ExtendableIndex {
     return $this->interfaces;
   }
 
+  public function delete() {
+    parent::delete();
+
+    foreach ($this->getInterfaces() as $interface) {
+      $interface->getClasses()->removeElement($this);
+    }
+    foreach ($this->getTraitsUsed() as $trait) {
+      $trait->getClassesUsing()->removeElement($this);
+    }
+  }
+
 }

@@ -41,4 +41,12 @@ abstract class ExtendableIndex extends BaseIndex {
     return $this->getExtendedBy()->containsKey($child);
   }
 
+  public function delete() {
+    $this->getExtending()->remove(0);
+
+    foreach ($this->getExtendedBy() as $child) {
+      $child->getExtending()->remove(0);
+    }
+  }
+
 }

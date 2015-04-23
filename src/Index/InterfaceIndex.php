@@ -35,4 +35,12 @@ class InterfaceIndex extends ExtendableIndex {
     return $this->classes;
   }
 
+  public function delete() {
+    parent::delete();
+
+    foreach ($this->getClasses() as $class) {
+      $class->getInterfaces()->remove($this);
+    }
+  }
+
 }

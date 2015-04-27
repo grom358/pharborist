@@ -1,10 +1,13 @@
 <?php
 namespace Pharborist;
 
-use Pharborist\Functions\FunctionCallNode;
-use Pharborist\Functions\FunctionDeclarationNode;
-use Pharborist\Objects\ClassMethodCallNode;
-use Pharborist\Objects\ClassNode;
+use Pharborist\Filters\ClassFilter;
+use Pharborist\Filters\ClassMethodCallFilter;
+use Pharborist\Filters\Combinator\AllCombinator;
+use Pharborist\Filters\Combinator\AnyCombinator;
+use Pharborist\Filters\FunctionCallFilter;
+use Pharborist\Filters\FunctionDeclarationFilter;
+use Pharborist\Filters\NodeTypeFilter;
 
 /**
  * Factory for creating common callback filters.
@@ -17,14 +20,13 @@ class Filter {
    * @return callable
    */
   public static function any($filters) {
-    return function ($node) use ($filters) {
-      foreach ($filters as $filter) {
-        if ($filter($node)) {
-          return TRUE;
-        }
-      }
-      return FALSE;
-    };
+    $combinator = new AnyCombinator();
+
+    foreach ($filters as $filter) {
+      $combinator->add($filter);
+    }
+
+    return $combinator;
   }
 
   /**
@@ -34,14 +36,13 @@ class Filter {
    * @return callable
    */
   public static function all($filters) {
-    return function ($node) use ($filters) {
-      foreach ($filters as $filter) {
-        if (!$filter($node)) {
-          return FALSE;
-        }
-      }
-      return TRUE;
-    };
+    $combinator = new AllCombinator();
+
+    foreach ($filters as $filter) {
+      $combinator->add($filter);
+    }
+
+    return $combinator;
   }
 
   /**
@@ -53,16 +54,7 @@ class Filter {
    * @return callable
    */
   public static function isInstanceOf($class_name) {
-    $classes = func_get_args();
-
-    return function ($node) use ($classes) {
-      foreach ($classes as $class) {
-        if ($node instanceof $class) {
-          return TRUE;
-        }
-      }
-      return FALSE;
-    };
+    return new NodeTypeFilter(func_get_args());
   }
 
   /**
@@ -74,14 +66,7 @@ class Filter {
    * @return callable
    */
   public static function isFunction($function_name) {
-    $function_names = func_get_args();
-
-    return function ($node) use ($function_names) {
-      if ($node instanceof FunctionDeclarationNode) {
-        return in_array($node->getName()->getText(), $function_names, TRUE);
-      }
-      return FALSE;
-    };
+    return new FunctionDeclarationFilter(func_get_args());
   }
 
   /**
@@ -93,14 +78,7 @@ class Filter {
    * @return callable
    */
   public static function isFunctionCall($function_name) {
-    $function_names = func_get_args();
-
-    return function ($node) use ($function_names) {
-      if ($node instanceof FunctionCallNode) {
-        return in_array($node->getName()->getText(), $function_names, TRUE);
-      }
-      return FALSE;
-    };
+    return new FunctionCallFilter(func_get_args());
   }
 
   /**
@@ -112,14 +90,7 @@ class Filter {
    * @return callable
    */
   public static function isClass($class_name) {
-    $class_names = func_get_args();
-
-    return function ($node) use ($class_names) {
-      if ($node instanceof ClassNode) {
-        return in_array($node->getName()->getText(), $class_names, TRUE);
-      }
-      return FALSE;
-    };
+    return new ClassFilter(func_get_args());
   }
 
   /**
@@ -129,14 +100,7 @@ class Filter {
    * @return callable
    */
   public static function isClassMethodCall($class_name, $method_name) {
-    return function ($node) use ($class_name, $method_name) {
-      if ($node instanceof ClassMethodCallNode) {
-        $class_matches = $node->getClassName()->getText() === $class_name;
-        $method_matches = $node->getMethodName()->getText() === $method_name;
-        return $class_matches && $method_matches;
-      }
-      return FALSE;
-    };
+    return new ClassMethodCallFilter($class_name, $method_name);
   }
 
   /**

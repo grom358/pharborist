@@ -20,7 +20,7 @@ class ClassFilter implements FilterInterface {
    * {@inheritdoc}
    */
   public function __invoke(NodeInterface $node) {
-    return ($node instanceof ClassNode && in_array($node->getName()->getText(), $this->classes));
+    return $node instanceof ClassNode && in_array($node->getName()->getText(), $this->classes);
   }
 
 }

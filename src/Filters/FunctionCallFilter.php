@@ -20,7 +20,7 @@ class FunctionCallFilter implements FilterInterface {
    * {@inheritdoc}
    */
   public function __invoke(NodeInterface $node) {
-    return ($node instanceof FunctionCallNode && in_array($node->getName()->getText(), $this->functions));
+    return $node instanceof FunctionCallNode && in_array($node->getName()->getText(), $this->functions);
   }
 
 }

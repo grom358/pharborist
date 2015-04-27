@@ -12,7 +12,9 @@ class NodeTypeFilter implements FilterInterface {
   protected $nodeTypes = [];
 
   public function __construct(array $node_types) {
-    $this->nodeTypes = $node_types;
+    $this->nodeTypes = array_map(function ($type) {
+      return ltrim($type, '\\');
+    }, $node_types);
   }
 
   /**

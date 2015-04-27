@@ -19,22 +19,19 @@ interface CombinatorInterface {
   /**
    * Adds a filter to the combinator.
    *
-   * @return self
+   * @return $this
    */
   public function add(callable $filter);
   
   /**
    * Removes a specific filter from the combinator.
    *
-   * @return self
+   * @return $this
    */
   public function drop(callable $filter);
 
   /**
-   * Executes all added filters to the given node.
-   *
-   * @param \Pharborist\NodeInterface $node
-   *  The node to test against the filters.
+   * Tests the given node against all filters in the combinator.
    *
    * @return boolean
    */

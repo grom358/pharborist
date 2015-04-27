@@ -11,6 +11,12 @@ class FunctionDeclarationFilterTest extends \PHPUnit_Framework_TestCase {
     $this->assertTrue($filter($func));
   }
 
+  public function testFailIncorrectFunction() {
+    $filter = new FunctionDeclarationFilter(['foobaz']);
+    $func = Parser::parseSnippet('function wambooli() {}');
+    $this->assertFalse($filter($func));
+  }
+
   public function testFailNonFunction() {
     $filter = new FunctionDeclarationFilter(['foobaz']);
     $var = Token::variable('$baz');

@@ -21,7 +21,13 @@ class NodeTypeFilter implements FilterInterface {
    * {@inheritdoc}
    */
   public function __invoke(NodeInterface $node) {
-    return in_array(get_class($node), $this->nodeTypes);
+    // Don't use in_array(), because it will not account for inheritance.
+    foreach ($this->nodeTypes as $node_type) {
+      if ($node instanceof $node_type) {
+        return TRUE;
+      }
+    }
+    return FALSE;
   }
 
 }

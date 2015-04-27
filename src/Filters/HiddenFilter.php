@@ -5,7 +5,7 @@ namespace Pharborist\Filters;
 use Pharborist\NodeInterface;
 
 /**
- * Inverse of ExecutableFilter; only passes white space and comments.
+ * Inverse of ExecutableFilter. Only passes white space and comments.
  */
 class HiddenFilter extends ExecutableFilter {
 

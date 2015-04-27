@@ -3,7 +3,7 @@ namespace Pharborist;
 
 class TokenIteratorTest extends \PHPUnit_Framework_TestCase {
   public function testSingle() {
-    $test = new TokenNode(T_STRING, 'test', new SourcePosition(1, 1));
+    $test = new TokenNode(T_STRING, 'test', new SourcePosition(NULL, 1, 1, 0));
     $iterator = new TokenIterator([$test]);
     $peek = $iterator->peek(0);
     $this->assertSame($test, $peek);

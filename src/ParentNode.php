@@ -18,7 +18,7 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
   /**
    * @var int
    */
-  protected $childCount;
+  protected $childCount = 0;
 
   protected function getProperties() {
     $properties = get_object_vars($this);
@@ -73,7 +73,7 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
       }
       $child = $child->next;
     }
-    return new NodeCollection($matches);
+    return new NodeCollection($matches, FALSE);
   }
 
   public function clear() {
@@ -353,6 +353,17 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
     return FALSE;
   }
 
+  public function isDescendant(Node $node) {
+    $parent = $node->parent;
+    while ($parent) {
+      if ($parent === $this) {
+        return TRUE;
+      }
+      $parent = $parent->parent;
+    }
+    return FALSE;
+  }
+
   private function _find(&$matches, callable $callback) {
     $child = $this->head;
     while ($child) {
@@ -370,6 +381,38 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
     $matches = [];
     $this->_find($matches, $callback);
     return new NodeCollection($matches, FALSE);
+  }
+
+  public function walk(callable $callback) {
+    $ret = $callback($this);
+    if ($ret === FALSE) {
+      return;
+    }
+    $child = $this->head;
+    while($child) {
+      if($child instanceof ParentNode) {
+        $child->walk($callback);
+      }
+      else {
+        $callback($child);
+      }
+      $child = $child->next;
+    }
+  }
+
+  public function acceptVisitor(VisitorInterface $visitor) {
+    $visitor->visit($this);
+    $child = $this->head;
+    while($child) {
+      if($child instanceof ParentNode) {
+        $child->acceptVisitor($visitor);
+      }
+      else {
+        $visitor->visit($child);
+      }
+      $child = $child->next;
+    }
+    $visitor->visitEnd($this);
   }
 
   public function getSourcePosition() {
@@ -438,16 +481,23 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
    */
   public function getTree() {
     $children = array();
+    $properties = $this->getProperties();
     $child = $this->head;
+    $i = 0;
     while ($child) {
+      $key = array_search($child, $properties, TRUE);
+      if (!$key) {
+        $key = $i;
+      }
       if ($child instanceof ParentNode) {
-        $children[] = $child->getTree();
+        $children[$key] = $child->getTree();
       }
       else {
         /** @var TokenNode $child */
-        $children[] = array($child->getTypeName() => $child->getText());
+        $children[$key] = array($child->getTypeName() => $child->getText());
       }
       $child = $child->next;
+      $i++;
     }
     $class_name = get_class($this);
     return array($class_name => $children);

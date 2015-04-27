@@ -20,8 +20,9 @@ use Pharborist\Variables\VariableNode;
 class Tokenizer {
   private $lineNo;
   private $colNo;
+  private $byteOffset;
 
-  private function parseToken($token) {
+  private function parseToken($token, $filename = NULL) {
     if (is_array($token)) {
       $type = $token[0];
       $text = $token[1];
@@ -31,6 +32,7 @@ class Tokenizer {
     }
     $lineNo = $this->lineNo;
     $colNo = $this->colNo;
+    $byteOffset = $this->byteOffset;
     $newline_count = substr_count($text, "\n");
     if ($newline_count > 0) {
       $this->lineNo += $newline_count;
@@ -40,10 +42,11 @@ class Tokenizer {
     } else {
       $this->colNo += strlen($text);
     }
-    return $this->createToken($type, $text, new SourcePosition($lineNo, $colNo), $newline_count);
+    $this->byteOffset += strlen($text);
+    return $this->createToken($type, $text, new SourcePosition($filename, $lineNo, $colNo, $byteOffset));
   }
 
-  private function createToken($type, $text, $position, $newline_count) {
+  private function createToken($type, $text, $position) {
     switch ($type) {
       case T_VARIABLE:
         return new VariableNode($type, $text, $position);
@@ -74,18 +77,27 @@ class Tokenizer {
       case T_DOC_COMMENT:
         return new DocCommentNode($type, $text, $position);
       case T_WHITESPACE:
-        return new WhitespaceNode($type, $text, $position, $newline_count);
+        return new WhitespaceNode($type, $text, $position);
       default:
         return new TokenNode($type, $text, $position);
     }
   }
 
-  public function getAll($source) {
+  /**
+   * @param string $source
+   *   PHP source code.
+   * @param $filename
+   *   (Optional) PHP filename.
+   * @return TokenNode[]
+   *   Tokens.
+   */
+  public function getAll($source, $filename = NULL) {
+    $this->byteOffset = 0;
     $this->colNo = 1;
     $this->lineNo = 1;
     $tokens = [];
     foreach (token_get_all($source) as $rawToken) {
-      $tokens[] = $this->parseToken($rawToken);
+      $tokens[] = $this->parseToken($rawToken, $filename);
     }
     return $tokens;
   }

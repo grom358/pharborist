@@ -1,6 +1,9 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Types\IntegerNode;
+use Pharborist\Types\StringNode;
+
 class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
   /**
    * Create mock ParentNode.
@@ -461,6 +464,14 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
     $this->assertSame($third, $collection[2]);
   }
 
+  public function testAddTo() {
+    $c1 = new NodeCollection([ StringNode::fromValue('foo') ]);
+    $c2 = new NodeCollection([ IntegerNode::fromValue(30) ]);
+    $union = $c1->addTo($c2);
+    $this->assertCount(2, $union);
+    $this->assertSame($union, $c2);
+  }
+
   /**
    * @expectedException \InvalidArgumentException
    */
@@ -574,5 +585,20 @@ class NodeCollectionTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals(0, $collection->indexOf(Filter::is($first)));
     $this->assertEquals(1, $collection->indexOf(Filter::is($second)));
     $this->assertEquals(-1, $collection->indexOf(Filter::is($not_found)));
+  }
+
+  public function testSort() {
+    $root = new RootNode();
+    $parent = $this->createParentNode();
+    $root->append($parent);
+    $children = [];
+    for ($i = 0; $i <= 21; $i++) {
+      $children[] = $this->createNode();
+    }
+    $parent->append($children);
+    $collection = new NodeCollection($children, TRUE);
+    foreach ($collection as $k => $child) {
+      $this->assertSame($children[$k], $child);
+    }
   }
 }

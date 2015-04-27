@@ -1,6 +1,8 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Namespaces\UseDeclarationNode;
+
 /**
  * A block of statements.
  */
@@ -25,5 +27,56 @@ class StatementBlockNode extends ParentNode {
    */
   public function getStatements() {
     return new NodeCollection($this->_getStatements(), FALSE);
+  }
+
+  /**
+   * Get the use declarations of this statement block.
+   *
+   * @return NodeCollection|UseDeclarationNode[]
+   *   Use declarations.
+   */
+  public function getUseDeclarations() {
+    $declarations = new NodeCollection();
+    /** @var \Pharborist\Namespaces\UseDeclarationBlockNode[] $use_blocks */
+    $use_blocks = $this->children(Filter::isInstanceOf('\Pharborist\Namespaces\UseDeclarationBlockNode'));
+    foreach ($use_blocks as $use_block) {
+      foreach ($use_block->getDeclarationStatements() as $use_statement) {
+        $declarations->add($use_statement->getDeclarations());
+      }
+    }
+    return $declarations;
+  }
+
+  /**
+   * Return mapping of class names to fully qualified names.
+   *
+   * @return array
+   *   Associative array of namespace alias to fully qualified names.
+   */
+  public function getClassAliases() {
+    $mappings = array();
+    foreach ($this->getUseDeclarations() as $use_declaration) {
+      if ($use_declaration->isClass()) {
+        $mappings[$use_declaration->getBoundedName()] = $use_declaration->getName()->getAbsolutePath();
+      }
+    }
+    return $mappings;
+  }
+
+  /**
+   * Append statement to block.
+   *
+   * @param StatementNode $statementNode
+   *   Statement to append.
+   * @return $this
+   */
+  public function appendStatement(StatementNode $statementNode) {
+    if (!$this->isEmpty() && $this->firstToken()->getType() === '{') {
+      $this->lastChild()->before($statementNode);
+    }
+    else {
+      $this->appendChild($statementNode);
+    }
+    return $this;
   }
 }

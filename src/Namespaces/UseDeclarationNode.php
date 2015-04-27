@@ -29,10 +29,16 @@ class UseDeclarationNode extends ParentNode {
    */
   protected $alias;
 
+  /**
+   * @param string $import
+   *   Fully qualified class name; can also include optional alias.
+   *
+   * @return UseDeclarationNode
+   */
   public static function create($import) {
     /** @var UseDeclarationBlockNode $use_declaration_block_node */
     $use_declaration_block_node = Parser::parseSnippet('use ' . $import . ';');
-    return $use_declaration_block_node->firstChild();
+    return $use_declaration_block_node->getDeclarationStatements()[0]->getDeclarations()[0];
   }
 
   /**
@@ -90,6 +96,42 @@ class UseDeclarationNode extends ParentNode {
     }
 
     return $this;
+  }
+
+  /**
+   * Test if use declaration is for class.
+   *
+   * @return bool
+   *   TRUE if use declaration of class.
+   */
+  public function isClass() {
+    /** @var UseDeclarationStatementNode $parent */
+    $parent = $this->parent->parent;
+    return $parent->importsClass();
+  }
+
+  /**
+   * Test if use declaration is for function.
+   *
+   * @return bool
+   *   TRUE if use declaration of function.
+   */
+  public function isFunction() {
+    /** @var UseDeclarationStatementNode $parent */
+    $parent = $this->parent->parent;
+    return $parent->importsFunction();
+  }
+
+  /**
+   * Test if use declaration is for const.
+   *
+   * @return bool
+   *   TRUE if use declaration of const.
+   */
+  public function isConst() {
+    /** @var UseDeclarationStatementNode $parent */
+    $parent = $this->parent->parent;
+    return $parent->importsConst();
   }
 
   /**

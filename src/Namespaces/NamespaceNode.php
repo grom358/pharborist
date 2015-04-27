@@ -2,7 +2,9 @@
 namespace Pharborist\Namespaces;
 
 use Pharborist\Constants\ConstantDeclarationNode;
+use Pharborist\Filter;
 use Pharborist\Functions\FunctionDeclarationNode;
+use Pharborist\Node;
 use Pharborist\Objects\ClassNode;
 use Pharborist\Objects\InterfaceNode;
 use Pharborist\Objects\TraitNode;
@@ -87,5 +89,25 @@ class NamespaceNode extends StatementNode {
    */
   public function owns($node) {
     return $this === $node->getName()->getNamespace();
+  }
+
+  /**
+   * Get use declarations.
+   *
+   * @return UseDeclarationNode[]|\Pharborist\NodeCollection
+   *   Use declarations.
+   */
+  public function getUseDeclarations() {
+    return $this->body->getUseDeclarations();
+  }
+
+  /**
+   * Return mapping of class names to fully qualified names.
+   *
+   * @return array
+   *   Associative array of namespace alias to fully qualified names.
+   */
+  public function getClassAliases() {
+    return $this->body->getClassAliases();
   }
 }

@@ -15,7 +15,7 @@ use Pharborist\Variables\VariableNode;
  */
 class ParameterNode extends ParentNode {
   /**
-   * @var Node
+   * @var NameNode|TokenNode
    */
   protected $typeHint;
 
@@ -83,30 +83,45 @@ class ParameterNode extends ParentNode {
   }
 
   /**
-   * Returns the function which defines this parameter.
+   * Returns the function/method which defines this parameter.
    *
-   * @return FunctionDeclarationNode|\Pharborist\Objects\ClassMethodNode|AnonymousFunctionNode|NULL
+   * @return FunctionDeclarationNode|\Pharborist\Objects\ClassMethodNode|\Pharborist\Objects\InterfaceMethodNode|AnonymousFunctionNode|NULL
    */
   public function getFunction() {
-    return $this->closest(Filter::isInstanceOf('Pharborist\Functions\FunctionDeclarationNode', 'Pharborist\Objects\ClassMethodNode', 'Pharborist\AnonymousFunctionNode'));
+    return $this->closest(Filter::isInstanceOf(
+      'Pharborist\Functions\FunctionDeclarationNode',
+      'Pharborist\Objects\ClassMethodNode',
+      'Pharborist\Objects\InterfaceMethodNode',
+      'Pharborist\Functions\AnonymousFunctionNode'
+    ));
   }
 
   /**
-   * @return Node
+   * @return NameNode|TokenNode
    */
   public function getTypeHint() {
     return $this->typeHint;
   }
 
   /**
-   * @param string|Node $type_hint
+   * @param string|NameNode|TokenNode $type_hint
    * @return $this
    */
   public function setTypeHint($type_hint) {
     if (is_string($type_hint)) {
       $type = $type_hint;
-      $type_hint = new NameNode();
-      $type_hint->append(Token::identifier($type));
+      switch ($type) {
+        case 'array':
+          $type_hint = Token::_array();
+          break;
+        case 'callable':
+          $type_hint = Token::_callable();
+          break;
+        default:
+          $type_hint = new NameNode();
+          $type_hint->append(Token::identifier($type));
+          break;
+      }
     }
     if (isset($this->typeHint)) {
       $this->typeHint->replaceWith($type_hint);
@@ -171,6 +186,14 @@ class ParameterNode extends ParentNode {
 
   /**
    * @return bool
+   *   TRUE if parameter is variadic.
+   */
+  public function isVariadic() {
+    return isset($this->variadic);
+  }
+
+  /**
+   * @return bool
    */
   public function isOptional() {
     return isset($this->value);
@@ -195,7 +218,7 @@ class ParameterNode extends ParentNode {
    *  The parameter name, without the leading $.
    */
   public function getName() {
-    return ltrim($this->getVariable(), '$');
+    return ltrim($this->getVariable()->getText(), '$');
   }
 
   /**
@@ -208,19 +231,19 @@ class ParameterNode extends ParentNode {
    * @return $this
    */
   public function setName($name, $rewrite = FALSE) {
-    $original_name = $this->getName();
+    $original_name = $this->name->getText();
 
-    $this->name->setText('$' . ltrim($name, '$'));
+    $this->name->setName($name);
 
     if ($rewrite) {
       $this
         ->getFunction()
         ->find(Filter::isInstanceOf('\Pharborist\Variables\VariableNode'))
         ->filter(function(VariableNode $node) use ($original_name) {
-          return $node->getText() === '$' . $original_name;
+          return $node->getText() === $original_name;
         })
         ->each(function(VariableNode $node) use ($name) {
-          $node->replaceWith(Token::variable('$' . $name));
+          $node->setText('$' . $name);
         });
     }
 
@@ -260,5 +283,46 @@ class ParameterNode extends ParentNode {
       }
     }
     return $this;
+  }
+
+  /**
+   * Get the doc block tag associated with this parameter.
+   *
+   * @return null|\phpDocumentor\Reflection\DocBlock\Tag\ParamTag
+   *   The parameter tag or null if not found.
+   */
+  public function getDocBlockTag() {
+    $doc_comment = $this->getFunction()->getDocComment();
+    return $doc_comment ? $doc_comment->getParameter($this->name->getText()) : NULL;
+  }
+
+  /**
+   * Get the type of the parameter as defined by type hinting or doc comment.
+   *
+   * @return string[]
+   *   The types as defined by phpdoc standard. Default is ['mixed'].
+   */
+  public function getTypes() {
+    // If type hint is set then that is the type of the parameter.
+    if ($this->typeHint) {
+      if ($this->typeHint instanceof TokenNode) {
+        return [$this->typeHint->getText()];
+      }
+      else {
+        return [$this->typeHint->getAbsolutePath()];
+      }
+    }
+    // No type specified means type is mixed.
+    $types = ['mixed'];
+    // Use types from the doc comment if available.
+    $doc_comment = $this->getFunction()->getDocComment();
+    if (!$doc_comment) {
+      return $types;
+    }
+    $param_tag = $doc_comment->getParameter($this->getName());
+    if (!$param_tag) {
+      return $types;
+    }
+    return $param_tag->getTypes();
   }
 }

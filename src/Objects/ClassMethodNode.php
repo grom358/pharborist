@@ -2,6 +2,7 @@
 namespace Pharborist\Objects;
 
 use Pharborist\Filter;
+use Pharborist\FormatterFactory;
 use Pharborist\Functions\FunctionDeclarationNode;
 use Pharborist\Node;
 use Pharborist\Parser;
@@ -51,11 +52,10 @@ class ClassMethodNode extends ClassStatementNode {
   public static function fromFunction(FunctionDeclarationNode $function_node) {
     $method_name = $function_node->getName()->getText();
     $parameters = $function_node->getParameterList()->getText();
-    $indent = Settings::get('formatter.indent');
-    $nl = Settings::get('formatter.nl');
-    $body = str_replace($nl, $nl . $indent, $function_node->getBody()->getText());
+    $body = $function_node->getBody()->getText();
     /** @var ClassNode $class_node */
     $class_node = Parser::parseSnippet("class Method {public function {$method_name}($parameters) $body}");
+    FormatterFactory::format($class_node);
     $method_node = $class_node->getStatements()[0]->remove();
     return $method_node;
   }
@@ -156,7 +156,9 @@ class ClassMethodNode extends ClassStatementNode {
    * @return string
    */
   public function getFullyQualifiedName() {
-    return $this->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode'))->getName()->getAbsolutePath() . '::' . $this->getName();
+    /** @var ClassNode $class_node */
+    $class_node = $this->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode'));
+    return $class_node->getName()->getAbsolutePath() . '::' . $this->getName()->getText();
   }
 
   protected function childInserted(Node $node) {

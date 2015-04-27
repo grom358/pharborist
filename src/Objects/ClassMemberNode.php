@@ -82,7 +82,7 @@ class ClassMemberNode extends ParentNode {
   /**
    * @return ClassMemberListNode
    */
-  protected function getClassMemberListNode() {
+  public function getClassMemberListNode() {
     return $this->parent()->parent();
   }
 
@@ -122,7 +122,7 @@ class ClassMemberNode extends ParentNode {
    * @return \Pharborist\TokenNode
    */
   public function getVisibility() {
-    $this->getClassMemberListNode()->getVisibility();
+    return $this->getClassMemberListNode()->getVisibility();
   }
 
   /**

@@ -2,18 +2,18 @@
 namespace Pharborist\Objects;
 
 use Pharborist\CommaListNode;
+use Pharborist\Constants\ConstantDeclarationNode;
 use Pharborist\DocCommentTrait;
 use Pharborist\ExpressionNode;
 use Pharborist\Filter;
+use Pharborist\FormatterFactory;
 use Pharborist\Functions\FunctionDeclarationNode;
 use Pharborist\Namespaces\IdentifierNameTrait;
 use Pharborist\Namespaces\NameNode;
 use Pharborist\NodeCollection;
-use Pharborist\Settings;
 use Pharborist\StatementBlockNode;
 use Pharborist\StatementNode;
 use Pharborist\Token;
-use Pharborist\WhitespaceNode;
 
 /**
  * Base class for ClassNode and TraitNode.
@@ -62,6 +62,7 @@ abstract class SingleInheritanceNode extends StatementNode {
         $this->extends->previous()->remove();
         // Remove extends namespace.
         $this->extends->remove();
+        $this->extends = NULL;
       }
     }
     else {
@@ -82,6 +83,13 @@ abstract class SingleInheritanceNode extends StatementNode {
       $this->extends = $extends;
     }
     return $this;
+  }
+
+  /**
+   * @return CommaListNode
+   */
+  public function getImplementList() {
+    return $this->implements;
   }
 
   /**
@@ -107,6 +115,7 @@ abstract class SingleInheritanceNode extends StatementNode {
         $this->implements->previous()->remove();
         // Remove implements list.
         $this->implements->remove();
+        $this->implements = NULL;
       }
     }
     else {
@@ -123,10 +132,10 @@ abstract class SingleInheritanceNode extends StatementNode {
         $implementList = new CommaListNode();
         foreach ($implements as $implement) {
           if (is_string($implement)) {
-            $implementList->append(NameNode::create($implement));
+            $implementList->appendItem(NameNode::create($implement));
           }
           elseif ($implement instanceof NameNode) {
-            $implementList->append($implement);
+            $implementList->appendItem($implement);
           }
           else {
             throw new \InvalidArgumentException('Invalid $implements argument');
@@ -183,13 +192,8 @@ abstract class SingleInheritanceNode extends StatementNode {
     elseif (is_string($method)) {
       $method = ClassMethodNode::create($method);
     }
-    $nl = Settings::get('formatter.nl');
-    $indent = Settings::get('formatter.indent');
-    $this->statements->append([
-      WhitespaceNode::create($nl . $indent),
-      $method,
-      WhitespaceNode::create($nl),
-    ]);
+    $this->statements->lastChild()->before($method);
+    FormatterFactory::format($this);
     return $this;
   }
 
@@ -214,13 +218,13 @@ abstract class SingleInheritanceNode extends StatementNode {
   public function getPropertyNames() {
     return array_map(function (ClassMemberNode $property) {
       return ltrim($property->getName(), '$');
-    }, $this->getAllProperties()->toArray());
+    }, $this->getProperties()->toArray());
   }
 
   /**
    * @return \Pharborist\NodeCollection
    */
-  public function getAllProperties() {
+  public function getProperties() {
     $properties = [];
     /** @var ClassMemberListNode $node */
     foreach ($this->statements->children(Filter::isInstanceOf('\Pharborist\Objects\ClassMemberListNode')) as $node) {
@@ -249,14 +253,45 @@ abstract class SingleInheritanceNode extends StatementNode {
   public function getMethodNames() {
     return array_map(function (ClassMethodNode $node) {
       return $node->getName()->getText();
-    }, $this->getAllMethods()->toArray());
+    }, $this->getMethods()->toArray());
   }
 
   /**
-   * @return \Pharborist\NodeCollection
+   * @return NodeCollection|ClassMethodNode[]
    */
-  public function getAllMethods() {
+  public function getMethods() {
     return $this->statements->children(Filter::isInstanceOf('\Pharborist\Objects\ClassMethodNode'));
+  }
+
+  /**
+   * @return NodeCollection|ConstantDeclarationNode[]
+   */
+  public function getConstants() {
+    $declarations = [];
+    /** @var \Pharborist\Constants\ConstantDeclarationStatementNode $node */
+    foreach ($this->statements->children(Filter::isInstanceOf('\Pharborist\Constants\ConstantDeclarationStatementNode')) as $node) {
+      $declarations = array_merge($declarations, $node->getDeclarations()->toArray());
+    }
+    return new NodeCollection($declarations, FALSE);
+  }
+
+  /**
+   * @return NodeCollection|TraitUseNode[]
+   */
+  public function getTraitUses() {
+    return $this->statements->children(Filter::isInstanceOf('\Pharborist\Objects\TraitUseNode'));
+  }
+
+  /**
+   * @return NodeCollection|NameNode[]
+   */
+  public function getTraits() {
+    $traits = [];
+    /** @var TraitUseNode $node */
+    foreach ($this->getTraitUses() as $node) {
+      $traits = array_merge($traits, $node->getTraits()->toArray());
+    }
+    return new NodeCollection($traits, FALSE);
   }
 
   /**
@@ -271,7 +306,7 @@ abstract class SingleInheritanceNode extends StatementNode {
     $name = ltrim($name, '$');
 
     $properties = $this
-      ->getAllProperties()
+      ->getProperties()
       ->filter(function (ClassMemberNode $property) use ($name) {
         return ltrim($property->getName(), '$') === $name;
       });
@@ -288,7 +323,7 @@ abstract class SingleInheritanceNode extends StatementNode {
    */
   public function getMethod($name) {
     $methods = $this
-      ->getAllMethods()
+      ->getMethods()
       ->filter(function (ClassMethodNode $method) use ($name) {
         return $method->getName()->getText() === $name;
       });
@@ -320,22 +355,14 @@ abstract class SingleInheritanceNode extends StatementNode {
     if (is_string($property)) {
       $property = ClassMemberListNode::create($property);
     }
-    $nl = Settings::get('formatter.nl');
-    $indent = Settings::get('formatter.indent');
     $properties = $this->statements->children(Filter::isInstanceOf('\Pharborist\ClassMemberListNode'));
     if ($properties->count() === 0) {
-      $this->statements->prepend([
-        WhitespaceNode::create($nl . $indent),
-        $property,
-        WhitespaceNode::create($nl),
-      ]);
+      $this->statements->firstChild()->after($property);
     }
     else {
-      $properties->last()->after([
-        WhitespaceNode::create($nl . $nl . $indent),
-        $property
-      ]);
+      $properties->last()->after($property);
     }
+    FormatterFactory::format($this);
     return $this;
   }
 }

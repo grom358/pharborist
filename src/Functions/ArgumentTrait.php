@@ -82,15 +82,30 @@ trait ArgumentTrait {
   /**
    * Insert argument before argument at index.
    *
-   * @param ExpressionNode $argument
+   * @param mixed $argument
+   *   The argument to insert. Can be an ExpressionNode or a scalar value,
+   *   which will be converted to an expression.
    * @param int $index
+   *   Position to insert argument at.
    * @throws \OutOfBoundsException
    *   Index out of bounds.
+   * @throws \InvalidArgumentException
+   *
    * @return $this
    */
-  public function insertArgument(ExpressionNode $argument, $index) {
-    /** @var Node $argument */
-    $this->arguments->insertItem($argument, $index);
+  public function insertArgument($argument, $index) {
+    if (is_scalar($argument)) {
+      $argument = Node::fromValue($argument);
+    }
+
+    if ($argument instanceof ExpressionNode) {
+      /** @var Node $argument */
+      $this->arguments->insertItem($argument, $index);
+    }
+    else {
+      throw new \InvalidArgumentException();
+    }
+
     return $this;
   }
 

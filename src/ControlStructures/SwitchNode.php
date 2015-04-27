@@ -1,23 +1,22 @@
 <?php
 namespace Pharborist\ControlStructures;
 
+use Pharborist\NodeCollection;
+use Pharborist\ParenTrait;
 use Pharborist\StatementNode;
 use Pharborist\ExpressionNode;
-use Pharborist\StatementBlockNode;
 
 /**
  * A switch control structure.
  */
 class SwitchNode extends StatementNode {
+  use ParenTrait;
+  use AltSyntaxTrait;
+
   /**
    * @var ExpressionNode
    */
   protected $switchOn;
-
-  /**
-   * @var StatementBlockNode
-   */
-  protected $cases;
 
   /**
    * @return ExpressionNode
@@ -27,9 +26,9 @@ class SwitchNode extends StatementNode {
   }
 
   /**
-   * @return CaseNode[]
+   * @return NodeCollection|CaseNode[]
    */
   public function getCases() {
-    return $this->cases->getStatements();
+    return new NodeCollection($this->childrenByInstance('\Pharborist\StatementNode'), FALSE);
   }
 }

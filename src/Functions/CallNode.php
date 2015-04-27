@@ -3,6 +3,7 @@ namespace Pharborist\Functions;
 
 use Pharborist\Objects\ObjectMethodCallNode;
 use Pharborist\ParentNode;
+use Pharborist\ParenTrait;
 
 /**
  * Base class of any function or method call, including:
@@ -16,6 +17,7 @@ use Pharborist\ParentNode;
  */
 abstract class CallNode extends ParentNode {
   use ArgumentTrait;
+  use ParenTrait;
 
   /**
    * Allows you to append a method call to this one, building a chain of method

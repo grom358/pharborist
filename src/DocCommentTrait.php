@@ -14,11 +14,11 @@ trait DocCommentTrait {
    */
   public function getIndent() {
     /** @var ParentNode $this */
-    $whitespace_token = $this->firstToken()->previousToken();
-    if ($whitespace_token->getType() !== T_WHITESPACE) {
+    $whitespace_token = $this->previousToken();
+    if (empty($whitespace_token) || $whitespace_token->getType() !== T_WHITESPACE) {
       return '';
     }
-    $nl = Settings::get('formatter.nl');
+    $nl = FormatterFactory::getDefaultFormatter()->getConfig('nl');
     $lines = explode($nl, $whitespace_token->getText());
     $last_line = end($lines);
     return $last_line;
@@ -42,7 +42,7 @@ trait DocCommentTrait {
     else {
       $indent = $this->getIndent();
       $comment->setIndent($indent);
-      $nl = Settings::get('formatter.nl');
+      $nl = FormatterFactory::getDefaultFormatter()->getConfig('nl');
       /** @var ParentNode $this */
       $this->firstChild()->before([
         $comment,

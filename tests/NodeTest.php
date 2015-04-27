@@ -84,6 +84,38 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertNull($node->closest($false));
   }
 
+  public function testFurthest() {
+    $grandparent = $this->createParentNode();
+    $parent = $this->createParentNode();
+    $parent->appendTo($grandparent);
+    $node = $this->createNode('test');
+    $parent->append($node);
+    $parent->append($this->createNode('me'));
+
+    $is_test = function($node) {
+      /** @var Node $node */
+      return $node->getText() === 'test';
+    };
+    $this->assertSame($node, $node->furthest($is_test));
+
+    $is_grandparent = function($node) use ($grandparent) {
+      /** @var Node $node */
+      return $node === $grandparent;
+    };
+    $this->assertSame($grandparent, $node->furthest($is_grandparent));
+
+    $false = function() {
+      return FALSE;
+    };
+    $this->assertNull($node->furthest($false));
+
+    $has_parent = function($node) {
+      /** @var Node $node */
+      return $node->parent() !== NULL;
+    };
+    $this->assertSame($parent, $node->furthest($has_parent));
+  }
+
   public function testIndex() {
     $parent = $this->createParentNode();
     /** @var Node[] $nodes */
@@ -347,6 +379,39 @@ class NodeTest extends \PHPUnit_Framework_TestCase {
       return $this->createNode('replacement');
     });
     $this->assertEquals('replacement', $parent->firstChild()->getText());
+  }
+
+  /**
+   * Test replacing a node with itself.
+   */
+  public function testReplaceWithSelf() {
+    $original = $this->createNode('original');
+    $original->replaceWith($original);
+    $this->assertEquals('original', $original->getText());
+  }
+
+  /**
+   * Test replacing a node with collection containing itself.
+   */
+  public function testReplaceWithContainsSelf() {
+    $original = $this->createNode('original');
+    $parent = $this->createParentNode();
+    $original->appendTo($parent);
+
+    // Test replacing with collection only containing node being replaced.
+    $original->replaceWith([$original]);
+    $this->assertEquals('original', $parent->firstChild()->getText());
+
+    // Test replacing with collection that contains node being replaced.
+    $replacements = [
+      $this->createNode('replacement_before'),
+      $original,
+      $this->createNode('replacement_after')
+    ];
+    $original->replaceWith($replacements);
+    $this->assertEquals('replacement_before', $parent->firstChild()->getText());
+    $this->assertEquals('original', $parent->firstChild()->next()->getText());
+    $this->assertEquals('replacement_after', $parent->lastChild()->getText());
   }
 
   /**

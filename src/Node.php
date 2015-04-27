@@ -89,6 +89,21 @@ abstract class Node implements NodeInterface {
     return NULL;
   }
 
+  public function furthest(callable $callback) {
+    $match = NULL;
+    if ($callback($this)) {
+      $match = $this;
+    }
+    $parent = $this->parent;
+    while ($parent) {
+      if ($callback($parent)) {
+        $match = $parent;
+      }
+      $parent = $parent->parent;
+    }
+    return $match;
+  }
+
   public function index() {
     $index = 0;
     $child = $this->parent->head;
@@ -266,6 +281,9 @@ abstract class Node implements NodeInterface {
       return $this;
     }
     if ($nodes instanceof Node) {
+      if ($nodes === $this) {
+        return $this;
+      }
       $nodes->remove();
       $this->parent->replaceChild($this, $nodes);
     }
@@ -274,13 +292,16 @@ abstract class Node implements NodeInterface {
       $insert_after = NULL;
       /** @var Node $node */
       foreach ($nodes as $node) {
-        $node->remove();
         if ($first) {
-          $this->parent->replaceChild($this, $node);
+          if ($node !== $this) {
+            $node->remove();
+            $this->parent->replaceChild($this, $node);
+          }
           $insert_after = $node;
           $first = FALSE;
         }
         else {
+          $node->remove();
           $insert_after->parent->insertAfterChild($insert_after, $node);
           $insert_after = $node;
         }
@@ -533,7 +554,7 @@ abstract class Node implements NodeInterface {
       return ArrayNode::create($elements);
     }
     elseif (is_string($value)) {
-      return new StringNode(T_STRING, var_export($value, TRUE));
+      return StringNode::create(var_export($value, TRUE));
     }
     elseif (is_integer($value)) {
       return new IntegerNode(T_LNUMBER, $value);
@@ -569,6 +590,52 @@ abstract class Node implements NodeInterface {
   public function hasRoot() {
     return $this->getRoot() !== NULL;
 
+  }
+
+  /**
+   * @return TokenNode
+   */
+  public function previousToken() {
+    $prev_node = $this->previous;
+    if ($prev_node === NULL) {
+      $parent = $this->parent;
+      while ($parent !== NULL && $parent->previous === NULL) {
+        $parent = $parent->parent;
+      }
+      if ($parent === NULL) {
+        return NULL;
+      }
+      $prev_node = $parent->previous;
+    }
+    if ($prev_node instanceof ParentNode) {
+      return $prev_node->isEmpty() ? $prev_node->previousToken() : $prev_node->lastToken();
+    }
+    else {
+      return $prev_node;
+    }
+  }
+
+  /**
+   * @return TokenNode
+   */
+  public function nextToken() {
+    $next_node = $this->next;
+    if ($next_node === NULL) {
+      $parent = $this->parent;
+      while ($parent !== NULL && $parent->next === NULL) {
+        $parent = $parent->parent;
+      }
+      if ($parent === NULL) {
+        return NULL;
+      }
+      $next_node = $parent->next;
+    }
+    if ($next_node instanceof ParentNode) {
+      return $next_node->isEmpty() ? $next_node->nextToken() : $next_node->firstToken();
+    }
+    else {
+      return $next_node;
+    }
   }
 
   public function __clone() {

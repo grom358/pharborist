@@ -1,10 +1,9 @@
 <?php
 namespace Pharborist\Functions;
 
-use Pharborist\Filters\FilterFactoryInterface;
-use Pharborist\Filters\FunctionFilter;
 use Pharborist\Objects\ClassMethodNode;
 use Pharborist\Objects\ClassNode;
+use Pharborist\Namespaces\IdentifierNameTrait;
 use Pharborist\Namespaces\NameNode;
 use Pharborist\Node;
 use Pharborist\Parser;
@@ -15,7 +14,8 @@ use Pharborist\TokenNode;
 /**
  * A function declaration.
  */
-class FunctionDeclarationNode extends StatementNode implements FilterFactoryInterface {
+class FunctionDeclarationNode extends StatementNode {
+  use IdentifierNameTrait;
   use FunctionTrait;
 
   /**

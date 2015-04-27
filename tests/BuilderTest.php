@@ -34,6 +34,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('class MyTest extends BaseClass {}', $classNode->getText());
 
     $classNode->setExtends(NULL);
+    $this->assertNull($classNode->getExtends());
     $this->assertEquals('class MyTest {}', $classNode->getText());
 
     $classNode->setImplements('MyInterface');
@@ -43,6 +44,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('class MyTest implements Yai {}', $classNode->getText());
 
     $classNode->setImplements(NULL);
+    $this->assertNull($classNode->getImplementList());
     $this->assertEquals('class MyTest {}', $classNode->getText());
 
     $classNode->appendProperty('someProperty');
@@ -50,9 +52,36 @@ class BuilderTest extends \PHPUnit_Framework_TestCase {
 
     $expected = <<<'EOF'
 class MyTest {
+
   private $someProperty;
 
-  public function someMethod() {}
+  public function someMethod() {
+  }
+
+}
+EOF;
+    $this->assertEquals($expected, $classNode->getText());
+
+    $property = $classNode->getProperty('someProperty');
+    $property->getClassMemberListNode()->setDocComment(DocCommentNode::create('Some property.'));
+
+    $method = $classNode->getMethod('someMethod');
+    $method->setDocComment(DocCommentNode::create('Some method.'));
+
+    $expected = <<<'EOF'
+class MyTest {
+
+  /**
+   * Some property.
+   */
+  private $someProperty;
+
+  /**
+   * Some method.
+   */
+  public function someMethod() {
+  }
+
 }
 EOF;
     $this->assertEquals($expected, $classNode->getText());
@@ -99,6 +128,12 @@ EOF;
     $arg = $method_call->getArguments()[0];
     $this->assertInstanceOf('\Pharborist\Variables\VariableNode', $arg);
     $this->assertEquals('$a', $arg->getText());
+
+    /** @var ParentNode $expression */
+    $expression = Parser::parseExpression($method_call->getText());
+    $expected = $expression->getTree();
+    $actual = $method_call->getTree();
+    $this->assertEquals($expected, $actual);
   }
 
   public function testClassMethodCall() {
@@ -112,6 +147,12 @@ EOF;
     $arg = $method_call->getArguments()[0];
     $this->assertInstanceOf('\Pharborist\Variables\VariableNode', $arg);
     $this->assertEquals('$a', $arg->getText());
+
+    /** @var ParentNode $expression */
+    $expression = Parser::parseExpression($method_call->getText());
+    $expected = $expression->getTree();
+    $actual = $method_call->getTree();
+    $this->assertEquals($expected, $actual);
   }
 
   public function testChainMethodCall() {
@@ -165,13 +206,15 @@ END;
 
     $expected = <<<'END'
 class DefaultController extends ControllerBase {
+
   public function diff_diffs_overview($node) {
-    drupal_set_title(t('Revisions for %title', array('%title' => $node->title)), PASS_THROUGH);
+    drupal_set_title(t('Revisions for %title', ['%title' => $node->title]), PASS_THROUGH);
     if ($cond) {
       test();
     }
     return drupal_get_form('diff_node_revisions', $node);
   }
+
 }
 END;
 

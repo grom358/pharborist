@@ -6,11 +6,11 @@ pharborist
 A PHP library to query and transform PHP source code via tree operations.
 
 # Roadmap
-* Tests with 100% code coverage
-* Integration with a third party library (suggestions welcomed) for extracting PHPDoc comments
-* API to ease querying and transforming of the syntax tree
-* Build a PHP source code formatter using the library
-* Build a PHP code check using the library
+* [ ] Tests with 100% code coverage
+* [x] Integration with a third party library for PHPDoc comments
+* [ ] API to ease querying and transforming of the syntax tree
+* [ ] Build a PHP source code formatter using the library (Partially completed).
+* [ ] Build a PHP code check using the library
 
 Below is an example of how the API might look once its more developed:
 

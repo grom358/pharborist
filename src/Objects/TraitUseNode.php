@@ -28,9 +28,19 @@ class TraitUseNode extends ClassStatementNode {
   }
 
   /**
+   * @return StatementBlockNode
+   */
+  public function getAdaptationBlock() {
+    return $this->adaptations;
+  }
+
+  /**
    * @return TraitAdaptationStatementNode[]
    */
   public function getAdaptations() {
+    if ($this->adaptations === NULL) {
+      return new NodeCollection();
+    }
     return $this->adaptations->getStatements();
   }
 }

@@ -1,6 +1,8 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Objects\ClassMethodNode;
+
 class DocCommentTest extends \PHPUnit_Framework_TestCase {
   public function testAddDocComment() {
     $original = <<<'EOF'
@@ -26,5 +28,17 @@ EOF;
     $comment = DocCommentNode::create('Test');
     $method->setDocComment($comment);
     $this->assertEquals($expected, $tree->getText());
+  }
+
+  public function testClassMethodNode() {
+    $method = ClassMethodNode::create('foo');
+    $method->setDocComment(DocCommentNode::create('{@inheritdoc}'));
+    $expected = <<<'END'
+/**
+ * {@inheritdoc}
+ */
+public function foo() {}
+END;
+    $this->assertEquals($expected, $method->getText());
   }
 }

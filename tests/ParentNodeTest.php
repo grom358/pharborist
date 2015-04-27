@@ -87,8 +87,68 @@ class ParentNodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertTrue($parent->has($is_me));
   }
 
+  public function testIsDescendant() {
+    $parent = $this->createParentNode();
+    $parent->append($this->createNode('one'));
+    $descendant = $this->createNode('two');
+    $parent->append($descendant);
+    $this->assertTrue($parent->isDescendant($descendant));
+
+    $sub = $this->createParentNode();
+    $descendant = $this->createNode('findMe');
+    $sub->append($descendant);
+    $parent->append($sub);
+    $this->assertTrue($parent->isDescendant($descendant));
+
+    $orphan = $this->createNode('orphan');
+    $this->assertFalse($parent->isDescendant($orphan));
+  }
+
+  public function testWalk() {
+    $parent = $this->createParentNode();
+    $one = $this->createNode('one');
+    $parent->append($one);
+    $two = $this->createNode('two');
+    $parent->append($two);
+    $sub = $this->createParentNode();
+    $leaf = $this->createNode('findMe');
+    $sub->append($leaf);
+    $parent->append($sub);
+
+    $order = [$parent, $one, $two, $sub, $leaf];
+    $i = 0;
+    $test = function($node) use ($order, &$i) {
+      $this->assertSame($order[$i], $node);
+      $i++;
+    };
+    $parent->walk($test);
+  }
+
+  public function testWalkAbort() {
+    $parent = $this->createParentNode();
+    $one = $this->createNode('one');
+    $parent->append($one);
+    $two = $this->createNode('two');
+    $parent->append($two);
+    $sub = $this->createParentNode();
+    $leaf = $this->createNode('findMe');
+    $sub->append($leaf);
+    $parent->append($sub);
+
+    $visited = [];
+    $test = function($node) use (&$visited) {
+      $visited[] = $node;
+      if ($node instanceof ParentNode && $node->parent() !== NULL) {
+        return FALSE;
+      }
+      return TRUE;
+    };
+    $parent->walk($test);
+    $this->assertEquals([$parent, $one, $two, $sub], $visited);
+  }
+
   public function testSourcePosition() {
-    $position = new SourcePosition(4, 2);
+    $position = new SourcePosition(NULL, 4, 2, 0);
     $token = new TokenNode(T_STRING, 'test', $position);
     $grandparent = $this->createParentNode();
     $grandparent->append($token);
@@ -99,7 +159,7 @@ class ParentNodeTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testLastToken() {
-    $position = new SourcePosition(4, 2);
+    $position = new SourcePosition(NULL, 4, 2, 0);
     $token = new TokenNode(T_STRING, 'test', $position);
     $grandparent = $this->createParentNode();
     $parent = $this->createParentNode();

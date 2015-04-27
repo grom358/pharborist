@@ -29,7 +29,7 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
         $sort[$key] = $node;
       }
     }
-    ksort($sort);
+    ksort($sort, SORT_NATURAL);
     return array_merge(array_values($sort), $detached);
   }
 
@@ -645,6 +645,18 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
     }
     $this->nodes = static::sortUnique($this->nodes);
     return $this;
+  }
+
+  /**
+   * Merges the current collection with another one, and returns the other one.
+   *
+   * @param static $collection
+   *  The destination collection.
+   *
+   * @return static
+   */
+  public function addTo(NodeCollection $collection) {
+    return $collection->add($this);
   }
 
   /**

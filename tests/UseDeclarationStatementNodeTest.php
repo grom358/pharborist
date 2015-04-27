@@ -8,6 +8,8 @@ class UseDeclarationStatementNodeTest extends \PHPUnit_Framework_TestCase {
     /** @var UseDeclarationBlockNode $use_block */
     $use_block = Parser::parseSnippet('use MyNamespace\MyClass;');
     $use_declaration_statement = $use_block->getDeclarationStatements()[0];
+    $this->assertCount(1, $use_declaration_statement->getDeclarations());
+    $this->assertEquals($use_declaration_statement->getDeclarations(), $use_declaration_statement->getDeclarationList()->getItems());
     $this->assertTrue($use_declaration_statement->importsClass());
     $this->assertFalse($use_declaration_statement->importsConst());
     $this->assertFalse($use_declaration_statement->importsFunction());
@@ -19,6 +21,8 @@ class UseDeclarationStatementNodeTest extends \PHPUnit_Framework_TestCase {
     /** @var UseDeclarationBlockNode $use_block */
     $use_block = Parser::parseSnippet('use const MyNamespace\MY_CONST;');
     $use_declaration_statement = $use_block->getDeclarationStatements()[0];
+    $this->assertCount(1, $use_declaration_statement->getDeclarations());
+    $this->assertEquals($use_declaration_statement->getDeclarations(), $use_declaration_statement->getDeclarationList()->getItems());
     $this->assertTrue($use_declaration_statement->importsConst());
     $this->assertFalse($use_declaration_statement->importsClass());
     $this->assertFalse($use_declaration_statement->importsFunction());
@@ -30,6 +34,8 @@ class UseDeclarationStatementNodeTest extends \PHPUnit_Framework_TestCase {
     /** @var UseDeclarationBlockNode $use_block */
     $use_block = Parser::parseSnippet('use function MyNamespace\test_func;');
     $use_declaration_statement = $use_block->getDeclarationStatements()[0];
+    $this->assertCount(1, $use_declaration_statement->getDeclarations());
+    $this->assertEquals($use_declaration_statement->getDeclarations(), $use_declaration_statement->getDeclarationList()->getItems());
     $this->assertTrue($use_declaration_statement->importsFunction());
     $this->assertFalse($use_declaration_statement->importsConst());
     $this->assertFalse($use_declaration_statement->importsClass());

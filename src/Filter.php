@@ -1,13 +1,11 @@
 <?php
 namespace Pharborist;
 
-use Pharborist\Filters\ClassFilter;
-use Pharborist\Filters\ClassMethodCallFilter;
-use Pharborist\Filters\Combinator\AllCombinator;
-use Pharborist\Filters\Combinator\AnyCombinator;
-use Pharborist\Filters\FunctionCallFilter;
-use Pharborist\Filters\FunctionDeclarationFilter;
-use Pharborist\Filters\NodeTypeFilter;
+use Pharborist\Functions\FunctionCallNode;
+use Pharborist\Functions\FunctionDeclarationNode;
+use Pharborist\Namespaces\NameNode;
+use Pharborist\Objects\ClassMethodCallNode;
+use Pharborist\Objects\ClassNode;
 
 /**
  * Factory for creating common callback filters.
@@ -20,13 +18,14 @@ class Filter {
    * @return callable
    */
   public static function any($filters) {
-    $combinator = new AnyCombinator();
-
-    foreach ($filters as $filter) {
-      $combinator->add($filter);
-    }
-
-    return $combinator;
+    return function ($node) use ($filters) {
+      foreach ($filters as $filter) {
+        if ($filter($node)) {
+          return TRUE;
+        }
+      }
+      return FALSE;
+    };
   }
 
   /**
@@ -36,13 +35,14 @@ class Filter {
    * @return callable
    */
   public static function all($filters) {
-    $combinator = new AllCombinator();
-
-    foreach ($filters as $filter) {
-      $combinator->add($filter);
-    }
-
-    return $combinator;
+    return function ($node) use ($filters) {
+      foreach ($filters as $filter) {
+        if (!$filter($node)) {
+          return FALSE;
+        }
+      }
+      return TRUE;
+    };
   }
 
   /**
@@ -54,7 +54,16 @@ class Filter {
    * @return callable
    */
   public static function isInstanceOf($class_name) {
-    return new NodeTypeFilter(func_get_args());
+    $classes = func_get_args();
+
+    return function ($node) use ($classes) {
+      foreach ($classes as $class) {
+        if ($node instanceof $class) {
+          return TRUE;
+        }
+      }
+      return FALSE;
+    };
   }
 
   /**
@@ -66,7 +75,14 @@ class Filter {
    * @return callable
    */
   public static function isFunction($function_name) {
-    return new FunctionDeclarationFilter(func_get_args());
+    $function_names = func_get_args();
+
+    return function ($node) use ($function_names) {
+      if ($node instanceof FunctionDeclarationNode) {
+        return in_array($node->getName()->getText(), $function_names, TRUE);
+      }
+      return FALSE;
+    };
   }
 
   /**
@@ -78,7 +94,14 @@ class Filter {
    * @return callable
    */
   public static function isFunctionCall($function_name) {
-    return new FunctionCallFilter(func_get_args());
+    $function_names = func_get_args();
+
+    return function ($node) use ($function_names) {
+      if ($node instanceof FunctionCallNode) {
+        return in_array($node->getName()->getText(), $function_names, TRUE);
+      }
+      return FALSE;
+    };
   }
 
   /**
@@ -90,17 +113,37 @@ class Filter {
    * @return callable
    */
   public static function isClass($class_name) {
-    return new ClassFilter(func_get_args());
+    $class_names = func_get_args();
+
+    return function ($node) use ($class_names) {
+      if ($node instanceof ClassNode) {
+        return in_array($node->getName()->getText(), $class_names, TRUE);
+      }
+      return FALSE;
+    };
   }
 
   /**
    * Callback to filter for calls to a class method.
+   *
    * @param string $class_name
+   *   Fully qualified class name or expression string.
    * @param string $method_name
+   *   Method name or expression string.
    * @return callable
+   *   Filter callable.
    */
   public static function isClassMethodCall($class_name, $method_name) {
-    return new ClassMethodCallFilter($class_name, $method_name);
+    return function ($node) use ($class_name, $method_name) {
+      if ($node instanceof ClassMethodCallNode) {
+        $call_class_name_node = $node->getClassName();
+        $call_class_name = $call_class_name_node instanceof NameNode ? $call_class_name_node->getAbsolutePath() : $call_class_name_node->getText();
+        $class_matches = $call_class_name === $class_name;
+        $method_matches = $node->getMethodName()->getText() === $method_name;
+        return $class_matches && $method_matches;
+      }
+      return FALSE;
+    };
   }
 
   /**
@@ -151,5 +194,46 @@ class Filter {
     return function ($node) use ($match) {
       return $node === $match;
     };
+  }
+
+  /**
+   * Callback to test if match to given token type.
+   *
+   * @param int|string $type
+   *   Token type.
+   *
+   * @return callable
+   */
+  public static function isTokenType($type) {
+    $types = func_get_args();
+    return function ($node) use ($types) {
+      return $node instanceof TokenNode && in_array($node->getType(), $types);
+    };
+  }
+
+  /**
+   * Callback to skip whitespace and comments.
+   *
+   * @return callable
+   */
+  public static function isNotHidden() {
+    return function ($node) {
+      return !($node instanceof WhitespaceNode || $node instanceof CommentNode || $node instanceof LineCommentBlockNode);
+    };
+  }
+
+  /**
+   * Callback to match whitespace containing newlines.
+   *
+   * @return callable
+   */
+  public static function isNewline() {
+    static $callback = NULL;
+    if (!$callback) {
+      $callback = function (Node $node) {
+        return $node instanceof WhitespaceNode && $node->getNewlineCount() > 0;
+      };
+    }
+    return $callback;
   }
 }

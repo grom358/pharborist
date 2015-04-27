@@ -1,0 +1,14 @@
+{
+  "formatter": {
+    "nl": "\n",
+    "indent": 4,
+    "soft_limit": 80,
+    "boolean_null_upper": false,
+    "force_array_new_style": true,
+    "else_newline": false,
+    "declaration_brace_newline": true,
+    "list_keep_wrap": true,
+    "list_wrap_if_long": true,
+    "blank_lines_around_class_body": 0
+  }
+}

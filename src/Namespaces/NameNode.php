@@ -1,6 +1,7 @@
 <?php
 namespace Pharborist\Namespaces;
 
+use Pharborist\Constants\ConstantNode;
 use Pharborist\Filter;
 use Pharborist\Functions\FunctionCallNode;
 use Pharborist\ParentNode;
@@ -50,17 +51,24 @@ class NameNode extends ParentNode {
   /**
    * @return string
    */
-  public function getBasePath() {
-    if ($this->parent() instanceof NamespaceNode) {
+  public function getParentPath() {
+    if ($this->parent instanceof NamespaceNode) {
+      return '\\';
+    }
+    if ($this->isAbsolute()) {
       return '\\';
     }
     /** @var NamespaceNode $namespace */
-    $namespace = $this->closest(Filter::isInstanceOf('\Pharborist\Namespaces\NamespaceNode'));
+    $namespace = $this->getNamespace();
     if (!$namespace) {
       return '\\';
     }
     else {
-      return '\\' . $namespace->getName()->getText() . '\\';
+      $name = $namespace->getName();
+      if (!$name) {
+        return '\\';
+      }
+      return '\\' . $name->getPath() . '\\';
     }
   }
 
@@ -163,33 +171,62 @@ class NameNode extends ParentNode {
   }
 
   /**
+   * Resolve an unqualified name to fully qualified name.
+   *
    * @param string $name
    *   The unqualified name to resolve.
    *
    * @return string
+   *   Fully qualified name.
    */
   protected function resolveUnqualified($name) {
-    if ($this->parent() instanceof NamespaceNode) {
+    if ($this->parent instanceof NamespaceNode) {
       return '\\' . $name;
     }
-    $namespace = $this->closest(Filter::isInstanceOf('\Pharborist\Namespaces\NamespaceNode'));
-    if (!$namespace) {
+    if ($this->parent instanceof UseDeclarationNode) {
       return '\\' . $name;
     }
-    if ($this->parent() instanceof FunctionCallNode) {
-      return $this->getBasePath() . $name;
+    $namespace = $this->getNamespace();
+    $use_declarations = array();
+    if ($namespace) {
+      $use_declarations = $namespace->getBody()->getUseDeclarations();
     }
-    if ($this->parent() instanceof UseDeclarationNode) {
-      return '\\' . $this->getPath();
-    }
-    /** @var UseDeclarationNode $use_declaration */
-    foreach ($namespace->find(Filter::isInstanceOf('\Pharborist\Namespaces\UseDeclarationNode')) as $use_declaration) {
-      $bounded_name = $use_declaration->getBoundedName();
-      if ($bounded_name === $name) {
-        return '\\' . $use_declaration->getName()->getPath();
+    else {
+      /** @var \Pharborist\RootNode $root_node */
+      $root_node = $this->closest(Filter::isInstanceOf('\Pharborist\RootNode'));
+      if ($root_node) {
+        $use_declarations = $root_node->getUseDeclarations();
       }
     }
-    return $this->getBasePath() . $name;
+    if ($this->parent instanceof FunctionCallNode) {
+      /** @var UseDeclarationNode $use_declaration */
+      foreach ($use_declarations as $use_declaration) {
+        if ($use_declaration->isFunction() && $use_declaration->getBoundedName() === $name) {
+          return '\\' . $use_declaration->getName()->getPath();
+        }
+      }
+      return $this->getParentPath() . $name;
+    }
+    elseif ($this->parent instanceof ConstantNode) {
+      /** @var UseDeclarationNode $use_declaration */
+      foreach ($use_declarations as $use_declaration) {
+        if ($use_declaration->isConst() && $use_declaration->getBoundedName() === $name) {
+          return '\\' . $use_declaration->getName()->getPath();
+        }
+      }
+      return $this->getParentPath() . $name;
+    }
+    else {
+      // Name is a class reference.
+      /** @var UseDeclarationNode $use_declaration */
+      foreach ($use_declarations as $use_declaration) {
+        if ($use_declaration->isClass() && $use_declaration->getBoundedName() === $name) {
+          return '\\' . $use_declaration->getName()->getPath();
+        }
+      }
+      // No use declaration so class name refers to class in current namespace.
+      return $this->getParentPath() . $name;
+    }
   }
 
   /**
@@ -211,7 +248,7 @@ class NameNode extends ParentNode {
       }
     }
     else {
-      $path = $absolute ? '\\' : $this->getBasePath();
+      $path = $absolute ? '\\' : $this->getParentPath();
       if ($parts[0]->getType() === T_NAMESPACE) {
         unset($parts[0]);
       }
@@ -227,6 +264,19 @@ class NameNode extends ParentNode {
    * @return boolean
    */
   public function isGlobal() {
-    return $this->getBasePath() === '\\';
+    return $this->getParentPath() === '\\';
+  }
+
+
+  /**
+   * Returns trailing name component of path.
+   *
+   * @return string
+   *   Last component of path.
+   */
+  public function getBaseName() {
+    $path = $this->getAbsolutePath();
+    $parts = explode('\\', $path);
+    return end($parts);
   }
 }

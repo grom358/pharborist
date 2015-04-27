@@ -1,49 +1,117 @@
 <?php
-
 namespace Pharborist;
 
+use Pharborist\Namespaces\UseDeclarationNode;
+
 class UseDeclarationNodeTest extends \PHPUnit_Framework_TestCase {
-  public function testAlias() {
-    /** @var \Pharborist\Namespaces\UseDeclarationNode $has_alias */
-    $has_alias = Parser::parseSnippet('use Cleese as Chapman;')->getDeclarationStatements()[0]->getDeclarations()[0];
-    $this->assertInstanceOf('\Pharborist\Namespaces\UseDeclarationNode', $has_alias);
-    $this->assertEquals('Cleese as Chapman', $has_alias->getText());
-    $this->assertTrue($has_alias->hasAlias());
-    /** @var \Pharborist\TokenNode $alias */
-    $alias = $has_alias->getAlias();
-    $this->assertInstanceOf('\Pharborist\TokenNode', $alias);
-    $this->assertEquals(T_STRING, $alias->getType());
-    $this->assertEquals('Chapman', $alias->getText());
 
-    /** @var \Pharborist\Namespaces\UseDeclarationNode $no_alias $no_alias */
-    $no_alias = Parser::parseSnippet('use Foobaz;')->getDeclarationStatements()[0]->getDeclarations()[0];
-    $this->assertInstanceOf('\Pharborist\Namespaces\UseDeclarationNode', $no_alias);
-    $this->assertFalse($no_alias->hasAlias());
-    $this->assertNull($no_alias->getAlias());
+  public function testImports() {
+    $snippet = <<<'EOF'
+use Foobar;
+use Cleese as Chapman;
+use function MyNamespace\test;
+use function MyNamespace\test as my_func;
+use const MyNamespace\TEST_CONST;
+use const MyNamespace\TEST_CONST as MY_CONST;
+EOF;
+    /** @var \Pharborist\Namespaces\UseDeclarationBlockNode $use_declaration_block */
+    $use_declaration_block = Parser::parseSnippet($snippet);
+    $declarations = $use_declaration_block->getDeclarationStatements();
 
-    $alias = new TokenNode(T_STRING, 'Foobar');
-    $no_alias->setAlias($alias);
-    $this->assertTrue($no_alias->hasAlias());
-    $this->assertSame($no_alias->getAlias(), $alias);
-    $this->assertEquals('Foobaz as Foobar', $no_alias->getText());
+    $declaration = $declarations[0]->getDeclarations()[0];
+    $this->assertTrue($declaration->isClass());
+    $this->assertFalse($declaration->isFunction());
+    $this->assertFalse($declaration->isConst());
+    $this->assertFalse($declaration->hasAlias());
+    $this->assertEquals('\Foobar', $declaration->getName()->getAbsolutePath());
+    $this->assertEquals('Foobar', $declaration->getName()->getText());
+    $this->assertEquals('Foobar', $declaration->getBoundedName());
 
-    $this->assertTrue($no_alias->setAlias('Blorf')->hasAlias());
-    $alias = $no_alias->getAlias();
-    $this->assertInstanceOf('\Pharborist\TokenNode', $alias);
-    $this->assertEquals(T_STRING, $alias->getType());
-    $this->assertEquals('Foobaz as Blorf', $no_alias->getText());
+    $declaration = $declarations[1]->getDeclarations()[0];
+    $this->assertTrue($declaration->isClass());
+    $this->assertFalse($declaration->isFunction());
+    $this->assertFalse($declaration->isConst());
+    $this->assertTrue($declaration->hasAlias());
+    $this->assertEquals('\Cleese', $declaration->getName()->getAbsolutePath());
+    $this->assertEquals('Cleese', $declaration->getName()->getText());
+    $this->assertEquals('Chapman', $declaration->getAlias()->getText());
+    $this->assertEquals('Chapman', $declaration->getBoundedName());
 
-    $no_alias->setAlias(NULL);
-    $this->assertFalse($no_alias->hasAlias());
-    $this->assertEquals('Foobaz', $no_alias->getText());
+    $declaration = $declarations[2]->getDeclarations()[0];
+    $this->assertFalse($declaration->isClass());
+    $this->assertTrue($declaration->isFunction());
+    $this->assertFalse($declaration->isConst());
+    $this->assertFalse($declaration->hasAlias());
+    $this->assertEquals('\MyNamespace\test', $declaration->getName()->getAbsolutePath());
+    $this->assertEquals('MyNamespace\test', $declaration->getName()->getText());
+    $this->assertEquals('test', $declaration->getBoundedName());
+
+    $declaration = $declarations[3]->getDeclarations()[0];
+    $this->assertFalse($declaration->isClass());
+    $this->assertTrue($declaration->isFunction());
+    $this->assertFalse($declaration->isConst());
+    $this->assertTrue($declaration->hasAlias());
+    $this->assertEquals('\MyNamespace\test', $declaration->getName()->getAbsolutePath());
+    $this->assertEquals('MyNamespace\test', $declaration->getName()->getText());
+    $this->assertEquals('my_func', $declaration->getAlias()->getText());
+    $this->assertEquals('my_func', $declaration->getBoundedName());
+
+    $declaration = $declarations[4]->getDeclarations()[0];
+    $this->assertFalse($declaration->isClass());
+    $this->assertFalse($declaration->isFunction());
+    $this->assertTrue($declaration->isConst());
+    $this->assertFalse($declaration->hasAlias());
+    $this->assertEquals('\MyNamespace\TEST_CONST', $declaration->getName()->getAbsolutePath());
+    $this->assertEquals('MyNamespace\TEST_CONST', $declaration->getName()->getText());
+    $this->assertEquals('TEST_CONST', $declaration->getBoundedName());
+
+    $declaration = $declarations[5]->getDeclarations()[0];
+    $this->assertFalse($declaration->isClass());
+    $this->assertFalse($declaration->isFunction());
+    $this->assertTrue($declaration->isConst());
+    $this->assertTrue($declaration->hasAlias());
+    $this->assertEquals('\MyNamespace\TEST_CONST', $declaration->getName()->getAbsolutePath());
+    $this->assertEquals('MyNamespace\TEST_CONST', $declaration->getName()->getText());
+    $this->assertEquals('MY_CONST', $declaration->getAlias()->getText());
+    $this->assertEquals('MY_CONST', $declaration->getBoundedName());
+  }
+
+  public function testSetAlias() {
+    /** @var \Pharborist\Namespaces\UseDeclarationBlockNode $declaration_block */
+    $declaration_block = Parser::parseSnippet('use Foobar;');
+    $declaration = $declaration_block->getDeclarationStatements()[0]->getDeclarations()[0];
+    $this->assertFalse($declaration->hasAlias());
+
+    $alias = Token::identifier('TestAlias');
+    $declaration->setAlias($alias);
+    $this->assertTrue($declaration->hasAlias());
+    $this->assertEquals('TestAlias', $declaration->getAlias()->getText());
+    $this->assertEquals('Foobar as TestAlias', $declaration->getText());
+
+    $declaration->setAlias('Overridden');
+    $this->assertTrue($declaration->hasAlias());
+    $this->assertEquals('Overridden', $declaration->getAlias()->getText());
+    $this->assertEquals('Foobar as Overridden', $declaration->getText());
+
+    $declaration->setAlias(NULL);
+    $this->assertFalse($declaration->hasAlias());
+    $this->assertEquals('Foobar', $declaration->getText());
   }
 
   /**
    * @expectedException \InvalidArgumentException
    */
   public function testSetAliasInvalidArgument() {
-    /** @var \Pharborist\Namespaces\UseDeclarationNode $has_alias */
-    $has_alias = Parser::parseSnippet('use Cleese as Chapman;')->getDeclarationStatements()[0]->getDeclarations()[0];
-    $has_alias->setAlias(3.141);
+    /** @var \Pharborist\Namespaces\UseDeclarationBlockNode $declaration_block */
+    $declaration_block = Parser::parseSnippet('use Cleese as Chapman;');
+    $declaration = $declaration_block->getDeclarationStatements()[0]->getDeclarations()[0];
+    $declaration->setAlias(3.141);
   }
+
+  public function testCreate() {
+    $declaration = UseDeclarationNode::create('Cleese as Chapman');
+    $this->assertEquals('Cleese', $declaration->getName()->getText());
+    $this->assertEquals('Chapman', $declaration->getAlias()->getText());
+  }
+
 }

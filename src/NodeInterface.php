@@ -51,6 +51,14 @@ interface NodeInterface {
   public function closest(callable $callback);
 
   /**
+   * Get the last node matched by the callback by testing this node and
+   * traversing up through its ancestors in the tree.
+   * @param callable $callback Callback to test for match.
+   * @return Node
+   */
+  public function furthest(callable $callback);
+
+  /**
    * Get the position of the element relative to its sibling elements.
    * @return int
    */

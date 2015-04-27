@@ -1,5 +1,4 @@
 <?php
-
 namespace Pharborist;
 
 class StatementNodeTest extends \PHPUnit_Framework_TestCase {
@@ -13,9 +12,12 @@ class Foobar {
 
 }
 END;
-    $this->assertEquals(7, Parser::parseSnippet($text)->getLineCount());
+    /** @var \Pharborist\StatementNode $node */
+    $node = Parser::parseSnippet($text);
+    $this->assertEquals(7, $node->getLineCount());
     // What, you haven't seen Spaceballs?
-    $this->assertEquals(1, Parser::parseSnippet('$combination = 12345;')->getLineCount());
+    $node = Parser::parseSnippet('$combination = 12345;');
+    $this->assertEquals(1, $node->getLineCount());
 
 
     $text = <<<'END'
@@ -23,7 +25,8 @@ db_delete('variable')
   ->condition('name', 'cron_last')
   ->execute();
 END;
-    $this->assertEquals(3, Parser::parseSnippet($text)->getLineCount());
+    $node = Parser::parseSnippet($text);
+    $this->assertEquals(3, $node->getLineCount());
   }
 
   public function testToComment() {
@@ -45,7 +48,9 @@ END;
 // }
 
 END;
-    $comment = Parser::parseSnippet($original)->toComment();
+    /** @var StatementNode $statement_node */
+    $statement_node = Parser::parseSnippet($original);
+    $comment = $statement_node->toComment();
     $this->assertEquals($expected, $comment->getText());
     $this->assertEquals($original, $comment->uncomment()->getText());
   }
@@ -65,7 +70,19 @@ END;
 // This is a haiku.
 $original
 END;
-    $node = Parser::parseSnippet($original)->addCommentAbove($comment);
+    /** @var StatementNode $statement_node */
+    $statement_node = Parser::parseSnippet($original);
+    $node = $statement_node->addCommentAbove($comment);
     $this->assertEquals($expected, $node->parent()->getText());
+  }
+
+  /**
+   * @expectedException \InvalidArgumentException
+   */
+  public function testInvalidCommentAbove() {
+    $original = '$value = variable_get("my_variable", NULL);';
+    /** @var StatementNode $statement_node */
+    $statement_node = Parser::parseSnippet($original);
+    $statement_node->addCommentAbove(NULL);
   }
 }

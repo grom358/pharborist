@@ -17,7 +17,32 @@ trait MethodTrait {
   /**
    * @var TokenNode
    */
+  protected $name;
+
+  /**
+   * @var TokenNode
+   */
   protected $static;
+
+  /**
+   * @return TokenNode
+   */
+  public function getName() {
+    return $this->name;
+  }
+
+  /**
+   * @param string|TokenNode $name
+   *
+   * @return $this
+   */
+  public function setName($name) {
+    if (is_string($name)) {
+      $name = Token::identifier($name);
+    }
+    $this->name->replaceWith($name);
+    return $this;
+  }
 
   /**
    * @return TokenNode

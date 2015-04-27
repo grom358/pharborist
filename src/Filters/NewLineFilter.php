@@ -5,7 +5,7 @@ namespace Pharborist\Filters;
 use Pharborist\NodeInterface;
 use Pharborist\WhitespaceNode;
 
-class NewLineFilter extends ExecutableFilter{
+class NewLineFilter extends ExecutableFilter {
 
   /**
    * {@inheritdoc}

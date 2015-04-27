@@ -2,27 +2,18 @@
 
 namespace Pharborist\Filters;
 
-use Pharborist\CommentNode;
-use Pharborist\LineCommentBlockNode;
 use Pharborist\NodeInterface;
-use Pharborist\WhitespaceNode;
 
 /**
- * Passes executable nodes only (anything that isn't white space or a comment).
+ * Inverse of HiddenFilter. Passes anything that isn't white space or a comment.
  */
-class ExecutableFilter implements FilterInterface {
+class ExecutableFilter extends HiddenFilter {
 
   /**
    * {@inheritdoc}
    */
   public function __invoke(NodeInterface $node) {
-    return (
-      $node instanceof WhitespaceNode
-      ||
-      $node instanceof CommentNode
-      ||
-      $node instanceof LineCommentBlockNode
-    );
+    return (! parent::__invoke($node));
   }
 
 }

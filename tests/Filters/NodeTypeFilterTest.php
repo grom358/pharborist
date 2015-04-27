@@ -3,7 +3,6 @@
 namespace Pharborist\Filters;
 
 use Pharborist\Functions\FunctionDeclarationNode;
-use Pharborist\Token;
 
 class NodeTypeFilterTest extends \PHPUnit_Framework_TestCase {
 

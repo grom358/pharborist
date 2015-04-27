@@ -7,16 +7,25 @@ use Pharborist\Token;
 
 class ClassFilterTest extends \PHPUnit_Framework_TestCase {
 
+  /**
+   * @var FilterInterface
+   */
+  private $filter;
+
+  public function setUp() {
+    $this->filter = new SingleNodeFilter('Pharborist\Objects\ClassNode', ['Foobaz']);
+  }
+
   public function testPass() {
-    $this->assertTrue((new ClassFilter(['Foobaz']))->__invoke(ClassNode::create('Foobaz')));
+    $this->assertTrue($this->filter->__invoke(ClassNode::create('Foobaz')));
   }
 
   public function testFail() {
-    $this->assertFalse((new ClassFilter(['Foobaz']))->__invoke(ClassNode::create('Blorf')));
+    $this->assertFalse($this->filter->__invoke(ClassNode::create('Blorf')));
   }
 
   public function testTypeFail() {
-    $this->assertFalse((new ClassFilter(['Foobaz']))->__invoke(Token::_abstract()));
+    $this->assertFalse($this->filter->__invoke(Token::_abstract()));
   }
 
 }

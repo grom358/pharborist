@@ -1,8 +1,6 @@
 <?php
 
-namespace Pharborist\Filters;
-
-use Pharborist\Node;
+namespace Pharborist\Filters\Combinator;
 
 abstract class CombinatorBase implements CombinatorInterface {
 
@@ -11,12 +9,16 @@ abstract class CombinatorBase implements CombinatorInterface {
    */
   protected $callbacks = [];
 
+  /**
+   * {@inheritdoc}
+   */
   public function has(callable $filter) {
-    // By default, this implementation is NOT differentiating filters by
-    // their configuration.
     return in_array($filter, $this->callbacks, TRUE);
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function add(callable $filter) {
     if (! $this->has($filter)) {
       $this->callbacks[] = $filter;
@@ -24,6 +26,9 @@ abstract class CombinatorBase implements CombinatorInterface {
     return $this;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function drop(callable $filter) {
     $index = array_search($filter, $this->callbacks, TRUE);
     if (is_integer($index)) {

@@ -11,6 +11,13 @@ class NodeTypeFilter implements FilterInterface {
    */
   protected $nodeTypes = [];
 
+  /**
+   * If TRUE, the configured node types will NOT pass the filter.
+   *
+   * @var boolean
+   */
+  protected $not = FALSE;
+
   public function __construct(array $node_types) {
     $this->nodeTypes = array_map(function ($type) {
       return ltrim($type, '\\');
@@ -18,16 +25,28 @@ class NodeTypeFilter implements FilterInterface {
   }
 
   /**
+   * Negates the filter.
+   *
+   * @return $this
+   */
+  public function not() {
+    $this->not = TRUE;
+    return $this;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function __invoke(NodeInterface $node) {
+    $result = FALSE;
     // Don't use in_array(), because it will not account for inheritance.
     foreach ($this->nodeTypes as $node_type) {
       if ($node instanceof $node_type) {
-        return TRUE;
+        $result = TRUE;
+        break;
       }
     }
-    return FALSE;
+    return ($this->not ? empty($result) : $result);
   }
 
 }

@@ -351,6 +351,7 @@ class ParameterNode extends ParentNode {
         $this->setValue(Node::fromValue($reflector->getDefaultValue()));
       }
     }
+    return $this;
   }
 
   public static function fromReflector(\ReflectionParameter $reflector) {

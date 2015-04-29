@@ -75,5 +75,7 @@ trait FunctionTrait {
       }
       $p->matchReflector($parameters[$i]);
     }
+
+    return $this;
   }
 }

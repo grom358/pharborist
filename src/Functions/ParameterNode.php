@@ -1,6 +1,7 @@
 <?php
 namespace Pharborist\Functions;
 
+use Pharborist\Constants\ConstantNode;
 use Pharborist\ExpressionNode;
 use Pharborist\Filter;
 use Pharborist\Namespaces\NameNode;
@@ -324,5 +325,37 @@ class ParameterNode extends ParentNode {
       return $types;
     }
     return $param_tag->getTypes();
+  }
+
+  public function matchReflector(\ReflectionParameter $reflector) {
+    $this->setReference($reflector->isPassedByReference());
+
+    // Match the reflector's type hint.
+    if ($reflector->isArray()) {
+      $this->setTypeHint('array');
+    }
+    elseif ($reflector->isCallable()) {
+      $this->setTypeHint('callable');
+    }
+    elseif ($class = $reflector->getClass()) {
+      $this->setTypeHint($class->getName());
+    }
+
+    // Match the reflector's default value, if there is one. It will be a
+    // scalar value, an array of scalar values, or a constant.
+    if ($reflector->isDefaultValueAvailable()) {
+      if ($reflector->isDefaultValueConstant()) {
+        $this->setValue(ConstantNode::create($reflector->getDefaultValueConstantName()));
+      }
+      else {
+        $this->setValue(Node::fromValue($reflector->getDefaultValue()));
+      }
+    }
+  }
+
+  public static function fromReflector(\ReflectionParameter $reflector) {
+    $node = static::create($reflector->getName());
+    $node->matchReflector($reflector);
+    return $node;
   }
 }

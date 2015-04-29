@@ -60,4 +60,20 @@ trait FunctionTrait {
     }
     return $return_tag->getTypes();
   }
+
+  public function matchReflector(\ReflectionFunctionAbstract $reflector) {
+    $this->setReference($reflector->returnsReference());
+
+    $parameters = $reflector->getParameters();
+    for ($i = 0; $i < sizeof($parameters); $i++) {
+      try {
+        $p = $this->getParameterAtIndex($i);
+      }
+      catch (\OutOfBoundsException $e) {
+        $p = ParameterNode::create($parameters[$i]->getName());
+        $this->appendParameter($p);
+      }
+      $p->matchReflector($parameters[$i]);
+    }
+  }
 }

@@ -1,6 +1,8 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Functions\ParameterNode;
+
 /**
  * Tests various methods of ParameterNode.
  */
@@ -151,5 +153,15 @@ EOF;
     $this->assertEquals(['callable'], $function->getParameter(3)->getTypes());
     $this->assertEquals(['int'], $function->getParameter(4)->getTypes());
     $this->assertEquals(['mixed'], $function->getParameter(5)->getTypes());
+  }
+
+  public function testMatchReflector() {
+    // @TODO Reflect on a function we define so we can more fully test this
+    $reflector = (new \ReflectionFunction('array_walk'))->getParameters()[0];
+    $node = ParameterNode::create('array')->matchReflector($reflector);
+
+    $this->assertInstanceOf('\Pharborist\TokenNode', $node->getReference());
+    $this->assertSame('&', $node->getReference()->getText());
+    $this->assertNull($node->getValue());
   }
 }

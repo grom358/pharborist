@@ -48,6 +48,7 @@ trait DocCommentTrait {
         $comment,
         WhitespaceNode::create($nl . $indent),
       ]);
+      $this->docComment = $comment;
     }
     return $this;
   }

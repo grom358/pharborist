@@ -37,19 +37,19 @@ trait DocCommentTrait {
    */
   public function setDocComment(DocCommentNode $comment) {
     if (isset($this->docComment)) {
-      $this->docComment->replaceWith($comment);
+      $this->docComment->remove();
     }
-    else {
-      $indent = $this->getIndent();
-      $comment->setIndent($indent);
-      $nl = FormatterFactory::getDefaultFormatter()->getConfig('nl');
-      /** @var ParentNode $this */
-      $this->firstChild()->before([
-        $comment,
-        WhitespaceNode::create($nl . $indent),
-      ]);
-      $this->docComment = $comment;
-    }
+
+    $indent = $this->getIndent();
+    $comment->setIndent($indent);
+    $nl = FormatterFactory::getDefaultFormatter()->getConfig('nl');
+    /** @var ParentNode $this */
+    $this->firstChild()->before([
+      $comment,
+      WhitespaceNode::create($nl . $indent),
+    ]);
+    $this->docComment = $comment;
+
     return $this;
   }
 }

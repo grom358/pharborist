@@ -64,16 +64,13 @@ trait FunctionTrait {
   public function matchReflector(\ReflectionFunctionAbstract $reflector) {
     $this->setReference($reflector->returnsReference());
 
-    $parameters = $reflector->getParameters();
-    for ($i = 0; $i < sizeof($parameters); $i++) {
+    foreach ($reflector->getParameters() as $i => $parameter) {
       try {
-        $p = $this->getParameterAtIndex($i);
+        $this->getParameterAtIndex($i)->matchReflector($parameter);
       }
       catch (\OutOfBoundsException $e) {
-        $p = ParameterNode::create($parameters[$i]->getName());
-        $this->appendParameter($p);
+        $this->appendParameter(ParameterNode::fromReflector($parameter));
       }
-      $p->matchReflector($parameters[$i]);
     }
 
     return $this;

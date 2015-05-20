@@ -161,6 +161,13 @@ class ParameterNode extends ParentNode {
   }
 
   /**
+   * @return bool
+   */
+  public function isReference() {
+    return $this->reference !== NULL;
+  }
+
+  /**
    * @return TokenNode
    */
   public function getVariadic() {

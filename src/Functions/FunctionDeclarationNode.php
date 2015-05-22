@@ -89,4 +89,10 @@ class FunctionDeclarationNode extends StatementNode {
       $this->reference = $node;
     }
   }
+
+  public static function fromReflector(\ReflectionFunction $reflector) {
+    $node = static::create($reflector->getName());
+    $node->matchReflector($reflector);
+    return $node;
+  }
 }

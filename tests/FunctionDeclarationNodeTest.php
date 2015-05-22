@@ -2,6 +2,8 @@
 
 namespace Pharborist;
 
+use Pharborist\Functions\FunctionDeclarationNode;
+
 class FunctionDeclarationNodeTest extends \PHPUnit_Framework_TestCase {
   public function testCloneAsMethodOf() {
     /** @var \Pharborist\Objects\ClassNode $class */
@@ -47,5 +49,13 @@ class FunctionDeclarationNodeTest extends \PHPUnit_Framework_TestCase {
 
     $func = Parser::parseSnippet('/** @return string|int */ function hello() {}');
     $this->assertEquals(['string', 'int'], $func->getReturnTypes());
+  }
+
+  public function testMatchReflector() {
+    $function = FunctionDeclarationNode::create('array_walk');
+    $reflector = new \ReflectionFunction('array_walk');
+    // $function->getReference() should return a TokenNode or NULL, which will
+    // loosely evaluate to TRUE or FALSE
+    $this->assertEquals($function->getReference(), $reflector->returnsReference());
   }
 }

@@ -9,6 +9,7 @@ use Pharborist\Node;
 use Pharborist\ParentNode;
 use Pharborist\Token;
 use Pharborist\TokenNode;
+use Pharborist\Types;
 use Pharborist\Variables\VariableNode;
 
 /**
@@ -331,7 +332,7 @@ class ParameterNode extends ParentNode {
     if (!$param_tag) {
       return $types;
     }
-    return $param_tag->getTypes();
+    return Types::normalize($param_tag->getTypes());
   }
 
   public function matchReflector(\ReflectionParameter $reflector) {

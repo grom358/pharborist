@@ -5,6 +5,7 @@ use Pharborist\DocCommentTrait;
 use Pharborist\ParenTrait;
 use Pharborist\Token;
 use Pharborist\TokenNode;
+use Pharborist\Types;
 
 trait FunctionTrait {
   use ParameterTrait;
@@ -58,7 +59,7 @@ trait FunctionTrait {
     if (!$return_tag) {
       return $types;
     }
-    return $return_tag->getTypes();
+    return Types::normalize($return_tag->getTypes());
   }
 
   public function matchReflector(\ReflectionFunctionAbstract $reflector) {

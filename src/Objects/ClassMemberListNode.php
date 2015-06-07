@@ -7,6 +7,7 @@ use Pharborist\Parser;
 use Pharborist\DocCommentTrait;
 use Pharborist\CommaListNode;
 use Pharborist\Token;
+use Pharborist\Types;
 
 /**
  * A class member list declaration, e.g. `protected $foo, $bar;` Even if you define
@@ -146,6 +147,6 @@ class ClassMemberListNode extends ClassStatementNode {
     }
     /** @var \phpDocumentor\Reflection\DocBlock\Tag\VarTag $var_tag */
     $var_tag = reset($var_tags);
-    return $var_tag->getTypes();
+    return Types::normalize($var_tag->getTypes());
   }
 }

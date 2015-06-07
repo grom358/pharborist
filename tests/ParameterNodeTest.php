@@ -125,6 +125,8 @@ EOF;
   public function testDocCommentTypes() {
     $source = <<<'EOF'
 <?php
+namespace MyNamespace;
+
 use MyNamespace\MyClass;
 use MyNamespace\SomeClass as TestClass;
 
@@ -133,6 +135,12 @@ use MyNamespace\SomeClass as TestClass;
  *   A test parameter.
  * @param TestClass $b
  *   Parameter using alias.
+ * @param \MyNamespace\FullClass $c
+ *   Parameter using fully qualified name.
+ * @param object $d
+ *   Parameter with fully qualified type hint.
+ * @param object $e
+ *   Parameter with relative type hint.
  * @param array $data
  *   An array parameter.
  * @param callable $callback
@@ -140,21 +148,24 @@ use MyNamespace\SomeClass as TestClass;
  * @param int $num
  *   An integer parameter.
  */
-function foo($a, $b, $data, $callback, $num, $unknown) {
+function foo($a, $b, $c, \MyNamespace\FullClass $d, RelativeClass $e, $data, $callback, $num, $unknown) {
   $a = new stdClass();
 }
 EOF;
     $tree = Parser::parseSource($source);
 
     /** @var \Pharborist\Functions\FunctionDeclarationNode $function */
-    $function = $tree->children(Filter::isInstanceOf('\Pharborist\Functions\FunctionDeclarationNode'))[0];
+    $function = $tree->find(Filter::isInstanceOf('\Pharborist\Functions\FunctionDeclarationNode'))[0];
 
     $this->assertEquals(['\MyNamespace\MyClass'], $function->getParameter(0)->getTypes());
     $this->assertEquals(['\MyNamespace\SomeClass'], $function->getParameter(1)->getTypes());
-    $this->assertEquals(['array'], $function->getParameter(2)->getTypes());
-    $this->assertEquals(['callable'], $function->getParameter(3)->getTypes());
-    $this->assertEquals(['int'], $function->getParameter(4)->getTypes());
-    $this->assertEquals(['mixed'], $function->getParameter(5)->getTypes());
+    $this->assertEquals(['\MyNamespace\FullClass'], $function->getParameter(2)->getTypes());
+    $this->assertEquals(['\MyNamespace\FullClass'], $function->getParameter(3)->getTypes());
+    $this->assertEquals(['\MyNamespace\RelativeClass'], $function->getParameter(4)->getTypes());
+    $this->assertEquals(['array'], $function->getParameter(5)->getTypes());
+    $this->assertEquals(['callable'], $function->getParameter(6)->getTypes());
+    $this->assertEquals(['int'], $function->getParameter(7)->getTypes());
+    $this->assertEquals(['mixed'], $function->getParameter(8)->getTypes());
   }
 
   public function testMatchReflector() {

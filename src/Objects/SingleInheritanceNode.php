@@ -222,7 +222,7 @@ abstract class SingleInheritanceNode extends StatementNode {
   }
 
   /**
-   * @return \Pharborist\NodeCollection
+   * @return \Pharborist\NodeCollection|ClassMemberNode[]
    */
   public function getProperties() {
     $properties = [];

@@ -136,4 +136,14 @@ class ClassMemberNode extends ParentNode {
     $this->getClassMemberListNode()->setVisibility($visibility);
     return $this;
   }
+
+  /**
+   * Get the type of the member as defined by doc comment.
+   *
+   * @return string[]
+   *   The types as defined by phpdoc standard. Default is ['mixed'].
+   */
+  public function getTypes() {
+    return $this->getClassMemberListNode()->getTypes();
+  }
 }

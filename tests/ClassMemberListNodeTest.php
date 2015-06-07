@@ -65,4 +65,65 @@ class ClassMemberListNodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertTrue($source->hasProperty('bar'));
     $this->assertTrue($target->hasProperty('bar'));
   }
+
+  public function testGetTypes() {
+    $source = <<<'EOF'
+<?php
+use MyNamespace\MyClass;
+use MyNamespace\SomeClass as TestClass;
+
+class Test {
+  /**
+   * A property using class.
+   *
+   * @var MyClass
+   */
+  private $a;
+
+  /**
+   * Property using class alias.
+   *
+   * @var TestClass
+   */
+  private $b;
+
+  /**
+   * An array property.
+   *
+   * @var array
+   */
+  private $data;
+
+  /**
+   * A callable property.
+   *
+   * @var callable
+   */
+  private $callback;
+
+  /**
+   * An integer property.
+   *
+   * @var int
+   */
+   private $num;
+
+  /**
+   * A generic property.
+   */
+  private $generic;
+}
+EOF;
+    $tree = Parser::parseSource($source);
+    /** @var ClassNode $class */
+    $class = $tree->children(Filter::isInstanceOf('\Pharborist\Objects\ClassNode'))[0];
+    $properties = $class->getProperties();
+
+    $this->assertEquals(['\MyNamespace\MyClass'], $properties[0]->getTypes());
+    $this->assertEquals(['\MyNamespace\SomeClass'], $properties[1]->getTypes());
+    $this->assertEquals(['array'], $properties[2]->getTypes());
+    $this->assertEquals(['callable'], $properties[3]->getTypes());
+    $this->assertEquals(['int'], $properties[4]->getTypes());
+    $this->assertEquals(['mixed'], $properties[5]->getTypes());
+  }
 }

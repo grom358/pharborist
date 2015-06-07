@@ -124,4 +124,28 @@ class ClassMemberListNode extends ClassStatementNode {
     $class->appendProperty($this);
     return $clone;
   }
+
+  /**
+   * Get the type of the members as defined by doc comment.
+   *
+   * @return string[]
+   *   The types as defined by phpdoc standard. Default is ['mixed'].
+   */
+  public function getTypes() {
+    // No type specified means type is mixed.
+    $types = ['mixed'];
+    // Use types from the doc comment if available.
+    $doc_comment = $this->getDocComment();
+    if (!$doc_comment) {
+      return $types;
+    }
+    $doc_block = $doc_comment->getDocBlock();
+    $var_tags = $doc_block->getTagsByName('var');
+    if (empty($var_tags)) {
+      return $types;
+    }
+    /** @var \phpDocumentor\Reflection\DocBlock\Tag\VarTag $var_tag */
+    $var_tag = reset($var_tags);
+    return $var_tag->getTypes();
+  }
 }

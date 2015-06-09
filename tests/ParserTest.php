@@ -463,7 +463,7 @@ EOF;
   public function testTraitDeclaration() {
     $snippet = <<<'EOF'
 /** trait doc comment */
-trait MyTrait extends ParentClass implements SomeInterface, AnotherInterface {
+trait MyTrait {
   // trait statements are covered by testClassDeclaration
   const MY_CONST = 1;
 }
@@ -472,10 +472,6 @@ EOF;
     $trait_declaration = $this->parseSnippet($snippet, '\Pharborist\Objects\TraitNode');
     $this->assertEquals('/** trait doc comment */', $trait_declaration->getDocComment()->getText());
     $this->assertEquals('MyTrait', $trait_declaration->getName()->getText());
-    $this->assertEquals('ParentClass', $trait_declaration->getExtends()->getText());
-    $implements = $trait_declaration->getImplements();
-    $this->assertEquals('SomeInterface', $implements[0]->getText());
-    $this->assertEquals('AnotherInterface', $implements[1]->getText());
 
     $statements = $trait_declaration->getStatements();
     /** @var ConstantDeclarationStatementNode $const_stmt */

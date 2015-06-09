@@ -1,6 +1,9 @@
 <?php
 namespace Pharborist\Objects;
 
+use Pharborist\CommaListNode;
+use Pharborist\Namespaces\NameNode;
+use Pharborist\NodeCollection;
 use Pharborist\Parser;
 use Pharborist\Token;
 use Pharborist\TokenNode;
@@ -20,12 +23,29 @@ class ClassNode extends SingleInheritanceNode {
   protected $final;
 
   /**
+   * @var \Pharborist\Namespaces\NameNode
+   */
+  protected $extends;
+
+  /**
+   * @var CommaListNode
+   */
+  protected $implements;
+
+  /**
    * @param $class_name
    * @return ClassNode
    */
   public static function create($class_name) {
     $class_node = Parser::parseSnippet("class $class_name {}")->remove();
     return $class_node;
+  }
+
+  /**
+   * @return bool
+   */
+  public function isAbstract() {
+    return $this->abstract !== NULL;
   }
 
   /**
@@ -62,6 +82,13 @@ class ClassNode extends SingleInheritanceNode {
   }
 
   /**
+   * @return bool
+   */
+  public function isFinal() {
+    return $this->final !== NULL;
+  }
+
+  /**
    * @return TokenNode
    */
   public function getFinal() {
@@ -90,6 +117,127 @@ class ClassNode extends SingleInheritanceNode {
         // Remove final.
         $this->final->remove();
       }
+    }
+    return $this;
+  }
+
+  /**
+   * @return NameNode
+   */
+  public function getExtends() {
+    return $this->extends;
+  }
+
+  /**
+   * @param string|\Pharborist\Namespaces\NameNode $extends
+   * @return $this
+   */
+  public function setExtends($extends) {
+    if ($extends === NULL) {
+      if (isset($this->extends)) {
+        // Remove whitespace after extends keyword.
+        $this->extends->previous()->remove();
+        // Remove extends keyword.
+        $this->extends->previous()->remove();
+        // Remove whitespace before extends keyword.
+        $this->extends->previous()->remove();
+        // Remove extends namespace.
+        $this->extends->remove();
+        $this->extends = NULL;
+      }
+    }
+    else {
+      if (is_string($extends)) {
+        $extends = NameNode::create($extends);
+      }
+      if (isset($this->extends)) {
+        $this->extends->replaceWith($extends);
+      }
+      else {
+        $this->name->after([
+          Token::space(),
+          Token::_extends(),
+          Token::space(),
+          $extends
+        ]);
+      }
+      $this->extends = $extends;
+    }
+    return $this;
+  }
+
+  /**
+   * @return CommaListNode
+   */
+  public function getImplementList() {
+    return $this->implements;
+  }
+
+  /**
+   * @return NodeCollection|NameNode[]
+   */
+  public function getImplements() {
+    return $this->implements->getItems();
+  }
+
+  /**
+   * @param string|NameNode|CommaListNode|array|NULL $implements
+   * @throws \InvalidArgumentException
+   * @return $this
+   */
+  public function setImplements($implements) {
+    if ($implements === NULL) {
+      if (isset($this->implements)) {
+        // Remove whitespace after implements keyword.
+        $this->implements->previous()->remove();
+        // Remove implements keyword
+        $this->implements->previous()->remove();
+        // Remove whitespace before implements keyword.
+        $this->implements->previous()->remove();
+        // Remove implements list.
+        $this->implements->remove();
+        $this->implements = NULL;
+      }
+    }
+    else {
+      // Type conversions.
+      if (is_string($implements)) {
+        $implements = NameNode::create($implements);
+      }
+      if ($implements instanceof NameNode) {
+        $implementList = new CommaListNode();
+        $implementList->append($implements);
+        $implements = $implementList;
+      }
+      if (is_array($implements)) {
+        $implementList = new CommaListNode();
+        foreach ($implements as $implement) {
+          if (is_string($implement)) {
+            $implementList->appendItem(NameNode::create($implement));
+          }
+          elseif ($implement instanceof NameNode) {
+            $implementList->appendItem($implement);
+          }
+          else {
+            throw new \InvalidArgumentException('Invalid $implements argument');
+          }
+        }
+        $implements = $implementList;
+      }
+      // Set implements.
+      if (isset($this->implements)) {
+        $this->implements->replaceWith($implements);
+      }
+      else {
+        $after = isset($this->extends) ? $this->extends : $this->name;
+        $after->after([
+          Token::space(),
+          Token::_implements(),
+          Token::space(),
+          $implements
+        ]);
+      }
+      $this->implements = $implements;
     }
     return $this;
   }

@@ -33,7 +33,7 @@ class ClassNode extends SingleInheritanceNode {
   protected $implements;
 
   /**
-   * @param $class_name
+   * @param string $class_name
    * @return ClassNode
    */
   public static function create($class_name) {
@@ -177,6 +177,9 @@ class ClassNode extends SingleInheritanceNode {
    * @return NodeCollection|NameNode[]
    */
   public function getImplements() {
+    if (!isset($this->implements)) {
+      return new NodeCollection();
+    }
     return $this->implements->getItems();
   }
 

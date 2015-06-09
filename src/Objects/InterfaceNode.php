@@ -38,6 +38,9 @@ class InterfaceNode extends StatementNode {
    * @return NodeCollection|NameNode[]
    */
   public function getExtends() {
+    if (!isset($this->extends)) {
+      return new NodeCollection();
+    }
     return $this->extends->getItems();
   }
 

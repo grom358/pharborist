@@ -61,6 +61,13 @@ class ClassMethodNode extends ClassStatementNode {
   }
 
   /**
+   * @return bool
+   */
+  public function isAbstract() {
+    return $this->abstract !== NULL;
+  }
+
+  /**
    * Returns the `abstract` keyword from the method declaration.
    *
    * @return TokenNode
@@ -106,6 +113,13 @@ class ClassMethodNode extends ClassStatementNode {
       }
     }
     return $this;
+  }
+
+  /**
+   * @return bool
+   */
+  public function isFinal() {
+    return $this->final !== NULL;
   }
 
   /**

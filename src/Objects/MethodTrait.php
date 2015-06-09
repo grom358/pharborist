@@ -45,6 +45,13 @@ trait MethodTrait {
   }
 
   /**
+   * @return bool
+   */
+  public function isStatic() {
+    return $this->static !== NULL;
+  }
+
+  /**
    * @return TokenNode
    */
   public function getStatic() {

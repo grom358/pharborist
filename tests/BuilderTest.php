@@ -8,6 +8,7 @@ use Pharborist\Objects\ClassMemberListNode;
 use Pharborist\Objects\ClassMethodCallNode;
 use Pharborist\Objects\ClassMethodNode;
 use Pharborist\Objects\ClassNode;
+use Pharborist\Objects\InterfaceNode;
 use Pharborist\Objects\ObjectMethodCallNode;
 
 /**
@@ -228,5 +229,27 @@ END;
   public function testNamespaceNode() {
     $ns = NamespaceNode::create('\Drupal\pantaloons');
     $this->assertInstanceOf('\Pharborist\Namespaces\NamespaceNode', $ns);
+  }
+
+  public function testBuildInterface() {
+    $interfaceNode = InterfaceNode::create('MyInterface');
+    $this->assertEquals('interface MyInterface {}', $interfaceNode->getText());
+
+    $interfaceNode->setExtends(['BaseInterface', 'AnotherInterface']);
+    $this->assertEquals('interface MyInterface extends BaseInterface, AnotherInterface {}', $interfaceNode->getText());
+
+    $interfaceNode->setExtends(NULL);
+    $this->assertEquals('interface MyInterface {}', $interfaceNode->getText());
+
+    $interfaceNode->appendMethod('someMethod');
+
+    $expected = <<<'EOF'
+interface MyInterface {
+
+  public function someMethod();
+
+}
+EOF;
+    $this->assertEquals($expected, $interfaceNode->getText());
   }
 }

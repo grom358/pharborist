@@ -2,6 +2,7 @@
 namespace Pharborist\Objects;
 
 use Pharborist\CommaListNode;
+use Pharborist\Constants\ConstantDeclarationNode;
 use Pharborist\Constants\ConstantDeclarationStatementNode;
 use Pharborist\Filter;
 use Pharborist\Namespaces\NameNode;
@@ -248,7 +249,7 @@ class ClassNode extends SingleInheritanceNode {
   }
 
   /**
-   * @return NodeCollection|ConstantDeclarationStatementNode
+   * @return NodeCollection|ConstantDeclarationNode[]
    */
   public function getConstants() {
     $constants = [];

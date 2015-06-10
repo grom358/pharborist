@@ -124,7 +124,7 @@ class InterfaceNode extends StatementNode {
   }
 
   /**
-   * @return NodeCollection|ConstantDeclarationStatementNode
+   * @return NodeCollection|ConstantDeclarationNode[]
    */
   public function getConstants() {
     $constants = [];

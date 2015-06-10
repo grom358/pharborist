@@ -1,6 +1,8 @@
 <?php
 namespace Pharborist\Objects;
 
+use Pharborist\Constants\ConstantDeclarationNode;
+use Pharborist\Constants\ConstantDeclarationStatementNode;
 use Pharborist\Filter;
 use Pharborist\FormatterFactory;
 use Pharborist\Namespaces\IdentifierNameTrait;
@@ -119,6 +121,18 @@ class InterfaceNode extends StatementNode {
    */
   public function getStatements() {
     return $this->statements->getStatements();
+  }
+
+  /**
+   * @return NodeCollection|ConstantDeclarationStatementNode
+   */
+  public function getConstants() {
+    $constants = [];
+    /** @var ConstantDeclarationStatementNode $node */
+    foreach ($this->statements->children(Filter::isInstanceOf('\Pharborist\Constants\ConstantDeclarationStatementNode')) as $node) {
+      $constants = array_merge($constants, $node->getDeclarations()->toArray());
+    }
+    return new NodeCollection($constants, FALSE);
   }
 
   /**

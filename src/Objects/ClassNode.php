@@ -2,6 +2,8 @@
 namespace Pharborist\Objects;
 
 use Pharborist\CommaListNode;
+use Pharborist\Constants\ConstantDeclarationStatementNode;
+use Pharborist\Filter;
 use Pharborist\Namespaces\NameNode;
 use Pharborist\NodeCollection;
 use Pharborist\Parser;
@@ -243,5 +245,17 @@ class ClassNode extends SingleInheritanceNode {
       $this->implements = $implements;
     }
     return $this;
+  }
+
+  /**
+   * @return NodeCollection|ConstantDeclarationStatementNode
+   */
+  public function getConstants() {
+    $constants = [];
+    /** @var ConstantDeclarationStatementNode $node */
+    foreach ($this->statements->children(Filter::isInstanceOf('\Pharborist\Constants\ConstantDeclarationStatementNode')) as $node) {
+      $constants = array_merge($constants, $node->getDeclarations()->toArray());
+    }
+    return new NodeCollection($constants, FALSE);
   }
 }

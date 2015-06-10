@@ -31,4 +31,16 @@ class InterfaceNodeTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('wambooli', $method->getName()->getText());
     $this->assertNull($interface->getMethod('harrr'));
   }
+
+  public function testGetConstants() {
+    /** @var \Pharborist\Objects\InterfaceNode $interface */
+    $interface = Parser::parseSnippet('interface Foo { const ANSWER = 42; }');
+    $constants = $interface->getConstants();
+    $this->assertCount(1, $constants);
+    /** @var \Pharborist\Constants\ConstantDeclarationNode $constant */
+    $constant = $constants[0];
+    $this->assertInstanceOf('\Pharborist\Constants\ConstantDeclarationNode', $constant);
+    $this->assertEquals('ANSWER', $constant->getName());
+    $this->assertEquals('42', $constant->getValue()->getText());
+  }
 }

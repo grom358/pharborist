@@ -306,21 +306,11 @@ class ParameterNode extends ParentNode {
   }
 
   /**
-   * Get the type of the parameter as defined by type hinting or doc comment.
+   * Get the php doc types for parameter.
    *
    * @return string[]
-   *   The types as defined by phpdoc standard. Default is ['mixed'].
    */
-  public function getTypes() {
-    // If type hint is set then that is the type of the parameter.
-    if ($this->typeHint) {
-      if ($this->typeHint instanceof TokenNode) {
-        return [$this->typeHint->getText()];
-      }
-      else {
-        return [$this->typeHint->getAbsolutePath()];
-      }
-    }
+  protected function getDocTypes() {
     // No type specified means type is mixed.
     $types = ['mixed'];
     // Use types from the doc comment if available.
@@ -333,6 +323,36 @@ class ParameterNode extends ParentNode {
       return $types;
     }
     return Types::normalize($param_tag->getTypes());
+  }
+
+  /**
+   * Get the type of the parameter as defined by type hinting or doc comment.
+   *
+   * @return string[]
+   *   The types as defined by phpdoc standard. Default is ['mixed'].
+   */
+  public function getTypes() {
+    // If type hint is set then that is the type of the parameter.
+    if ($this->typeHint) {
+      if ($this->typeHint instanceof TokenNode) {
+        if ($this->typeHint->getType() === T_ARRAY) {
+          $docTypes = $this->getDocTypes();
+          foreach ($docTypes as $docType) {
+            if ($docType !== 'array' && substr($docType, -2) !== '[]') {
+              return [$this->typeHint->getText()];
+            }
+          }
+          return $docTypes;
+        }
+        else {
+          return [$this->typeHint->getText()];
+        }
+      }
+      else {
+        return [$this->typeHint->getAbsolutePath()];
+      }
+    }
+    return $this->getDocTypes();
   }
 
   public function matchReflector(\ReflectionParameter $reflector) {

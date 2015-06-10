@@ -147,8 +147,10 @@ use MyNamespace\SomeClass as TestClass;
  *   A callable parameter.
  * @param int $num
  *   An integer parameter.
+ * @param Node[] $nodes
+ *   Test array type overriding type hint for arrays.
  */
-function foo($a, $b, $c, \MyNamespace\FullClass $d, RelativeClass $e, $data, $callback, $num, $unknown) {
+function foo($a, $b, $c, \MyNamespace\FullClass $d, RelativeClass $e, $data, $callback, $num, array $nodes, $unknown) {
   $a = new stdClass();
 }
 EOF;
@@ -165,7 +167,8 @@ EOF;
     $this->assertEquals(['array'], $function->getParameter(5)->getTypes());
     $this->assertEquals(['callable'], $function->getParameter(6)->getTypes());
     $this->assertEquals(['int'], $function->getParameter(7)->getTypes());
-    $this->assertEquals(['mixed'], $function->getParameter(8)->getTypes());
+    $this->assertEquals(['\MyNamespace\Node[]'], $function->getParameter(8)->getTypes());
+    $this->assertEquals(['mixed'], $function->getParameter(9)->getTypes());
   }
 
   public function testMatchReflector() {

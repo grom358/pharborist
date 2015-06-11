@@ -86,7 +86,6 @@ class PropertyIndex extends BaseIndex {
   public function compatibleWith(PropertyIndex $propertyIndex) {
     return $this->getName() === $propertyIndex->getName() &&
       $this->isStatic() === $propertyIndex->isStatic() &&
-      $this->getVisibility() === $propertyIndex->getVisibility() &&
-      $this->getTypes() === $propertyIndex->getTypes();
+      $this->getVisibility() === $propertyIndex->getVisibility();
   }
 }

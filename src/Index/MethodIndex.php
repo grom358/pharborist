@@ -108,7 +108,7 @@ class MethodIndex extends FunctionIndex {
       count($this->parameters) === count($methodIndex->parameters);
     if ($compatible) {
       foreach ($this->parameters as $i => $parameter) {
-        if ($parameter->getTypes() !== $methodIndex->parameters[$i]->getTypes()) {
+        if ($parameter->getTypeHint() !== $methodIndex->parameters[$i]->getTypeHint()) {
           return FALSE;
         }
       }

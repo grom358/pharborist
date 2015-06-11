@@ -203,8 +203,13 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
       'A precedence rule was defined for \Example\A::say but this method does not exist at src/Trait.php:55',
       'Trait method \Example\D::say has not been applied, because it has collisions with \Example\C::say at src/Trait.php:59',
       'An alias was defined for \Example\C::missingMethod but this method does not exist at src/Trait.php:65',
-      'Trait property \Example\E::$letter conflicts with existing property \Example\A::$letter at src/Trait.php:73'
+      'Trait property \Example\E::$letter conflicts with existing property \Example\A::$letter at src/Trait.php:73',
+      'Trait property \Example\E::$letter conflicts with existing property \Example\PropertyVisibilityConflict::$letter at src/Trait.php:77',
+      'Declaration of \Example\SayBase::say() must be compatible with \Example\Base::say() at src/Trait.php:95',
     ], $index->getErrors());
+
+    $class = $index->getClass('\Example\SayHello');
+    $this->assertEmpty($class->getTraitMethods());
 
     // Load index from filesystem and check against the saved index.
     $loadedIndex = ProjectIndex::load($baseDir);

@@ -223,7 +223,10 @@ class Indexer extends VisitorBase {
    *   Properties and methods from traits.
    */
   private function resolveTraitUses($index) {
+    $ownProperties = $index->getOwnProperties();
+    /** @var PropertyIndex[] $traitProperties */
     $traitProperties = [];
+    /** @var MethodIndex[] $traitMethods */
     $traitMethods = [];
     $traitPrecedences = $index->getTraitPrecedences();
     $traitAliases = $index->getTraitAliases();
@@ -241,7 +244,6 @@ class Indexer extends VisitorBase {
     foreach ($traits as $traitFqn => $traitIndex) {
       foreach ($traitIndex->getProperties() as $propertyName => $propertyIndex) {
         if (isset($traitProperties[$propertyName])) {
-          /** @var PropertyIndex $existingPropertyIndex */
           $existingPropertyIndex = $traitProperties[$propertyName];
           if ($existingPropertyIndex->compatibleWith($propertyIndex)) {
             $this->errors[] = new Error($index->getPosition(), sprintf(
@@ -267,7 +269,23 @@ class Indexer extends VisitorBase {
           }
         }
         else {
-          $traitProperties[$propertyName] = $propertyIndex;
+          if (isset($ownProperties[$propertyName])) {
+            $existingPropertyIndex = $ownProperties[$propertyName];
+            if (!$existingPropertyIndex->compatibleWith($propertyIndex)) {
+              $this->errors[] = new Error($index->getPosition(), sprintf(
+                "Trait property %s::\$%s conflicts with existing property %s::\$%s at %s:%d",
+                $traitFqn,
+                $propertyName,
+                $existingPropertyIndex->getOwner(),
+                $existingPropertyIndex->getName(),
+                $index->getPosition()->getFilename(),
+                $index->getPosition()->getLineNumber()
+              ));
+            }
+          }
+          else {
+            $traitProperties[$propertyName] = $propertyIndex;
+          }
         }
       }
     }
@@ -405,6 +423,8 @@ class Indexer extends VisitorBase {
         }
       }
     }
+
+    $traitMethods = array_diff_key($traitMethods, $index->getOwnMethods());
 
     $index
       ->setTraitProperties($traitProperties)
@@ -610,6 +630,28 @@ class Indexer extends VisitorBase {
       foreach ($parentClassIndex->getMethods() as $methodName => $methodIndex) {
         if (!isset($ownMethods[$methodName]) && !isset($traitMethods[$methodName]) && $methodIndex->getVisibility() !== 'private') {
           $inheritedMethods[$methodName] = $methodIndex;
+        }
+        elseif ((isset($ownMethods[$methodName]) || isset($traitMethods[$methodName])) && $methodIndex->getVisibility() !== 'private') {
+          // Check the method is compatible with parent.
+          if (isset($ownMethods[$methodName])) {
+            $existingMethodIndex = $ownMethods[$methodName];
+            $position = $existingMethodIndex->getPosition();
+          }
+          else {
+            $existingMethodIndex = $traitMethods[$methodName];
+            $position = $classIndex->getPosition();
+          }
+          if (!$existingMethodIndex->compatibleWith($methodIndex)) {
+            $this->errors[] = new Error($position, sprintf(
+              "Declaration of %s::%s() must be compatible with %s::%s() at %s:%d",
+              $existingMethodIndex->getOwner(),
+              $methodName,
+              $parentFqn,
+              $methodName,
+              $position->getFilename(),
+              $position->getLineNumber()
+            ));
+          }
         }
       }
     }

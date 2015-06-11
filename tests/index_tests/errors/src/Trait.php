@@ -73,3 +73,25 @@ trait E {
 trait ConflictProperty {
   use A, E;
 }
+
+class PropertyVisibilityConflict {
+  use E;
+
+  protected $letter = 'E';
+}
+
+class Base {
+  public function say() {
+    echo 'base', PHP_EOL;
+  }
+}
+
+trait SayBase {
+  public function say($name) {
+    echo 'My name is ', $name, PHP_EOL;
+  }
+}
+
+class Test extends Base {
+  use SayBase;
+}

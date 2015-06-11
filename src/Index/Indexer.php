@@ -593,11 +593,11 @@ class Indexer extends VisitorBase {
     if ($parentFqn) {
       if (!isset($this->classes[$parentFqn])) {
         $this->errors[] = new Error($classIndex->getPosition(), sprintf(
-          "Class %s at %s:%d extends missing class %s",
+          "Class %s extends missing class %s at %s:%d",
           $classIndex->getName(),
+          $parentFqn,
           $classIndex->getPosition()->getFilename(),
-          $classIndex->getPosition()->getLineNumber(),
-          $parentFqn
+          $classIndex->getPosition()->getLineNumber()
         ));
       }
       else {
@@ -609,11 +609,11 @@ class Indexer extends VisitorBase {
     foreach ($classIndex->getImplements() as $interfaceFqn) {
       if (!isset($this->interfaces[$interfaceFqn])) {
         $this->errors[] = new Error($classIndex->getPosition(), sprintf(
-          "Class %s at %s:%d implements missing interface %s",
+          "Class %s implements missing interface %s at %s:%d",
           $classIndex->getName(),
+          $interfaceFqn,
           $classIndex->getPosition()->getFilename(),
-          $classIndex->getPosition()->getLineNumber(),
-          $interfaceFqn
+          $classIndex->getPosition()->getLineNumber()
         ));
       }
       else {
@@ -623,11 +623,11 @@ class Indexer extends VisitorBase {
     foreach ($classIndex->getTraits() as $traitFqn) {
       if (!isset($this->traits[$traitFqn])) {
         $this->errors[] = new Error($classIndex->getPosition(), sprintf(
-          "Class %s at %s:%d uses missing trait %s",
+          "Class %s uses missing trait %s at %s:%d",
           $classIndex->getName(),
+          $traitFqn,
           $classIndex->getPosition()->getFilename(),
-          $classIndex->getPosition()->getLineNumber(),
-          $traitFqn
+          $classIndex->getPosition()->getLineNumber()
         ));
       }
       else {
@@ -680,6 +680,34 @@ class Indexer extends VisitorBase {
           }
           else {
             $inheritedConstants[$constantName] = $constantIndex;
+          }
+        }
+        // Check class implements interface correctly.
+        $methods = array_merge($inheritedMethods, $traitMethods, $ownMethods);
+        foreach ($interfaceIndex->getMethods() as $methodName => $methodIndex) {
+          if (!isset($methods[$methodName])) {
+            $this->errors[] = new Error($classIndex->getPosition(), sprintf(
+              "Class %s does not implement method %s at %s:%d",
+              $classFqn,
+              $methodName,
+              $classIndex->getPosition()->getFilename(),
+              $classIndex->getPosition()->getLineNumber()
+            ));
+          }
+          else {
+            /** @var MethodIndex $classMethodIndex */
+            $classMethodIndex = $methods[$methodName];
+            if (!$classMethodIndex->compatibleWith($methodIndex)) {
+              $this->errors[] = new Error($classMethodIndex->getPosition(), sprintf(
+                "Declaration of %s::%s() must be compatible with %s::%s() at %s:%d",
+                $classFqn,
+                $methodName,
+                $interfaceFqn,
+                $methodName,
+                $classMethodIndex->getPosition()->getFilename(),
+                $classMethodIndex->getPosition()->getLineNumber()
+              ));
+            }
           }
         }
       }

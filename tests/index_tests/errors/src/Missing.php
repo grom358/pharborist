@@ -12,3 +12,9 @@ trait T {
 interface I extends MissingInterface {
 
 }
+
+interface Speaker {
+  public function speak();
+}
+
+class Communicator implements Speaker {}

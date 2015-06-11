@@ -284,10 +284,14 @@ class ProjectIndex {
    * @param string $dir
    *   Directory to load index from.
    *
-   * @return ProjectIndex
+   * @return ProjectIndex|FALSE
    */
   public static function load($dir) {
-    return unserialize(file_get_contents($dir . '/.pharborist'));
+    $contents = @file_get_contents($dir . '/.pharborist');
+    if ($contents === FALSE) {
+      return FALSE;
+    }
+    return unserialize($contents);
   }
 
   /**

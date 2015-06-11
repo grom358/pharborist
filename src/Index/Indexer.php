@@ -129,11 +129,8 @@ class Indexer extends VisitorBase {
    *   Directory for index.
    */
   public function __construct($dir) {
-    $loaded = FALSE;
     $this->baseDir = $dir;
-    if (file_exists($dir . '/index.json')) {
-      // Load existing index.
-      $projectIndex = ProjectIndex::load($dir);
+    if ($projectIndex = ProjectIndex::load($dir)) {
       $this->fileSet = $projectIndex->getFileSet();
       $this->files = $projectIndex->getFiles();
       $this->classes = $projectIndex->getClasses();
@@ -150,9 +147,8 @@ class Indexer extends VisitorBase {
       }
       $this->constants = $projectIndex->getConstants();
       $this->functions = $projectIndex->getFunctions();
-      $loaded = TRUE;
     }
-    if (!$loaded) {
+    else {
       $this->fileSet = new FileSet();
       $this->files = [];
       $this->classes = [];

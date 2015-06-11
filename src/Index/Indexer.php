@@ -530,7 +530,14 @@ class Indexer extends VisitorBase {
         $parentInterfaceIndex = $this->interfaces[$parentFqn];
         foreach ($parentInterfaceIndex->getConstants() as $constantName => $constantIndex) {
           if (isset($ownConstants[$constantName])) {
-            // @todo Cannot inherit previously-inherited or override constant $constantName from interface $parentFqn
+            $this->errors[] = new Error($interfaceIndex->getPosition(), sprintf(
+              "Cannot inherit previously-inherited or override constant %s from interface %s at %s:%d",
+              $constantName,
+              $parentInterfaceIndex->getName(),
+              $interfaceIndex->getPosition()->getFilename(),
+              $interfaceIndex->getPosition()->getLineNumber(),
+              $parentFqn
+            ));
           }
           else {
             $inheritedConstants[$constantName] = $constantIndex;
@@ -538,8 +545,25 @@ class Indexer extends VisitorBase {
         }
         foreach ($parentInterfaceIndex->getMethods() as $methodName => $methodIndex) {
           if (isset($ownMethods[$methodName])) {
-            // @todo
-            //Declaration of B::say() must be compatible with A::say()
+            $existingMethodIndex = $ownMethods[$methodName];
+          } elseif (isset($inheritedMethods[$methodName])) {
+            $existingMethodIndex = $inheritedMethods[$methodName];
+          } else {
+            $existingMethodIndex = NULL;
+          }
+          if ($existingMethodIndex) {
+            if (!$existingMethodIndex->compatibleWith($methodIndex)) {
+              $this->errors[] = new Error($interfaceIndex->getPosition(), sprintf(
+                "Declaration of %s::%s() must be compatible with %s::%s() at %s:%d",
+                $methodIndex->getOwner(),
+                $methodName,
+                $existingMethodIndex->getOwner(),
+                $methodName,
+                $interfaceIndex->getPosition()->getFilename(),
+                $interfaceIndex->getPosition()->getLineNumber(),
+                $parentFqn
+              ));
+            }
           }
           else {
             $inheritedMethods[$methodName] = $methodIndex;
@@ -613,15 +637,15 @@ class Indexer extends VisitorBase {
 
     $this->resolveTraitUses($classIndex);
 
+    $ownConstants = $classIndex->getOwnConstants();
+    $ownProperties = $classIndex->getOwnProperties();
+    $ownMethods = $classIndex->getOwnMethods();
+    $traitProperties = $classIndex->getTraitProperties();
+    $traitMethods = $classIndex->getTraitMethods();
     $inheritedConstants = [];
     $inheritedProperties = [];
     $inheritedMethods = [];
     if ($parentFqn && isset($this->classes[$parentFqn])) {
-      $ownConstants = $classIndex->getOwnConstants();
-      $ownProperties = $classIndex->getOwnProperties();
-      $ownMethods = $classIndex->getOwnMethods();
-      $traitProperties = $classIndex->getTraitProperties();
-      $traitMethods = $classIndex->getTraitMethods();
       $parentClassIndex = $this->classes[$parentFqn];
       foreach ($parentClassIndex->getConstants() as $constantName => $constantIndex) {
         if (!isset($ownConstants[$constantName])) {
@@ -645,7 +669,14 @@ class Indexer extends VisitorBase {
         $interfaceIndex = $this->interfaces[$interfaceFqn];
         foreach ($interfaceIndex->getConstants() as $constantName => $constantIndex) {
           if (isset($ownConstants[$constantName]) || isset($inheritedConstants[$constantName])) {
-            // @todo Cannot inherit previously-inherited or override constant $constantName from interface $parentFqn
+            $this->errors[] = new Error($classIndex->getPosition(), sprintf(
+              "Cannot inherit previously-inherited or override constant %s from interface %s at %s:%d",
+              $constantName,
+              $interfaceIndex->getName(),
+              $classIndex->getPosition()->getFilename(),
+              $classIndex->getPosition()->getLineNumber(),
+              $parentFqn
+            ));
           }
           else {
             $inheritedConstants[$constantName] = $constantIndex;
@@ -898,9 +929,10 @@ class Indexer extends VisitorBase {
     }
     $constants = [];
     foreach ($classNode->getConstants() as $constantNode) {
-      $constants[] = new ConstantIndex(
+      $constantName = $constantNode->getName()->getBaseName();
+      $constants[$constantName] = new ConstantIndex(
         FilePosition::fromNode($constantNode),
-        $constantNode->getName(),
+        $constantName,
         $classFqn
       );
     }

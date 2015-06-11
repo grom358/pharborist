@@ -94,4 +94,26 @@ class MethodIndex extends FunctionIndex {
     return $this->visibility;
   }
 
+  /**
+   * Test if method definitions are compatible.
+   *
+   * @param MethodIndex $methodIndex
+   *
+   * @return bool
+   */
+  public function compatibleWith(MethodIndex $methodIndex) {
+    $compatible = $this->getName() === $methodIndex->getName() &&
+      $this->isStatic() === $methodIndex->isStatic() &&
+      $this->getVisibility() === $methodIndex->getVisibility() &&
+      count($this->parameters) === count($methodIndex->parameters);
+    if ($compatible) {
+      foreach ($this->parameters as $i => $parameter) {
+        if ($parameter->getTypes() !== $methodIndex->parameters[$i]->getTypes()) {
+          return FALSE;
+        }
+      }
+    }
+    return $compatible;
+  }
+
 }

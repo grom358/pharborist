@@ -142,6 +142,11 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
     $index = $indexer->index();
 
     $this->assertEquals([
+      'Cannot inherit previously-inherited or override constant MSG from interface \Example\InterfaceA at src/Interface.php:8',
+      'Cannot inherit previously-inherited or override constant MSG from interface \Example\InterfaceA at src/Interface.php:12',
+      'Cannot inherit previously-inherited or override constant MSG from interface \Example\InterfaceC at src/Interface.php:20',
+      'Cannot inherit previously-inherited or override constant MSG from interface \Example\InterfaceC at src/Interface.php:24',
+      'Declaration of \Example\InterfaceY::say() must be compatible with \Example\InterfaceX::say() at src/Interface.php:34',
       'Class \Example\Missing at src/Missing.php:4 extends missing class \Example\MissingClass',
       'Class \Example\Missing at src/Missing.php:4 implements missing interface \Example\MissingInterface',
       'Class \Example\Missing at src/Missing.php:4 uses missing trait \Example\MissingTrait',

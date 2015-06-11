@@ -102,6 +102,27 @@ class Indexer extends VisitorBase {
   private $fileFunctions;
 
   /**
+   * Processed traits.
+   *
+   * @var string[]
+   */
+  private $processedTraits;
+
+  /**
+   * Processed interfaces.
+   *
+   * @var string[]
+   */
+  private $processedInterfaces;
+
+  /**
+   * Processed classes.
+   *
+   * @var string[]
+   */
+  private $processedClasses;
+
+  /**
    * Setup indexer.
    *
    * @param string $dir
@@ -243,119 +264,415 @@ class Indexer extends VisitorBase {
   }
 
   /**
+   * Resolve trait uses.
+   *
    * @param ClassIndex|TraitIndex $index
    *   Class or trait.
    *
    * @return array
    *   Properties and methods from traits.
    */
-  private function resolveTraits($index) {
-    $traits = $index->getTraits();
-    $traitPrecedences = $index->getTraitPrecedences();
-    $traitAliases = $index->getTraitAliases();
-    // Collect properties and methods from traits.
+  private function resolveTraitUses($index) {
     $traitProperties = [];
     $traitMethods = [];
-    foreach ($traitPrecedences as $methodName => $traitPrecedence) {
-      $traitFqn = $traitPrecedence->getOwnerTrait();
-      if (!isset($this->traits[$traitFqn])) {
-        // Missing trait error already raised.
+    $traitPrecedences = $index->getTraitPrecedences();
+    $traitAliases = $index->getTraitAliases();
+
+    // Filter to traits that exist.
+    /** @var TraitIndex[] $traits */
+    $traits = [];
+    foreach ($index->getTraits() as $traitFqn) {
+      if (isset($this->traits[$traitFqn])) {
+        $traits[$traitFqn] = $this->traits[$traitFqn];
       }
-      elseif (!in_array($traitFqn, $traits)) {
-        $this->errors[] = new Error($index->getPosition(), sprintf(
-          "Required trait %s wasn't added in %s %s at %s:%d",
-          $traitFqn,
+    }
+
+    // Process properties.
+    foreach ($traits as $traitFqn => $traitIndex) {
+      foreach ($traitIndex->getProperties() as $propertyName => $propertyIndex) {
+        if (isset($traitProperties[$propertyName])) {
+          /** @var PropertyIndex $existingPropertyIndex */
+          $existingPropertyIndex = $traitProperties[$propertyName];
+          if ($existingPropertyIndex->compatibleWith($propertyIndex)) {
+            $this->errors[] = new Error($index->getPosition(), sprintf(
+              "Trait property %s::\$%s defines the same property %s::\$%s at %s:%d",
+              $traitFqn,
+              $propertyName,
+              $existingPropertyIndex->getOwner(),
+              $existingPropertyIndex->getName(),
+              $index->getPosition()->getFilename(),
+              $index->getPosition()->getLineNumber()
+            ));
+          }
+          else {
+            $this->errors[] = new Error($index->getPosition(), sprintf(
+              "Trait property %s::\$%s conflicts with existing property %s::\$%s at %s:%d",
+              $traitFqn,
+              $propertyName,
+              $existingPropertyIndex->getOwner(),
+              $existingPropertyIndex->getName(),
+              $index->getPosition()->getFilename(),
+              $index->getPosition()->getLineNumber()
+            ));
+          }
+        }
+        else {
+          $traitProperties[$propertyName] = $propertyIndex;
+        }
+      }
+    }
+
+    // Apply trait precedence rules.
+    $resolvedConflict = [];
+    foreach ($traitPrecedences as $traitPrecedenceIndex) {
+      $methodName = $traitPrecedenceIndex->getMethodName();
+      $ownerTraitFqn = $traitPrecedenceIndex->getOwnerTrait();
+      if (!isset($traits[$ownerTraitFqn])) {
+        $this->errors[] = new Error($traitPrecedenceIndex->getPosition(), sprintf(
+          "Required trait %s wasn't added to %s %s at %s:%d",
+          $ownerTraitFqn,
           $index instanceof ClassIndex ? 'class' : 'trait',
           $index->getName(),
-          $index->getPosition()->getFilename(),
-          $index->getPosition()->getLineNumber()
+          $traitPrecedenceIndex->getPosition()->getFilename(),
+          $traitPrecedenceIndex->getPosition()->getLineNumber()
         ));
       }
       else {
-        $trait = $this->traits[$traitFqn];
-        $traitMethods = $trait->getOwnMethods();
-        if (!isset($traitMethods[$traitPrecedence->getMethodName()])) {
-          $this->errors[] = new Error($traitPrecedence->getPosition(), sprintf(
-            "Trait %s missing method %s at %s:%d",
-            $traitFqn,
-            $traitPrecedence->getMethodName(),
-            $traitPrecedence->getPosition()->getFilename(),
-            $traitPrecedence->getPosition()->getLineNumber()
+        $trait = $traits[$ownerTraitFqn];
+        if (!$trait->hasMethod($methodName)) {
+          $this->errors[] = new Error($traitPrecedenceIndex->getPosition(), sprintf(
+            "A precedence rule was defined for %s::%s but this method does not exist at %s:%d",
+            $ownerTraitFqn,
+            $methodName,
+            $traitPrecedenceIndex->getPosition()->getFilename(),
+            $traitPrecedenceIndex->getPosition()->getLineNumber()
           ));
         }
         else {
-          $method = $traitMethods[$traitPrecedence->getMethodName()];
-          $traitMethods[$method->getName()] = $method;
+          $resolvedConflict[$ownerTraitFqn][$methodName] = $ownerTraitFqn;
+          foreach ($traitPrecedenceIndex->getTraits() as $traitFqn) {
+            if (!isset($traits[$traitFqn])) {
+              $this->errors[] = new Error($traitPrecedenceIndex->getPosition(), sprintf(
+                "Required trait %s wasn't added to %s %s at %s:%d",
+                $traitFqn,
+                $index instanceof ClassIndex ? 'class' : 'trait',
+                $index->getName(),
+                $traitPrecedenceIndex->getPosition()->getFilename(),
+                $traitPrecedenceIndex->getPosition()->getLineNumber()
+              ));
+            }
+            $trait = $this->traits[$traitFqn];
+            if (!$trait->hasMethod($methodName)) {
+              $this->errors[] = new Error($traitPrecedenceIndex->getPosition(), sprintf(
+                "A precedence rule was defined for %s::%s but this method does not exist at %s:%d",
+                $traitFqn,
+                $methodName,
+                $traitPrecedenceIndex->getPosition()->getFilename(),
+                $traitPrecedenceIndex->getPosition()->getLineNumber()
+              ));
+            }
+            else {
+              $resolvedConflict[$traitFqn][$methodName] = $ownerTraitFqn;
+            }
+          }
+          $traitMethods[$methodName] = $trait->getMethod($methodName);
         }
       }
     }
-    foreach ($traitAliases as $traitAlias) {
-      $traitFqn = $traitAlias->getOwnerTrait();
-      if (!isset($this->traits[$traitFqn])) {
-        // @todo Missing trait.
+
+    // Validate trait aliases.
+    $aliases = [];
+    foreach ($traitAliases as $traitAliasIndex) {
+      $methodName = $traitAliasIndex->getMethodName();
+      $traitFqn = $traitAliasIndex->getOwnerTrait();
+      if (!isset($traits[$traitFqn])) {
+        $this->errors[] = new Error($traitAliasIndex->getPosition(), sprintf(
+          "Required trait %s wasn't added to %s %s at %s:%d",
+          $traitFqn,
+          $index instanceof ClassIndex ? 'class' : 'trait',
+          $index->getName(),
+          $traitAliasIndex->getPosition()->getFilename(),
+          $traitAliasIndex->getPosition()->getLineNumber()
+        ));
       }
       else {
-        $trait = $this->traits[$traitFqn];
-        $method = $trait->getOwnMethods()[$traitAlias->getMethodName()];
-        $aliasedMethod = new MethodIndex(
-          $method->getPosition(),
-          $traitAlias->getAliasName(),
-          $method->getOwner(),
-          $traitAlias->getAliasVisibility() ?: $method->getVisibility(),
-          $method->isFinal(),
-          $method->isStatic(),
-          $method->isAbstract(),
-          $method->getParameters(),
-          $method->getReturnTypes()
-        );
-        // @todo check alias doesn't conflict?
-        $traitMethods[$traitAlias->getAliasName()] = $aliasedMethod;
+        $trait = $traits[$traitFqn];
+        if (!$trait->hasMethod($methodName)) {
+          $this->errors[] = new Error($traitAliasIndex->getPosition(), sprintf(
+            "An alias was defined for %s::%s but this method does not exist at %s:%d",
+            $traitFqn,
+            $methodName,
+            $traitAliasIndex->getPosition()->getFilename(),
+            $traitAliasIndex->getPosition()->getLineNumber()
+          ));
+        }
+        else {
+          $aliases[$traitFqn][$methodName] = $traitAliasIndex;
+        }
       }
     }
-    // @todo check for method conflicts
-    foreach ($traits as $traitFqn) {
-      if (isset($this->traits[$traitFqn])) {
-        $trait = $this->traits[$traitFqn];
-        foreach ($trait->getOwnMethods() as $method) {
-          if (!isset($traitMethods[$method->getName()])) {
-            $traitMethods[$method->getName()] = $method;
+
+    // Import trait methods.
+    foreach ($traits as $traitFqn => $traitIndex) {
+      foreach ($traitIndex->getMethods() as $methodName => $methodIndex) {
+        // Apply alias if it exists.
+        if (isset($aliases[$traitFqn][$methodName])) {
+          /** @var TraitAliasIndex $traitAliasIndex */
+          $traitAliasIndex = $aliases[$traitFqn][$methodName];
+          $ownerTraitIndex = $traits[$traitAliasIndex->getOwnerTrait()];
+          $methodIndex = $ownerTraitIndex->getMethod($methodName);
+          $aliasedMethodIndex = new MethodIndex(
+            $methodIndex->getPosition(),
+            $traitAliasIndex->getAliasName(),
+            $methodIndex->getOwner(),
+            $traitAliasIndex->getAliasVisibility() ?: $methodIndex->getVisibility(),
+            $methodIndex->isFinal(),
+            $methodIndex->isStatic(),
+            $methodIndex->isAbstract(),
+            $methodIndex->getParameters(),
+            $methodIndex->getReturnTypes()
+          );
+          $traitMethods[$traitAliasIndex->getAliasName()] = $aliasedMethodIndex;
+        }
+        // Add method if not hidden by precedence rule.
+        if (!isset($resolvedConflict[$traitFqn][$methodName])) {
+          if (isset($traitMethods[$methodName])) {
+            /** @var MethodIndex $conflictMethodIndex */
+            $conflictMethodIndex = $traitMethods[$methodName];
+            $this->errors[] = new Error($index->getPosition(), sprintf(
+              'Trait method %s::%s has not been applied, because it has collisions with %s::%s at %s:%d',
+              $traitFqn,
+              $methodName,
+              $conflictMethodIndex->getOwner(),
+              $methodName,
+              $index->getPosition()->getFilename(),
+              $index->getPosition()->getLineNumber()
+            ));
+          }
+          else {
+            $traitMethods[$methodName] = $methodIndex;
           }
         }
       }
     }
+
     $index
       ->setTraitProperties($traitProperties)
       ->setTraitMethods($traitMethods);
   }
 
   /**
-   * @param InterfaceIndex $interfaceIndex
+   * Process trait.
+   *
+   * @param string $traitFqn
+   *   Fully qualified trait name.
+   * @param TraitIndex $traitIndex
+   *   Indexed trait.
    */
-  protected function inheritInterface($interfaceIndex, &$inheritedConstants, &$inheritedMethods) {
+  protected function processTrait($traitFqn, TraitIndex $traitIndex) {
+    if (isset($this->processedTraits[$traitFqn])) {
+      return;
+    }
+    foreach ($traitIndex->getTraits() as $dependentFqn) {
+      if (!isset($this->traits[$dependentFqn])) {
+        $this->errors[] = new Error($traitIndex->getPosition(), sprintf(
+          "Trait %s at %s:%d uses missing trait %s",
+          $traitIndex->getName(),
+          $traitIndex->getPosition()->getFilename(),
+          $traitIndex->getPosition()->getLineNumber(),
+          $dependentFqn
+        ));
+      }
+      else {
+        $dependentTrait = $this->traits[$dependentFqn];
+        $dependentTrait->addUsedByTrait($traitFqn);
+        $this->processTrait($dependentFqn, $dependentTrait);
+      }
+    }
+    $this->resolveTraitUses($traitIndex);
+    $this->processedTraits[$traitFqn] = $traitFqn;
+  }
+
+  /**
+   * Process interface.
+   *
+   * @param string $interfaceFqn
+   *   Fully qualified interface name.
+   * @param InterfaceIndex $interfaceIndex
+   *   Indexed interface.
+   */
+  protected function processInterface($interfaceFqn, InterfaceIndex $interfaceIndex) {
+    if (isset($this->processedInterfaces[$interfaceFqn])) {
+      return;
+    }
+    foreach ($interfaceIndex->getExtends() as $parentFqn) {
+      if (!isset($this->interfaces[$parentFqn])) {
+        $this->errors[] = new Error($interfaceIndex->getPosition(), sprintf(
+          "Interface %s at %s:%d extends missing interface %s",
+          $interfaceIndex->getName(),
+          $interfaceIndex->getPosition()->getFilename(),
+          $interfaceIndex->getPosition()->getLineNumber(),
+          $parentFqn
+        ));
+      }
+      else {
+        $parentInterfaceIndex = $this->interfaces[$parentFqn];
+        $parentInterfaceIndex->addExtendedBy($interfaceFqn);
+        $this->processInterface($parentFqn, $parentInterfaceIndex);
+      }
+    }
+    $ownConstants = $interfaceIndex->getOwnConstants();
+    $ownMethods = $interfaceIndex->getOwnMethods();
+    $inheritedConstants = [];
+    $inheritedMethods = [];
     foreach ($interfaceIndex->getExtends() as $parentFqn) {
       if (isset($this->interfaces[$parentFqn])) {
         $parentInterfaceIndex = $this->interfaces[$parentFqn];
-        $this->inheritInterface($parentInterfaceIndex, $inheritedConstants, $inheritedMethods);
-        // Inherit constants.
-        foreach ($parentInterfaceIndex->getOwnConstants() as $constantIndex) {
-          if (isset($inheritedConstants[$constantIndex->getName()])) {
-            // @todo error
+        foreach ($parentInterfaceIndex->getConstants() as $constantName => $constantIndex) {
+          if (isset($ownConstants[$constantName])) {
+            // @todo Cannot inherit previously-inherited or override constant $constantName from interface $parentFqn
           }
           else {
-            $inheritedConstants[$constantIndex->getName()] = $constantIndex;
+            $inheritedConstants[$constantName] = $constantIndex;
           }
         }
-        // Inherit methods.
-        foreach ($parentInterfaceIndex->getOwnMethods() as $methodIndex) {
-          if (isset($inheritedMethods[$methodIndex->getName()])) {
-            // @todo check if method is compatible
+        foreach ($parentInterfaceIndex->getMethods() as $methodName => $methodIndex) {
+          if (isset($ownMethods[$methodName])) {
+            // @todo
+            //Declaration of B::say() must be compatible with A::say()
           }
           else {
-            $inheritedMethods[$methodIndex->getName()] = $methodIndex;
+            $inheritedMethods[$methodName] = $methodIndex;
           }
         }
       }
     }
+    $this->interfaces[$interfaceFqn]
+      ->setInheritedConstants($inheritedConstants)
+      ->setInheritedMethods($inheritedMethods);
+    $this->processedInterfaces[$interfaceFqn] = $interfaceFqn;
+  }
+
+  /**
+   * Process class.
+   *
+   * @param string $classFqn
+   *   Fully qualified class name.
+   * @param ClassIndex $classIndex
+   *   Indexed class.
+   */
+  protected function processClass($classFqn, ClassIndex $classIndex) {
+    if (isset($this->processedClasses[$classFqn])) {
+      return;
+    }
+    $parentFqn = $classIndex->getExtends();
+    if ($parentFqn) {
+      if (!isset($this->classes[$parentFqn])) {
+        $this->errors[] = new Error($classIndex->getPosition(), sprintf(
+          "Class %s at %s:%d extends missing class %s",
+          $classIndex->getName(),
+          $classIndex->getPosition()->getFilename(),
+          $classIndex->getPosition()->getLineNumber(),
+          $parentFqn
+        ));
+      }
+      else {
+        $parentClassIndex = $this->classes[$parentFqn];
+        $parentClassIndex->addSubclass($classFqn);
+        $this->processClass($parentFqn, $parentClassIndex);
+      }
+    }
+    foreach ($classIndex->getImplements() as $interfaceFqn) {
+      if (!isset($this->interfaces[$interfaceFqn])) {
+        $this->errors[] = new Error($classIndex->getPosition(), sprintf(
+          "Class %s at %s:%d implements missing interface %s",
+          $classIndex->getName(),
+          $classIndex->getPosition()->getFilename(),
+          $classIndex->getPosition()->getLineNumber(),
+          $interfaceFqn
+        ));
+      }
+      else {
+        $this->interfaces[$interfaceFqn]->addImplementedBy($classFqn);
+      }
+    }
+    foreach ($classIndex->getTraits() as $traitFqn) {
+      if (!isset($this->traits[$traitFqn])) {
+        $this->errors[] = new Error($classIndex->getPosition(), sprintf(
+          "Class %s at %s:%d uses missing trait %s",
+          $classIndex->getName(),
+          $classIndex->getPosition()->getFilename(),
+          $classIndex->getPosition()->getLineNumber(),
+          $traitFqn
+        ));
+      }
+      else {
+        $this->traits[$traitFqn]->addUsedByClass($classFqn);
+      }
+    }
+
+    $this->resolveTraitUses($classIndex);
+
+    $inheritedConstants = [];
+    $inheritedProperties = [];
+    $inheritedMethods = [];
+    if ($parentFqn && isset($this->classes[$parentFqn])) {
+      $ownConstants = $classIndex->getOwnConstants();
+      $ownProperties = $classIndex->getOwnProperties();
+      $ownMethods = $classIndex->getOwnMethods();
+      $traitProperties = $classIndex->getTraitProperties();
+      $traitMethods = $classIndex->getTraitMethods();
+      $parentClassIndex = $this->classes[$parentFqn];
+      foreach ($parentClassIndex->getConstants() as $constantName => $constantIndex) {
+        if (!isset($ownConstants[$constantName])) {
+          $inheritedConstants[$constantName] = $constantIndex;
+        }
+      }
+      foreach ($parentClassIndex->getProperties() as $propertyName => $propertyIndex) {
+        if (!isset($ownProperties[$propertyName]) && !isset($traitProperties[$propertyName]) && $propertyIndex->getVisibility() !== 'private') {
+          $inheritedProperties[$propertyName] = $propertyIndex;
+        }
+      }
+      foreach ($parentClassIndex->getMethods() as $methodName => $methodIndex) {
+        if (!isset($ownMethods[$methodName]) && !isset($traitMethods[$methodName]) && $methodIndex->getVisibility() !== 'private') {
+          $inheritedMethods[$methodName] = $methodIndex;
+        }
+      }
+    }
+    // Inherit constants from interfaces.
+    foreach ($classIndex->getImplements() as $interfaceFqn) {
+      if (isset($this->interfaces[$interfaceFqn])) {
+        $interfaceIndex = $this->interfaces[$interfaceFqn];
+        foreach ($interfaceIndex->getConstants() as $constantName => $constantIndex) {
+          if (isset($ownConstants[$constantName]) || isset($inheritedConstants[$constantName])) {
+            // @todo Cannot inherit previously-inherited or override constant $constantName from interface $parentFqn
+          }
+          else {
+            $inheritedConstants[$constantName] = $constantIndex;
+          }
+        }
+      }
+    }
+
+    $parents = [];
+    while ($parentFqn) {
+      $parents[] = $parentFqn;
+      if (isset($this->classes[$parentFqn])) {
+        $parentClassIndex = $this->classes[$parentFqn];
+        $parentFqn = $parentClassIndex->getExtends();
+      }
+      else {
+        $parentFqn = NULL;
+      }
+    }
+    $parents = array_reverse($parents);
+
+    $this->classes[$classFqn]
+      ->setParents($parents)
+      ->setInheritedConstants($inheritedConstants)
+      ->setInheritedProperties($inheritedProperties)
+      ->setInheritedMethods($inheritedMethods);
+    $this->processedClasses[$classFqn] = $classFqn;
   }
 
   /**
@@ -365,6 +682,9 @@ class Indexer extends VisitorBase {
    */
   public function index() {
     $this->errors = [];
+    $this->processedTraits = [];
+    $this->processedInterfaces = [];
+    $this->processedClasses = [];
     $deletedFiles = array_flip(array_keys($this->files));
 
     // Process files.
@@ -382,147 +702,19 @@ class Indexer extends VisitorBase {
       $this->fileRemoved($fileIndex);
     }
 
-    // Post process classes.
-    foreach ($this->classes as $classFqn => $classIndex) {
-      $parentFqn = $classIndex->getExtends();
-      if ($parentFqn) {
-        if (!isset($this->classes[$parentFqn])) {
-          $this->errors[] = new Error($classIndex->getPosition(), sprintf(
-            "Class %s at %s:%d extends missing class %s",
-            $classIndex->getName(),
-            $classIndex->getPosition()->getFilename(),
-            $classIndex->getPosition()->getLineNumber(),
-            $parentFqn
-          ));
-        }
-        else {
-          $this->classes[$parentFqn]->addSubclass($classFqn);
-        }
-      }
-      foreach ($classIndex->getImplements() as $interfaceFqn) {
-        if (!isset($this->interfaces[$interfaceFqn])) {
-          $this->errors[] = new Error($classIndex->getPosition(), sprintf(
-            "Class %s at %s:%d implements missing interface %s",
-            $classIndex->getName(),
-            $classIndex->getPosition()->getFilename(),
-            $classIndex->getPosition()->getLineNumber(),
-            $interfaceFqn
-          ));
-        }
-        else {
-          $this->interfaces[$interfaceFqn]->addImplementedBy($classFqn);
-        }
-      }
-      foreach ($classIndex->getTraits() as $traitFqn) {
-        if (!isset($this->traits[$traitFqn])) {
-          $this->errors[] = new Error($classIndex->getPosition(), sprintf(
-            "Class %s at %s:%d uses missing trait %s",
-            $classIndex->getName(),
-            $classIndex->getPosition()->getFilename(),
-            $classIndex->getPosition()->getLineNumber(),
-            $traitFqn
-          ));
-        }
-        else {
-          $this->traits[$traitFqn]->addUsedByClass($classFqn);
-        }
-      }
-      $this->resolveTraits($classIndex);
-      $parents = [];
-      $inheritedConstants = [];
-      $inheritedProperties = [];
-      $inheritedMethods = [];
-      while ($parentFqn) {
-        $parents[] = $parentFqn;
-        if (isset($this->classes[$parentFqn])) {
-          /** @var ClassIndex $parentClass */
-          $parentClass = $this->classes[$parentFqn];
-          $parentFqn = $parentClass->getExtends();
-        }
-        else {
-          $parentFqn = NULL;
-        }
-      }
-      $parents = array_reverse($parents);
-      $ownConstants = $classIndex->getOwnConstants();
-      $ownProperties = $classIndex->getOwnProperties();
-      $ownMethods = $classIndex->getOwnMethods();
-      // Inherited constants/properties/methods.
-      foreach ($parents as $parentFqn) {
-        if (isset($this->classes[$parentFqn])) {
-          $parentClass = $this->classes[$parentFqn];
-          foreach ($parentClass->getOwnConstants() as $constantIndex) {
-            if (!isset($ownConstants[$constantIndex->getName()])) {
-              $inheritedConstants[$constantIndex->getName()] = $constantIndex;
-            }
-          }
-          foreach ($parentClass->getOwnProperties() as $propertyIndex) {
-            if (!isset($ownProperties[$propertyIndex->getName()]) && $propertyIndex->getVisibility() !== 'private') {
-              $inheritedProperties[$propertyIndex->getName()] = $propertyIndex;
-            }
-          }
-          foreach ($parentClass->getOwnMethods() as $methodIndex) {
-            if (!isset($ownMethods[$methodIndex->getName()]) && $methodIndex->getVisibility() !== 'private') {
-              $inheritedMethods[$methodIndex->getName()] = $methodIndex;
-            }
-          }
-        }
-      }
-      // Inherit interface constants.
-      foreach ($classIndex->getImplements() as $interfaceFqn) {
-        if (isset($this->interfaces[$interfaceFqn])) {
-          $interfaceIndex = $this->interfaces[$interfaceFqn];
-          $this->inheritInterface($interfaceIndex, $inheritedConstants, $inheritedMethods);
-        }
-      }
-      $this->classes[$classFqn]
-        ->setParents($parents)
-        ->setInheritedConstants($inheritedConstants)
-        ->setInheritedProperties($inheritedProperties)
-        ->setInheritedMethods($inheritedMethods);
-    }
-
     // Post process traits.
     foreach ($this->traits as $traitFqn => $traitIndex) {
-      foreach ($traitIndex->getTraits() as $dependentFqn) {
-        if (!isset($this->traits[$dependentFqn])) {
-          $this->errors[] = new Error($traitIndex->getPosition(), sprintf(
-            "Trait %s at %s:%d uses missing trait %s",
-            $traitIndex->getName(),
-            $traitIndex->getPosition()->getFilename(),
-            $traitIndex->getPosition()->getLineNumber(),
-            $dependentFqn
-          ));
-        }
-        else {
-          $this->traits[$dependentFqn]->addUsedByTrait($traitFqn);
-        }
-      }
-      $this->resolveTraits($traitIndex);
+      $this->processTrait($traitFqn, $traitIndex);
     }
 
     // Post process interfaces.
     foreach ($this->interfaces as $interfaceFqn => $interfaceIndex) {
-      foreach ($interfaceIndex->getExtends() as $parentFqn) {
-        if (!isset($this->interfaces[$parentFqn])) {
-          $this->errors[] = new Error($interfaceIndex->getPosition(), sprintf(
-            "Interface %s at %s:%d extends missing interface %s",
-            $interfaceIndex->getName(),
-            $interfaceIndex->getPosition()->getFilename(),
-            $interfaceIndex->getPosition()->getLineNumber(),
-            $parentFqn
-          ));
-        }
-        else {
-          $this->interfaces[$parentFqn]->addExtendedBy($interfaceFqn);
-        }
-      }
-      $inheritedConstants = [];
-      $inheritedMethods = [];
-      $this->inheritInterface($interfaceIndex, $inheritedConstants, $inheritedMethods);
-      $this->interfaces[$interfaceFqn]
-        ->setInheritedConstants($inheritedConstants)
-        ->setInheritedMethods($inheritedMethods);
+      $this->processInterface($interfaceFqn, $interfaceIndex);
+    }
+
+    // Post process classes.
+    foreach ($this->classes as $classFqn => $classIndex) {
+      $this->processClass($classFqn, $classIndex);
     }
 
     // Sort errors.
@@ -541,7 +733,7 @@ class Indexer extends VisitorBase {
       if ($cmp !== 0) {
         return $cmp;
       }
-      return strnatcasecmp($a->getMessage(), $b->getMessage());
+      return $a->getErrorNo() - $b->getErrorNo();
     });
 
     // Get error messages.
@@ -644,6 +836,7 @@ class Indexer extends VisitorBase {
         FilePosition::fromNode($propertyNode),
         $propertyName,
         $index->getName(),
+        $propertyNode->isStatic(),
         $visibility === 'var' ? 'public' : $visibility->getText(),
         $propertyNode->getTypes()
       );

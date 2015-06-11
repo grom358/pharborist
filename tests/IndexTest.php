@@ -142,14 +142,21 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
     $index = $indexer->index();
 
     $this->assertEquals([
-      'Trait alias conflictMethod at src/Conflict.php:31 conflicts with existing alias at src/Conflict.php:30',
-      'Trait precedence at src/Conflict.php:39 conflicts with existing rule at src/Conflict.php:38',
-      'Required trait \Example\C wasn\'t added in trait \Example\MissingRequiredTrait at src/Conflict.php:43',
       'Class \Example\Missing at src/Missing.php:4 extends missing class \Example\MissingClass',
       'Class \Example\Missing at src/Missing.php:4 implements missing interface \Example\MissingInterface',
       'Class \Example\Missing at src/Missing.php:4 uses missing trait \Example\MissingTrait',
       'Trait \Example\T at src/Missing.php:8 uses missing trait \Example\MissingTrait',
-      'Interface \Example\I at src/Missing.php:12 extends missing interface \Example\MissingInterface'
+      'Interface \Example\I at src/Missing.php:12 extends missing interface \Example\MissingInterface',
+      'Trait property \Example\B::$letter defines the same property \Example\A::$letter at src/Trait.php:32',
+      'Trait method \Example\D::say has not been applied, because it has collisions with \Example\C::say at src/Trait.php:32',
+      'Trait alias conflictMethod at src/Trait.php:35 conflicts with existing alias at src/Trait.php:34',
+      'Trait precedence at src/Trait.php:43 conflicts with existing rule at src/Trait.php:42',
+      'Required trait \Example\C wasn\'t added to trait \Example\MissingRequiredTrait at src/Trait.php:49',
+      'Required trait \Example\A wasn\'t added to trait \Example\AnotherMissingRequiredTrait at src/Trait.php:55',
+      'A precedence rule was defined for \Example\A::say but this method does not exist at src/Trait.php:55',
+      'Trait method \Example\D::say has not been applied, because it has collisions with \Example\C::say at src/Trait.php:59',
+      'An alias was defined for \Example\C::missingMethod but this method does not exist at src/Trait.php:65',
+      'Trait property \Example\E::$letter conflicts with existing property \Example\A::$letter at src/Trait.php:73'
     ], $index->getErrors());
 
     // Load index from filesystem and check against the saved index.

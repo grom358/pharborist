@@ -9,6 +9,11 @@ class PropertyIndex extends BaseIndex {
   private $owner;
 
   /**
+   * @var bool
+   */
+  private $static;
+
+  /**
    * @var string
    */
   private $visibility;
@@ -22,12 +27,14 @@ class PropertyIndex extends BaseIndex {
    * @param FilePosition $position
    * @param string $name
    * @param string $owner
+   * @param bool $static
    * @param string $visibility
    * @param string[] $types
    */
-  public function __construct(FilePosition $position, $name, $owner, $visibility = 'public', $types = ['mixed']) {
+  public function __construct(FilePosition $position, $name, $owner, $static, $visibility = 'public', $types = ['mixed']) {
     parent::__construct($position, $name);
     $this->owner = $owner;
+    $this->static = $static;
     $this->visibility = $visibility;
     $this->types = $types;
   }
@@ -39,6 +46,15 @@ class PropertyIndex extends BaseIndex {
    */
   public function getOwner() {
     return $this->owner;
+  }
+
+  /**
+   * Whether or not this property is static.
+   *
+   * @return bool
+   */
+  public function isStatic() {
+    return $this->static;
   }
 
   /**
@@ -60,4 +76,14 @@ class PropertyIndex extends BaseIndex {
     return $this->types;
   }
 
+  /**
+   * Test if property definitions are compatible.
+   *
+   * @param PropertyIndex $propertyIndex
+   *
+   * @return bool
+   */
+  public function compatibleWith(PropertyIndex $propertyIndex) {
+    return $this->getName() === $propertyIndex->getName() && $this->getVisibility() === $propertyIndex->getVisibility();
+  }
 }

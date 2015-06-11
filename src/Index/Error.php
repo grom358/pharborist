@@ -5,6 +5,13 @@ use Pharborist\SourcePosition;
 
 class Error {
 
+  static private $counter = 1;
+
+  /**
+   * @var int
+   */
+  protected $errorNo;
+
   /**
    * @var FilePosition|SourcePosition
    */
@@ -22,6 +29,7 @@ class Error {
   public function __construct($position, $message) {
     $this->position = $position;
     $this->message = $message;
+    $this->errorNo = self::$counter++;
   }
 
   /**
@@ -36,6 +44,13 @@ class Error {
    */
   public function getMessage() {
     return $this->message;
+  }
+
+  /**
+   * @return int
+   */
+  public function getErrorNo() {
+    return $this->errorNo;
   }
 
 }

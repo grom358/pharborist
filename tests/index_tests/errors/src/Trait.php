@@ -2,12 +2,16 @@
 namespace Example;
 
 trait A {
+  protected $letter = 'A';
+
   public function sayA() {
     echo 'A', PHP_EOL;
   }
 }
 
 trait B {
+  protected $letter = 'B';
+
   public function sayB() {
     echo 'B', PHP_EOL;
   }
@@ -54,4 +58,18 @@ trait AnotherMissingRequiredTrait {
 
 trait MissingExplicit {
   use C, D;
+}
+
+trait MissingMethod {
+  use C {
+    C::missingMethod as miss;
+  }
+}
+
+trait E {
+  public $letter = 'e';
+}
+
+trait ConflictProperty {
+  use A, E;
 }

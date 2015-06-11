@@ -476,11 +476,11 @@ class Indexer extends VisitorBase {
     foreach ($traitIndex->getTraits() as $dependentFqn) {
       if (!isset($this->traits[$dependentFqn])) {
         $this->errors[] = new Error($traitIndex->getPosition(), sprintf(
-          "Trait %s at %s:%d uses missing trait %s",
+          "Trait %s uses missing trait %s at %s:%d",
           $traitIndex->getName(),
+          $dependentFqn,
           $traitIndex->getPosition()->getFilename(),
-          $traitIndex->getPosition()->getLineNumber(),
-          $dependentFqn
+          $traitIndex->getPosition()->getLineNumber()
         ));
       }
       else {
@@ -508,11 +508,11 @@ class Indexer extends VisitorBase {
     foreach ($interfaceIndex->getExtends() as $parentFqn) {
       if (!isset($this->interfaces[$parentFqn])) {
         $this->errors[] = new Error($interfaceIndex->getPosition(), sprintf(
-          "Interface %s at %s:%d extends missing interface %s",
+          "Interface %s extends missing interface %s at %s:%d",
           $interfaceIndex->getName(),
+          $parentFqn,
           $interfaceIndex->getPosition()->getFilename(),
-          $interfaceIndex->getPosition()->getLineNumber(),
-          $parentFqn
+          $interfaceIndex->getPosition()->getLineNumber()
         ));
       }
       else {
@@ -687,8 +687,9 @@ class Indexer extends VisitorBase {
         foreach ($interfaceIndex->getMethods() as $methodName => $methodIndex) {
           if (!isset($methods[$methodName])) {
             $this->errors[] = new Error($classIndex->getPosition(), sprintf(
-              "Class %s does not implement method %s at %s:%d",
+              "Class %s does not implement method %s::%s() at %s:%d",
               $classFqn,
+              $interfaceFqn,
               $methodName,
               $classIndex->getPosition()->getFilename(),
               $classIndex->getPosition()->getLineNumber()

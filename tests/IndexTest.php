@@ -129,6 +129,49 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
     ProjectIndex::delete($baseDir);
   }
 
+  public function testRevisions() {
+    $indexer = new Indexer();
+
+    // Load revision 1.
+    $rev1 = dirname(__FILE__) . '/index_tests/rev1';
+    $index = $indexer->index($rev1, new FileSet(['src']), TRUE);
+
+    $this->assertTrue($index->interfaceExists('\Example\StringObject'));
+    $this->assertTrue($index->traitExists('\Example\ObjectUtil'));
+    $this->assertTrue($index->classExists('\Example\Base'));
+    $this->assertTrue($index->classExists('\Example\ParentClass'));
+    $this->assertTrue($index->classExists('\Example\ChildClass'));
+    $class = $index->getClass('\Example\ChildClass');
+    $this->assertEquals(['\Example\Base', '\Example\ParentClass'], $class->getParents());
+
+    $files = $index->getFiles();
+    $parentClassHash = $files['src/ParentClass.php']->getHash();
+    $childClassHash = $files['src/ChildClass.php']->getHash();
+
+    // Copy index to revision 2.
+    $rev2 = dirname(__FILE__) . '/index_tests/rev2';
+    rename($rev1 . '/.pharborist', $rev2 . '/.pharborist');
+
+    // Load revision 2.
+    $index = $indexer->index($rev2);
+
+    $this->assertTrue($index->interfaceExists('\Example\StringObject'));
+    $this->assertTrue($index->traitExists('\Example\ObjectUtil'));
+    $this->assertFalse($index->classExists('\Example\Base'));
+    $this->assertTrue($index->classExists('\Example\BaseObject'));
+    $this->assertTrue($index->classExists('\Example\ParentClass'));
+    $this->assertTrue($index->classExists('\Example\ChildClass'));
+    $class = $index->getClass('\Example\ChildClass');
+    $this->assertEquals(['\Example\BaseObject', '\Example\ParentClass'], $class->getParents());
+    $this->assertTrue($class->hasMethod('sayHello'));
+
+    $files = $index->getFiles();
+    $this->assertNotEquals($parentClassHash, $files['src/ParentClass.php']->getHash());
+    $this->assertEquals($childClassHash, $files['src/ChildClass.php']->getHash());
+
+    ProjectIndex::delete($rev2);
+  }
+
   public function testErrors() {
     $baseDir = dirname(__FILE__) . '/index_tests/errors';
 

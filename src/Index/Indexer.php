@@ -239,21 +239,27 @@ class Indexer extends VisitorBase {
         $this->fileRemoved($this->files[$filename]);
       }
 
-      /** @var RootNode $tree */
-      $tree = Parser::parseFile($filename);
-      $tree->acceptVisitor($this);
+      try {
+        /** @var RootNode $tree */
+        $tree = Parser::parseFile($filename);
+        $tree->acceptVisitor($this);
 
-      $hash = md5_file($filename);
-      $this->files[$filename] = new FileIndex(
-        $filename,
-        time(),
-        $hash,
-        $this->fileClasses,
-        $this->fileTraits,
-        $this->fileInterfaces,
-        $this->fileConstants,
-        $this->fileFunctions
-      );
+        $hash = md5_file($filename);
+        $this->files[$filename] = new FileIndex(
+          $filename,
+          time(),
+          $hash,
+          $this->fileClasses,
+          $this->fileTraits,
+          $this->fileInterfaces,
+          $this->fileConstants,
+          $this->fileFunctions
+        );
+      }
+      catch (\Exception $e) {
+        $position = new FilePosition($filename, 1, 1, 0, 0);
+        $this->errors[] = new Error($position, $e->getMessage());
+      }
 
       $this->fileClasses = [];
       $this->fileTraits = [];

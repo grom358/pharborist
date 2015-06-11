@@ -123,58 +123,6 @@ class Indexer extends VisitorBase {
   private $processedClasses;
 
   /**
-   * Setup indexer.
-   *
-   * @param string $dir
-   *   Directory for index.
-   */
-  public function __construct($dir) {
-    $this->baseDir = $dir;
-    if ($projectIndex = ProjectIndex::load($dir)) {
-      $this->fileSet = $projectIndex->getFileSet();
-      $this->files = $projectIndex->getFiles();
-      $this->classes = $projectIndex->getClasses();
-      foreach ($this->classes as $classIndex) {
-        $classIndex->clear();
-      }
-      $this->traits = $projectIndex->getTraits();
-      foreach ($this->traits as $traitIndex) {
-        $traitIndex->clear();
-      }
-      $this->interfaces = $projectIndex->getInterfaces();
-      foreach ($this->interfaces as $interfaceIndex) {
-        $interfaceIndex->clear();
-      }
-      $this->constants = $projectIndex->getConstants();
-      $this->functions = $projectIndex->getFunctions();
-    }
-    else {
-      $this->fileSet = new FileSet();
-      $this->files = [];
-      $this->classes = [];
-      $this->traits = [];
-      $this->interfaces = [];
-      $this->constants = [];
-      $this->functions = [];
-    }
-
-    $this->fileClasses = [];
-    $this->fileTraits = [];
-    $this->fileInterfaces = [];
-    $this->fileConstants = [];
-    $this->fileFunctions = [];
-  }
-
-  /**
-   * Get file set for current index.
-   *
-   * @return FileSet
-   */
-  public function getFileSet() {
-    return $this->fileSet;
-  }
-
-  /**
    * Check if filename requires indexing.
    *
    * @param string $filename
@@ -757,9 +705,56 @@ class Indexer extends VisitorBase {
   /**
    * Create index.
    *
+   * Attempts to load and update existing index in base directory, otherwise
+   * creates new index with file set.
+   *
+   * @param string $baseDir
+   *   Base directory for project.
+   * @param FileSet $fileSet
+   *   (Optional) Set of files to be indexed. Parameter is required if no
+   *   existing index is found.
+   * @param bool $forceRebuild
+   *   (Optional) Force complete index rebuild.
+   *
    * @return ProjectIndex
    */
-  public function index() {
+  public function index($baseDir, $fileSet = NULL, $forceRebuild = FALSE) {
+    $this->baseDir = $baseDir;
+    if (!$forceRebuild && ($projectIndex = ProjectIndex::load($baseDir))) {
+      $this->fileSet = $projectIndex->getFileSet();
+      $this->files = $projectIndex->getFiles();
+      $this->classes = $projectIndex->getClasses();
+      foreach ($this->classes as $classIndex) {
+        $classIndex->clear();
+      }
+      $this->traits = $projectIndex->getTraits();
+      foreach ($this->traits as $traitIndex) {
+        $traitIndex->clear();
+      }
+      $this->interfaces = $projectIndex->getInterfaces();
+      foreach ($this->interfaces as $interfaceIndex) {
+        $interfaceIndex->clear();
+      }
+      $this->constants = $projectIndex->getConstants();
+      $this->functions = $projectIndex->getFunctions();
+    }
+    else {
+      if (!$fileSet instanceof FileSet) {
+        throw new \InvalidArgumentException('Must provide file set since no existing index found.');
+      }
+      $this->fileSet = $fileSet;
+      $this->files = [];
+      $this->classes = [];
+      $this->traits = [];
+      $this->interfaces = [];
+      $this->constants = [];
+      $this->functions = [];
+    }
+    $this->fileClasses = [];
+    $this->fileTraits = [];
+    $this->fileInterfaces = [];
+    $this->fileConstants = [];
+    $this->fileFunctions = [];
     $this->errors = [];
     $this->processedTraits = [];
     $this->processedInterfaces = [];

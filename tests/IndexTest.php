@@ -1,6 +1,7 @@
 <?php
 namespace Pharborist;
 
+use Pharborist\Index\FileSet;
 use Pharborist\Index\Indexer;
 use Pharborist\Index\ProjectIndex;
 
@@ -12,13 +13,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
   public function testExample() {
     $baseDir = dirname(__FILE__) . '/index_tests/example';
 
-    // Remove index from filesystem.
-    ProjectIndex::delete($baseDir);
-
     // Create index.
-    $indexer = new Indexer($baseDir);
-    $indexer->getFileSet()->addDirectory('src');
-    $index = $indexer->index();
+    $indexer = new Indexer();
+    $index = $indexer->index($baseDir, new FileSet(['src']), TRUE);
 
     $this->assertTrue($index->classExists('\Example\Person'));
     $this->assertTrue($index->classExists('\Example\Communicator'));
@@ -80,13 +77,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
   public function testTraits() {
     $baseDir = dirname(__FILE__) . '/index_tests/traits';
 
-    // Remove index from filesystem.
-    ProjectIndex::delete($baseDir);
-
     // Create index.
-    $indexer = new Indexer($baseDir);
-    $indexer->getFileSet()->addDirectory('src');
-    $index = $indexer->index();
+    $indexer = new Indexer();
+    $index = $indexer->index($baseDir, new FileSet(['src']), TRUE);
 
     $this->assertTrue($index->classExists('\Example\Base'));
     $this->assertTrue($index->traitExists('\Example\SayWorld'));
@@ -139,13 +132,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
   public function testErrors() {
     $baseDir = dirname(__FILE__) . '/index_tests/errors';
 
-    // Remove index from filesystem.
-    ProjectIndex::delete($baseDir);
-
     // Create index.
-    $indexer = new Indexer($baseDir);
-    $indexer->getFileSet()->addDirectory('src');
-    $index = $indexer->index();
+    $indexer = new Indexer();
+    $index = $indexer->index($baseDir, new FileSet(['src']), TRUE);
 
     $this->assertEquals([
       'Cannot inherit previously-inherited or override constant MSG from interface \Example\InterfaceA at src/Interface.php:8',

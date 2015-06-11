@@ -18,3 +18,11 @@ interface Speaker {
 }
 
 class Communicator implements Speaker {}
+
+abstract class AbstractClass {
+  abstract public function test();
+}
+
+class MissingAbstract extends AbstractClass {
+
+}

@@ -663,10 +663,28 @@ class Indexer extends VisitorBase {
         }
       }
     }
-    // Inherit constants from interfaces.
+    /** @var MethodIndex[] $methods */
+    $methods = array_merge($inheritedMethods, $traitMethods, $ownMethods);
+    if (!$classIndex->isAbstract()) {
+      // Check no abstract methods in non-abstract class.
+      foreach ($methods as $methodIndex) {
+        if ($methodIndex->isAbstract()) {
+          $this->errors[] = new Error($classIndex->getPosition(), sprintf(
+            "Class %s does not implement method %s::%s() at %s:%d",
+            $classFqn,
+            $methodIndex->getOwner(),
+            $methodIndex->getName(),
+            $classIndex->getPosition()->getFilename(),
+            $classIndex->getPosition()->getLineNumber(),
+            $parentFqn
+          ));
+        }
+      }
+    }
     foreach ($classIndex->getImplements() as $interfaceFqn) {
       if (isset($this->interfaces[$interfaceFqn])) {
         $interfaceIndex = $this->interfaces[$interfaceFqn];
+        // Inherit constants from interfaces.
         foreach ($interfaceIndex->getConstants() as $constantName => $constantIndex) {
           if (isset($ownConstants[$constantName]) || isset($inheritedConstants[$constantName])) {
             $this->errors[] = new Error($classIndex->getPosition(), sprintf(
@@ -683,7 +701,6 @@ class Indexer extends VisitorBase {
           }
         }
         // Check class implements interface correctly.
-        $methods = array_merge($inheritedMethods, $traitMethods, $ownMethods);
         foreach ($interfaceIndex->getMethods() as $methodName => $methodIndex) {
           if (!isset($methods[$methodName])) {
             $this->errors[] = new Error($classIndex->getPosition(), sprintf(

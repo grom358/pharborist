@@ -154,6 +154,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
       'Trait \Example\T uses missing trait \Example\MissingTrait at src/Missing.php:8',
       'Interface \Example\I extends missing interface \Example\MissingInterface at src/Missing.php:12',
       'Class \Example\Communicator does not implement method \Example\Speaker::speak() at src/Missing.php:20',
+      'Class \Example\MissingAbstract does not implement method \Example\AbstractClass::test() at src/Missing.php:26',
       'Trait property \Example\B::$letter defines the same property \Example\A::$letter at src/Trait.php:32',
       'Trait method \Example\D::say has not been applied, because it has collisions with \Example\C::say at src/Trait.php:32',
       'Trait alias conflictMethod at src/Trait.php:35 conflicts with existing alias at src/Trait.php:34',

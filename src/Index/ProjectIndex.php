@@ -291,6 +291,19 @@ class ProjectIndex {
   }
 
   /**
+   * Delete index from filesystem.
+   *
+   * @param string $dir
+   *   Directory to load index from.
+   *
+   * @return bool
+   *   TRUE if index was deleted.
+   */
+  public static function delete($dir) {
+    return @unlink($dir . '/.pharborist');
+  }
+
+  /**
    * Save index to filesystem.
    *
    * @param string $dir

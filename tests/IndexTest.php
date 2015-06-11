@@ -13,7 +13,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
     $baseDir = dirname(__FILE__) . '/index_tests/example';
 
     // Remove index from filesystem.
-    @unlink($baseDir . '/.pharborist');
+    ProjectIndex::delete($baseDir);
 
     // Create index.
     $indexer = new Indexer($baseDir);
@@ -72,13 +72,16 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('\Example\Ni', $class->getMethod('ni')->getOwner());
     $constants = $class->getConstants();
     $this->assertArrayHasKey('HELLO', $constants);
+
+    // Remove index from filesystem.
+    ProjectIndex::delete($baseDir);
   }
 
   public function testTraits() {
     $baseDir = dirname(__FILE__) . '/index_tests/traits';
 
     // Remove index from filesystem.
-    @unlink($baseDir . '/.pharborist');
+    ProjectIndex::delete($baseDir);
 
     // Create index.
     $indexer = new Indexer($baseDir);
@@ -128,13 +131,16 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
     // Load index from filesystem and check against the saved index.
     $loadedIndex = ProjectIndex::load($baseDir);
     $this->assertEquals($index, $loadedIndex);
+
+    // Remove index from filesystem.
+    ProjectIndex::delete($baseDir);
   }
 
   public function testErrors() {
     $baseDir = dirname(__FILE__) . '/index_tests/errors';
 
     // Remove index from filesystem.
-    @unlink($baseDir . '/.pharborist');
+    ProjectIndex::delete($baseDir);
 
     // Create index.
     $indexer = new Indexer($baseDir);
@@ -171,6 +177,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
     // Load index from filesystem and check against the saved index.
     $loadedIndex = ProjectIndex::load($baseDir);
     $this->assertEquals($index, $loadedIndex);
+
+    // Remove index from filesystem.
+    ProjectIndex::delete($baseDir);
   }
 
 }

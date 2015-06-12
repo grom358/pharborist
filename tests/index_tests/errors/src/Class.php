@@ -30,3 +30,16 @@ class SayGreet extends SayHello {
     echo 'Greetings ', implode(', ', $name), PHP_EOL;
   }
 }
+
+trait TraitProperty {
+  public $p = 't';
+}
+
+class PropertyA {
+  public $p = 'a';
+}
+
+class PropertyB extends PropertyA {
+  use TraitProperty;
+  public $p = 'b';
+}

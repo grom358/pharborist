@@ -287,6 +287,17 @@ class Indexer extends VisitorBase {
                 $index->getPosition()->getLineNumber()
               ));
             }
+            else {
+              $this->errors[] = new Error($index->getPosition(), sprintf(
+                "Trait property %s::\$%s defines the same property as %s::\$%s at %s:%d",
+                $traitFqn,
+                $propertyName,
+                $existingPropertyIndex->getOwner(),
+                $existingPropertyIndex->getName(),
+                $index->getPosition()->getFilename(),
+                $index->getPosition()->getLineNumber()
+              ));
+            }
           }
           else {
             $traitProperties[$propertyName] = $propertyIndex;

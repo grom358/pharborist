@@ -238,4 +238,16 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
     ProjectIndex::delete($baseDir);
   }
 
+  public function testDocTypes() {
+    $baseDir = dirname(__FILE__) . '/index_tests/doc';
+
+    // Create index.
+    $indexer = new Indexer();
+    $index = $indexer->index($baseDir, new FileSet(['src']), TRUE);
+
+    $class = $index->getClass('\Example\TestSay');
+    $method = $class->getMethod('say');
+    $this->assertEquals(['string'], $method->getReturnTypes());
+  }
+
 }

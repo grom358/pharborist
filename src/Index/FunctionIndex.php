@@ -68,6 +68,7 @@ class FunctionIndex extends BaseIndex {
    */
   public function setReturnTypes(array $returnTypes) {
     $this->returnTypes = $returnTypes;
+    $this->hasReturnTypes = TRUE;
     return $this;
   }
 

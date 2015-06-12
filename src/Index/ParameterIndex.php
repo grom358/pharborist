@@ -80,6 +80,7 @@ class ParameterIndex extends BaseIndex {
    */
   public function setTypes(array $types) {
     $this->types = $types;
+    $this->hasTypes = TRUE;
     return $this;
   }
 

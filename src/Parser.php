@@ -335,6 +335,7 @@ class Parser {
         $this->mustMatch('(', $node, 'openParen');
         $this->mustMatch(')', $node, 'closeParen');
         $this->endStatement($node);
+        $this->tryMatch(T_INLINE_HTML, $node);
         return $node;
       default:
         if ($this->currentType === T_FUNCTION && $this->isLookAhead(T_STRING, '&')) {

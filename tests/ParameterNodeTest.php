@@ -169,6 +169,7 @@ EOF;
     $this->assertEquals(['int'], $function->getParameter(7)->getTypes());
     $this->assertEquals(['\MyNamespace\Node[]'], $function->getParameter(8)->getTypes());
     $this->assertEquals(['mixed'], $function->getParameter(9)->getTypes());
+    $this->assertFalse($function->getParameter(9)->hasDocTypes());
   }
 
   public function testMatchReflector() {

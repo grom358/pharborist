@@ -39,15 +39,23 @@ class FunctionDeclarationNodeTest extends \PHPUnit_Framework_TestCase {
   public function testReturnType() {
     /** @var \Pharborist\Functions\FunctionDeclarationNode $func */
     $func = Parser::parseSnippet('function hello() {}');
+    $this->assertFalse($func->hasReturnTypes());
+    $this->assertEquals(['void'], $func->getReturnTypes());
+
+    $func = Parser::parseSnippet('/** @return */ function hello() {}');
+    $this->assertFalse($func->hasReturnTypes());
     $this->assertEquals(['void'], $func->getReturnTypes());
 
     $func = Parser::parseSnippet('/** @return void */ function hello() {}');
+    $this->assertTrue($func->hasReturnTypes());
     $this->assertEquals(['void'], $func->getReturnTypes());
 
     $func = Parser::parseSnippet('/** @return string */ function hello() {}');
+    $this->assertTrue($func->hasReturnTypes());
     $this->assertEquals(['string'], $func->getReturnTypes());
 
     $func = Parser::parseSnippet('/** @return string|int */ function hello() {}');
+    $this->assertTrue($func->hasReturnTypes());
     $this->assertEquals(['string', 'int'], $func->getReturnTypes());
   }
 

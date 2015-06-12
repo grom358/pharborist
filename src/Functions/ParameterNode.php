@@ -306,11 +306,29 @@ class ParameterNode extends ParentNode {
   }
 
   /**
+   * Return TRUE if parameter has a phpDoc type.
+   *
+   * @return bool
+   */
+  public function hasDocTypes() {
+    $doc_comment = $this->getFunction()->getDocComment();
+    if (!$doc_comment) {
+      return FALSE;
+    }
+    $param_tag = $doc_comment->getParameter($this->getName());
+    if (!$param_tag) {
+      return FALSE;
+    }
+    $types = $param_tag->getTypes();
+    return !empty($types);
+  }
+
+  /**
    * Get the php doc types for parameter.
    *
    * @return string[]
    */
-  protected function getDocTypes() {
+  public function getDocTypes() {
     // No type specified means type is mixed.
     $types = ['mixed'];
     // Use types from the doc comment if available.
@@ -322,7 +340,11 @@ class ParameterNode extends ParentNode {
     if (!$param_tag) {
       return $types;
     }
-    return Types::normalize($param_tag->getTypes());
+    $types = Types::normalize($param_tag->getTypes());
+    if (empty($types)) {
+      $types[] = 'mixed';
+    }
+    return $types;
   }
 
   /**

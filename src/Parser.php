@@ -1901,36 +1901,36 @@ class Parser {
    * @return Node
    */
   private function objectDereference(Node $object) {
-    if ($this->currentType !== T_OBJECT_OPERATOR) {
-      return $object;
-    }
-    $operator_node = new PartialNode();
-    $this->mustMatch(T_OBJECT_OPERATOR, $operator_node, 'operator');
+    while ($this->currentType === T_OBJECT_OPERATOR) {
+      $operator_node = new PartialNode();
+      $this->mustMatch(T_OBJECT_OPERATOR, $operator_node, 'operator');
 
-    $object_property = $this->objectProperty();
-    if ($this->currentType === '(') {
-      $node = new ObjectMethodCallNode();
-      $node->addChild($object, 'object');
-      $node->mergeNode($operator_node);
-      $node->addChild($object_property, 'methodName');
-      $this->functionCallParameterList($node);
-      $node = $this->arrayDeference($node);
-    }
-    else {
-      $node = new ObjectPropertyNode();
-      $node->addChild($object, 'object');
-      $node->mergeNode($operator_node);
-      $node->addChild($object_property, 'property');
-      $node = $this->offsetVariable($node);
+      $object_property = $this->objectProperty();
       if ($this->currentType === '(') {
-        $call = new CallbackCallNode();
-        $call->addChild($node, 'callback');
-        $this->functionCallParameterList($call);
-        $node = $this->arrayDeference($call);
+        $node = new ObjectMethodCallNode();
+        $node->addChild($object, 'object');
+        $node->mergeNode($operator_node);
+        $node->addChild($object_property, 'methodName');
+        $this->functionCallParameterList($node);
+        $node = $this->arrayDeference($node);
       }
+      else {
+        $node = new ObjectPropertyNode();
+        $node->addChild($object, 'object');
+        $node->mergeNode($operator_node);
+        $node->addChild($object_property, 'property');
+        $node = $this->offsetVariable($node);
+        if ($this->currentType === '(') {
+          $call = new CallbackCallNode();
+          $call->addChild($node, 'callback');
+          $this->functionCallParameterList($call);
+          $node = $this->arrayDeference($call);
+        }
+      }
+      $object = $node;
     }
 
-    return $this->objectDereference($node);
+    return $object;
   }
 
   /**

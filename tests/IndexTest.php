@@ -70,7 +70,10 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
     $constants = $class->getConstants();
     $this->assertArrayHasKey('HELLO', $constants);
 
-    // Remove index from filesystem.
+    // Load index from filesystem and check against the saved index.
+    $index->save($baseDir);
+    $loadedIndex = ProjectIndex::load($baseDir);
+    $this->assertEquals($index, $loadedIndex);
     ProjectIndex::delete($baseDir);
   }
 
@@ -134,10 +137,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('\Example\A', $methods['big']->getOwner());
 
     // Load index from filesystem and check against the saved index.
+    $index->save($baseDir);
     $loadedIndex = ProjectIndex::load($baseDir);
     $this->assertEquals($index, $loadedIndex);
-
-    // Remove index from filesystem.
     ProjectIndex::delete($baseDir);
   }
 
@@ -162,7 +164,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
 
     // Copy index to revision 2.
     $rev2 = dirname(__FILE__) . '/index_tests/rev2';
-    rename($rev1 . '/.pharborist', $rev2 . '/.pharborist');
+    $index->save($rev2);
 
     // Load revision 2.
     $index = $indexer->index($rev2);
@@ -190,6 +192,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
     // Create index.
     $indexer = new Indexer();
     $index = $indexer->index($baseDir, new FileSet(['src']), TRUE);
+    $index->save($baseDir);
 
     $this->assertEquals([
       'Cannot inherit previously-inherited or override constant MSG from interface \Example\InterfaceA at src/Interface.php:8',
@@ -229,10 +232,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals(['string'], $parameter->getTypes());
 
     // Load index from filesystem and check against the saved index.
+    $index->save($baseDir);
     $loadedIndex = ProjectIndex::load($baseDir);
     $this->assertEquals($index, $loadedIndex);
-
-    // Remove index from filesystem.
     ProjectIndex::delete($baseDir);
   }
 

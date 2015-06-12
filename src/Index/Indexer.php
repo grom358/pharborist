@@ -921,7 +921,7 @@ class Indexer extends VisitorBase {
     }
 
     // Create index.
-    $projectIndex = new ProjectIndex(
+    return new ProjectIndex(
       $this->fileSet,
       $this->files,
       $this->classes,
@@ -931,11 +931,6 @@ class Indexer extends VisitorBase {
       $this->functions,
       $errors
     );
-
-    // Save index.
-    $projectIndex->save($this->baseDir);
-
-    return $projectIndex;
   }
 
   private function processClassOrTrait(SingleInheritanceNode $node, SingleInheritanceIndex $index) {

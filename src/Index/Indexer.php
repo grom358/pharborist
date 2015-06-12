@@ -947,13 +947,15 @@ class Indexer extends VisitorBase {
     $ownProperties = [];
     foreach ($node->getProperties() as $propertyNode) {
       $visibility = $propertyNode->getVisibility();
+      $visibility = $visibility ? $visibility->getText() : 'public';
+      $visibility = $visibility === 'var' ? 'public' : $visibility;
       $propertyName = ltrim($propertyNode->getName()->getText(), '$');
       $ownProperties[$propertyName] = new PropertyIndex(
         FilePosition::fromNode($propertyNode),
         $propertyName,
         $index->getName(),
         $propertyNode->isStatic(),
-        $visibility === 'var' ? 'public' : $visibility->getText(),
+        $visibility,
         $propertyNode->getTypes()
       );
     }
@@ -1063,12 +1065,14 @@ class Indexer extends VisitorBase {
     $methods = [];
     foreach ($interfaceNode->getMethods() as $methodNode) {
       $parameters = $this->getParameters($methodNode);
+      $visibility = $methodNode->getVisibility();
+      $visibility = $visibility ? $visibility->getText() : 'public';
       $methodName = $methodNode->getName()->getText();
       $methods[$methodName] = new MethodIndex(
         FilePosition::fromNode($methodNode),
         $methodName,
         $interfaceFqn,
-        $methodNode->getVisibility()->getText(),
+        $visibility,
         FALSE,
         $methodNode->isStatic(),
         FALSE,

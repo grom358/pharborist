@@ -1424,7 +1424,7 @@ class Parser {
       case '`':
         return $this->backtick();
     }
-    throw new ParserException($this->iterator->getSourcePosition(), "expression operand");
+    throw new ParserException($this->iterator->getSourcePosition(), "excepted expression operand but got " . $this->current->getTypeName());
   }
 
   /**

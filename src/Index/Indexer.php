@@ -677,8 +677,34 @@ class Indexer extends VisitorBase {
         }
       }
       foreach ($parentClassIndex->getProperties() as $propertyName => $propertyIndex) {
-        if (!isset($ownProperties[$propertyName]) && !isset($traitProperties[$propertyName]) && $propertyIndex->getVisibility() !== 'private') {
+        if (!isset($ownProperties[$propertyName]) && $propertyIndex->getVisibility() !== 'private') {
           $inheritedProperties[$propertyName] = $propertyIndex;
+          if (isset($traitProperties[$propertyName])) {
+            $traitPropertyIndex = $traitProperties[$propertyName];
+            if ($propertyIndex->compatibleWith($traitPropertyIndex)) {
+              $this->errors[] = new Error($classIndex->getPosition(), sprintf(
+                "Trait property %s::\$%s conflicts with inherited property %s::\$%s at %s:%d",
+                $traitPropertyIndex->getOwner(),
+                $propertyName,
+                $propertyIndex->getOwner(),
+                $propertyName,
+                $classIndex->getPosition()->getFilename(),
+                $classIndex->getPosition()->getLineNumber()
+              ));
+            }
+            else {
+              $this->errors[] = new Error($classIndex->getPosition(), sprintf(
+                "Trait property %s::\$%s defines the same property as %s::\$%s at %s:%d",
+                $traitPropertyIndex->getOwner(),
+                $propertyName,
+                $propertyIndex->getOwner(),
+                $propertyName,
+                $classIndex->getPosition()->getFilename(),
+                $classIndex->getPosition()->getLineNumber()
+              ));
+            }
+            unset($traitProperties[$propertyName]);
+          }
         }
       }
       foreach ($parentClassIndex->getMethods() as $methodName => $methodIndex) {

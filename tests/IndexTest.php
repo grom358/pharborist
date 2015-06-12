@@ -200,6 +200,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals([
       'Declaration of \Example\SayGreet::say() must be compatible with \Example\SayHello::say() at src/Class.php:26',
       'Trait property \Example\TraitProperty::$p defines the same property as \Example\PropertyB::$p at src/Class.php:42',
+      'Trait property \Example\TraitA::$p conflicts with inherited property \Example\ClassTraitA::$p at src/Class.php:59',
       'Cannot inherit previously-inherited or override constant MSG from interface \Example\InterfaceA at src/Interface.php:8',
       'Cannot inherit previously-inherited or override constant MSG from interface \Example\InterfaceA at src/Interface.php:12',
       'Cannot inherit previously-inherited or override constant MSG from interface \Example\InterfaceC at src/Interface.php:20',

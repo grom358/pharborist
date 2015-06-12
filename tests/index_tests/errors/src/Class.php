@@ -43,3 +43,19 @@ class PropertyB extends PropertyA {
   use TraitProperty;
   public $p = 'b';
 }
+
+trait TraitA {
+  public $p;
+}
+
+trait TraitB {
+  use TraitA;
+}
+
+class ClassTraitA {
+  public $p;
+}
+
+class ClassTraitB extends ClassTraitA {
+  use TraitB;
+}

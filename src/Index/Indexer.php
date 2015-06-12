@@ -1017,13 +1017,15 @@ class Indexer extends VisitorBase {
       $visibility = $visibility ? $visibility->getText() : 'public';
       $visibility = $visibility === 'var' ? 'public' : $visibility;
       $propertyName = ltrim($propertyNode->getName()->getText(), '$');
+      $defaultValue = $propertyNode->getValue();
       $ownProperties[$propertyName] = new PropertyIndex(
         FilePosition::fromNode($propertyNode),
         $propertyName,
         $index->getName(),
         $propertyNode->isStatic(),
         $visibility,
-        $propertyNode->getTypes()
+        $propertyNode->getTypes(),
+        $defaultValue ? $defaultValue->getText() : NULL
       );
     }
     $ownMethods = [];

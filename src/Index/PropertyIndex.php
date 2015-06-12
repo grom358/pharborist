@@ -24,19 +24,26 @@ class PropertyIndex extends BaseIndex {
   private $types;
 
   /**
+   * @var string
+   */
+  protected $defaultValue;
+
+  /**
    * @param FilePosition $position
    * @param string $name
    * @param string $owner
    * @param bool $static
    * @param string $visibility
    * @param string[] $types
+   * @param string $defaultValue
    */
-  public function __construct(FilePosition $position, $name, $owner, $static, $visibility = 'public', $types = ['mixed']) {
+  public function __construct(FilePosition $position, $name, $owner, $static, $visibility = 'public', $types = ['mixed'], $defaultValue) {
     parent::__construct($position, $name);
     $this->owner = $owner;
     $this->static = $static;
     $this->visibility = $visibility;
     $this->types = $types;
+    $this->defaultValue = $defaultValue;
   }
 
   /**
@@ -74,6 +81,15 @@ class PropertyIndex extends BaseIndex {
    */
   public function getTypes() {
     return $this->types;
+  }
+
+  /**
+   * PHP expression of default value for property.
+   *
+   * @return string
+   */
+  public function getDefaultValue() {
+    return $this->defaultValue;
   }
 
   /**

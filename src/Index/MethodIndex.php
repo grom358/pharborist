@@ -33,14 +33,15 @@ class MethodIndex extends FunctionIndex {
    * @param string $name
    * @param string $owner
    * @param string $visibility
-   * @param boolean $final
-   * @param boolean $static
-   * @param boolean $abstract
+   * @param bool $final
+   * @param bool $static
+   * @param bool $abstract
    * @param ParameterIndex[]  $parameters
+   * @param bool $hasReturnTypes
    * @param string[] $returnTypes
    */
-  public function __construct(FilePosition $position, $name, $owner, $visibility, $final, $static, $abstract, $parameters, $returnTypes) {
-    parent::__construct($position, $name, $parameters, $returnTypes);
+  public function __construct(FilePosition $position, $name, $owner, $visibility, $final, $static, $abstract, $parameters, $hasReturnTypes, $returnTypes) {
+    parent::__construct($position, $name, $parameters, $hasReturnTypes, $returnTypes);
     $this->owner = $owner;
     $this->final = $final;
     $this->static = $static;

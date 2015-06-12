@@ -8,6 +8,11 @@ class FunctionIndex extends BaseIndex {
   protected $parameters;
 
   /**
+   * @var bool
+   */
+  protected $hasReturnTypes;
+
+  /**
    * @var string[]
    */
   protected $returnTypes;
@@ -16,11 +21,13 @@ class FunctionIndex extends BaseIndex {
    * @param FilePosition $position
    * @param string $name
    * @param ParameterIndex[] $parameters
+   * @param bool $hasReturnTypes
    * @param string[] $return_types
    */
-  public function __construct(FilePosition $position, $name, $parameters, $return_types) {
+  public function __construct(FilePosition $position, $name, $parameters, $hasReturnTypes, $return_types) {
     parent::__construct($position, $name);
     $this->parameters = $parameters;
+    $this->hasReturnTypes = $hasReturnTypes;
     $this->returnTypes = $return_types;
   }
 
@@ -34,12 +41,34 @@ class FunctionIndex extends BaseIndex {
   }
 
   /**
+   * Get whether function has phpDoc return types.
+   *
+   * @return bool
+   */
+  public function hasReturnTypes() {
+    return $this->hasReturnTypes;
+  }
+
+  /**
    * Get the return types of function/method.
    *
    * @return string[]
    */
   public function getReturnTypes() {
     return $this->returnTypes;
+  }
+
+  /**
+   * Set the return types of function/method.
+   *
+   * @internal Used by Indexer.
+   *
+   * @param string[] $returnTypes
+   * @return $this
+   */
+  public function setReturnTypes(array $returnTypes) {
+    $this->returnTypes = $returnTypes;
+    return $this;
   }
 
 }

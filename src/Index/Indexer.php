@@ -428,6 +428,7 @@ class Indexer extends VisitorBase {
             $methodIndex->isStatic(),
             $methodIndex->isAbstract(),
             $methodIndex->getParameters(),
+            $methodIndex->hasReturnTypes(),
             $methodIndex->getReturnTypes()
           );
           $traitMethods[$traitAliasIndex->getAliasName()] = $aliasedMethodIndex;
@@ -637,6 +638,13 @@ class Indexer extends VisitorBase {
 
     $this->resolveTraitUses($classIndex);
 
+    // Copy trait methods into class.
+    $traitMethods = [];
+    foreach ($classIndex->getTraitMethods() as $methodName => $methodIndex) {
+      $traitMethods[$methodName] = clone $methodIndex;
+    }
+    $classIndex->setTraitMethods($traitMethods);
+
     $ownConstants = $classIndex->getOwnConstants();
     $ownProperties = $classIndex->getOwnProperties();
     $ownMethods = $classIndex->getOwnMethods();
@@ -681,6 +689,18 @@ class Indexer extends VisitorBase {
               $position->getFilename(),
               $position->getLineNumber()
             ));
+          }
+          else {
+            // Inherit phpDoc types.
+            if (!$existingMethodIndex->hasReturnTypes() && $methodIndex->hasReturnTypes()) {
+              $existingMethodIndex->setReturnTypes($methodIndex->getReturnTypes());
+            }
+            $parameters = $methodIndex->getParameters();
+            foreach ($existingMethodIndex->getParameters() as $i => $parameterIndex) {
+              if (!$parameterIndex->hasDocTypes() && $parameters[$i]->hasDocTypes()) {
+                $parameterIndex->setTypes($parameters[$i]->getTypes());
+              }
+            }
           }
         }
       }
@@ -747,6 +767,18 @@ class Indexer extends VisitorBase {
                 $classMethodIndex->getPosition()->getFilename(),
                 $classMethodIndex->getPosition()->getLineNumber()
               ));
+            }
+            else {
+              // Inherit phpDoc types.
+              if (!$classMethodIndex->hasReturnTypes() && $methodIndex->hasReturnTypes()) {
+                $classMethodIndex->setReturnTypes($methodIndex->getReturnTypes());
+              }
+              $parameters = $methodIndex->getParameters();
+              foreach ($classMethodIndex->getParameters() as $i => $parameterIndex) {
+                if (!$parameterIndex->hasDocTypes() && $parameters[$i]->hasDocTypes()) {
+                  $parameterIndex->setTypes($parameters[$i]->getTypes());
+                }
+              }
             }
           }
         }
@@ -1007,6 +1039,7 @@ class Indexer extends VisitorBase {
         $methodNode->isStatic(),
         $methodNode->isAbstract(),
         $this->getParameters($methodNode),
+        $methodNode->hasReturnTypes(),
         $methodNode->getReturnTypes()
       );
     }
@@ -1031,6 +1064,7 @@ class Indexer extends VisitorBase {
       $parameters[] = new ParameterIndex(
         FilePosition::fromNode($parameterNode),
         $parameterNode->getName(),
+        $parameterNode->hasDocTypes(),
         $parameterNode->getTypes(),
         $typeHint ? $typeHint->getText() : NULL,
         $value ? $value->getText() : NULL,
@@ -1112,6 +1146,7 @@ class Indexer extends VisitorBase {
         $methodNode->isStatic(),
         FALSE,
         $parameters,
+        $methodNode->hasReturnTypes(),
         $methodNode->getReturnTypes()
       );
     }
@@ -1140,6 +1175,7 @@ class Indexer extends VisitorBase {
       FilePosition::fromNode($functionDeclarationNode),
       $functionFqn,
       $this->getParameters($functionDeclarationNode),
+      $functionDeclarationNode->hasReturnTypes(),
       $functionDeclarationNode->getReturnTypes()
     );
     $this->fileFunctions[] = $functionFqn;

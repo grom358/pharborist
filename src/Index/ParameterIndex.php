@@ -4,6 +4,11 @@ namespace Pharborist\Index;
 class ParameterIndex extends BaseIndex {
 
   /**
+   * @var bool
+   */
+  protected $hasTypes;
+
+  /**
    * @var string[]
    */
   protected $types;
@@ -31,18 +36,29 @@ class ParameterIndex extends BaseIndex {
   /**
    * @param FilePosition $position
    * @param string $name
+   * @param bool $hasTypes
    * @param string[] $types
    * @param string $typeHint
    * @param string $defaultValue
    * @param bool $reference
    * @param bool $variadic
    */
-  public function __construct(FilePosition $position, $name, $types, $typeHint, $defaultValue, $reference, $variadic) {
+  public function __construct(FilePosition $position, $name, $hasTypes, $types, $typeHint, $defaultValue, $reference, $variadic) {
     parent::__construct($position, $name);
+    $this->hasTypes = $hasTypes;
     $this->types = $types;
     $this->defaultValue = $defaultValue;
     $this->reference = $reference;
     $this->variadic = $variadic;
+  }
+
+  /**
+   * Get whether parameter has phpDoc types.
+   *
+   * @return bool
+   */
+  public function hasDocTypes() {
+    return $this->hasTypes;
   }
 
   /**
@@ -52,6 +68,19 @@ class ParameterIndex extends BaseIndex {
    */
   public function getTypes() {
     return $this->types;
+  }
+
+  /**
+   * Set the types of the parameter.
+   *
+   * @internal Used by Indexer.
+   *
+   * @param string[] $types
+   * @return $this
+   */
+  public function setTypes(array $types) {
+    $this->types = $types;
+    return $this;
   }
 
   /**

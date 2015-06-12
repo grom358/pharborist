@@ -47,6 +47,7 @@ class ParameterIndex extends BaseIndex {
     parent::__construct($position, $name);
     $this->hasTypes = $hasTypes;
     $this->types = $types;
+    $this->typeHint = $typeHint;
     $this->defaultValue = $defaultValue;
     $this->reference = $reference;
     $this->variadic = $variadic;

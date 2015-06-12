@@ -69,6 +69,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('\Example\Ni', $class->getMethod('ni')->getOwner());
     $constants = $class->getConstants();
     $this->assertArrayHasKey('HELLO', $constants);
+    $method = $class->getMethod('testTypeHint');
+    $parameters = $method->getParameters();
+    $this->assertEquals('callable', $parameters[0]->getTypeHint());
 
     // Load index from filesystem and check against the saved index.
     $index->save($baseDir);
@@ -195,6 +198,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
     $index->save($baseDir);
 
     $this->assertEquals([
+      'Declaration of \Example\SayGreet::say() must be compatible with \Example\SayHello::say() at src/Class.php:26',
       'Cannot inherit previously-inherited or override constant MSG from interface \Example\InterfaceA at src/Interface.php:8',
       'Cannot inherit previously-inherited or override constant MSG from interface \Example\InterfaceA at src/Interface.php:12',
       'Cannot inherit previously-inherited or override constant MSG from interface \Example\InterfaceC at src/Interface.php:20',

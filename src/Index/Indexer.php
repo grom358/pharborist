@@ -938,7 +938,7 @@ class Indexer extends VisitorBase {
     );
   }
 
-  private function processClassOrTrait(SingleInheritanceNode $node, SingleInheritanceIndex $index) {
+  private function indexTraitUses(SingleInheritanceNode $node, SingleInheritanceIndex $index) {
     $traits = [];
     $traitPrecedences = [];
     $traitAliases = [];
@@ -1102,7 +1102,7 @@ class Indexer extends VisitorBase {
       $implements,
       $constants
     );
-    $this->processClassOrTrait($classNode, $classIndex);
+    $this->indexTraitUses($classNode, $classIndex);
     $this->classes[$classFqn] = $classIndex;
     $this->fileClasses[] = $classFqn;
   }
@@ -1113,7 +1113,7 @@ class Indexer extends VisitorBase {
       FilePosition::fromNode($traitNode),
       $traitFqn
     );
-    $this->processClassOrTrait($traitNode, $traitIndex);
+    $this->indexTraitUses($traitNode, $traitIndex);
     $this->traits[$traitFqn] = $traitIndex;
     $this->fileTraits[] = $traitFqn;
   }

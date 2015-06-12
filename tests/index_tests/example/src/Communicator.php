@@ -12,4 +12,7 @@ class Communicator extends Person implements PublicSpeaker {
     return 'Monty Python and Holy Grail';
   }
 
+  public function testTypeHint(callable $hint) {
+
+  }
 }

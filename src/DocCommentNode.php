@@ -82,7 +82,7 @@ class DocCommentNode extends CommentNode {
       /** @var NamespaceNode $namespace_node */
       $namespace_node = $this->closest(Filter::isInstanceOf('\Pharborist\Namespaces\NamespaceNode'));
       if ($namespace_node !== NULL) {
-        $namespace = $namespace_node->getName()->getAbsolutePath();
+        $namespace = $namespace_node->getName() ? $namespace_node->getName()->getAbsolutePath() : '';
         $aliases = $namespace_node->getClassAliases();
       } else {
         /** @var RootNode $root_node */

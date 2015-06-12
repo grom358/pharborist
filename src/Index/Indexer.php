@@ -2,6 +2,8 @@
 namespace Pharborist\Index;
 
 use Pharborist\Constants\ConstantDeclarationNode;
+use Pharborist\Filter;
+use Pharborist\Functions\DefineNode;
 use Pharborist\Functions\FunctionDeclarationNode;
 use Pharborist\Objects\ClassMethodNode;
 use Pharborist\Objects\InterfaceMethodNode;
@@ -12,6 +14,9 @@ use Pharborist\Objects\TraitNode;
 use Pharborist\Objects\TraitPrecedenceNode;
 use Pharborist\Parser;
 use Pharborist\RootNode;
+use Pharborist\Types\ArrayNode;
+use Pharborist\Types\ScalarNode;
+use Pharborist\Types\StringNode;
 use Pharborist\VisitorBase;
 use Pharborist\Objects\ClassNode;
 use phpDocumentor\Reflection\DocBlock;
@@ -1084,6 +1089,7 @@ class Indexer extends VisitorBase {
       $constants[$constantName] = new ConstantIndex(
         FilePosition::fromNode($constantNode),
         $constantName,
+        $constantNode->getValue()->getText(),
         $classFqn
       );
     }
@@ -1123,6 +1129,7 @@ class Indexer extends VisitorBase {
       $constants[$constantNode->getName()->getBaseName()] = new ConstantIndex(
         FilePosition::fromNode($constantNode),
         $constantNode->getName()->getBaseName(),
+        $constantNode->getValue()->getText(),
         $interfaceFqn
       );
     }
@@ -1156,10 +1163,14 @@ class Indexer extends VisitorBase {
   }
 
   public function visitConstantDeclarationNode(ConstantDeclarationNode $constantDeclarationNode) {
+    if ($constantDeclarationNode->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode', '\Pharborist\Objects\InterfaceNode'))) {
+      return;
+    }
     $constantFqn = $constantDeclarationNode->getName()->getAbsolutePath();
     $this->constants[$constantFqn] = new ConstantIndex(
       FilePosition::fromNode($constantDeclarationNode),
-      $constantFqn
+      $constantFqn,
+      $constantDeclarationNode->getValue()->getText()
     );
     $this->fileConstants[] = $constantFqn;
   }
@@ -1174,6 +1185,24 @@ class Indexer extends VisitorBase {
       $functionDeclarationNode->getReturnTypes()
     );
     $this->fileFunctions[] = $functionFqn;
+  }
+
+  public function visitDefineNode(DefineNode $defineNode) {
+    $arguments = $defineNode->getArguments();
+    $constantName = $arguments->get(0);
+    if ($constantName instanceof StringNode) {
+      $constantName = $constantName->toValue();
+    }
+    else {
+      $constantName = $constantName->getText();
+    }
+    $constantFqn = '\\' . $constantName;
+    $this->constants[$constantFqn] = new ConstantIndex(
+      FilePosition::fromNode($defineNode),
+      '\\' . $constantName,
+      $arguments->get(1)->getText()
+    );
+    $this->fileConstants[] = $constantFqn;
   }
 
 }

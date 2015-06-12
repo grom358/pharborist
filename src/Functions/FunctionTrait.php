@@ -44,6 +44,24 @@ trait FunctionTrait {
   }
 
   /**
+   * Return TRUE if function has phpDoc return type.
+   *
+   * @return bool
+   */
+  public function hasReturnTypes() {
+    $doc_comment = $this->getDocComment();
+    if (!$doc_comment) {
+      return FALSE;
+    }
+    $return_tag = $doc_comment->getReturn();
+    if (!$return_tag) {
+      return FALSE;
+    }
+    $types = $return_tag->getTypes();
+    return !empty($types);
+  }
+
+  /**
    * Get the return type of the function as defined by the doc comment.
    *
    * @return string[]
@@ -59,7 +77,11 @@ trait FunctionTrait {
     if (!$return_tag) {
       return $types;
     }
-    return Types::normalize($return_tag->getTypes());
+    $types = Types::normalize($return_tag->getTypes());
+    if (empty($types)) {
+      $types[] = 'void';
+    }
+    return $types;
   }
 
   public function matchReflector(\ReflectionFunctionAbstract $reflector) {

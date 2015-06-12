@@ -1,7 +1,12 @@
 <?php
 namespace Pharborist\Index;
 
-class TraitAliasIndex extends BaseIndex {
+class TraitAliasIndex {
+
+  /**
+   * @var FilePosition
+   */
+  protected $position;
 
   /**
    * @var string
@@ -25,14 +30,13 @@ class TraitAliasIndex extends BaseIndex {
 
   /**
    * @param FilePosition $position
-   * @param string $method_reference
    * @param string $owner_trait
    * @param string $method_name
    * @param string $alias_name
    * @param string $alias_visibility
    */
-  public function __construct(FilePosition $position, $method_reference, $owner_trait, $method_name, $alias_name, $alias_visibility = NULL) {
-    parent::__construct($position, $method_reference);
+  public function __construct(FilePosition $position, $owner_trait, $method_name, $alias_name, $alias_visibility = NULL) {
+    $this->position  = $position;
     $this->ownerTrait = $owner_trait;
     $this->methodName = $method_name;
     $this->aliasName = $alias_name;
@@ -40,12 +44,10 @@ class TraitAliasIndex extends BaseIndex {
   }
 
   /**
-   * Get the fully qualified method name.
-   *
-   * @return string
+   * @return FilePosition
    */
-  public function getMethodReference() {
-    return $this->name;
+  public function getPosition() {
+    return $this->position;
   }
 
   /**

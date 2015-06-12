@@ -348,34 +348,60 @@ class Indexer extends VisitorBase {
       }
     }
 
+    // Trait methods.
+    $methods = [];
+    foreach ($traits as $traitFqn => $traitIndex) {
+      foreach ($traitIndex->getMethods() as $methodName => $methodIndex) {
+        if (!isset($methods[$methodName])) {
+          $methods[$methodName] = $traitFqn;
+        }
+      }
+    }
+
     // Validate trait aliases.
     $aliases = [];
     foreach ($traitAliases as $traitAliasIndex) {
       $methodName = $traitAliasIndex->getMethodName();
       $traitFqn = $traitAliasIndex->getOwnerTrait();
-      if (!isset($traits[$traitFqn])) {
-        $this->errors[] = new Error($traitAliasIndex->getPosition(), sprintf(
-          "Required trait %s wasn't added to %s %s at %s:%d",
-          $traitFqn,
-          $index instanceof ClassIndex ? 'class' : 'trait',
-          $index->getName(),
-          $traitAliasIndex->getPosition()->getFilename(),
-          $traitAliasIndex->getPosition()->getLineNumber()
-        ));
-      }
-      else {
-        $trait = $traits[$traitFqn];
-        if (!$trait->hasMethod($methodName)) {
+      if (!$traitFqn) {
+        if (!isset($methods[$methodName])) {
           $this->errors[] = new Error($traitAliasIndex->getPosition(), sprintf(
-            "An alias was defined for %s::%s but this method does not exist at %s:%d",
-            $traitFqn,
+            "An alias was defined for %s but this method does not exist at %s:%d",
             $methodName,
             $traitAliasIndex->getPosition()->getFilename(),
             $traitAliasIndex->getPosition()->getLineNumber()
           ));
         }
         else {
+          $traitFqn = $methods[$methodName];
           $aliases[$traitFqn][$methodName] = $traitAliasIndex;
+        }
+      }
+      else {
+        if (!isset($traits[$traitFqn])) {
+          $this->errors[] = new Error($traitAliasIndex->getPosition(), sprintf(
+            "Required trait %s wasn't added to %s %s at %s:%d",
+            $traitFqn,
+            $index instanceof ClassIndex ? 'class' : 'trait',
+            $index->getName(),
+            $traitAliasIndex->getPosition()->getFilename(),
+            $traitAliasIndex->getPosition()->getLineNumber()
+          ));
+        }
+        else {
+          $trait = $traits[$traitFqn];
+          if (!$trait->hasMethod($methodName)) {
+            $this->errors[] = new Error($traitAliasIndex->getPosition(), sprintf(
+              "An alias was defined for %s::%s but this method does not exist at %s:%d",
+              $traitFqn,
+              $methodName,
+              $traitAliasIndex->getPosition()->getFilename(),
+              $traitAliasIndex->getPosition()->getLineNumber()
+            ));
+          }
+          else {
+            $aliases[$traitFqn][$methodName] = $traitAliasIndex;
+          }
         }
       }
     }
@@ -387,7 +413,11 @@ class Indexer extends VisitorBase {
         if (isset($aliases[$traitFqn][$methodName])) {
           /** @var TraitAliasIndex $traitAliasIndex */
           $traitAliasIndex = $aliases[$traitFqn][$methodName];
-          $ownerTraitIndex = $traits[$traitAliasIndex->getOwnerTrait()];
+          $ownerTraitFqn = $traitAliasIndex->getOwnerTrait();
+          if (!$ownerTraitFqn) {
+            $ownerTraitFqn = $methods[$methodName];
+          }
+          $ownerTraitIndex = $traits[$ownerTraitFqn];
           $methodIndex = $ownerTraitIndex->getMethod($methodName);
           $aliasedMethodIndex = new MethodIndex(
             $methodIndex->getPosition(),
@@ -408,7 +438,7 @@ class Indexer extends VisitorBase {
             /** @var MethodIndex $conflictMethodIndex */
             $conflictMethodIndex = $traitMethods[$methodName];
             $this->errors[] = new Error($index->getPosition(), sprintf(
-              'Trait method %s::%s has not been applied, because it has collisions with %s::%s at %s:%d',
+              'Trait method %s::%s has not been applied because it collides with %s::%s at %s:%d',
               $traitFqn,
               $methodName,
               $conflictMethodIndex->getOwner(),
@@ -907,8 +937,6 @@ class Indexer extends VisitorBase {
           else {
             $traitPrecedences[$methodName] = new TraitPrecedenceIndex(
               $adaptationPosition,
-              $methodReference->getTraitName()
-                ->getAbsolutePath() . '::' . $methodName,
               $methodReference->getTraitName()->getAbsolutePath(),
               $methodName,
               $traitNames
@@ -932,11 +960,18 @@ class Indexer extends VisitorBase {
             ));
           }
           else {
+            if ($methodReference instanceof \Pharborist\Objects\TraitMethodReferenceNode) {
+              $ownerTrait = $methodReference->getTraitName()->getAbsolutePath();
+              $methodName = $methodReference->getMethodReference()->getText();
+            }
+            else {
+              $ownerTrait = NULL;
+              $methodName = $methodReference->getText();
+            }
             $traitAliases[$aliasName] = new TraitAliasIndex(
               $adaptationPosition,
-              $methodReference->getTraitName()->getAbsolutePath() . '::' . $methodReference->getMethodReference()->getText(),
-              $methodReference->getTraitName()->getAbsolutePath(),
-              $methodReference->getMethodReference()->getText(),
+              $ownerTrait,
+              $methodName,
               $aliasName,
               $visibility ? $visibility->getText() : NULL
             );

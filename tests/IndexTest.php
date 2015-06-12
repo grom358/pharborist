@@ -121,6 +121,18 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
     $this->assertArrayHasKey('quote', $methods);
     $this->assertEquals('\Example\KingArthur', $methods['quote']->getOwner());
 
+    $this->assertTrue($index->classExists('\Example\ClassA'));
+    $class = $index->getClass('\Example\ClassA');
+    $methods = $class->getMethods();
+    $this->assertArrayHasKey('smallTalk', $methods);
+    $this->assertEquals('\Example\A', $methods['smallTalk']->getOwner());
+    $this->assertArrayHasKey('small', $methods);
+    $this->assertEquals('\Example\A', $methods['small']->getOwner());
+    $this->assertArrayHasKey('bigTalk', $methods);
+    $this->assertEquals('\Example\A', $methods['bigTalk']->getOwner());
+    $this->assertArrayHasKey('big', $methods);
+    $this->assertEquals('\Example\A', $methods['big']->getOwner());
+
     // Load index from filesystem and check against the saved index.
     $loadedIndex = ProjectIndex::load($baseDir);
     $this->assertEquals($index, $loadedIndex);
@@ -195,13 +207,13 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
       'Class \Example\MissingAbstract does not implement method \Example\AbstractClass::test() at src/Missing.php:26',
       'Error at line 4:17 in file src/Parse.php: expected {',
       'Trait property \Example\B::$letter defines the same property \Example\A::$letter at src/Trait.php:32',
-      'Trait method \Example\D::say has not been applied, because it has collisions with \Example\C::say at src/Trait.php:32',
+      'Trait method \Example\D::say has not been applied because it collides with \Example\C::say at src/Trait.php:32',
       'Trait alias conflictMethod at src/Trait.php:35 conflicts with existing alias at src/Trait.php:34',
       'Trait precedence at src/Trait.php:43 conflicts with existing rule at src/Trait.php:42',
       'Required trait \Example\C wasn\'t added to trait \Example\MissingRequiredTrait at src/Trait.php:49',
       'Required trait \Example\A wasn\'t added to trait \Example\AnotherMissingRequiredTrait at src/Trait.php:55',
       'A precedence rule was defined for \Example\A::say but this method does not exist at src/Trait.php:55',
-      'Trait method \Example\D::say has not been applied, because it has collisions with \Example\C::say at src/Trait.php:59',
+      'Trait method \Example\D::say has not been applied because it collides with \Example\C::say at src/Trait.php:59',
       'An alias was defined for \Example\C::missingMethod but this method does not exist at src/Trait.php:65',
       'Trait property \Example\E::$letter conflicts with existing property \Example\A::$letter at src/Trait.php:73',
       'Trait property \Example\E::$letter conflicts with existing property \Example\PropertyVisibilityConflict::$letter at src/Trait.php:77',

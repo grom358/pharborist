@@ -1,7 +1,12 @@
 <?php
 namespace Pharborist\Index;
 
-class TraitPrecedenceIndex extends BaseIndex {
+class TraitPrecedenceIndex {
+
+  /**
+   * @var FilePosition
+   */
+  protected $position;
 
   /**
    * @var string
@@ -20,16 +25,22 @@ class TraitPrecedenceIndex extends BaseIndex {
 
   /**
    * @param FilePosition $position
-   * @param string $method_reference
    * @param string $owner_trait
    * @param string $method_name
    * @param string[] $traits
    */
-  public function __construct(FilePosition $position, $method_reference, $owner_trait, $method_name, $traits) {
-    parent::__construct($position, $method_reference);
+  public function __construct(FilePosition $position, $owner_trait, $method_name, $traits) {
+    $this->position  = $position;
     $this->ownerTrait = $owner_trait;
     $this->methodName = $method_name;
     $this->traits = $traits;
+  }
+
+  /**
+   * @return FilePosition
+   */
+  public function getPosition() {
+    return $this->position;
   }
 
   /**
@@ -38,7 +49,7 @@ class TraitPrecedenceIndex extends BaseIndex {
    * @return string
    */
   public function getMethodReference() {
-    return $this->name;
+    return $this->ownerTrait . '::' . $this->methodName;
   }
 
   /**

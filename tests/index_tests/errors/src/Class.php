@@ -59,3 +59,7 @@ class ClassTraitA {
 class ClassTraitB extends ClassTraitA {
   use TraitB;
 }
+
+class DefaultValue {
+  public function say($msg = 'hello') {}
+}

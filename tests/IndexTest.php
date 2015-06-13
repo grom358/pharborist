@@ -237,6 +237,10 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
     $parameter = $parameters[0];
     $this->assertEquals(['string'], $parameter->getTypes());
 
+    $method = $index->getClass('\Example\DefaultValue')->getMethod('say');
+    $this->assertEquals("'hello'", $method->getParameters()[0]->getDefaultValue());
+
+
     // Load index from filesystem and check against the saved index.
     $index->save($baseDir);
     $loadedIndex = ProjectIndex::load($baseDir);

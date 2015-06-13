@@ -207,6 +207,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
       'Trait property \Example\TraitProperty::$p defines the same property as \Example\PropertyB::$p at src/Class.php:42',
       'Trait property \Example\TraitA::$p conflicts with inherited property \Example\ClassTraitA::$p at src/Class.php:59',
       'Class \Example\TestY does not implement method \Example\Say::say() at src/Class.php:69',
+      'Declaration of \Example\ExporterParameter::export() must be compatible with \Example\Exporter::export() at src/Class.php:76',
       'Cannot inherit previously-inherited or override constant MSG from interface \Example\InterfaceA at src/Interface.php:8',
       'Cannot inherit previously-inherited or override constant MSG from interface \Example\InterfaceA at src/Interface.php:12',
       'Cannot inherit previously-inherited or override constant MSG from interface \Example\InterfaceC at src/Interface.php:20',

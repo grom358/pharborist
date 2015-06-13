@@ -122,7 +122,7 @@ class MethodIndex extends FunctionIndex {
       }
     }
     if ($parameterCount > $otherParameterCount) {
-      for ($i = $parameterCount - $otherParameterCount - 1; $i < $parameterCount; $i++) {
+      for ($i = $otherParameterCount; $i < $parameterCount; $i++) {
         if ($parameters[$i]->getDefaultValue() === NULL) {
           return FALSE;
         }

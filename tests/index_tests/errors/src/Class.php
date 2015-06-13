@@ -67,3 +67,11 @@ class DefaultValue {
 abstract class TestX implements Say {}
 
 class TestY extends TestX {}
+
+interface Exporter {
+  public static function export();
+}
+
+class ExporterParameter implements Exporter {
+  public static function export($function, $parameter, $return = null) {}
+}

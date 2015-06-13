@@ -709,6 +709,9 @@ class Indexer extends VisitorBase {
         if (!isset($ownMethods[$methodName]) && !isset($traitMethods[$methodName]) && $methodIndex->getVisibility() !== 'private') {
           $inheritedMethods[$methodName] = $methodIndex;
         }
+        elseif ($methodName === '__construct' && $methodIndex->getVisibility() !== 'private') {
+          // Don't process constructor.
+        }
         elseif ((isset($ownMethods[$methodName]) || isset($traitMethods[$methodName])) && $methodIndex->getVisibility() !== 'private') {
           // Check the method is compatible with parent.
           if (isset($ownMethods[$methodName])) {
@@ -737,13 +740,17 @@ class Indexer extends VisitorBase {
             }
             $parameters = $methodIndex->getParameters();
             foreach ($existingMethodIndex->getParameters() as $i => $parameterIndex) {
-              if (!$parameterIndex->hasDocTypes() && $parameters[$i]->hasDocTypes()) {
+              if (isset($parameters[$i]) && !$parameterIndex->hasDocTypes() && $parameters[$i]->hasDocTypes()) {
                 $parameterIndex->setTypes($parameters[$i]->getTypes());
               }
             }
           }
         }
       }
+      $classIndex->setInterfaces(array_unique(array_merge($parentClassIndex->getInterfaces(), $classIndex->getImplements())));
+    }
+    else {
+      $classIndex->setInterfaces($classIndex->getImplements());
     }
     /** @var MethodIndex[] $methods */
     $methods = array_merge($inheritedMethods, $traitMethods, $ownMethods);
@@ -763,7 +770,7 @@ class Indexer extends VisitorBase {
         }
       }
     }
-    foreach ($classIndex->getImplements() as $interfaceFqn) {
+    foreach ($classIndex->getInterfaces() as $interfaceFqn) {
       if (isset($this->interfaces[$interfaceFqn])) {
         $interfaceIndex = $this->interfaces[$interfaceFqn];
         // Inherit constants from interfaces.
@@ -785,14 +792,16 @@ class Indexer extends VisitorBase {
         // Check class implements interface correctly.
         foreach ($interfaceIndex->getMethods() as $methodName => $methodIndex) {
           if (!isset($methods[$methodName])) {
-            $this->errors[] = new Error($classIndex->getPosition(), sprintf(
-              "Class %s does not implement method %s::%s() at %s:%d",
-              $classFqn,
-              $interfaceFqn,
-              $methodName,
-              $classIndex->getPosition()->getFilename(),
-              $classIndex->getPosition()->getLineNumber()
-            ));
+            if (!$classIndex->isAbstract()) {
+              $this->errors[] = new Error($classIndex->getPosition(), sprintf(
+                "Class %s does not implement method %s::%s() at %s:%d",
+                $classFqn,
+                $interfaceFqn,
+                $methodName,
+                $classIndex->getPosition()->getFilename(),
+                $classIndex->getPosition()->getLineNumber()
+              ));
+            }
           }
           else {
             /** @var MethodIndex $classMethodIndex */
@@ -815,7 +824,7 @@ class Indexer extends VisitorBase {
               }
               $parameters = $methodIndex->getParameters();
               foreach ($classMethodIndex->getParameters() as $i => $parameterIndex) {
-                if (!$parameterIndex->hasDocTypes() && $parameters[$i]->hasDocTypes()) {
+                if (isset($parameters[$i]) && !$parameterIndex->hasDocTypes() && $parameters[$i]->hasDocTypes()) {
                   $parameterIndex->setTypes($parameters[$i]->getTypes());
                 }
               }

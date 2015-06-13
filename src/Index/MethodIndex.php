@@ -105,16 +105,30 @@ class MethodIndex extends FunctionIndex {
   public function compatibleWith(MethodIndex $methodIndex) {
     $compatible = $this->getName() === $methodIndex->getName() &&
       $this->isStatic() === $methodIndex->isStatic() &&
-      $this->getVisibility() === $methodIndex->getVisibility() &&
-      count($this->parameters) === count($methodIndex->parameters);
-    if ($compatible) {
-      foreach ($this->parameters as $i => $parameter) {
-        if ($parameter->getTypeHint() !== $methodIndex->parameters[$i]->getTypeHint()) {
+      $this->getVisibility() === $methodIndex->getVisibility();
+    if (!$compatible) {
+      return FALSE;
+    }
+    $parameters = $this->getParameters();
+    $parameterCount = count($parameters);
+    $otherParameters = $methodIndex->getParameters();
+    $otherParameterCount = count($otherParameters);
+    if ($parameterCount < $otherParameterCount) {
+      return FALSE;
+    }
+    foreach ($otherParameters as $i => $otherParameter) {
+      if ($otherParameter->getTypeHint() !== $parameters[$i]->getTypeHint()) {
+        return FALSE;
+      }
+    }
+    if ($parameterCount > $otherParameterCount) {
+      for ($i = $parameterCount - $otherParameterCount - 1; $i < $parameterCount; $i++) {
+        if ($parameters[$i]->getDefaultValue() === NULL) {
           return FALSE;
         }
       }
     }
-    return $compatible;
+    return TRUE;
   }
 
 }

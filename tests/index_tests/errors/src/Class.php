@@ -63,3 +63,7 @@ class ClassTraitB extends ClassTraitA {
 class DefaultValue {
   public function say($msg = 'hello') {}
 }
+
+abstract class TestX implements Say {}
+
+class TestY extends TestX {}

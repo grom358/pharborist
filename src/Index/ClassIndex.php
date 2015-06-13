@@ -34,6 +34,11 @@ class ClassIndex extends SingleInheritanceIndex {
   /**
    * @var string[]
    */
+  protected $interfaces;
+
+  /**
+   * @var string[]
+   */
   protected $extendedBy;
 
   /**
@@ -152,6 +157,29 @@ class ClassIndex extends SingleInheritanceIndex {
    */
   public function setParents($parents) {
     $this->parents = $parents;
+    return $this;
+  }
+
+  /**
+   * Get the interfaces of this class.
+   *
+   * @return string[]
+   */
+  public function getInterfaces() {
+    return $this->interfaces;
+  }
+
+  /**
+   * Set the interfaces for this class.
+   *
+   * @internal Used by Indexer.
+   *
+   * @param string[] $interfaces
+   *
+   * @return $this
+   */
+  public function setInterfaces($interfaces) {
+    $this->interfaces = $interfaces;
     return $this;
   }
 

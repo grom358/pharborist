@@ -14,8 +14,6 @@ use Pharborist\Objects\TraitNode;
 use Pharborist\Objects\TraitPrecedenceNode;
 use Pharborist\Parser;
 use Pharborist\RootNode;
-use Pharborist\Types\ArrayNode;
-use Pharborist\Types\ScalarNode;
 use Pharborist\Types\StringNode;
 use Pharborist\VisitorBase;
 use Pharborist\Objects\ClassNode;
@@ -1014,8 +1012,17 @@ class Indexer extends VisitorBase {
         }
         elseif ($traitAdaptation instanceof TraitAliasNode) {
           $methodReference = $traitAdaptation->getTraitMethodReference();
+          if ($methodReference instanceof \Pharborist\Objects\TraitMethodReferenceNode) {
+            $ownerTrait = $methodReference->getTraitName()->getAbsolutePath();
+            $methodName = $methodReference->getMethodReference()->getText();
+          }
+          else {
+            $ownerTrait = NULL;
+            $methodName = $methodReference->getText();
+          }
           $visibility = $traitAdaptation->getVisibility();
-          $aliasName = $traitAdaptation->getAlias()->getText();
+          $aliasNameNode = $traitAdaptation->getAlias();
+          $aliasName = $aliasNameNode ? $aliasNameNode->getText() : $methodName;
           if (isset($traitAliases[$aliasName])) {
             /** @var TraitAliasIndex $existingAlias */
             $existingAlias = $traitAliases[$aliasName];
@@ -1029,14 +1036,6 @@ class Indexer extends VisitorBase {
             ));
           }
           else {
-            if ($methodReference instanceof \Pharborist\Objects\TraitMethodReferenceNode) {
-              $ownerTrait = $methodReference->getTraitName()->getAbsolutePath();
-              $methodName = $methodReference->getMethodReference()->getText();
-            }
-            else {
-              $ownerTrait = NULL;
-              $methodName = $methodReference->getText();
-            }
             $traitAliases[$aliasName] = new TraitAliasIndex(
               $adaptationPosition,
               $ownerTrait,

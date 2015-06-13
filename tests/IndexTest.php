@@ -139,6 +139,10 @@ class IndexTest extends \PHPUnit_Framework_TestCase {
     $this->assertArrayHasKey('big', $methods);
     $this->assertEquals('\Example\A', $methods['big']->getOwner());
 
+    $this->assertTrue($index->classExists('\Example\PrivateHelloWorld'));
+    $class = $index->getClass('\Example\PrivateHelloWorld');
+    $this->assertEquals('private', $class->getMethod('sayHello')->getVisibility());
+
     // Load index from filesystem and check against the saved index.
     $index->save($baseDir);
     $loadedIndex = ProjectIndex::load($baseDir);

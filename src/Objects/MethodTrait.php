@@ -67,8 +67,9 @@ trait MethodTrait {
       if (!isset($this->static)) {
         // Insert before T_FUNCTION.
         $function_token = $this->name->previous()->previous();
+        $this->static = Token::_static();
         $function_token->before([
-          Token::_static(),
+          $this->static,
           Token::space(),
         ]);
       }

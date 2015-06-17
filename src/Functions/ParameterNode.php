@@ -51,37 +51,8 @@ class ParameterNode extends ParentNode {
   public static function create($parameter_name) {
     $parameter_name = '$' . ltrim($parameter_name, '$');
     $parameter_node = new ParameterNode();
-    $parameter_node->append(new VariableNode(T_VARIABLE, $parameter_name));
+    $parameter_node->addChild(new VariableNode(T_VARIABLE, $parameter_name), 'name');
     return $parameter_node;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function childInserted(Node $node) {
-    if ($node instanceof TokenNode) {
-      if ($node->getType() === T_ARRAY || $node->getType() === T_CALLABLE) {
-        $this->typeHint = $node;
-      }
-      elseif ($node->getType() === '&') {
-        $this->reference = $node;
-      }
-      elseif ($node->getType() === T_ELLIPSIS) {
-        $this->variadic = $node;
-      }
-      elseif ($node instanceof VariableNode) {
-        $this->name = $node;
-      }
-      elseif ($node instanceof ExpressionNode) {
-        $this->value = $node;
-      }
-    }
-    elseif ($node instanceof NameNode) {
-      $this->typeHint = $node;
-    }
-    elseif ($node instanceof ExpressionNode) {
-      $this->value = $node;
-    }
   }
 
   /**
@@ -120,19 +91,24 @@ class ParameterNode extends ParentNode {
           $type_hint = Token::_callable();
           break;
         default:
-          $type_hint = new NameNode();
-          $type_hint->append(Token::identifier($type));
+          $type_hint = NameNode::create($type);
           break;
       }
     }
-    if (isset($this->typeHint)) {
-      $this->typeHint->replaceWith($type_hint);
+    if ($type_hint) {
+      if (isset($this->typeHint)) {
+        $this->typeHint->replaceWith($type_hint);
+      }
+      else {
+        $this->typeHint = $type_hint;
+        $this->prepend([
+          $this->typeHint,
+          Token::space(),
+        ]);
+      }
     }
     else {
-      $this->prepend([
-        $type_hint,
-        Token::space(),
-      ]);
+      $this->typeHint->remove();
     }
     return $this;
   }
@@ -151,7 +127,8 @@ class ParameterNode extends ParentNode {
   public function setReference($is_reference) {
     if ($is_reference) {
       if (!isset($this->reference)) {
-        $this->name->before(Token::reference());
+        $this->reference = Token::reference();
+        $this->name->before($this->reference);
       }
     }
     else {
@@ -183,7 +160,8 @@ class ParameterNode extends ParentNode {
   public function setVariadic($is_variadic) {
     if ($is_variadic) {
       if (!isset($this->variadic)) {
-        $this->name->before(Token::splat());
+        $this->variadic = Token::splat();
+        $this->name->before($this->variadic);
       }
     }
     else {

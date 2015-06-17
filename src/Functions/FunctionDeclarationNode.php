@@ -84,12 +84,6 @@ class FunctionDeclarationNode extends StatementNode {
     return $clone;
   }
 
-  protected function childInserted(Node $node) {
-    if ($node instanceof TokenNode && $node->getType() === '&') {
-      $this->reference = $node;
-    }
-  }
-
   public static function fromReflector(\ReflectionFunction $reflector) {
     $node = static::create($reflector->getName());
     $node->matchReflector($reflector);

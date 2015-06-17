@@ -63,7 +63,8 @@ class AnonymousFunctionNode extends ParentNode implements ExpressionNode {
   public function setReference($is_reference) {
     if ($is_reference) {
       if (!isset($this->reference)) {
-        $this->openParen->before(Token::reference());
+        $this->reference = Token::reference();
+        $this->openParen->before($this->reference);
       }
     }
     else {
@@ -187,11 +188,5 @@ class AnonymousFunctionNode extends ParentNode implements ExpressionNode {
    */
   public function getBody() {
     return $this->body;
-  }
-
-  protected function childInserted(Node $node) {
-    if ($node instanceof TokenNode && $node->getType() === '&') {
-      $this->reference = $node;
-    }
   }
 }

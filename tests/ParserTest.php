@@ -203,10 +203,10 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('$g', $parameter->getVariable()->getText());
     $this->assertNull($parameter->getReference());
 
-    $parameter->getVariable()->before(new TokenNode('&', '&'));
+    $parameter->setReference(TRUE);
     $this->assertEquals('&', $parameter->getReference()->getText());
 
-    $function_declaration->getName()->before(new TokenNode('&', '&'));
+    $function_declaration->setReference(TRUE);
     $this->assertEquals('&', $function_declaration->getReference()->getText());
   }
 
@@ -336,7 +336,7 @@ EOF;
     $this->assertEquals('$b', $parameters[1]->getText());
     $this->assertEquals('{ perform(); }', $method->getBody()->getText());
 
-    $method->getName()->next()->before(new TokenNode('&', '&'));
+    $method->setReference(TRUE);
     $this->assertEquals('&', $method->getReference()->getText());
 
     $method = $statements[7];
@@ -446,14 +446,10 @@ EOF;
     $this->assertEquals('$a', $parameters[0]->getText());
     $this->assertEquals('$b', $parameters[1]->getText());
 
-    $method->getName()->before(new TokenNode('&', '&'));
+    $method->setReference(TRUE);
     $this->assertEquals('&', $method->getReference()->getText());
 
-    $method->getName()->before([
-      new TokenNode(T_WHITESPACE, ' '),
-      new TokenNode(T_STATIC, 'static'),
-      new TokenNode(T_WHITESPACE, ' ')
-    ]);
+    $method->setStatic(TRUE);
     $this->assertEquals('static', $method->getStatic()->getText());
   }
 
@@ -1499,7 +1495,7 @@ EOF';
     $this->assertCount(0, $function->getParameters());
     $this->assertEquals('{ body(); }', $function->getBody()->getText());
 
-    $function->getParameterList()->before(new TokenNode('&', '&'));
+    $function->setReference(TRUE);
     $this->assertEquals('&', $function->getReference()->getText());
 
 

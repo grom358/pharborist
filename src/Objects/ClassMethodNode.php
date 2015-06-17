@@ -174,25 +174,4 @@ class ClassMethodNode extends ClassStatementNode {
     $class_node = $this->closest(Filter::isInstanceOf('\Pharborist\Objects\ClassNode'));
     return $class_node->getName()->getAbsolutePath() . '::' . $this->getName()->getText();
   }
-
-  protected function childInserted(Node $node) {
-    static $visibilityTypes = [T_PUBLIC, T_PROTECTED, T_PRIVATE];
-    if ($node instanceof TokenNode) {
-      if ($node->getType() === '&') {
-        $this->reference = $node;
-      }
-      elseif (in_array($node->getType(), $visibilityTypes)) {
-        $this->visibility = $node;
-      }
-      elseif ($node->getType() === T_STATIC) {
-        $this->static = $node;
-      }
-      elseif ($node->getType() === T_ABSTRACT) {
-        $this->abstract = $node;
-      }
-      elseif ($node->getType() === T_FINAL) {
-        $this->final = $node;
-      }
-    }
-  }
 }

@@ -32,7 +32,8 @@ trait FunctionTrait {
     if ($is_reference) {
       if (!isset($this->reference)) {
         /** @var \Pharborist\Functions\FunctionDeclarationNode|\Pharborist\Objects\ClassMethodNode|\Pharborist\Objects\InterfaceMethodNode $this */
-        $this->name->before(Token::reference());
+        $this->reference = Token::reference();
+        $this->name->before($this->reference);
       }
     }
     else {

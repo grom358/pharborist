@@ -181,4 +181,57 @@ EOF;
     $this->assertSame('&', $node->getReference()->getText());
     $this->assertNull($node->getValue());
   }
+
+  public function testTypeHint() {
+    $source = <<<'EOF'
+<?php
+use MyNamespace\MyClass;
+
+function foo($a, array $b) {
+}
+EOF;
+    $tree = Parser::parseSource($source);
+
+    /** @var \Pharborist\Functions\FunctionDeclarationNode $function */
+    $function = $tree->children(Filter::isInstanceOf('\Pharborist\Functions\FunctionDeclarationNode'))[0];
+
+    $parameter = $function->getParameter(0);
+    $this->assertInstanceOf('Pharborist\Functions\FunctionDeclarationNode', $parameter->getFunction());
+    $this->assertNull($parameter->getTypeHint());
+    $parameter->setTypeHint('array');
+    $this->assertEquals('array', $parameter->getTypeHint()->getText());
+
+    $parameter = $function->getParameter(1);
+    $this->assertInstanceOf('Pharborist\Functions\FunctionDeclarationNode', $parameter->getFunction());
+    $this->assertEquals('array', $parameter->getTypeHint()->getText());
+    $parameter->setTypeHint('callable');
+    $this->assertEquals('callable', $parameter->getTypeHint()->getText());
+    $this->assertEquals('callable $b', $parameter->getText());
+    $parameter->setTypeHint('MyClass');
+    $this->assertEquals('\MyNamespace\MyClass', $parameter->getTypeHint()->getAbsolutePath());
+    $this->assertEquals('MyClass $b', $parameter->getText());
+    $parameter->setTypeHint(NULL);
+    $this->assertNull($parameter->getTypeHint());
+  }
+
+  /**
+   * @requires PHP 5.6
+   */
+  public function testVariadic() {
+    $source = <<<'EOF'
+<?php
+function foo(...$args) {
+}
+EOF;
+    $tree = Parser::parseSource($source);
+
+    /** @var \Pharborist\Functions\FunctionDeclarationNode $function */
+    $function = $tree->children(Filter::isInstanceOf('\Pharborist\Functions\FunctionDeclarationNode'))[0];
+
+    $parameter = $function->getParameter(0);
+    $this->assertTrue($parameter->isVariadic());
+    $parameter->setVariadic(FALSE);
+    $this->assertFalse($parameter->isVariadic());
+    $this->assertEquals('$args', $parameter->getText());
+  }
 }

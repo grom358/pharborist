@@ -33,17 +33,16 @@ class Tokenizer {
     $lineNo = $this->lineNo;
     $colNo = $this->colNo;
     $byteOffset = $this->byteOffset;
-    $newline_count = substr_count($text, "\n");
-    if ($newline_count > 0) {
-      $this->lineNo += $newline_count;
-      $lines = explode("\n", $text);
-      $last_line = end($lines);
-      $this->colNo = strlen($last_line) + 1;
+    $length = strlen($text);
+    $newlineCount = substr_count($text, "\n");
+    if ($newlineCount > 0) {
+      $this->lineNo += $newlineCount;
+      $colNo = $length - strrpos($text, "\n");
     } else {
-      $this->colNo += strlen($text);
+      $this->colNo += $length;
     }
-    $this->byteOffset += strlen($text);
-    return $this->createToken($type, $text, new SourcePosition($filename, $lineNo, $colNo, $byteOffset));
+    $this->byteOffset += $length;
+    return $this->createToken($type, $text, new SourcePosition($filename, $lineNo, $newlineCount, $colNo, $byteOffset));
   }
 
   private function createToken($type, $text, $position) {

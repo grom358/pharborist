@@ -36,15 +36,15 @@ class StatementBlockNode extends ParentNode {
    *   Use declarations.
    */
   public function getUseDeclarations() {
-    $declarations = new NodeCollection();
+    $declarations = [];
     /** @var \Pharborist\Namespaces\UseDeclarationBlockNode[] $use_blocks */
     $use_blocks = $this->children(Filter::isInstanceOf('\Pharborist\Namespaces\UseDeclarationBlockNode'));
     foreach ($use_blocks as $use_block) {
       foreach ($use_block->getDeclarationStatements() as $use_statement) {
-        $declarations->add($use_statement->getDeclarations());
+        $declarations = array_merge($declarations, $use_statement->getDeclarations()->toArray());
       }
     }
-    return $declarations;
+    return new NodeCollection($declarations, FALSE);
   }
 
   /**

@@ -172,7 +172,7 @@ abstract class Node implements NodeInterface {
       }
       $next = $next->next;
     }
-    return new NodeCollection($matches);
+    return new NodeCollection($matches, FALSE);
   }
 
   public function nextUntil(callable $callback, $inclusive = FALSE) {
@@ -188,7 +188,7 @@ abstract class Node implements NodeInterface {
       $matches[] = $next;
       $next = $next->next;
     }
-    return new NodeCollection($matches);
+    return new NodeCollection($matches, FALSE);
   }
 
   /**

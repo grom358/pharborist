@@ -18,6 +18,12 @@ class SourcePosition {
   protected $lineNo;
 
   /**
+   * Count of newlines.
+   * @var int
+   */
+  protected $newlineCount;
+
+  /**
    * The column number.
    * @var int
    */
@@ -36,12 +42,14 @@ class SourcePosition {
    *
    * @param string $filename
    * @param integer $line_no
+   * @param integer $newline_count
    * @param integer $col_no
    * @param integer $byte_offset
    */
-  public function __construct($filename, $line_no, $col_no, $byte_offset) {
+  public function __construct($filename, $line_no, $newline_count, $col_no, $byte_offset) {
     $this->filename = $filename;
     $this->lineNo = $line_no;
+    $this->newlineCount = $newline_count;
     $this->colNo = $col_no;
     $this->byteOffset = $byte_offset;
   }
@@ -60,6 +68,13 @@ class SourcePosition {
    */
   public function getLineNumber() {
     return $this->lineNo;
+  }
+
+  /**
+   * @return int
+   */
+  public function getNewlineCount() {
+    return $this->newlineCount;
   }
 
   /**

@@ -220,7 +220,7 @@ EOF;
   public function testVariadic() {
     $source = <<<'EOF'
 <?php
-function foo(...$args) {
+function foo($args) {
 }
 EOF;
     $tree = Parser::parseSource($source);
@@ -229,9 +229,9 @@ EOF;
     $function = $tree->children(Filter::isInstanceOf('\Pharborist\Functions\FunctionDeclarationNode'))[0];
 
     $parameter = $function->getParameter(0);
-    $this->assertTrue($parameter->isVariadic());
-    $parameter->setVariadic(FALSE);
     $this->assertFalse($parameter->isVariadic());
-    $this->assertEquals('$args', $parameter->getText());
+    $parameter->setVariadic(TRUE);
+    $this->assertTrue($parameter->isVariadic());
+    $this->assertEquals('...$args', $parameter->getText());
   }
 }

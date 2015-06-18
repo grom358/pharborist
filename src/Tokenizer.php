@@ -37,7 +37,7 @@ class Tokenizer {
     $newlineCount = substr_count($text, "\n");
     if ($newlineCount > 0) {
       $this->lineNo += $newlineCount;
-      $colNo = $length - strrpos($text, "\n");
+      $this->colNo = $length - strrpos($text, "\n");
     } else {
       $this->colNo += $length;
     }

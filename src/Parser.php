@@ -1463,7 +1463,7 @@ class Parser {
           $lexical_vars_node->addChild($var);
         }
         else {
-          $this->mustMatch(T_VARIABLE, $lexical_vars_node, TRUE);
+          $this->mustMatch(T_VARIABLE, $lexical_vars_node, NULL, TRUE);
         }
       } while ($this->tryMatch(',', $lexical_vars_node));
       $node->addChild($lexical_vars_node, 'lexicalVariables');

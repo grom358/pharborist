@@ -20,7 +20,7 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
    */
   protected $childCount = 0;
 
-  protected function getProperties() {
+  public function getChildProperties() {
     $properties = get_object_vars($this);
     unset($properties['head']);
     unset($properties['tail']);
@@ -177,7 +177,7 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
       $this->appendChild($child);
       $child = $next;
     }
-    foreach ($node->getProperties() as $name => $value) {
+    foreach ($node->getChildProperties() as $name => $value) {
       $this->{$name} = $value;
     }
   }
@@ -246,7 +246,7 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
    */
   protected function removeChild(Node $child) {
     $this->childCount--;
-    foreach ($this->getProperties() as $name => $value) {
+    foreach ($this->getChildProperties() as $name => $value) {
       if ($child === $value) {
         $this->{$name} = NULL;
         break;
@@ -277,7 +277,7 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
    * @return $this
    */
   protected function replaceChild(Node $child, Node $replacement) {
-    foreach ($this->getProperties() as $name => $value) {
+    foreach ($this->getChildProperties() as $name => $value) {
       if ($child === $value) {
         $this->{$name} = $replacement;
         break;
@@ -417,7 +417,7 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
     $this->parent = NULL;
     $this->previous = NULL;
     $this->next = NULL;
-    $properties = $this->getProperties();
+    $properties = $this->getChildProperties();
     $children = [];
     $child = $this->head;
     while ($child) {
@@ -470,7 +470,7 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
    */
   public function getTree() {
     $children = array();
-    $properties = $this->getProperties();
+    $properties = $this->getChildProperties();
     $child = $this->head;
     $i = 0;
     while ($child) {

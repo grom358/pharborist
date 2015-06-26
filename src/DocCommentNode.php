@@ -1,7 +1,6 @@
 <?php
 namespace Pharborist;
 
-use Pharborist\Namespaces\NameNode;
 use Pharborist\Namespaces\NamespaceNode;
 use phpDocumentor\Reflection\DocBlock;
 

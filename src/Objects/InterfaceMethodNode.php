@@ -1,10 +1,8 @@
 <?php
 namespace Pharborist\Objects;
 
-use Pharborist\Node;
 use Pharborist\Parser;
 use Pharborist\StatementNode;
-use Pharborist\TokenNode;
 
 /**
  * An interface method.

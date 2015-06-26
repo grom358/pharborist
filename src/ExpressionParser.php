@@ -8,6 +8,11 @@ namespace Pharborist;
  */
 class ExpressionParser {
   /**
+   * @var string
+   */
+  private $filename;
+
+  /**
    * @var Operator[]
    */
   private $operators = [];
@@ -61,19 +66,28 @@ class ExpressionParser {
 
   /**
    * Parse the expression nodes into a tree.
-   * @param Node[] $nodes array of operands and operators
+   * @param Node[] $nodes
+   *   Array of operands and operators
+   * @param string $filename
+   *   Filename being parsed.
    * @return Node
    * @throws ParserException
    */
-  public function parse($nodes) {
+  public function parse($nodes, $filename = NULL) {
     $this->nodes = $nodes;
+    $this->filename = $filename;
     $this->position = 0;
     $this->length = count($nodes);
     $this->operators = [$this->sentinel];
     $this->operands = [];
     $this->E();
     if ($this->next()) {
-      throw new ParserException($this->next()->getSourcePosition(), "invalid expression");
+      $next = $this->next();
+      throw new ParserException(
+        $this->filename,
+        $next->getLineNumber(),
+        $next->getColumnNumber(),
+        "invalid expression");
     }
     return self::arrayLast($this->operands);
   }
@@ -93,7 +107,11 @@ class ExpressionParser {
         $this->P();
       }
       else {
-        throw new ParserException($node->getSourcePosition(), "invalid expression");
+        throw new ParserException(
+          $this->filename,
+          $node->getLineNumber(),
+          $node->getColumnNumber(),
+          "invalid expression");
       }
     }
     while (self::arrayLast($this->operators) !== $this->sentinel) {
@@ -110,7 +128,11 @@ class ExpressionParser {
         $this->P();
       }
       else {
-        throw new ParserException($node->getSourcePosition(), 'unexpected ' . $node->getOperator() . ' operator!');
+        throw new ParserException(
+          $this->filename,
+          $node->getLineNumber(),
+          $node->getColumnNumber(),
+          'unexpected ' . $node->getOperator() . ' operator!');
       }
     }
     else {
@@ -143,7 +165,9 @@ class ExpressionParser {
       $non_associative = $a->associativity === Operator::ASSOC_NONE && $b->associativity === Operator::ASSOC_NONE;
       if ($non_associative && $a->precedence === $b->precedence) {
         throw new ParserException(
-          $b->getSourcePosition(),
+          $this->filename,
+          $b->getLineNumber(),
+          $b->getColumnNumber(),
           'Non-associative operators of equal precedence can not be next to each other!'
         );
       }

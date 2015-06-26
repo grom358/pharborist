@@ -3,7 +3,6 @@ namespace Pharborist\Objects;
 
 use Pharborist\CommaListNode;
 use Pharborist\Functions\CallNode;
-use Pharborist\Namespaces\NameNode;
 use Pharborist\Node;
 use Pharborist\Token;
 use Pharborist\TokenNode;

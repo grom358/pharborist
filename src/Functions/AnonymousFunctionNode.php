@@ -4,7 +4,6 @@ namespace Pharborist\Functions;
 use Pharborist\CommaListNode;
 use Pharborist\ExpressionNode;
 use Pharborist\Filter;
-use Pharborist\Node;
 use Pharborist\NodeCollection;
 use Pharborist\ParentNode;
 use Pharborist\ParenTrait;

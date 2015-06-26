@@ -98,6 +98,12 @@ class Parser {
   private static $visibilityTypes = [T_PUBLIC, T_PROTECTED, T_PRIVATE];
 
   /**
+   * Filename being parsed.
+   * @var string
+   */
+  private $filename;
+
+  /**
    * Iterator over PHP tokens.
    * @var TokenIterator
    */
@@ -225,8 +231,9 @@ class Parser {
       $tokenizer = new Tokenizer();
       $parser = new self();
     }
-    $tokens = $tokenizer->getAll($source, $filename);
-    return $parser->buildTree(new TokenIterator($tokens, $filename));
+    $tokens = $tokenizer->getAll($source);
+    $parser->filename = $filename;
+    return $parser->buildTree(new TokenIterator($tokens));
   }
 
   /**
@@ -273,7 +280,10 @@ class Parser {
         $node->addChild($this->echoTagStatement());
       }
       else {
-        throw new ParserException($this->iterator->getSourcePosition(),
+        throw new ParserException(
+          $this->filename,
+          $this->iterator->getLineNumber(),
+          $this->iterator->getColumnNumber(),
           'expected PHP opening tag, but got ' . $this->iterator->current()->getText());
       }
     }
@@ -708,7 +718,11 @@ class Parser {
       $this->mustMatch(T_CASE, $node);
       $node->addChild($this->expr(), 'matchOn');
       if (!$this->tryMatch(':', $node, NULL, TRUE, TRUE) && !$this->tryMatch(';', $node, NULL, TRUE, TRUE)) {
-        throw new ParserException($this->iterator->getSourcePosition(), 'expected :');
+        throw new ParserException(
+          $this->filename,
+          $this->iterator->getLineNumber(),
+          $this->iterator->getColumnNumber(),
+          'expected :');
       }
       if ($this->currentType !== $terminator && !in_array($this->currentType, $terminators)) {
         $this->matchHidden($node);
@@ -720,7 +734,11 @@ class Parser {
       $node = new DefaultNode();
       $this->mustMatch(T_DEFAULT, $node);
       if (!$this->tryMatch(':', $node, NULL, TRUE, TRUE) && !$this->tryMatch(';', $node, NULL, TRUE, TRUE)) {
-        throw new ParserException($this->iterator->getSourcePosition(), 'expected :');
+        throw new ParserException(
+          $this->filename,
+          $this->iterator->getLineNumber(),
+          $this->iterator->getColumnNumber(),
+          'expected :');
       }
       if ($this->currentType !== $terminator && !in_array($this->currentType, $terminators)) {
         $this->matchHidden($node);
@@ -728,7 +746,11 @@ class Parser {
       }
       return $node;
     }
-    throw new ParserException($this->iterator->getSourcePosition(), "expected case or default");
+    throw new ParserException(
+      $this->filename,
+      $this->iterator->getLineNumber(),
+      $this->iterator->getColumnNumber(),
+      "expected case or default");
   }
 
   /**
@@ -859,7 +881,11 @@ class Parser {
         return $node;
       }
     }
-    throw new ParserException($this->iterator->getSourcePosition(), 'expected a global variable (eg. T_VARIABLE)');
+    throw new ParserException(
+      $this->filename,
+      $this->iterator->getLineNumber(),
+      $this->iterator->getColumnNumber(),
+      'expected a global variable (eg. T_VARIABLE)');
   }
 
   /**
@@ -1198,10 +1224,14 @@ class Parser {
         $expression_nodes[] = $operand;
       }
       else {
-        throw new ParserException($this->iterator->getSourcePosition(), "invalid expression");
+        throw new ParserException(
+          $this->filename,
+          $this->iterator->getLineNumber(),
+          $this->iterator->getColumnNumber(),
+          "invalid expression");
       }
     }
-    return $this->expressionParser->parse($expression_nodes);
+    return $this->expressionParser->parse($expression_nodes, $this->filename);
   }
 
   /**
@@ -1424,7 +1454,11 @@ class Parser {
       case '`':
         return $this->backtick();
     }
-    throw new ParserException($this->iterator->getSourcePosition(), "excepted expression operand but got " . $this->current->getTypeName());
+    throw new ParserException(
+      $this->filename,
+      $this->iterator->getLineNumber(),
+      $this->iterator->getColumnNumber(),
+      "excepted expression operand but got " . $this->current->getTypeName());
   }
 
   /**
@@ -1682,7 +1716,10 @@ class Parser {
     elseif ($this->mustMatch(T_VARIABLE, $node)) {
       if ($this->tryMatch('[', $node)) {
         if (!in_array($this->currentType, $offset_types)) {
-          throw new ParserException($this->iterator->getSourcePosition(),
+          throw new ParserException(
+            $this->filename,
+            $this->iterator->getLineNumber(),
+            $this->iterator->getColumnNumber(),
             'expected encaps_var_offset (T_STRING or T_NUM_STRING or T_VARIABLE)');
         }
         $node->addChild($this->tryMatchToken($offset_types));
@@ -1693,7 +1730,11 @@ class Parser {
       }
       return $node;
     }
-    throw new ParserException($this->iterator->getSourcePosition(), 'expected encaps variable');
+    throw new ParserException(
+      $this->filename,
+      $this->iterator->getLineNumber(),
+      $this->iterator->getColumnNumber(),
+      'expected encaps variable');
   }
 
   /**
@@ -1851,7 +1892,11 @@ class Parser {
           return $this->objectDereference($var);
         }
     }
-    throw new ParserException($this->iterator->getSourcePosition(), "expected variable");
+    throw new ParserException(
+      $this->filename,
+      $this->iterator->getLineNumber(),
+      $this->iterator->getColumnNumber(),
+      "expected variable");
   }
 
   /**
@@ -2222,7 +2267,10 @@ class Parser {
   private function innerStatement() {
     switch ($this->currentType) {
       case T_HALT_COMPILER:
-        throw new ParserException($this->iterator->getSourcePosition(),
+        throw new ParserException(
+          $this->filename,
+          $this->iterator->getLineNumber(),
+          $this->iterator->getColumnNumber(),
           "__halt_compiler can only be used from the outermost scope");
       case T_ABSTRACT:
       case T_FINAL:
@@ -2439,7 +2487,9 @@ class Parser {
         case T_PRIVATE:
           if ($modifiers->getVisibility()) {
             throw new ParserException(
-              $this->iterator->getSourcePosition(),
+              $this->filename,
+              $this->iterator->getLineNumber(),
+              $this->iterator->getColumnNumber(),
               "can only have one visibility modifier on class member/method."
             );
           }
@@ -2448,18 +2498,26 @@ class Parser {
         case T_STATIC:
           if ($modifiers->getStatic()) {
             throw new ParserException(
-              $this->iterator->getSourcePosition(), "duplicate modifier");
+              $this->filename,
+              $this->iterator->getLineNumber(),
+              $this->iterator->getColumnNumber(),
+              "duplicate modifier");
           }
           $this->mustMatch(T_STATIC, $modifiers, 'static');
           break;
         case T_FINAL:
           if ($modifiers->getFinal()) {
             throw new ParserException(
-              $this->iterator->getSourcePosition(), "duplicate modifier");
+              $this->filename,
+              $this->iterator->getLineNumber(),
+              $this->iterator->getColumnNumber(),
+              "duplicate modifier");
           }
           if ($modifiers->getAbstract()) {
             throw new ParserException(
-              $this->iterator->getSourcePosition(),
+              $this->filename,
+              $this->iterator->getLineNumber(),
+              $this->iterator->getColumnNumber(),
               "can not use final modifier on abstract method");
           }
           $this->mustMatch(T_FINAL, $modifiers, 'final');
@@ -2467,16 +2525,23 @@ class Parser {
         case T_ABSTRACT:
           if ($modifiers->getAbstract()) {
             throw new ParserException(
-              $this->iterator->getSourcePosition(), "duplicate modifier");
+              $this->filename,
+              $this->iterator->getLineNumber(),
+              $this->iterator->getColumnNumber(),
+              "duplicate modifier");
           }
           if ($modifiers->getFinal()) {
             throw new ParserException(
-              $this->iterator->getSourcePosition(),
+              $this->filename,
+              $this->iterator->getLineNumber(),
+              $this->iterator->getColumnNumber(),
               "can not use abstract modifier on final method");
           }
           if (!$is_abstract) {
             throw new ParserException(
-              $this->iterator->getSourcePosition(),
+              $this->filename,
+              $this->iterator->getLineNumber(),
+              $this->iterator->getColumnNumber(),
               "can not use abstract modifier in non-abstract class");
           }
           $this->mustMatch(T_ABSTRACT, $modifiers, 'abstract');
@@ -2487,12 +2552,16 @@ class Parser {
           return $this->classMemberList($doc_comment, $modifiers);
         default:
           throw new ParserException(
-            $this->iterator->getSourcePosition(),
+            $this->filename,
+            $this->iterator->getLineNumber(),
+            $this->iterator->getColumnNumber(),
             "invalid class statement");
       }
     }
     throw new ParserException(
-      $this->iterator->getSourcePosition(),
+      $this->filename,
+      $this->iterator->getLineNumber(),
+      $this->iterator->getColumnNumber(),
       "invalid class statement");
   }
 
@@ -2507,12 +2576,16 @@ class Parser {
     // Modifier checks
     if ($modifiers->getAbstract()) {
       throw new ParserException(
-        $this->iterator->getSourcePosition(),
+        $this->filename,
+        $this->iterator->getLineNumber(),
+        $this->iterator->getColumnNumber(),
         "members can not be declared abstract");
     }
     if ($modifiers->getFinal()) {
       throw new ParserException(
-        $this->iterator->getSourcePosition(),
+        $this->filename,
+        $this->iterator->getLineNumber(),
+        $this->iterator->getColumnNumber(),
         "members can not be declared final");
     }
     $node = new ClassMemberListNode();
@@ -2689,7 +2762,9 @@ class Parser {
     while (in_array($this->currentType, $visibility_keyword_types)) {
       if ($node->getVisibility()) {
         throw new ParserException(
-          $this->iterator->getSourcePosition(),
+          $this->filename,
+          $this->iterator->getLineNumber(),
+          $this->iterator->getColumnNumber(),
           "can only have one visibility modifier on interface method."
         );
       }
@@ -2862,7 +2937,9 @@ class Parser {
   private function mustMatch($expected_type, ParentNode $parent, $property_name = NULL, $maybe_last = FALSE, $capture_doc_comment = FALSE) {
     if ($this->currentType !== $expected_type) {
       throw new ParserException(
-        $this->iterator->getSourcePosition(),
+        $this->filename,
+        $this->iterator->getLineNumber(),
+        $this->iterator->getColumnNumber(),
         'expected ' . TokenNode::typeName($expected_type));
     }
     $token_node = $this->current;
@@ -2935,7 +3012,9 @@ class Parser {
   private function mustMatchToken($expected_type) {
     if ($this->currentType !== $expected_type) {
       throw new ParserException(
-        $this->iterator->getSourcePosition(),
+        $this->filename,
+        $this->iterator->getLineNumber(),
+        $this->iterator->getColumnNumber(),
         'expected ' . TokenNode::typeName($expected_type));
     }
     $token_node = $this->current;

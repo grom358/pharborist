@@ -22,7 +22,7 @@ class Tokenizer {
   private $colNo;
   private $byteOffset;
 
-  private function parseToken($token, $filename = NULL) {
+  private function parseToken($token) {
     if (is_array($token)) {
       $type = $token[0];
       $text = $token[1];
@@ -42,61 +42,59 @@ class Tokenizer {
       $this->colNo += $length;
     }
     $this->byteOffset += $length;
-    return $this->createToken($type, $text, new SourcePosition($filename, $lineNo, $newlineCount, $colNo, $byteOffset));
+    return $this->createToken($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
   }
 
-  private function createToken($type, $text, $position) {
+  private function createToken($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset) {
     switch ($type) {
       case T_VARIABLE:
-        return new VariableNode($type, $text, $position);
+        return new VariableNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
       case T_LNUMBER:
-        return new IntegerNode($type, $text, $position);
+        return new IntegerNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
       case T_DNUMBER:
-        return new FloatNode($type, $text, $position);
+        return new FloatNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
       case T_CONSTANT_ENCAPSED_STRING:
-        return new StringNode($type, $text, $position);
+        return new StringNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
       case T_LINE:
-        return new LineMagicConstantNode($type, $text, $position);
+        return new LineMagicConstantNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
       case T_FILE:
-        return new FileMagicConstantNode($type, $text, $position);
+        return new FileMagicConstantNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
       case T_DIR:
-        return new DirMagicConstantNode($type, $text, $position);
+        return new DirMagicConstantNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
       case T_FUNC_C:
-        return new FunctionMagicConstantNode($type, $text, $position);
+        return new FunctionMagicConstantNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
       case T_CLASS_C:
-        return new ClassMagicConstantNode($type, $text, $position);
+        return new ClassMagicConstantNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
       case T_TRAIT_C:
-        return new TraitMagicConstantNode($type, $text, $position);
+        return new TraitMagicConstantNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
       case T_METHOD_C:
-        return new MethodMagicConstantNode($type, $text, $position);
+        return new MethodMagicConstantNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
       case T_NS_C:
-        return new NamespaceMagicConstantNode($type, $text, $position);
+        return new NamespaceMagicConstantNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
       case T_COMMENT:
-        return new CommentNode($type, $text, $position);
+        return new CommentNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
       case T_DOC_COMMENT:
-        return new DocCommentNode($type, $text, $position);
+        return new DocCommentNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
       case T_WHITESPACE:
-        return new WhitespaceNode($type, $text, $position);
+        return new WhitespaceNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
       default:
-        return new TokenNode($type, $text, $position);
+        return new TokenNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
     }
   }
 
   /**
    * @param string $source
    *   PHP source code.
-   * @param $filename
-   *   (Optional) PHP filename.
    * @return TokenNode[]
    *   Tokens.
    */
-  public function getAll($source, $filename = NULL) {
+  public function getAll($source) {
     $this->byteOffset = 0;
     $this->colNo = 1;
     $this->lineNo = 1;
     $tokens = [];
     foreach (token_get_all($source) as $rawToken) {
-      $tokens[] = $this->parseToken($rawToken, $filename);
+      $tokens[] = $this->parseToken($rawToken);
     }
     return $tokens;
   }

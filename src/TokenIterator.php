@@ -24,18 +24,11 @@ class TokenIterator {
   private $length;
 
   /**
-   * The filename that tokens belong to.
-   * @var string
-   */
-  private $filename;
-
-  /**
    * @param TokenNode[] $tokens
    */
-  public function __construct(array $tokens, $filename = NULL) {
+  public function __construct(array $tokens) {
     $this->tokens = $tokens;
     $this->length = count($tokens);
-    $this->filename = $filename;
     $this->position = 0;
   }
 
@@ -84,25 +77,32 @@ class TokenIterator {
   }
 
   /**
-   * Return the source position.
-   * @return SourcePosition
+   * @return int
    */
-  public function getSourcePosition() {
+  public function getLineNumber() {
     if ($this->length === 0) {
-      return new SourcePosition($this->filename, 1, 0, 1, 0);
+      return 1;
     }
     $token = $this->current();
     if ($token === NULL) {
       $token = $this->tokens[$this->length - 1];
-      $source_position = $token->getSourcePosition();
-      $filename = $source_position->getFilename();
-      $line_no = $source_position->getLineNumber();
-      $newline_count = $source_position->getNewlineCount();
-      $col_no = $source_position->getColumnNumber();
-      $byte_offset = $source_position->getByteOffset();
-      $length = strlen($token->getText());
-      return new SourcePosition($filename, $line_no, $newline_count, $col_no + $length, $byte_offset + $length);
+      return $token->getLineNumber();
     }
-    return $token->getSourcePosition();
+    return $token->getLineNumber();
+  }
+
+  /**
+   * @return int
+   */
+  public function getColumnNumber() {
+    if ($this->length === 0) {
+      return 1;
+    }
+    $token = $this->current();
+    if ($token === NULL) {
+      $token = $this->tokens[$this->length - 1];
+      return $token->getColumnNumber() + $token->getByteLength();
+    }
+    return $token->getColumnNumber();
   }
 }

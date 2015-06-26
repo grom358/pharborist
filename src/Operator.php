@@ -79,11 +79,4 @@ class Operator extends PartialNode {
    * @var string
    */
   public $binaryClassName;
-
-  /**
-   * Get the position of the operator.
-   */
-  public function getSourcePosition() {
-    return $this->getOperator()->getSourcePosition();
-  }
 }

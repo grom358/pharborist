@@ -650,7 +650,7 @@ class NodeCollection implements \IteratorAggregate, \Countable, \ArrayAccess {
   /**
    * Merges the current collection with another one, and returns the other one.
    *
-   * @param static $collection
+   * @param NodeCollection $collection
    *  The destination collection.
    *
    * @return static

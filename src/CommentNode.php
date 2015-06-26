@@ -22,10 +22,13 @@ class CommentNode extends HiddenNode {
    * Construct token.
    * @param int $type
    * @param string $text
-   * @param SourcePosition $position
+   * @param int $lineNo
+   * @param int $newlineCount
+   * @param int $colNo
+   * @param int $byteOffset
    */
-  public function __construct($type, $text, $position = NULL) {
-    parent::__construct($type, $text, $position);
+  public function __construct($type, $text, $lineNo = -1, $newlineCount = -1, $colNo = -1, $byteOffset = -1) {
+    parent::__construct($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
     $prefix = substr($text, 0, 3);
     if ($prefix === self::DOC) {
       $this->commentType = self::DOC;

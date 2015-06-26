@@ -5,29 +5,16 @@ namespace Pharborist;
  * Whitespace.
  */
 class WhitespaceNode extends HiddenNode {
-  private $newlineCount;
-
-  public function __construct($type, $text, $position = NULL) {
-    parent::__construct($type, $text, $position);
-    if (!$position) {
+  public function __construct($type, $text, $lineNo = -1, $newlineCount = -1, $colNo = -1, $byteOffset = -1) {
+    parent::__construct($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
+    if ($newlineCount < 0) {
       $nl = FormatterFactory::getDefaultFormatter()->getConfig('nl');
       $this->newlineCount = substr_count($this->getText(), $nl);
-    }
-    else {
-      /** @var SourcePosition $position */
-      $this->newlineCount = $position->getNewlineCount();
     }
   }
 
   public static function create($whitespace) {
     return new WhitespaceNode(T_WHITESPACE, $whitespace);
-  }
-
-  /**
-   * @return int
-   */
-  public function getNewlineCount() {
-    return $this->newlineCount;
   }
 
   public function setText($text) {

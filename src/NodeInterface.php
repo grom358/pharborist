@@ -9,10 +9,34 @@ namespace Pharborist;
  */
 interface NodeInterface {
   /**
-   * Get the source position of the node.
-   * @return SourcePosition
+   * Get the line number of the node.
+   * @return int
    */
-  public function getSourcePosition();
+  public function getLineNumber();
+
+  /**
+   * Get the number of newlines for this node.
+   * @return int
+   */
+  public function getNewlineCount();
+
+  /**
+   * Get the column number of the node.
+   * @return int
+   */
+  public function getColumnNumber();
+
+  /**
+   * Get the byte offset to this node.
+   * @return int
+   */
+  public function getByteOffset();
+
+  /**
+   * Get the byte length of this node.
+   * @return int
+   */
+  public function getByteLength();
 
   /**
    * Convert the node into PHP source code.

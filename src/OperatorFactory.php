@@ -168,10 +168,11 @@ class OperatorFactory {
   /**
    * @param Node $operand
    * @param Operator $operator
+   * @param string $filename
    * @return PostDecrementNode|PostIncrementNode
    * @throws ParserException
    */
-  public static function createPostfixOperatorNode(Node $operand, Operator $operator) {
+  public static function createPostfixOperatorNode(Node $operand, Operator $operator, $filename = NULL) {
     if ($operator->type === T_DEC) {
       $node = new PostDecrementNode();
     }
@@ -179,7 +180,12 @@ class OperatorFactory {
       $node = new PostIncrementNode();
     }
     else {
-      throw new ParserException($operator->getOperator()->getSourcePosition(), "Invalid postfix operator!");
+      $op = $operator->getOperator();
+      throw new ParserException(
+        $filename,
+        $op->getLineNumber(),
+        $op->getColumnNumber(),
+        "Invalid postfix operator!");
     }
     $node->addChild($operand, 'operand');
     $node->mergeNode($operator);

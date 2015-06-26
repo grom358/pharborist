@@ -5,7 +5,6 @@ use Pharborist\Objects\ClassMethodNode;
 use Pharborist\Objects\ClassNode;
 use Pharborist\Namespaces\IdentifierNameTrait;
 use Pharborist\Namespaces\NameNode;
-use Pharborist\Node;
 use Pharborist\Parser;
 use Pharborist\StatementBlockNode;
 use Pharborist\StatementNode;

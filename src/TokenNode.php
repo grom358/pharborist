@@ -16,27 +16,76 @@ class TokenNode extends Node {
   protected $text;
 
   /**
-   * @var SourcePosition
+   * @var int
    */
-  protected $position;
+  protected $lineNo;
+
+  /**
+   * @var int
+   */
+  protected $newlineCount;
+
+  /**
+   * @var int
+   */
+  protected $colNo;
+
+  /**
+   * @var int
+   */
+  protected $byteOffset;
 
   /**
    * Construct token.
    * @param int $type
    * @param string $text
-   * @param SourcePosition $position
+   * @param int $lineNo
+   * @param int $newlineCount
+   * @param int $colNo
+   * @param int $byteOffset
    */
-  public function __construct($type, $text, $position = NULL) {
+  public function __construct($type, $text, $lineNo = -1, $newlineCount = -1, $colNo = -1, $byteOffset = -1) {
     $this->type = $type;
     $this->text = $text;
-    $this->position = $position;
+    $this->lineNo = $lineNo;
+    $this->newlineCount = $newlineCount;
+    $this->colNo = $colNo;
+    $this->byteOffset = $byteOffset;
   }
 
   /**
-   * @return SourcePosition
+   * @return int
    */
-  public function getSourcePosition() {
-    return $this->position;
+  public function getLineNumber() {
+    return $this->lineNo;
+  }
+
+  /**
+   * @return int
+   */
+  public function getNewlineCount() {
+    return $this->newlineCount;
+  }
+
+  /**
+   * @return int
+   */
+  public function getColumnNumber() {
+    return $this->colNo;
+  }
+
+  /**
+   * @return int
+   */
+  public function getByteOffset() {
+    return $this->byteOffset;
+  }
+
+  /**
+   * @return int
+   */
+  public function getByteLength() {
+    return strlen($this->text);
   }
 
   /**

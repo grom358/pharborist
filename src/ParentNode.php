@@ -404,12 +404,36 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
     $visitor->visitEnd($this);
   }
 
-  public function getSourcePosition() {
+  public function getLineNumber() {
     if ($this->head === NULL) {
-      return $this->parent->getSourcePosition();
+      return $this->parent->getLineNumber();
     }
     $child = $this->head;
-    return $child->getSourcePosition();
+    return $child->getLineNumber();
+  }
+
+  public function getNewlineCount() {
+    return substr_count($this->getText(), "\n");
+  }
+
+  public function getColumnNumber() {
+    if ($this->head === NULL) {
+      return $this->parent->getColumnNumber();
+    }
+    $child = $this->head;
+    return $child->getColumnNumber();
+  }
+
+  public function getByteOffset() {
+    if ($this->head === NULL) {
+      return $this->parent->getByteOffset();
+    }
+    $child = $this->head;
+    return $child->getByteOffset();
+  }
+
+  public function getByteLength() {
+    return strlen($this->getText());
   }
 
   public function __clone() {

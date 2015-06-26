@@ -6,14 +6,16 @@ namespace Pharborist;
  */
 class ParserException extends \Exception {
   /**
-   * @param SourcePosition $position
+   * @param string $filename
+   * @param int $lineNo
+   * @param int $colNo
    * @param string $message
    */
-  public function __construct($position, $message) {
-    $details = 'Error at line ' . $position->getLineNumber();
-    $details .= ':' . $position->getColumnNumber();
-    if ($position->getFilename()) {
-      $details .= ' in file ' . $position->getFilename();
+  public function __construct($filename, $lineNo, $colNo, $message) {
+    $details = 'Error at line ' . $lineNo;
+    $details .= ':' . $colNo;
+    if ($filename) {
+      $details .= ' in file ' . $filename;
     }
     $message = "$details: $message";
     parent::__construct($message);

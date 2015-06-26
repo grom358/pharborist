@@ -2,9 +2,7 @@
 namespace Pharborist\Namespaces;
 
 use Pharborist\Constants\ConstantDeclarationNode;
-use Pharborist\Filter;
 use Pharborist\Functions\FunctionDeclarationNode;
-use Pharborist\Node;
 use Pharborist\Objects\ClassNode;
 use Pharborist\Objects\InterfaceNode;
 use Pharborist\Objects\TraitNode;

@@ -99,7 +99,7 @@ class ExpressionParser {
       if ($node->type == T_INC || $node->type == T_DEC) {
         $this->consume();
         $operand = array_pop($this->operands);
-        $this->operands[] = OperatorFactory::createPostfixOperatorNode($operand, $node);
+        $this->operands[] = OperatorFactory::createPostfixOperatorNode($operand, $node, $this->filename);
       }
       elseif ($node->type === '?' || $node->hasBinaryMode) {
         $this->pushOperator($node, Operator::MODE_BINARY);

@@ -9,6 +9,7 @@ class TokenIteratorTest extends \PHPUnit_Framework_TestCase {
     $this->assertSame($test, $peek);
     $this->assertNull($iterator->peek(1));
 
+    $this->assertFalse($iterator->hasNext());
     $this->assertNull($iterator->next());
     $this->assertEquals(1, $iterator->getLineNumber());
     $this->assertEquals(5, $iterator->getColumnNumber());

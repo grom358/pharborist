@@ -73,7 +73,7 @@ class TokenIterator {
    * @return bool
    */
   public function hasNext() {
-    return $this->position < $this->length;
+    return $this->position + 1 < $this->length;
   }
 
   /**

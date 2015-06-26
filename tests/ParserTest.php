@@ -90,7 +90,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
    * Helper function to parse a snippet.
    */
   public function parseSnippet($snippet, $expected_type) {
-    $tree = $this->parseSource('<?php '. $snippet);
+    $tree = $this->parseSource('<?php ' . $snippet);
     $node = $tree->firstChild()->next();
     $this->assertInstanceOf($expected_type, $node);
     return $node;
@@ -474,6 +474,24 @@ EOF;
     $const_stmt = $statements[0];
     $const = $const_stmt->getDeclarations()[0];
     $this->assertEquals('MY_CONST', $const->getName()->getText());
+  }
+
+  /**
+   * @expectedException \Pharborist\ParserException
+   * @expectedExceptionMessage Traits can only be composed from other traits with the 'use' keyword.
+   */
+  public function testTraitExtends() {
+    $snippet = 'trait MyTrait extends BaseTrait {}' . PHP_EOL;
+    $this->parseSnippet($snippet, '\Pharborist\Objects\TraitNode');
+  }
+
+  /**
+   * @expectedException \Pharborist\ParserException
+   * @expectedExceptionMessage Traits can not implement interfaces.
+   */
+  public function testTraitImplements() {
+    $snippet = 'trait MyTrait implements TestInterface {}' . PHP_EOL;
+    $this->parseSnippet($snippet, '\Pharborist\Objects\TraitNode');
   }
 
   /**

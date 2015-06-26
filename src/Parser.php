@@ -113,24 +113,24 @@ class Parser {
    * ParentNode to capture document comment if the child does not capture it.
    * @var ParentNode
    */
-  private $skipParent = NULL;
+  private $skipParent;
 
   /**
    * Skipped hidden tokens.
    * @var TokenNode[]
    */
-  private $skipped = [];
+  private $skipped;
 
   /**
    * Skipped document comment.
    * @var DocCommentNode
    */
-  private $docComment = NULL;
+  private $docComment;
 
   /**
    * Skipped hidden tokens after document comment.
    */
-  private $skippedDocComment = [];
+  private $skippedDocComment;
 
   /**
    * The root node of the syntax tree.
@@ -183,6 +183,10 @@ class Parser {
    * @return RootNode Root node of the tree
    */
   public function buildTree(TokenIterator $iterator) {
+    $this->skipped = [];
+    $this->skipParent = NULL;
+    $this->docComment = NULL;
+    $this->skippedDocComment = [];
     $this->iterator = $iterator;
     $this->current = $this->iterator->current();
     $this->currentType = $this->current ? $this->current->getType() : NULL;
@@ -2779,10 +2783,10 @@ class Parser {
     return $node;
   }
 
-
   /**
    * Parse a trait declaration.
    * @return TraitNode
+   * @throws ParserException
    */
   private function traitDeclaration() {
     $node = new TraitNode();
@@ -2791,15 +2795,21 @@ class Parser {
     $name_node = new NameNode();
     $this->mustMatch(T_STRING, $name_node, NULL, TRUE);
     $node->addChild($name_node, 'name');
-    if ($this->tryMatch(T_EXTENDS, $node)) {
-      $node->addChild($this->name(), 'extends');
+    if ($this->currentType === T_EXTENDS) {
+      throw new ParserException(
+        $this->filename,
+        $this->iterator->getLineNumber(),
+        $this->iterator->getColumnNumber(),
+        'Traits can only be composed from other traits with the \'use\' keyword.'
+      );
     }
-    if ($this->tryMatch(T_IMPLEMENTS, $node)) {
-      $implements = new CommaListNode();
-      do {
-        $implements->addChild($this->name());
-      } while ($this->tryMatch(',', $implements));
-      $node->addChild($implements, 'implements');
+    if ($this->currentType === T_IMPLEMENTS) {
+      throw new ParserException(
+        $this->filename,
+        $this->iterator->getLineNumber(),
+        $this->iterator->getColumnNumber(),
+        'Traits can not implement interfaces.'
+      );
     }
     $this->matchHidden($node);
     $statement_block = new StatementBlockNode();

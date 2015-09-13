@@ -77,6 +77,17 @@ class TokenIterator {
   }
 
   /**
+   * @return string
+   */
+  public function getFileName() {
+    $token = $this->current();
+    if ($token === NULL) {
+      $token = $this->tokens[$this->length - 1];
+    }
+    return $token->getFileName();
+  }
+
+  /**
    * @return int
    */
   public function getLineNumber() {

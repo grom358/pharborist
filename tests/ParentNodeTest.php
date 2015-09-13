@@ -148,7 +148,7 @@ class ParentNodeTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testSourcePosition() {
-    $token = new TokenNode(T_STRING, 'test', 4, 0, 2);
+    $token = new TokenNode(T_STRING, 'test', '', 4, 0, 2);
     $grandparent = $this->createParentNode();
     $grandparent->append($token);
     $parent = $this->createParentNode();

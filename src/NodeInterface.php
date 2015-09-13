@@ -8,6 +8,13 @@ namespace Pharborist;
  * indicate they support the Node API.
  */
 interface NodeInterface {
+
+  /**
+   * Get the filename of the node.
+   * @return string
+   */
+  public function getFileName();
+
   /**
    * Get the line number of the node.
    * @return int

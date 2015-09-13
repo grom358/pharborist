@@ -18,6 +18,7 @@ use Pharborist\Variables\VariableNode;
  * Convert PHP source into an array of tokens.
  */
 class Tokenizer {
+  private $fileName;
   private $lineNo;
   private $colNo;
   private $byteOffset;
@@ -30,6 +31,7 @@ class Tokenizer {
       $type = $token;
       $text = $token;
     }
+    $fileName = $this->fileName;
     $lineNo = $this->lineNo;
     $colNo = $this->colNo;
     $byteOffset = $this->byteOffset;
@@ -42,43 +44,43 @@ class Tokenizer {
       $this->colNo += $length;
     }
     $this->byteOffset += $length;
-    return $this->createToken($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
+    return $this->createToken($type, $text, $fileName, $lineNo, $newlineCount, $colNo, $byteOffset);
   }
 
-  private function createToken($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset) {
+  private function createToken($type, $text, $fileName, $lineNo, $newlineCount, $colNo, $byteOffset) {
     switch ($type) {
       case T_VARIABLE:
-        return new VariableNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
+        return new VariableNode($type, $text, $fileName, $lineNo, $newlineCount, $colNo, $byteOffset);
       case T_LNUMBER:
-        return new IntegerNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
+        return new IntegerNode($type, $text, $fileName, $lineNo, $newlineCount, $colNo, $byteOffset);
       case T_DNUMBER:
-        return new FloatNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
+        return new FloatNode($type, $text, $fileName, $lineNo, $newlineCount, $colNo, $byteOffset);
       case T_CONSTANT_ENCAPSED_STRING:
-        return new StringNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
+        return new StringNode($type, $text, $fileName, $lineNo, $newlineCount, $colNo, $byteOffset);
       case T_LINE:
-        return new LineMagicConstantNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
+        return new LineMagicConstantNode($type, $text, $fileName, $lineNo, $newlineCount, $colNo, $byteOffset);
       case T_FILE:
-        return new FileMagicConstantNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
+        return new FileMagicConstantNode($type, $text, $fileName, $lineNo, $newlineCount, $colNo, $byteOffset);
       case T_DIR:
-        return new DirMagicConstantNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
+        return new DirMagicConstantNode($type, $text, $fileName, $lineNo, $newlineCount, $colNo, $byteOffset);
       case T_FUNC_C:
-        return new FunctionMagicConstantNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
+        return new FunctionMagicConstantNode($type, $text, $fileName, $lineNo, $newlineCount, $colNo, $byteOffset);
       case T_CLASS_C:
-        return new ClassMagicConstantNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
+        return new ClassMagicConstantNode($type, $text, $fileName, $lineNo, $newlineCount, $colNo, $byteOffset);
       case T_TRAIT_C:
-        return new TraitMagicConstantNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
+        return new TraitMagicConstantNode($type, $text, $fileName, $lineNo, $newlineCount, $colNo, $byteOffset);
       case T_METHOD_C:
-        return new MethodMagicConstantNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
+        return new MethodMagicConstantNode($type, $text, $fileName, $lineNo, $newlineCount, $colNo, $byteOffset);
       case T_NS_C:
-        return new NamespaceMagicConstantNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
+        return new NamespaceMagicConstantNode($type, $text, $fileName, $lineNo, $newlineCount, $colNo, $byteOffset);
       case T_COMMENT:
-        return new CommentNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
+        return new CommentNode($type, $text, $fileName, $lineNo, $newlineCount, $colNo, $byteOffset);
       case T_DOC_COMMENT:
-        return new DocCommentNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
+        return new DocCommentNode($type, $text, $fileName, $lineNo, $newlineCount, $colNo, $byteOffset);
       case T_WHITESPACE:
-        return new WhitespaceNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
+        return new WhitespaceNode($type, $text, $fileName, $lineNo, $newlineCount, $colNo, $byteOffset);
       default:
-        return new TokenNode($type, $text, $lineNo, $newlineCount, $colNo, $byteOffset);
+        return new TokenNode($type, $text, $fileName, $lineNo, $newlineCount, $colNo, $byteOffset);
     }
   }
 
@@ -97,5 +99,14 @@ class Tokenizer {
       $tokens[] = $this->parseToken($rawToken);
     }
     return $tokens;
+  }
+
+  /**
+   * Sets the filename.
+   *
+   * @param string $filename
+   */
+  public function setFileName($filename) {
+    $this->fileName = $filename;
   }
 }

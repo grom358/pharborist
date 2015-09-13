@@ -23,7 +23,7 @@ class TokenNode extends Node {
   /**
    * @var string
    */
-  protected $fileName;
+  protected $filename;
 
   /**
    * @var int
@@ -44,16 +44,16 @@ class TokenNode extends Node {
    * Construct token.
    * @param int $type
    * @param string $text
-   * @param string $fileName
+   * @param string $filename
    * @param int $lineNo
    * @param int $newlineCount
    * @param int $colNo
    * @param int $byteOffset
    */
-  public function __construct($type, $text, $fileName = '', $lineNo = -1, $newlineCount = -1, $colNo = -1, $byteOffset = -1) {
+  public function __construct($type, $text, $filename = '', $lineNo = -1, $newlineCount = -1, $colNo = -1, $byteOffset = -1) {
     $this->type = $type;
     $this->text = $text;
-    $this->fileName = $fileName;
+    $this->filename = $filename;
     $this->lineNo = $lineNo;
     $this->newlineCount = $newlineCount;
     $this->colNo = $colNo;
@@ -63,8 +63,8 @@ class TokenNode extends Node {
   /**
    * @return string
    */
-  public function getFileName() {
-    return $this->fileName;
+  public function getFilename() {
+    return $this->filename;
   }
 
   /**

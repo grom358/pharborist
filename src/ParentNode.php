@@ -404,12 +404,12 @@ abstract class ParentNode extends Node implements ParentNodeInterface {
     $visitor->visitEnd($this);
   }
 
-  public function getFileName() {
+  public function getFilename() {
     if ($this->head === NULL) {
-      return $this->parent->getFileName();
+      return $this->parent->getFilename();
     }
     $child = $this->head;
-    return $child->getFileName();
+    return $child->getFilename();
   }
 
   public function getLineNumber() {

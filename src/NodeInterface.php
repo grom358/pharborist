@@ -13,7 +13,7 @@ interface NodeInterface {
    * Get the filename of the node.
    * @return string
    */
-  public function getFileName();
+  public function getFilename();
 
   /**
    * Get the line number of the node.

@@ -148,11 +148,12 @@ class ParentNodeTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testSourcePosition() {
-    $token = new TokenNode(T_STRING, 'test', 4, 0, 2);
+    $token = new TokenNode(T_STRING, 'test', 'source', 4, 0, 2);
     $grandparent = $this->createParentNode();
     $grandparent->append($token);
     $parent = $this->createParentNode();
     $grandparent->append($parent);
+    $this->assertEquals('source', $parent->getFilename());
     $this->assertEquals(4, $parent->getLineNumber());
     $this->assertEquals(2, $parent->getColumnNumber());
   }

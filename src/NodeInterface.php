@@ -9,6 +9,12 @@ namespace Pharborist;
  */
 interface NodeInterface {
   /**
+   * Get the file name for this node.
+   * @return string
+   */
+  public function getFilename();
+
+  /**
    * Get the line number of the node.
    * @return int
    */

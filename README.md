@@ -33,12 +33,13 @@ use Pharborist\Parser;
 use Pharborist\Namespaces\NamespaceNode;
 use Pharborist\Filter;
 
+$filename = $argv[1];
 $tree = Parser::parseFile($filename);
 
 // check there only one namespace declaration
 $namespaces = $tree->children(Filter::isInstanceOf('\Pharborist\Namespaces\NamespaceNode'));
 if ($namespaces->count() > 1) {
-  die('More then one namespace at line ' . $namespaces[1]->getSourcePosition()->getLineNumber() . PHP_EOL);
+  die('More then one namespace at line ' . $namespaces[1]->getLineNumber() . PHP_EOL);
 }
 ```
 [![Build Status](https://travis-ci.org/grom358/pharborist.png?branch=master)](https://travis-ci.org/grom358/pharborist)

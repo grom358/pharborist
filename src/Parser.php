@@ -235,7 +235,7 @@ class Parser {
       $tokenizer = new Tokenizer();
       $parser = new self();
     }
-    $tokens = $tokenizer->getAll($source);
+    $tokens = $tokenizer->getAll($source, $filename);
     $parser->filename = $filename;
     return $parser->buildTree(new TokenIterator($tokens));
   }

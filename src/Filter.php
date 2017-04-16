@@ -1,11 +1,14 @@
 <?php
 namespace Pharborist;
 
-use Pharborist\Functions\FunctionCallNode;
-use Pharborist\Functions\FunctionDeclarationNode;
+use Pharborist\Filters\Combinator\AllCombinator;
+use Pharborist\Filters\Combinator\AnyCombinator;
+use Pharborist\Filters\ExecutableFilter;
+use Pharborist\Filters\NewLineFilter;
+use Pharborist\Filters\NodeTypeFilter;
+use Pharborist\Filters\SingleNodeFilter;
 use Pharborist\Namespaces\NameNode;
 use Pharborist\Objects\ClassMethodCallNode;
-use Pharborist\Objects\ClassNode;
 
 /**
  * Factory for creating common callback filters.
@@ -17,15 +20,8 @@ class Filter {
    * @param callable[] $filters
    * @return callable
    */
-  public static function any($filters) {
-    return function ($node) use ($filters) {
-      foreach ($filters as $filter) {
-        if ($filter($node)) {
-          return TRUE;
-        }
-      }
-      return FALSE;
-    };
+  public static function any(array $filters) {
+    return (new AnyCombinator())->addMultiple($filters);
   }
 
   /**
@@ -34,15 +30,8 @@ class Filter {
    * @param callable[] $filters
    * @return callable
    */
-  public static function all($filters) {
-    return function ($node) use ($filters) {
-      foreach ($filters as $filter) {
-        if (!$filter($node)) {
-          return FALSE;
-        }
-      }
-      return TRUE;
-    };
+  public static function all(array $filters) {
+    return (new AllCombinator())->addMultiple($filters);
   }
 
   /**
@@ -54,16 +43,7 @@ class Filter {
    * @return callable
    */
   public static function isInstanceOf($class_name) {
-    $classes = func_get_args();
-
-    return function ($node) use ($classes) {
-      foreach ($classes as $class) {
-        if ($node instanceof $class) {
-          return TRUE;
-        }
-      }
-      return FALSE;
-    };
+    return new NodeTypeFilter(func_get_args());
   }
 
   /**
@@ -75,14 +55,7 @@ class Filter {
    * @return callable
    */
   public static function isFunction($function_name) {
-    $function_names = func_get_args();
-
-    return function ($node) use ($function_names) {
-      if ($node instanceof FunctionDeclarationNode) {
-        return in_array($node->getName()->getText(), $function_names, TRUE);
-      }
-      return FALSE;
-    };
+    return new SingleNodeFilter('Pharborist\Functions\FunctionDeclarationNode', func_get_args());
   }
 
   /**
@@ -94,14 +67,7 @@ class Filter {
    * @return callable
    */
   public static function isFunctionCall($function_name) {
-    $function_names = func_get_args();
-
-    return function ($node) use ($function_names) {
-      if ($node instanceof FunctionCallNode) {
-        return in_array($node->getName()->getText(), $function_names, TRUE);
-      }
-      return FALSE;
-    };
+    return new SingleNodeFilter('Pharborist\Functions\FunctionCallNode', func_get_args());
   }
 
   /**
@@ -113,14 +79,7 @@ class Filter {
    * @return callable
    */
   public static function isClass($class_name) {
-    $class_names = func_get_args();
-
-    return function ($node) use ($class_names) {
-      if ($node instanceof ClassNode) {
-        return in_array($node->getName()->getText(), $class_names, TRUE);
-      }
-      return FALSE;
-    };
+    return new SingleNodeFilter('Pharborist\Objects\ClassNode', func_get_args());
   }
 
   /**
@@ -217,9 +176,7 @@ class Filter {
    * @return callable
    */
   public static function isNotHidden() {
-    return function ($node) {
-      return !($node instanceof WhitespaceNode || $node instanceof CommentNode || $node instanceof LineCommentBlockNode);
-    };
+    return new ExecutableFilter();
   }
 
   /**
@@ -230,9 +187,7 @@ class Filter {
   public static function isNewline() {
     static $callback = NULL;
     if (!$callback) {
-      $callback = function (Node $node) {
-        return $node instanceof WhitespaceNode && $node->getNewlineCount() > 0;
-      };
+      $callback = new NewLineFilter();
     }
     return $callback;
   }

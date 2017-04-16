@@ -99,24 +99,28 @@ END;
   }
 
   public function testAny() {
+    $node = $this->getMock('\Pharborist\NodeInterface');
+
     $pass = function () { return TRUE; };
     $fail = function () { return FALSE; };
 
     $filter = Filter::any([$fail]);
-    $this->assertFalse($filter(NULL));
+    $this->assertFalse($filter($node));
 
     $filter = Filter::any([$fail, $pass]);
-    $this->assertTrue($filter(NULL));
+    $this->assertTrue($filter($node));
   }
 
   public function testAll() {
+    $node = $this->getMock('\Pharborist\NodeInterface');
+
     $pass = function () { return TRUE; };
     $fail = function () { return FALSE; };
 
     $filter = Filter::all([$pass]);
-    $this->assertTrue($filter(NULL));
+    $this->assertTrue($filter($node));
 
     $filter = Filter::all([$pass, $fail]);
-    $this->assertFalse($filter(NULL));
+    $this->assertFalse($filter($node));
   }
 }

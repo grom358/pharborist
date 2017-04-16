@@ -122,6 +122,17 @@ class Filter {
       return FALSE;
     };
   }
+  
+  /**
+   * Filters on scalar constants (strings and numbers).
+   *
+   * @todo Support boolean constants, NULL constant, and scalar expressions.
+   *
+   * @return boolean
+   */
+  public static function isScalar(Node $node) {
+    return $node instanceof StringNode || $node instanceof IntegerNode || $node instanceof FloatNode;
+  }
 
   /**
    * Callback to filter for calls to a class method.
